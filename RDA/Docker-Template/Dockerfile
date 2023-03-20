@@ -1,3 +1,5 @@
+# Nutzung: Dockerfile ins Mavenprojekt-Verzeichnis legen und letzte Zeile anpassen
+
 # Dieser Teil wird benötigt, um das Projekt zu kompilieren und Abhängigkeiten zu Verfügung zu stellen
 FROM eclipse-temurin:17-jdk-alpine as build
 WORKDIR /workspace/app

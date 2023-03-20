@@ -1,3 +1,20 @@
+# Eine Docker Compose Datei ist eine Sammlung an mehreren Docker-Containern
+# Nutzung: an einen geeigneten Pfad kopieren, ein/mehrere Services zusammen schreiben und die "Context"-Variable ändern
+
+# Hiermal die minimal Version einer Docker Compose Datei
+version: '3.7'
+services:
+  test:
+    build:
+      # Hier bei "Context" den Pfad für Image-Dockerfile anpassen (Linux-Schreibweise)
+      context: .
+      dockerfile: Dockerfile
+    container_name: test-services
+    networks:
+      - "default"
+    ports:
+      - 81:8080
+
 # Befehl zum starten mit Image-Erstellen ist:
 # docker compose up --build
 # Zum starten im Hintergrund das "-d"-Flag (detached) hinzufügen
@@ -11,18 +28,6 @@
 # Befehl zum starten, wenn die Datei NICHT "docker-compose.yaml" heißt:
 # docker compose up -f "dateiname"
 
-# Hiermal die minimal Version einer Docker Compose Datei
-version: '3.7'
-services:
-  test:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: test-services
-    networks:
-      - "default"
-    ports:
-      - 81:8080
 
   # "service-name":     (dieser wird auch als DNS-Name im Docker-Netzwerk benutzt)
   #   build:
