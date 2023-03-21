@@ -55,7 +55,7 @@ Returns customer resource with id=={c_id}.
 }
 ```
 ### POST /customer
-Creates new customer Resource.
+Creates new customer resource.
 
 #### Request body:
 ```json
@@ -135,7 +135,7 @@ Returns policy resource for customer with id=={c_id}, with policy id={p_id}.
 }
 ```
 ### POST /customer/{c_id}/policy
-Creates new policy Resource for customer with id=={c_id}.
+Creates new policy resource for customer with id=={c_id}.
 
 #### Request body:
 ```json
