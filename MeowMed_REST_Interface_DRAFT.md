@@ -1,6 +1,6 @@
 # MeowMed+ REST Interface
 ## Customer
-### GET /customer?fields=[firstName,lastName,address]
+### GET /customer?fields=firstName,lastName,address
 Returns customer list with each customer containing id and requested fields.
 
 #### Response body:
@@ -84,7 +84,7 @@ Creates new customer resource.
 }
 ```
 ## Policy
-### GET /customer/{c_id}/policy?fields=[objectOfInsurance.name,startDate,endDate,coverage]
+### GET /customer/{c_id}/policy?fields=objectOfInsurance.name,startDate,endDate,coverage
 Returns all policies for customer with id=={c_id}, with each policy containing policy id and requested fields.
 
 #### Response body:
@@ -177,6 +177,9 @@ Creates new policy resource for customer with id=={c_id}.
   "weight": 4
 }
 ```
+#### alternative:
+GET /policyprice?postalCode=30855&coverage=50000&race=Bengal&color=Braun&dateOfBirth=2015-07-22&castrated=true&personality=anhänglich&environment=drinnen&weight=4
+
 #### Response body:
 ```json
 {
