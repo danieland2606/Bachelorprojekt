@@ -1,0 +1,133 @@
+{
+	"info": {
+		"_postman_id": "c1e234b2-8dba-4737-b646-d5e0f1dbfceb",
+		"name": "Policy-Service",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "20976194"
+	},
+	"item": [
+		{
+			"name": "getPolicyList",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:81/api/customer/1/policy",
+					"host": [
+						"localhost"
+					],
+					"port": "81",
+					"path": [
+						"api",
+						"customer",
+						"1",
+						"policy"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getPolicy",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:81/api/customer/1/policy/0",
+					"host": [
+						"localhost"
+					],
+					"port": "81",
+					"path": [
+						"api",
+						"customer",
+						"1",
+						"policy",
+						"0"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "postPolicy",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "localhost:81/api/customer/1/policy",
+					"host": [
+						"localhost"
+					],
+					"port": "81",
+					"path": [
+						"api",
+						"customer",
+						"1",
+						"policy"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "putPolicy",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\": 0,\r\n    \"c_id\": 1,\r\n    \"startDate\": \"2017-01-15\",\r\n    \"endDate\": \"2099-01-01\",\r\n    \"coverage\": 50000,\r\n    \"objectOfInsurance\": {\r\n        \"name\": \"Belly\",\r\n        \"race\": \"Bengal\",\r\n        \"color\": \"Braun\",\r\n        \"age\": \"2015-01-01\",\r\n        \"castrated\": false,\r\n        \"personality\": \"anhänglich\",\r\n        \"enviroment\": \"drinnen\",\r\n        \"weight\": 4\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:81/api/customer/1/policy/0",
+					"host": [
+						"localhost"
+					],
+					"port": "81",
+					"path": [
+						"api",
+						"customer",
+						"1",
+						"policy",
+						"0"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "postPolicyPrice",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"postalCode\": \"30855\",\r\n  \"coverage\": 50000,\r\n  \"race\": \"Bengal\",\r\n  \"color\": \"Braun\",\r\n  \"age\": 8,\r\n  \"castrated\": true,\r\n  \"personality\": \"anhänglich\",\r\n  \"environment\": \"drinnen\",\r\n  \"weight\": 4\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:81/api/policyprice",
+					"host": [
+						"localhost"
+					],
+					"port": "81",
+					"path": [
+						"api",
+						"policyprice"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
