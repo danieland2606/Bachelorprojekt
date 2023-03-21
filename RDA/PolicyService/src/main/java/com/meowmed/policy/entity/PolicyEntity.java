@@ -105,10 +105,4 @@ public class PolicyEntity {
             return false;
         return true;
     }
-   
- 
-
-    
-
-
 }

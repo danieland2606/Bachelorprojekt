@@ -1,0 +1,12 @@
+# Für das komplette Projekt später
+version: '3.7'
+services:
+  policy:
+    build:
+      context: ./PolicyService
+      dockerfile: Dockerfile
+    container_name: policy-service
+    networks:
+      - "default"
+    ports:
+      - 81:8080
