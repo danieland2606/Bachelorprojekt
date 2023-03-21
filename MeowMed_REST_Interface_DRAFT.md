@@ -7,26 +7,26 @@ Returns customer list with each customer containing id and requested fields.
 ```json
 {
   "customerList": [
-	{
-  	  "id": 0,
-  	  "firstName": "John",
-  	  "lastName": "Doe",
-  	  "address": {
-    	"city": "Hannover",
-    	"street": "Berliner Allee 100",
-    	"postalCode": "30855"
-  	  }
-	},
-	{
-  	  "id": 1,
-  	  "firstName": "Jane",
-  	  "lastName": "Eyre",
-  	  "address": {
-    	"city": "Hannover",
-    	"street": "Berliner Allee 101",
-    	"postalCode": "30855"
-  	  }
-	}
+    {
+      "id": 0,
+      "firstName": "John",
+      "lastName": "Doe",
+      "address": {
+        "city": "Hannover",
+        "street": "Berliner Allee 100",
+        "postalCode": "30855"
+      }
+    },
+    {
+      "id": 1,
+      "firstName": "Jane",
+      "lastName": "Eyre",
+      "address": {
+        "city": "Hannover",
+        "street": "Berliner Allee 101",
+        "postalCode": "30855"
+      }
+    }
   ]
 }
 ```
@@ -45,9 +45,9 @@ Returns customer resource with id=={c_id}.
   "dateOfBirth": "2000-12-30",
   "employmentStatus": "employed",
   "address": {
-	"city": "Hannover",
-	"street": "Berliner Allee 100",
-	"postalCode": "30855"
+    "city": "Hannover",
+    "street": "Berliner Allee 100",
+    "postalCode": "30855"
   },
   "phoneNumber": "+4951177488375",
   "email": "example@aol.com",
@@ -68,9 +68,9 @@ Creates new customer Resource.
   "dateOfBirth": "2000-12-30",
   "employmentStatus": "employed",
   "address": {
-	"city": "Hannover",
-	"street": "Berliner Allee 100",
-	"postalCode": "30855"
+    "city": "Hannover",
+    "street": "Berliner Allee 100",
+    "postalCode": "30855"
   },
   "phoneNumber": "+4951177488375",
   "email": "example@aol.com",
@@ -91,24 +91,24 @@ Returns all policies for customer with id=={c_id}, with each policy containing p
 ```json
 {
   "policyList": [
-	{
+    {
       "id": 0,
       "startDate": "1990-01-01",
       "endDate": "2030-12-31",
       "coverage": 50000,
       "objectOfInsurance": {
-	    "name": "Tomato"
-	  }
-	},
-	{
+        "name": "Tomato"
+      }
+    },
+    {
       "id": 1,
       "startDate": "1992-11-01",
       "endDate": "2024-11-01",
       "coverage": 10000,
       "objectOfInsurance": {
-	    "name": "Perry"
-	  }
-	}
+        "name": "Perry"
+      }
+    }
   ]
 }
 ```
@@ -123,14 +123,14 @@ Returns policy resource for customer with id=={c_id}, with policy id={p_id}.
   "coverage": 50000,
   "premium": 75,
   "objectOfInsurance": {
-	"name": "Tomato",
-	"race": "Bengal",
-	"color": "Braun",
-	"dateOfBirth": "2015-07-22",
-	"castrated": true,
-	"personality": "anhänglich",
-	"environment": "drinnen",
-	"weight": 4
+    "name": "Tomato",
+    "race": "Bengal",
+    "color": "Braun",
+    "dateOfBirth": "2015-07-22",
+    "castrated": true,
+    "personality": "anhänglich",
+    "environment": "drinnen",
+    "weight": 4
   }
 }
 ```
@@ -145,14 +145,14 @@ Creates new policy Resource for customer with id=={c_id}.
   "coverage": 50000,
   "premium": 75,
   "objectOfInsurance": {
-	"name": "Tomato",
-	"race": "Bengal",
-	"color": "Braun",
-	"dateOfBirth": "2015-07-22",
-	"castrated": true,
-	"personality": "anhänglich",
-	"environment": "drinnen",
-	"weight": 4
+    "name": "Tomato",
+    "race": "Bengal",
+    "color": "Braun",
+    "dateOfBirth": "2015-07-22",
+    "castrated": true,
+    "personality": "anhänglich",
+    "environment": "drinnen",
+    "weight": 4
   }
 }
 ```
