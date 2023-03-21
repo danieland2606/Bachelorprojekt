@@ -1,6 +1,7 @@
 package com.meowmed.policy;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -64,6 +65,27 @@ public class PolicyApplication {
 
 	@PostMapping("/policyprice")
 	public double postPolicyPrice(@RequestBody PriceCalculationEntity body){
-		return 0.2;
+		double grundpreis = 0;
+		double endbetrag = 0;
+		switch(body.getColor()){
+			case "schwarz":
+				grundpreis = 0.02*body.getCoverage();
+				break;
+			default:
+				grundpreis = 0.015*body.getCoverage();
+		}
+		endbetrag = grundpreis;
+		endbetrag += Math.abs((body.getWeight()-4)*5);
+		//krankheitsberechnungsmagie
+		endbetrag += 0.1*grundpreis;
+		if(ChronoUnit.YEARS.between(body.getAge(), LocalDate.now())>4){
+			endbetrag += 0.2*grundpreis;
+		} else if (ChronoUnit.YEARS.between(body.getAge(), LocalDate.now())<=2){
+			endbetrag+=5;
+		};
+		if(body.isCastrated()) endbetrag+=5;
+		if(body.getPostalCode()<20000) endbetrag+= 0.05*grundpreis;
+		endbetrag = ((int)(endbetrag*100))/100;
+		return endbetrag;
 	}
 }
