@@ -113,7 +113,7 @@ Returns all policies for customer with id=={c_id}, with each policy containing p
 }
 ```
 ### GET /customer/{c_id}/policy/{p_id}
-Returns policy resource for customer with id=={c_id}, with policy id={p_id}.
+Returns policy resource for customer with id=={c_id} with policy id={p_id}.
 
 #### Response body:
 ```json
@@ -134,8 +134,8 @@ Returns policy resource for customer with id=={c_id}, with policy id={p_id}.
   }
 }
 ```
-### POST /customer/{c_id}/policy
-Creates new policy Resource for customer with id=={c_id}.
+### POST /customer/{id}/policy
+Creates new Policy Resource for id=={p_id} under customer with id=={c_id}.
 
 #### Request body:
 ```json
