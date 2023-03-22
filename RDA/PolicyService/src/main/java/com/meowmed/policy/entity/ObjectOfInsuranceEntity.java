@@ -2,8 +2,12 @@ package com.meowmed.policy.entity;
 
 import java.time.LocalDate;
 
-//@Entity 
+import jakarta.persistence.Entity;
+
+
+@Entity
 public class ObjectOfInsuranceEntity {
+
     private String name;
     private String race;
     private String color;
