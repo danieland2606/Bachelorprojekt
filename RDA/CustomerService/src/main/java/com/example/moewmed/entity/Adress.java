@@ -1,10 +1,11 @@
 package com.example.moewmed.entity;
 
-class Adress {
+public class Adress {
     private String city;
     private String street;
     private String postalCode;
 
+    
     public Adress(String city, String street, String postalCode) {
         this.city = city;
         this.street = street;

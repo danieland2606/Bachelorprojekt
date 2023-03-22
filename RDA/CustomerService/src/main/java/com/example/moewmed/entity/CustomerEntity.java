@@ -1,13 +1,14 @@
 package com.example.moewmed.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+//import jakarta.persistence.Entity;
+//import jakarta.persistence.GeneratedValue;
+//import jakarta.persistence.Id;
 
 import java.time.LocalDate;
-@Entity
-class CustomerEntity {
-    private @Id @GeneratedValue long id;
+//@Entity
+public class CustomerEntity {
+    //private @Id @GeneratedValue long id;
+    private long id;
     private String firstName;
     private String lastName;
     private String martialStatus;
