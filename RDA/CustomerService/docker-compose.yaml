@@ -1,0 +1,11 @@
+version: '3.7'
+services:
+  customer:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: customer-services
+    networks:
+      - "default"
+    ports:
+      - 82:8080
