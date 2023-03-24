@@ -2,33 +2,52 @@ package com.meowmed.policy.entity;
 
 import java.time.LocalDate;
 
+import com.fasterxml.jackson.annotation.JsonFilter;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import jakarta.persistence.Entity;
 
 
 @Entity
+@JsonFilter("objectOfInsuranceFilter")
 public class ObjectOfInsuranceEntity {
 
+    @JsonProperty("name")
     private String name;
+
+    @JsonProperty("race")
     private String race;
+
+    @JsonProperty("color")
     private String color;
+
+    @JsonProperty("age")
     private LocalDate age;
+
+    @JsonProperty("castrated")
     private boolean castrated;
+
+    @JsonProperty("personality")
     private String personality;
-    private String enviroment;
+
+    @JsonProperty("environment")
+    private String environment;
+
+    @JsonProperty("weight")
     private int weight;
 
     public ObjectOfInsuranceEntity() {
     }
 
     public ObjectOfInsuranceEntity(String name, String race, String color, LocalDate age, boolean castrated,
-            String personality, String enviroment, int weight) {
+            String personality, String environment, int weight) {
         this.name = name;
         this.race = race;
         this.color = color;
         this.age = age;
         this.castrated = castrated;
         this.personality = personality;
-        this.enviroment = enviroment;
+        this.environment = environment;
         this.weight = weight;
     }
 
@@ -81,11 +100,11 @@ public class ObjectOfInsuranceEntity {
     }
 
     public String getEnviroment() {
-        return enviroment;
+        return environment;
     }
 
-    public void setEnviroment(String enviroment) {
-        this.enviroment = enviroment;
+    public void setEnviroment(String environment) {
+        this.environment = environment;
     }
 
     public int getWeight() {
@@ -99,7 +118,7 @@ public class ObjectOfInsuranceEntity {
     @Override
     public String toString() {
         return "ObjectOfInsuranceEntity [name=" + name + ", race=" + race + ", color=" + color + ", age=" + age
-                + ", castrated=" + castrated + ", personality=" + personality + ", enviroment=" + enviroment
+                + ", castrated=" + castrated + ", personality=" + personality + ", environment=" + environment
                 + ", weight=" + weight + "]";
     }
 
@@ -113,7 +132,7 @@ public class ObjectOfInsuranceEntity {
         result = prime * result + ((age == null) ? 0 : age.hashCode());
         result = prime * result + (castrated ? 1231 : 1237);
         result = prime * result + ((personality == null) ? 0 : personality.hashCode());
-        result = prime * result + ((enviroment == null) ? 0 : enviroment.hashCode());
+        result = prime * result + ((environment == null) ? 0 : environment.hashCode());
         result = prime * result + weight;
         return result;
     }
@@ -154,10 +173,10 @@ public class ObjectOfInsuranceEntity {
                 return false;
         } else if (!personality.equals(other.personality))
             return false;
-        if (enviroment == null) {
-            if (other.enviroment != null)
+        if (environment == null) {
+            if (other.environment != null)
                 return false;
-        } else if (!enviroment.equals(other.enviroment))
+        } else if (!environment.equals(other.environment))
             return false;
         if (weight != other.weight)
             return false;
