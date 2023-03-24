@@ -1,7 +1,7 @@
 # MeowMed+ REST Interface
 ## Customer
-### GET /customer?fields=firstName,lastName,address
-Returns customer list with each customer containing id and requested fields.
+### GET /customer?fields={comma_seperated_fields}
+Returns customer list with each customer containing id and requested fields. This example has {comma_seperated_fields}==firstName,lastName,address
 
 #### Response body:
 ```json
@@ -84,8 +84,8 @@ Creates new customer resource.
 }
 ```
 ## Policy
-### GET /customer/{c_id}/policy?fields=objectOfInsurance.name,startDate,endDate,coverage
-Returns all policies for customer with id=={c_id}, with each policy containing policy id and requested fields.
+### GET /customer/{c_id}/policy?fields={comma_seperated_fields}
+Returns all policies for customer with id=={c_id}, with each policy containing policy id and requested fields. This example has {comma_seperated_fields}==startDate,endDate,coverage,objectOfInsurance.name
 
 #### Response body:
 ```json
@@ -162,7 +162,7 @@ Creates new policy resource for customer with id=={c_id}.
   "id": 0
 }
 ```
-### GET /policyprice?details=[base64 encoded JSON calculation object]
+### GET /policyprice?details={base64 encoded JSON calculation object}
 #### Calculation object:
 ```json
 {
@@ -177,9 +177,6 @@ Creates new policy resource for customer with id=={c_id}.
   "weight": 4
 }
 ```
-#### alternative:
-GET /policyprice?postalCode=30855&coverage=50000&race=Bengal&color=Braun&dateOfBirth=2015-07-22&castrated=true&personality=anhänglich&environment=drinnen&weight=4
-
 #### Response body:
 ```json
 {
