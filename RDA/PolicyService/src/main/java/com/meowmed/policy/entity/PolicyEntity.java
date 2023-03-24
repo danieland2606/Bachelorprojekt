@@ -3,6 +3,9 @@ package com.meowmed.policy.entity;
 
 import java.time.LocalDate;
 
+import com.fasterxml.jackson.annotation.JsonFilter;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -15,17 +18,29 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name="Contract")
+@JsonFilter("policy")
 public class PolicyEntity {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     @Column(name="Contract_ID")
+    @JsonProperty("id")
     private long id;
+
+    @JsonProperty("c_id")
     private long c_id;
+    
+    @JsonProperty("startDate")
     private LocalDate startDate;
+    
+    @JsonProperty("endDate")
     private LocalDate endDate;
+
+    @JsonProperty("coverage")
     private int coverage;
 
     @OneToOne
+    @JsonProperty("objectOfInsurance")
+    @JsonFilter("objectOfInsuranceFilter")
     private ObjectOfInsuranceEntity objectOfInsurance;
     
     public PolicyEntity() {

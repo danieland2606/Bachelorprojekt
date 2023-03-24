@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+//import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.meowmed.policy.entity.ObjectOfInsuranceEntity;
@@ -21,7 +21,7 @@ import com.meowmed.policy.entity.PriceCalculationEntity;
 
 @SpringBootApplication
 @RestController
-@RequestMapping("/api")
+//@RequestMapping("/api")
 public class PolicyApplication {
 
 	public static void main(String[] args) {
