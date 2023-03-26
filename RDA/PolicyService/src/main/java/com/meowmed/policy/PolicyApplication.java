@@ -36,8 +36,8 @@ public class PolicyApplication {
 		LocalDate birthDate2 = LocalDate.of(2015, 1, 2);
 		ObjectOfInsuranceEntity cat1 = new ObjectOfInsuranceEntity("Belly", "Bengal", "Braun", birthDate1, false, "anhänglich", "drinnen", 4);
 		ObjectOfInsuranceEntity cat2 = new ObjectOfInsuranceEntity("Rough", "Bengal", "Schwarz", birthDate2, false, "draufgängerisch", "drinnen", 4);
-		PolicyEntity policy1 = new PolicyEntity(0, c_id , startDate, endDate1, 50000, cat1);
-		PolicyEntity policy2 = new PolicyEntity(1, c_id,startDate, endDate1, 50000, cat2);
+		PolicyEntity policy1 = new PolicyEntity(0, c_id , startDate, endDate1, 50000, 765,cat1);
+		PolicyEntity policy2 = new PolicyEntity(1, c_id,startDate, endDate1, 50000, 765 ,cat2);
 		return List.of(policy1, policy2);
 	}
 
@@ -47,7 +47,7 @@ public class PolicyApplication {
 		LocalDate endDate1 = LocalDate.of(2099, 1, 1);
 		LocalDate birthDate1 = LocalDate.of(2015, 1, 1);
 		ObjectOfInsuranceEntity cat1 = new ObjectOfInsuranceEntity("Belly", "Bengal", "Braun", birthDate1, false, "anhänglich", "drinnen", 4);
-		return new PolicyEntity(p_id, c_id , startDate, endDate1, 50000, cat1);
+		return new PolicyEntity(p_id, c_id , startDate, endDate1, 50000, 765 ,cat1);
 	}
 
 	@PostMapping("/customer/{c_id}/policy")
