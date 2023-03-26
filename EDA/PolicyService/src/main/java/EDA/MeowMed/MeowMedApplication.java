@@ -1,6 +1,7 @@
 package EDA.MeowMed;
 
 import EDA.MeowMed.View.*;
+import EDA.MeowMed.Messaging.*;
 import EDA.MeowMed.View.ObjectOfInsuranceOverview;
 import EDA.MeowMed.View.PolicyOverview;
 import org.springframework.boot.SpringApplication;
