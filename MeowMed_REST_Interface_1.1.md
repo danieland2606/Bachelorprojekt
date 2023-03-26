@@ -186,6 +186,7 @@ Creates new policy resource for customer with id=={c_id}.
 Example with Customer:
 The request
 > GET /customer
+
 produces a response like this:
 ```json
 {
@@ -200,6 +201,7 @@ produces a response like this:
 }
 ```
 > GET /customer?fields=firstName
+
 produces a response like this:
 ```json
 {
@@ -216,6 +218,7 @@ produces a response like this:
 }
 ```
 > GET /customer?fields=maritalStatus,dateOfBirth,address.street
+
 produces a response like this:
 ```json
 {
