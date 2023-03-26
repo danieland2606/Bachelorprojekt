@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.converter.json.MappingJacksonValue;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
@@ -23,16 +24,24 @@ public class PolicyService {
     
 	private static final Logger log = LoggerFactory.getLogger(PolicyService.class);
 
-    public List<String> getPolicyList(Long c_id) {
+    public List<PolicyEntity> getPolicyList(Long c_id) {
 		LocalDate startDate = LocalDate.of(2017, 1, 15);
 		LocalDate endDate1 = LocalDate.of(2099, 1, 1);
 		LocalDate birthDate1 = LocalDate.of(2015, 1, 1);
 		LocalDate birthDate2 = LocalDate.of(2015, 1, 2);
 		ObjectOfInsuranceEntity cat1 = new ObjectOfInsuranceEntity("Belly", "Bengal", "Braun", birthDate1, false, "anhänglich", "drinnen", 4);
 		ObjectOfInsuranceEntity cat2 = new ObjectOfInsuranceEntity("Rough", "Bengal", "Schwarz", birthDate2, false, "draufgängerisch", "drinnen", 4);
-		PolicyEntity policy1 = new PolicyEntity(0, c_id , startDate, endDate1, 50000, 765,cat1);
-		PolicyEntity policy2 = new PolicyEntity(1, c_id,startDate, endDate1, 50000, 765 ,cat2);
-        SimpleFilterProvider filterProvider = new SimpleFilterProvider();
+		PolicyEntity policy1 = new PolicyEntity(c_id , startDate, endDate1, 50000, 765,cat1);
+		PolicyEntity policy2 = new PolicyEntity(c_id,startDate, endDate1, 50000, 765 ,cat2);
+        
+		//MappingJacksonValue wrapper = new MappingJacksonValue(userRepository.findOne(id));        
+		//MappingJacksonValue wrapper = new MappingJacksonValue(policy1);        
+        //wrapper.setFilters(new SimpleFilterProvider()
+        //                           .addFilter("userFilter",
+        //                                      SimpleBeanPropertyFilter.filterOutAllExcept("name")));
+
+		/*
+		SimpleFilterProvider filterProvider = new SimpleFilterProvider();
         filterProvider.addFilter("ObjectOfInsuranceFilter", SimpleBeanPropertyFilter.filterOutAllExcept("name"));
         ObjectMapper mapper = new ObjectMapper();
         mapper.setFilterProvider(filterProvider);
@@ -46,7 +55,8 @@ public class PolicyService {
         }
         //String fString = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(policy1);
         //String sString = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(policy2);
-		return List.of(fString, sString);
+		*/
+		return List.of(policy1, policy2);
 	}
 
     public PolicyEntity getPolicy(Long c_id, Long p_id){
@@ -54,7 +64,7 @@ public class PolicyService {
 		LocalDate endDate1 = LocalDate.of(2099, 1, 1);
 		LocalDate birthDate1 = LocalDate.of(2015, 1, 1);
 		ObjectOfInsuranceEntity cat1 = new ObjectOfInsuranceEntity("Belly", "Bengal", "Braun", birthDate1, false, "anhänglich", "drinnen", 4);
-		return new PolicyEntity(p_id, c_id , startDate, endDate1, 50000, 765 ,cat1);
+		return new PolicyEntity(c_id , startDate, endDate1, 50000, 765 ,cat1);
 	}
 
     public int postPolicy(Long c_id, PolicyRequest pRequest){

@@ -18,40 +18,31 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name="Contract")
-@JsonFilter("policyFilter")
+//@JsonFilter("policyFilter")
 public class PolicyEntity {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     @Column(name="Policy_ID")
-    @JsonProperty("id")
     private long id;
 
-    @JsonProperty("c_id")
     private long c_id;
     
-    @JsonProperty("startDate")
     private LocalDate startDate;
     
-    @JsonProperty("endDate")
     private LocalDate endDate;
 
-    @JsonProperty("coverage")
     private int coverage;
 
-    @JsonProperty("premium")
     private int premium;
 
     @OneToOne
-    @JsonProperty("objectOfInsurance")
-    @JsonFilter("objectOfInsuranceFilter")
     private ObjectOfInsuranceEntity objectOfInsurance;
     
     public PolicyEntity() {
     }
 
-    public PolicyEntity(long id, long c_id, LocalDate startDate, LocalDate endDate, int coverage, int premium,
+    public PolicyEntity(long c_id, LocalDate startDate, LocalDate endDate, int coverage, int premium,
             ObjectOfInsuranceEntity objectOfInsurance) {
-        this.id = id;
         this.c_id = c_id;
         this.startDate = startDate;
         this.endDate = endDate;
