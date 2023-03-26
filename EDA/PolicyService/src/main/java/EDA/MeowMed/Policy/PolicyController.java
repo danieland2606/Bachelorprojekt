@@ -1,23 +1,17 @@
-package EDA.MeowMed.Logic;
-
-import EDA.MeowMed.Storage.TemporaryStorage;
-import EDA.MeowMed.View.ObjectOfInsuranceOverview;
-import EDA.MeowMed.View.PolicyOverview;
-import EDA.MeowMed.View.PolicyView;
-import org.springframework.web.bind.annotation.RequestParam;
+package EDA.MeowMed.Policy;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Logic {
+import EDA.MeowMed.Policy.View.*;
+import EDA.MeowMed.Policy.Storage.*;
 
-    public TemporaryStorage storage;
+public class PolicyController {
 
-    public Logic() {
-        this.storage = new TemporaryStorage();
-    }
-    public List<PolicyOverview> getPolicyList(long customer_id, String objectOfInsuranceName, String startDate, String endDate, Integer coverage) {
+    public static TemporaryStorage storage = new TemporaryStorage();
+
+    public static List<PolicyOverview> getPolicyList(long customer_id, String objectOfInsuranceName, String startDate, String endDate, Integer coverage) {
         ArrayList<PolicyOverview> listOfPolicies = new ArrayList<>();
         for (PolicyView p : storage.getData().keySet()) {
             if (storage.getData().get(p) == customer_id &&
@@ -32,16 +26,16 @@ public class Logic {
         return listOfPolicies;
     }
 
-    public PolicyView getPolicyById(long customerID, long policyID) {
-        for (PolicyView p : this.storage.getData().keySet()) {
-            if (this.storage.getData().get(p) == customerID && p.getId() == policyID) {
+    public static PolicyView getPolicyById(long customerID, long policyID) {
+        for (PolicyView p : storage.getData().keySet()) {
+            if (storage.getData().get(p) == customerID && p.getId() == policyID) {
                 return p;
             }
         }
         return null;
     }
 
-    public long addPolicy(long customerID, PolicyView policy) {
+    public static long addPolicy(long customerID, PolicyView policy) {
         long maxID = 0;
         for (PolicyView p : storage.getData().keySet()) {
             if (maxID < p.getId()) {

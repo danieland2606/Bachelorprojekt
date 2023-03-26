@@ -1,7 +1,7 @@
-package EDA.MeowMed.Storage;
+package EDA.MeowMed.Policy.Storage;
 
-import EDA.MeowMed.View.ObjectOfInsuranceView;
-import EDA.MeowMed.View.PolicyView;
+import EDA.MeowMed.Policy.View.ObjectOfInsuranceView;
+import EDA.MeowMed.Policy.View.PolicyView;
 
 import java.time.LocalDate;
 import java.util.HashMap;

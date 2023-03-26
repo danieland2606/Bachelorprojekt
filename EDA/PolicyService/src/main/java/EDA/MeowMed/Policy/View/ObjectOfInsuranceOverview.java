@@ -1,4 +1,4 @@
-package EDA.MeowMed.View;
+package EDA.MeowMed.Policy.View;
 
 public class ObjectOfInsuranceOverview {
 
