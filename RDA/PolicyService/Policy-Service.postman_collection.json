@@ -12,16 +12,21 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:81/api/customer/1/policy",
+					"raw": "localhost:8080/customer/1/policy?fields=startDate,endDate,coverage,objectOfInsurance.name,id",
 					"host": [
 						"localhost"
 					],
-					"port": "81",
+					"port": "8080",
 					"path": [
-						"api",
 						"customer",
 						"1",
 						"policy"
+					],
+					"query": [
+						{
+							"key": "fields",
+							"value": "startDate,endDate,coverage,objectOfInsurance.name,id"
+						}
 					]
 				}
 			},
@@ -33,17 +38,16 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:81/api/customer/1/policy/0",
+					"raw": "localhost:8080/customer/1/policy/1",
 					"host": [
 						"localhost"
 					],
-					"port": "81",
+					"port": "8080",
 					"path": [
-						"api",
 						"customer",
 						"1",
 						"policy",
-						"0"
+						"1"
 					]
 				}
 			},
@@ -54,14 +58,22 @@
 			"request": {
 				"method": "POST",
 				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "    {\r\n        \"startDate\": \"2017-01-15\",\r\n        \"endDate\": \"2099-01-01\",\r\n        \"coverage\": 50000,\r\n        \"objectOfInsurance\": {\r\n            \"enviroment\": \"drinnen\",\r\n            \"ooi_id\": 0,\r\n            \"name\": \"Belly\",\r\n            \"race\": \"Bengal\",\r\n            \"color\": \"Braun\",\r\n            \"age\": \"2015-01-01\",\r\n            \"castrated\": false,\r\n            \"personality\": \"anhänglich\",\r\n            \"environment\": \"drinnen\",\r\n            \"weight\": 4\r\n        }\r\n    }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
 				"url": {
-					"raw": "localhost:81/api/customer/1/policy",
+					"raw": "localhost:8080/customer/1/policy",
 					"host": [
 						"localhost"
 					],
-					"port": "81",
+					"port": "8080",
 					"path": [
-						"api",
 						"customer",
 						"1",
 						"policy"
@@ -71,40 +83,12 @@
 			"response": []
 		},
 		{
-			"name": "putPolicy",
-			"request": {
-				"method": "PUT",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"id\": 0,\r\n    \"c_id\": 1,\r\n    \"startDate\": \"2017-01-15\",\r\n    \"endDate\": \"2099-01-01\",\r\n    \"coverage\": 50000,\r\n    \"objectOfInsurance\": {\r\n        \"name\": \"Belly\",\r\n        \"race\": \"Bengal\",\r\n        \"color\": \"Braun\",\r\n        \"age\": \"2015-01-01\",\r\n        \"castrated\": false,\r\n        \"personality\": \"anhänglich\",\r\n        \"enviroment\": \"drinnen\",\r\n        \"weight\": 4\r\n    }\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "localhost:81/api/customer/1/policy/0",
-					"host": [
-						"localhost"
-					],
-					"port": "81",
-					"path": [
-						"api",
-						"customer",
-						"1",
-						"policy",
-						"0"
-					]
-				}
-			},
-			"response": []
-		},
-		{
 			"name": "postPolicyPrice",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
 			"request": {
-				"method": "POST",
+				"method": "GET",
 				"header": [],
 				"body": {
 					"mode": "raw",
@@ -116,13 +100,12 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:81/api/policyprice",
+					"raw": "localhost:8080/policyprice",
 					"host": [
 						"localhost"
 					],
-					"port": "81",
+					"port": "8080",
 					"path": [
-						"api",
 						"policyprice"
 					]
 				}

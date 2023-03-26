@@ -12,13 +12,13 @@ import jakarta.persistence.Id;
 
 
 @Entity
-//@JsonFilter("objectOfInsuranceFilter")
+@JsonFilter("objectOfInsuranceFilter")
 public class ObjectOfInsuranceEntity {
 
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     private long id;
-
+    @JsonProperty("name")
     private String name;
 
     private String race;
