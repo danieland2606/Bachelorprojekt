@@ -1,35 +1,21 @@
-package com.meowmed.policy;
+package com.meowmed.rdapolicy;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-//import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
+import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
+import com.meowmed.rdapolicy.entity.ObjectOfInsuranceEntity;
+import com.meowmed.rdapolicy.entity.PolicyEntity;
+import com.meowmed.rdapolicy.entity.PolicyRequest;
+import com.meowmed.rdapolicy.entity.PriceCalculationEntity;
 
-import com.meowmed.policy.entity.ObjectOfInsuranceEntity;
-import com.meowmed.policy.entity.PolicyEntity;
-import com.meowmed.policy.entity.PriceCalculationEntity;
-
-@SpringBootApplication
-@RestController
-//@RequestMapping("/api")
-public class PolicyApplication {
-
-	public static void main(String[] args) {
-		SpringApplication.run(PolicyApplication.class, args);
-	}
-
-	@GetMapping("/customer/{c_id}/policy")
-	public List<PolicyEntity> getPolicyList(@PathVariable Long c_id) {
+public class PolicyService {
+    
+    public List<String> getPolicyList(Long c_id) {
 		LocalDate startDate = LocalDate.of(2017, 1, 15);
 		LocalDate endDate1 = LocalDate.of(2099, 1, 1);
 		LocalDate birthDate1 = LocalDate.of(2015, 1, 1);
@@ -38,11 +24,24 @@ public class PolicyApplication {
 		ObjectOfInsuranceEntity cat2 = new ObjectOfInsuranceEntity("Rough", "Bengal", "Schwarz", birthDate2, false, "draufgängerisch", "drinnen", 4);
 		PolicyEntity policy1 = new PolicyEntity(0, c_id , startDate, endDate1, 50000, 765,cat1);
 		PolicyEntity policy2 = new PolicyEntity(1, c_id,startDate, endDate1, 50000, 765 ,cat2);
-		return List.of(policy1, policy2);
+        SimpleFilterProvider filterProvider = new SimpleFilterProvider();
+        filterProvider.addFilter("ObjectOfInsuranceFilter", SimpleBeanPropertyFilter.filterOutAllExcept("name"));
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.setFilterProvider(filterProvider);
+        String fString = "leer";
+        String sString = "leer";
+        try {
+            fString = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(policy1);
+            sString = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(policy2);
+        } catch (Exception e) {
+            System.out.println(sString);
+        }
+        //String fString = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(policy1);
+        //String sString = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(policy2);
+		return List.of(fString, sString);
 	}
 
-	@GetMapping("/customer/{c_id}/policy/{p_id}")
-	public PolicyEntity getPolicy(@PathVariable Long c_id, @PathVariable Long p_id){
+    public PolicyEntity getPolicy(Long c_id, Long p_id){
 		LocalDate startDate = LocalDate.of(2017, 1, 15);
 		LocalDate endDate1 = LocalDate.of(2099, 1, 1);
 		LocalDate birthDate1 = LocalDate.of(2015, 1, 1);
@@ -50,18 +49,12 @@ public class PolicyApplication {
 		return new PolicyEntity(p_id, c_id , startDate, endDate1, 50000, 765 ,cat1);
 	}
 
-	@PostMapping("/customer/{c_id}/policy")
-	public int postPolicy(@PathVariable Long c_id){
-		return ThreadLocalRandom.current().nextInt(10000);
+    public int postPolicy(Long c_id, PolicyRequest pRequest){
+		// sql update Datenbank
+        return ThreadLocalRandom.current().nextInt(10000);
 	}
 
-	@PutMapping("/customer/{c_id}/policy/{p_id}")
-	public PolicyEntity putPolicy(@RequestBody PolicyEntity policy, @PathVariable Long c_id, @PathVariable Long p_id){
-		return policy;
-	}
-
-	@PostMapping("/policyprice")
-	public double postPolicyPrice(@RequestBody PriceCalculationEntity body){
+    public double postPolicyPrice(PriceCalculationEntity body){
 		double grundpreis = 0;
 		double endbetrag = 0;
 		switch(body.getColor()){

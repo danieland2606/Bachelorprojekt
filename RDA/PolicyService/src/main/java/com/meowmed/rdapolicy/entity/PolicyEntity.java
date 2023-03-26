@@ -1,4 +1,4 @@
-package com.meowmed.policy.entity;
+package com.meowmed.rdapolicy.entity;
 
 
 import java.time.LocalDate;
@@ -18,7 +18,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name="Contract")
-@JsonFilter("policy")
+@JsonFilter("policyFilter")
 public class PolicyEntity {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
