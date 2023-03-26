@@ -1,4 +1,4 @@
-package com.meowmed.policy;
+package com.meowmed.rdapolicy;
 
 import java.util.List;
 
@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.meowmed.policy.entity.PolicyEntity;
-import com.meowmed.policy.entity.PolicyRequest;
-import com.meowmed.policy.entity.PriceCalculationEntity;
+import com.meowmed.rdapolicy.entity.PolicyEntity;
+import com.meowmed.rdapolicy.entity.PolicyRequest;
+import com.meowmed.rdapolicy.entity.PriceCalculationEntity;
 
 @SpringBootApplication
 @RestController
@@ -26,7 +26,7 @@ public class PolicyApplication {
 	}
 
 	@GetMapping("/customer/{c_id}/policy")
-	public List<PolicyEntity> getPolicyList(@PathVariable Long c_id) {
+	public List<String> getPolicyList(@PathVariable Long c_id) {
 		return pService.getPolicyList(c_id);
 	}
 

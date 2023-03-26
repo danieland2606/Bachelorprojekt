@@ -1,27 +1,48 @@
-package com.meowmed.policy.entity;
+package com.meowmed.rdapolicy.entity;
 
 import java.time.LocalDate;
 
-public class PriceCalculationEntity {
-    
-    private int postalCode;
-    private int coverage;
-    private String Bengal;
+import com.fasterxml.jackson.annotation.JsonFilter;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import jakarta.persistence.Entity;
+
+
+@Entity
+@JsonFilter("objectOfInsuranceFilter")
+public class ObjectOfInsuranceEntity {
+
+    @JsonProperty("name")
+    private String name;
+
+    @JsonProperty("race")
+    private String race;
+
+    @JsonProperty("color")
     private String color;
+
+    @JsonProperty("age")
     private LocalDate age;
+
+    @JsonProperty("castrated")
     private boolean castrated;
+
+    @JsonProperty("personality")
     private String personality;
+
+    @JsonProperty("environment")
     private String environment;
+
+    @JsonProperty("weight")
     private int weight;
-    
-    public PriceCalculationEntity() {
+
+    public ObjectOfInsuranceEntity() {
     }
 
-    public PriceCalculationEntity(int postalCode, int coverage, String bengal, String color, LocalDate age,
-            boolean castrated, String personality, String environment, int weight) {
-        this.postalCode = postalCode;
-        this.coverage = coverage;
-        Bengal = bengal;
+    public ObjectOfInsuranceEntity(String name, String race, String color, LocalDate age, boolean castrated,
+            String personality, String environment, int weight) {
+        this.name = name;
+        this.race = race;
         this.color = color;
         this.age = age;
         this.castrated = castrated;
@@ -30,28 +51,20 @@ public class PriceCalculationEntity {
         this.weight = weight;
     }
 
-    public int getPostalCode() {
-        return postalCode;
+    public String getName() {
+        return name;
     }
 
-    public void setPostalCode(int postalCode) {
-        this.postalCode = postalCode;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public int getCoverage() {
-        return coverage;
+    public String getRace() {
+        return race;
     }
 
-    public void setCoverage(int coverage) {
-        this.coverage = coverage;
-    }
-
-    public String getBengal() {
-        return Bengal;
-    }
-
-    public void setBengal(String bengal) {
-        Bengal = bengal;
+    public void setRace(String race) {
+        this.race = race;
     }
 
     public String getColor() {
@@ -86,11 +99,11 @@ public class PriceCalculationEntity {
         this.personality = personality;
     }
 
-    public String getEnvironment() {
+    public String getEnviroment() {
         return environment;
     }
 
-    public void setEnvironment(String environment) {
+    public void setEnviroment(String environment) {
         this.environment = environment;
     }
 
@@ -103,12 +116,18 @@ public class PriceCalculationEntity {
     }
 
     @Override
+    public String toString() {
+        return "ObjectOfInsuranceEntity [name=" + name + ", race=" + race + ", color=" + color + ", age=" + age
+                + ", castrated=" + castrated + ", personality=" + personality + ", environment=" + environment
+                + ", weight=" + weight + "]";
+    }
+
+    @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + postalCode;
-        result = prime * result + coverage;
-        result = prime * result + ((Bengal == null) ? 0 : Bengal.hashCode());
+        result = prime * result + ((name == null) ? 0 : name.hashCode());
+        result = prime * result + ((race == null) ? 0 : race.hashCode());
         result = prime * result + ((color == null) ? 0 : color.hashCode());
         result = prime * result + ((age == null) ? 0 : age.hashCode());
         result = prime * result + (castrated ? 1231 : 1237);
@@ -126,15 +145,16 @@ public class PriceCalculationEntity {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        PriceCalculationEntity other = (PriceCalculationEntity) obj;
-        if (postalCode != other.postalCode)
-            return false;
-        if (coverage != other.coverage)
-            return false;
-        if (Bengal == null) {
-            if (other.Bengal != null)
+        ObjectOfInsuranceEntity other = (ObjectOfInsuranceEntity) obj;
+        if (name == null) {
+            if (other.name != null)
                 return false;
-        } else if (!Bengal.equals(other.Bengal))
+        } else if (!name.equals(other.name))
+            return false;
+        if (race == null) {
+            if (other.race != null)
+                return false;
+        } else if (!race.equals(other.race))
             return false;
         if (color == null) {
             if (other.color != null)
@@ -162,4 +182,7 @@ public class PriceCalculationEntity {
             return false;
         return true;
     }
+
+
+    
 }

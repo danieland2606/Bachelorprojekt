@@ -1,18 +1,21 @@
-package com.meowmed.policy;
+package com.meowmed.rdapolicy;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
-import com.meowmed.policy.entity.ObjectOfInsuranceEntity;
-import com.meowmed.policy.entity.PolicyEntity;
-import com.meowmed.policy.entity.PolicyRequest;
-import com.meowmed.policy.entity.PriceCalculationEntity;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
+import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
+import com.meowmed.rdapolicy.entity.ObjectOfInsuranceEntity;
+import com.meowmed.rdapolicy.entity.PolicyEntity;
+import com.meowmed.rdapolicy.entity.PolicyRequest;
+import com.meowmed.rdapolicy.entity.PriceCalculationEntity;
 
 public class PolicyService {
     
-    public List<PolicyEntity> getPolicyList(Long c_id) {
+    public List<String> getPolicyList(Long c_id) {
 		LocalDate startDate = LocalDate.of(2017, 1, 15);
 		LocalDate endDate1 = LocalDate.of(2099, 1, 1);
 		LocalDate birthDate1 = LocalDate.of(2015, 1, 1);
@@ -21,7 +24,21 @@ public class PolicyService {
 		ObjectOfInsuranceEntity cat2 = new ObjectOfInsuranceEntity("Rough", "Bengal", "Schwarz", birthDate2, false, "draufgängerisch", "drinnen", 4);
 		PolicyEntity policy1 = new PolicyEntity(0, c_id , startDate, endDate1, 50000, 765,cat1);
 		PolicyEntity policy2 = new PolicyEntity(1, c_id,startDate, endDate1, 50000, 765 ,cat2);
-		return List.of(policy1, policy2);
+        SimpleFilterProvider filterProvider = new SimpleFilterProvider();
+        filterProvider.addFilter("ObjectOfInsuranceFilter", SimpleBeanPropertyFilter.filterOutAllExcept("name"));
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.setFilterProvider(filterProvider);
+        String fString = "leer";
+        String sString = "leer";
+        try {
+            fString = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(policy1);
+            sString = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(policy2);
+        } catch (Exception e) {
+            System.out.println(sString);
+        }
+        //String fString = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(policy1);
+        //String sString = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(policy2);
+		return List.of(fString, sString);
 	}
 
     public PolicyEntity getPolicy(Long c_id, Long p_id){
