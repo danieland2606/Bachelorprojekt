@@ -11,7 +11,7 @@
 	<groupId>com.meowmed</groupId>
 	<artifactId>policy</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>policy</name>
+	<name>RDA-policy</name>
 	<description>Policy Service der Firma Meowmed</description>
 	<properties>
 		<java.version>17</java.version>
