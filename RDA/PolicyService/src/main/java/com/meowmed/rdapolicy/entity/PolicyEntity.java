@@ -22,7 +22,7 @@ import jakarta.persistence.Table;
 public class PolicyEntity {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
-    @Column(name="Contract_ID")
+    @Column(name="Policy_ID")
     @JsonProperty("id")
     private long id;
 

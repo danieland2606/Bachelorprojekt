@@ -5,9 +5,15 @@ import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Bean;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
+//import com.meowmed.rdapolicy.database.PolicyRepository;
 import com.meowmed.rdapolicy.entity.ObjectOfInsuranceEntity;
 import com.meowmed.rdapolicy.entity.PolicyEntity;
 import com.meowmed.rdapolicy.entity.PolicyRequest;
@@ -15,6 +21,8 @@ import com.meowmed.rdapolicy.entity.PriceCalculationEntity;
 
 public class PolicyService {
     
+	private static final Logger log = LoggerFactory.getLogger(PolicyService.class);
+
     public List<String> getPolicyList(Long c_id) {
 		LocalDate startDate = LocalDate.of(2017, 1, 15);
 		LocalDate endDate1 = LocalDate.of(2099, 1, 1);
@@ -78,4 +86,9 @@ public class PolicyService {
 		endbetrag = ((int)(endbetrag*100))/100;
 		return endbetrag;
 	}
+
+	//@Bean
+	//public CommandLineRunner demo (PolicyRepository repo){
+
+	//}
 }

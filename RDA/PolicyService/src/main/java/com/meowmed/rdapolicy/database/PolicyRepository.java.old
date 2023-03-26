@@ -1,0 +1,12 @@
+package com.meowmed.rdapolicy.database;
+
+import java.util.List;
+
+import org.springframework.data.repository.CrudRepository;
+
+import com.meowmed.rdapolicy.entity.PolicyEntity;
+
+public interface PolicyRepository extends CrudRepository<PolicyEntity, Long>{
+    List<PolicyEntity> findByc_id(long c_id);    
+    PolicyEntity findByPolicyId(long p_id);
+}

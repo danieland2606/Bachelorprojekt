@@ -6,11 +6,16 @@ import com.fasterxml.jackson.annotation.JsonFilter;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 
 
 @Entity
 @JsonFilter("objectOfInsuranceFilter")
 public class ObjectOfInsuranceEntity {
+
+    @Id
+    @JsonProperty("ooi_id")
+    private long id;
 
     @JsonProperty("name")
     private String name;
