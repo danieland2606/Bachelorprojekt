@@ -1,54 +1,37 @@
 package EDA.MeowMed.Policy;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
+import EDA.MeowMed.Policy.View.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
-import EDA.MeowMed.Policy.View.*;
-import EDA.MeowMed.Policy.Storage.*;
 
+@RestController
+@RequestMapping("/customer/{c_id}/policy")
 public class PolicyController {
 
-    public static TemporaryStorage storage = new TemporaryStorage();
+    private final PolicyService policyService;
 
-    public static List<PolicyOverview> getPolicyList(long customer_id, String objectOfInsuranceName, String startDate, String endDate, Integer coverage) {
-        ArrayList<PolicyOverview> listOfPolicies = new ArrayList<>();
-        for (PolicyView p : storage.getData().keySet()) {
-            if (storage.getData().get(p) == customer_id &&
-               (objectOfInsuranceName == null || p.getObjectOfInsurance().getName().equals(objectOfInsuranceName)) &&
-               (startDate == null || p.getStartDate().equals(LocalDate.parse(startDate))) &&
-               (endDate == null || p.getEndDate().equals(LocalDate.parse(endDate))) &&
-               (coverage == null || p.getCoverage() == coverage)) {
-
-                listOfPolicies.add(new PolicyOverview(p.getId(), p.getStartDate(), p.getEndDate(), p.getCoverage(), new ObjectOfInsuranceOverview(p.getObjectOfInsurance().getName())));
-            }
-        }
-        return listOfPolicies;
+    @Autowired
+    public PolicyController(PolicyService policyService) {
+        this.policyService = policyService;
     }
 
-    public static PolicyView getPolicyById(long customerID, long policyID) {
-        for (PolicyView p : storage.getData().keySet()) {
-            if (storage.getData().get(p) == customerID && p.getId() == policyID) {
-                return p;
-            }
-        }
-        return null;
+    @GetMapping
+    public List<PolicyOverview> getOverviewOfPolicy(@PathVariable long c_id, @RequestParam(required = false) String objectOfInsuranceName,
+                                                    @RequestParam(required = false) String startDate, @RequestParam(required = false) String endDate,
+                                                    @RequestParam(required = false) Integer coverage) {
+        return this.policyService.getPolicyList(c_id, objectOfInsuranceName, startDate, endDate, coverage);
     }
 
-    public static long addPolicy(long customerID, PolicyView policy) {
-        long maxID = 0;
-        for (PolicyView p : storage.getData().keySet()) {
-            if (maxID < p.getId()) {
-                maxID = p.getId();
-            }
-        }
-        policy.setId(++maxID);
-        storage.getData().put(policy, customerID);
+    @GetMapping("/{p_id}")
+    public PolicyView getPolicy(@PathVariable long c_id, @PathVariable long p_id) {
+        return this.policyService.getPolicyById(c_id, p_id); //TODO: return 404 or something like that?
+    }
 
-
-        //TODO: Send Event to notification Service
-        
-
-        return maxID;
+    @PostMapping
+    public long addPolicy(@PathVariable long c_id, @RequestBody PolicyView policy) {
+        return this.policyService.addPolicy(c_id, policy); //TODO: return error when something went wrong?
     }
 }
