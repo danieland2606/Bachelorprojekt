@@ -6,34 +6,33 @@ import com.fasterxml.jackson.annotation.JsonFilter;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 
 
 @Entity
-@JsonFilter("objectOfInsuranceFilter")
+//@JsonFilter("objectOfInsuranceFilter")
 public class ObjectOfInsuranceEntity {
 
-    @JsonProperty("name")
+    @Id
+    @GeneratedValue(strategy=GenerationType.AUTO)
+    private long id;
+
     private String name;
 
-    @JsonProperty("race")
     private String race;
 
-    @JsonProperty("color")
     private String color;
 
-    @JsonProperty("age")
     private LocalDate age;
 
-    @JsonProperty("castrated")
     private boolean castrated;
 
-    @JsonProperty("personality")
     private String personality;
 
-    @JsonProperty("environment")
     private String environment;
 
-    @JsonProperty("weight")
     private int weight;
 
     public ObjectOfInsuranceEntity() {

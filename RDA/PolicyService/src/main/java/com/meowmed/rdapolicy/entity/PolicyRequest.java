@@ -6,18 +6,15 @@ public class PolicyRequest {
     private LocalDate startDate;
     private LocalDate endDate;
     private int coverage;
-    private int premium;
     private ObjectOfInsuranceEntity objectOfInsurance;
     
     
     public PolicyRequest() {
     }
-    public PolicyRequest(LocalDate startDate, LocalDate endDate, int coverage, int premium,
-            ObjectOfInsuranceEntity objectOfInsurance) {
+    public PolicyRequest(LocalDate startDate, LocalDate endDate, int coverage,ObjectOfInsuranceEntity objectOfInsurance) {
         this.startDate = startDate;
         this.endDate = endDate;
         this.coverage = coverage;
-        this.premium = premium;
         this.objectOfInsurance = objectOfInsurance;
     }
     public LocalDate getStartDate() {
@@ -38,12 +35,6 @@ public class PolicyRequest {
     public void setCoverage(int coverage) {
         this.coverage = coverage;
     }
-    public int getPremium() {
-        return premium;
-    }
-    public void setPremium(int premium) {
-        this.premium = premium;
-    }
     public ObjectOfInsuranceEntity getObjectOfInsurance() {
         return objectOfInsurance;
     }
@@ -57,7 +48,6 @@ public class PolicyRequest {
         result = prime * result + ((startDate == null) ? 0 : startDate.hashCode());
         result = prime * result + ((endDate == null) ? 0 : endDate.hashCode());
         result = prime * result + coverage;
-        result = prime * result + premium;
         result = prime * result + ((objectOfInsurance == null) ? 0 : objectOfInsurance.hashCode());
         return result;
     }
@@ -81,8 +71,6 @@ public class PolicyRequest {
         } else if (!endDate.equals(other.endDate))
             return false;
         if (coverage != other.coverage)
-            return false;
-        if (premium != other.premium)
             return false;
         if (objectOfInsurance == null) {
             if (other.objectOfInsurance != null)

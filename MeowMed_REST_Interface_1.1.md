@@ -143,7 +143,6 @@ Creates new policy resource for customer with id=={c_id}.
   "startDate": "1990-01-01",
   "endDate": "2030-12-31",
   "coverage": 50000,
-  "premium": 75,
   "objectOfInsurance": {
     "name": "Tomato",
     "race": "Bengal",
@@ -181,5 +180,65 @@ Creates new policy resource for customer with id=={c_id}.
 ```json
 {
   "premium": 75
+}
+```
+## Fields query parameter
+Example with Customer:
+The request
+> GET /customer
+
+produces a response like this:
+```json
+{
+  "customerList": [
+    {
+      "id": 0,
+    },
+    {
+      "id": 1,
+    }
+  ]
+}
+```
+> GET /customer?fields=firstName
+
+produces a response like this:
+```json
+{
+  "customerList": [
+    {
+      "id": 0,
+      "firstName": "John",
+    },
+    {
+      "id": 1,
+      "firstName": "Jane",
+    }
+  ]
+}
+```
+> GET /customer?fields=maritalStatus,dateOfBirth,address.street
+
+produces a response like this:
+```json
+{
+  "customerList": [
+    {
+      "id": 0,
+      "maritalStatus": "single",
+      "dateOfBirth": "2000-12-30",
+      "address": {
+        "street": "Berliner Allee 100"
+      }
+    },
+    {
+      "id": 1,
+      "maritalStatus": "married",
+      "dateOfBirth": "1998-06-22",
+      "address": {
+        "street": "Berliner Allee 101"
+      }
+    }
+  ]
 }
 ```
