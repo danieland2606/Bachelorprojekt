@@ -10,3 +10,12 @@ services:
       - "default"
     ports:
       - 81:8080
+  notification:
+    build:
+      context: ./NotificationService
+      dockerfile: Dockerfile
+    container_name: notification-service
+    networks:
+      - "default"
+    ports:
+      - 82:8080

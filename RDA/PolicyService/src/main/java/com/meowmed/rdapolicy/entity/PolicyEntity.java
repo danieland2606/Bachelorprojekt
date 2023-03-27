@@ -4,7 +4,6 @@ package com.meowmed.rdapolicy.entity;
 import java.time.LocalDate;
 
 import com.fasterxml.jackson.annotation.JsonFilter;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -18,14 +17,15 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name="Contract")
-//@JsonFilter("policyFilter")
+@JsonFilter("policyFilter")
 public class PolicyEntity {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     @Column(name="Policy_ID")
     private long id;
 
-    private long c_id;
+    @Column(name="c_id")
+    private long cid;
     
     private LocalDate startDate;
     
@@ -33,7 +33,7 @@ public class PolicyEntity {
 
     private int coverage;
 
-    private int premium;
+    private double premium;
 
     @OneToOne
     private ObjectOfInsuranceEntity objectOfInsurance;
@@ -41,9 +41,9 @@ public class PolicyEntity {
     public PolicyEntity() {
     }
 
-    public PolicyEntity(long c_id, LocalDate startDate, LocalDate endDate, int coverage, int premium,
+    public PolicyEntity(long c_id, LocalDate startDate, LocalDate endDate, int coverage, double premium,
             ObjectOfInsuranceEntity objectOfInsurance) {
-        this.c_id = c_id;
+        this.cid = c_id;
         this.startDate = startDate;
         this.endDate = endDate;
         this.coverage = coverage;
@@ -60,11 +60,11 @@ public class PolicyEntity {
     }
 
     public long getC_id() {
-        return c_id;
+        return cid;
     }
 
     public void setC_id(long c_id) {
-        this.c_id = c_id;
+        this.cid = c_id;
     }
 
     public LocalDate getStartDate() {
@@ -91,11 +91,11 @@ public class PolicyEntity {
         this.coverage = coverage;
     }
 
-    public int getPremium() {
+    public double getPremium() {
         return premium;
     }
 
-    public void setPremium(int premium) {
+    public void setPremium(double premium) {
         this.premium = premium;
     }
 
@@ -112,11 +112,11 @@ public class PolicyEntity {
         final int prime = 31;
         int result = 1;
         result = prime * result + (int) (id ^ (id >>> 32));
-        result = prime * result + (int) (c_id ^ (c_id >>> 32));
+        result = prime * result + (int) (cid ^ (cid >>> 32));
         result = prime * result + ((startDate == null) ? 0 : startDate.hashCode());
         result = prime * result + ((endDate == null) ? 0 : endDate.hashCode());
         result = prime * result + coverage;
-        result = prime * result + premium;
+        result = prime * result + (int)premium;
         result = prime * result + ((objectOfInsurance == null) ? 0 : objectOfInsurance.hashCode());
         return result;
     }
@@ -132,7 +132,7 @@ public class PolicyEntity {
         PolicyEntity other = (PolicyEntity) obj;
         if (id != other.id)
             return false;
-        if (c_id != other.c_id)
+        if (cid != other.cid)
             return false;
         if (startDate == null) {
             if (other.startDate != null)

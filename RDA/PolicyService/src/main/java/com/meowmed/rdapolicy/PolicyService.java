@@ -2,77 +2,75 @@ package com.meowmed.rdapolicy;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
+import java.util.Set;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.boot.CommandLineRunner;
-import org.springframework.context.annotation.Bean;
 import org.springframework.http.converter.json.MappingJacksonValue;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
-//import com.meowmed.rdapolicy.database.PolicyRepository;
-import com.meowmed.rdapolicy.entity.ObjectOfInsuranceEntity;
+import com.meowmed.rdapolicy.database.ObjectOfInsuranceRepository;
+import com.meowmed.rdapolicy.database.PolicyRepository;
 import com.meowmed.rdapolicy.entity.PolicyEntity;
+import com.meowmed.rdapolicy.entity.PolicyPostResponse;
 import com.meowmed.rdapolicy.entity.PolicyRequest;
 import com.meowmed.rdapolicy.entity.PriceCalculationEntity;
+import com.meowmed.rdapolicy.entity.PriceCalculationReturn;
 
 public class PolicyService {
     
-	private static final Logger log = LoggerFactory.getLogger(PolicyService.class);
+	//private static final Logger log = LoggerFactory.getLogger(PolicyService.class);
 
-    public List<PolicyEntity> getPolicyList(Long c_id) {
-		LocalDate startDate = LocalDate.of(2017, 1, 15);
-		LocalDate endDate1 = LocalDate.of(2099, 1, 1);
-		LocalDate birthDate1 = LocalDate.of(2015, 1, 1);
-		LocalDate birthDate2 = LocalDate.of(2015, 1, 2);
-		ObjectOfInsuranceEntity cat1 = new ObjectOfInsuranceEntity("Belly", "Bengal", "Braun", birthDate1, false, "anhänglich", "drinnen", 4);
-		ObjectOfInsuranceEntity cat2 = new ObjectOfInsuranceEntity("Rough", "Bengal", "Schwarz", birthDate2, false, "draufgängerisch", "drinnen", 4);
-		PolicyEntity policy1 = new PolicyEntity(c_id , startDate, endDate1, 50000, 765,cat1);
-		PolicyEntity policy2 = new PolicyEntity(c_id,startDate, endDate1, 50000, 765 ,cat2);
-        
-		//MappingJacksonValue wrapper = new MappingJacksonValue(userRepository.findOne(id));        
-		//MappingJacksonValue wrapper = new MappingJacksonValue(policy1);        
-        //wrapper.setFilters(new SimpleFilterProvider()
-        //                           .addFilter("userFilter",
-        //                                      SimpleBeanPropertyFilter.filterOutAllExcept("name")));
+    public MappingJacksonValue getPolicyList(Long c_id, String fields, PolicyRepository pRepository) {
+		MappingJacksonValue wrapper = new MappingJacksonValue(pRepository.findByCid(c_id));
+		
+		List<String> policyList = new ArrayList<String>();
+		policyList.addAll(Arrays.asList(fields.split(",")));
+		List<String> ooIList = new ArrayList<String>();
 
-		/*
-		SimpleFilterProvider filterProvider = new SimpleFilterProvider();
-        filterProvider.addFilter("ObjectOfInsuranceFilter", SimpleBeanPropertyFilter.filterOutAllExcept("name"));
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.setFilterProvider(filterProvider);
-        String fString = "leer";
-        String sString = "leer";
-        try {
-            fString = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(policy1);
-            sString = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(policy2);
-        } catch (Exception e) {
-            System.out.println(sString);
-        }
-        //String fString = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(policy1);
-        //String sString = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(policy2);
-		*/
-		return List.of(policy1, policy2);
+		boolean containsOoI = false;
+		for (String result : policyList) {
+			if(result.contains("objectOfInsurance.")){
+				ooIList.add(result.substring(18));
+				policyList.remove(result);
+				containsOoI = true;
+				//if(!policyList.contains("objectOfInsurance")){
+				//	policyList.add("objectOfInsurance");
+				//}
+			}
+		}
+		if(containsOoI) policyList.add("objectOfInsurance");
+		
+		wrapper.setFilters(new SimpleFilterProvider()
+		.addFilter("policyFilter", SimpleBeanPropertyFilter.filterOutAllExcept(Set.copyOf(policyList)))
+		.addFilter("objectOfInsuranceFilter", SimpleBeanPropertyFilter.filterOutAllExcept(Set.copyOf(ooIList)))
+		.setFailOnUnknownId(false));
+		return wrapper;
 	}
 
-    public PolicyEntity getPolicy(Long c_id, Long p_id){
-		LocalDate startDate = LocalDate.of(2017, 1, 15);
-		LocalDate endDate1 = LocalDate.of(2099, 1, 1);
-		LocalDate birthDate1 = LocalDate.of(2015, 1, 1);
-		ObjectOfInsuranceEntity cat1 = new ObjectOfInsuranceEntity("Belly", "Bengal", "Braun", birthDate1, false, "anhänglich", "drinnen", 4);
-		return new PolicyEntity(c_id , startDate, endDate1, 50000, 765 ,cat1);
+    public MappingJacksonValue getPolicy(Long c_id, Long p_id, PolicyRepository pRepository){
+		MappingJacksonValue wrapper = new MappingJacksonValue(pRepository.findById(p_id));
+		wrapper.setFilters(new SimpleFilterProvider()
+		.addFilter("policyFilter", SimpleBeanPropertyFilter.serializeAllExcept("id", "c_id"))
+		.addFilter("objectOfInsuranceFilter", SimpleBeanPropertyFilter.serializeAll())
+		.setFailOnUnknownId(false));
+		
+		return wrapper;
 	}
 
-    public int postPolicy(Long c_id, PolicyRequest pRequest){
-		// sql update Datenbank
-        return ThreadLocalRandom.current().nextInt(10000);
+    public PolicyPostResponse postPolicy(Long c_id, PolicyRequest pRequest, PolicyRepository pRepository, ObjectOfInsuranceRepository oRepository){
+		oRepository.save(pRequest.getObjectOfInsurance());
+		PriceCalculationEntity tempCalc = new PriceCalculationEntity(12150, pRequest.getCoverage(), pRequest.getObjectOfInsurance().getRace(), 
+				pRequest.getObjectOfInsurance().getColor(), pRequest.getObjectOfInsurance().getAge(), pRequest.getObjectOfInsurance().isCastrated(), 
+				pRequest.getObjectOfInsurance().getPersonality(), pRequest.getObjectOfInsurance().getEnviroment(), pRequest.getObjectOfInsurance().getWeight());
+		PolicyEntity policy = new PolicyEntity(c_id, pRequest.getStartDate(), pRequest.getEndDate(), pRequest.getCoverage(), getPolicyPrice(tempCalc), pRequest.getObjectOfInsurance());
+		PolicyEntity returnValue = pRepository.save(policy);
+        return new PolicyPostResponse(returnValue.getId());
 	}
 
-    public double postPolicyPrice(PriceCalculationEntity body){
+    public double getPolicyPrice(PriceCalculationEntity body){
 		double grundpreis = 0;
 		double endbetrag = 0;
 		switch(body.getColor()){
@@ -97,8 +95,7 @@ public class PolicyService {
 		return endbetrag;
 	}
 
-	//@Bean
-	//public CommandLineRunner demo (PolicyRepository repo){
-
-	//}
+	public PriceCalculationReturn getPolicyPriceRequest(PriceCalculationEntity body){
+		return new PriceCalculationReturn(getPolicyPrice(body));
+	}
 }

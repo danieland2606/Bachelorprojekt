@@ -1,57 +1,64 @@
 package com.meowmed.rdapolicy;
 
 import java.time.LocalDate;
-import java.util.List;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.meowmed.rdapolicy.database.ObjectOfInsuranceRepository;
 import com.meowmed.rdapolicy.database.PolicyRepository;
 import com.meowmed.rdapolicy.entity.ObjectOfInsuranceEntity;
 import com.meowmed.rdapolicy.entity.PolicyEntity;
+import com.meowmed.rdapolicy.entity.PolicyPostResponse;
 import com.meowmed.rdapolicy.entity.PolicyRequest;
 import com.meowmed.rdapolicy.entity.PriceCalculationEntity;
+import com.meowmed.rdapolicy.entity.PriceCalculationReturn;
 
 @SpringBootApplication
 @RestController
 public class PolicyApplication {
 
 	PolicyService pService = new PolicyService();
+	PolicyRepository pRepository;
+	ObjectOfInsuranceRepository oRepository;
 
 	public static void main(String[] args) {
 		SpringApplication.run(PolicyApplication.class, args);
 	}
 
 	@GetMapping("/customer/{c_id}/policy")
-	public List<PolicyEntity> getPolicyList(@PathVariable Long c_id) {
-		return pService.getPolicyList(c_id);
+	public MappingJacksonValue getPolicyList(@PathVariable Long c_id, @RequestParam(value = "fields") String fields) {
+		return pService.getPolicyList(c_id,fields, pRepository);
 	}
 
 	@GetMapping("/customer/{c_id}/policy/{p_id}")
-	public PolicyEntity getPolicy(@PathVariable Long c_id, @PathVariable Long p_id){
-		return pService.getPolicy(c_id, p_id);
+	public MappingJacksonValue getPolicy(@PathVariable Long c_id, @PathVariable Long p_id){
+		return pService.getPolicy(c_id, p_id, pRepository);
 	}
 
 	@PostMapping("/customer/{c_id}/policy")
-	public int postPolicy(@PathVariable Long c_id, @RequestBody PolicyRequest pRequest){
-		return pService.postPolicy(c_id, pRequest);
+	public PolicyPostResponse postPolicy(@PathVariable Long c_id, @RequestBody PolicyRequest pRequest){
+		return pService.postPolicy(c_id, pRequest, pRepository, oRepository);
 	}
 
 	@GetMapping("/policyprice")
-	public double postPolicyPrice(@RequestBody PriceCalculationEntity body){
-		return pService.postPolicyPrice(body);
+	public PriceCalculationReturn getPolicyPrice(@RequestBody PriceCalculationEntity body){
+		return pService.getPolicyPriceRequest(body);
 	}
 
 	@Bean
 	CommandLineRunner commandLineRunner(PolicyRepository policyRepository, ObjectOfInsuranceRepository objectOfInsuranceRepository){
+		pRepository = policyRepository;
+		oRepository = objectOfInsuranceRepository;
 		return args -> {
 			LocalDate startDate = LocalDate.of(2017, 1, 15);
 			LocalDate endDate1 = LocalDate.of(2099, 1, 1);
@@ -67,4 +74,13 @@ public class PolicyApplication {
 			policyRepository.save(policy2);			
 		};
 	}
+	/*
+	protected PolicyRepository getPolicyRepository(){
+		return pRepository;
+	}
+
+	protected ObjectOfInsuranceRepository getObjectOfInsuranceRepository(){
+		return oRepository;
+	}
+	*/
 }
