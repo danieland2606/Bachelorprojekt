@@ -1,20 +1,34 @@
-package EDA.MeowMed.Policy.Entity;
+package EDA.MeowMed.Policy.Persistence.Entity;
+
+import jakarta.persistence.*;
 
 import java.io.Serializable;
 
-public class AddressEntity implements Serializable {
-    private String city;
-    private String street;
-    private String postalCode;
+@Entity
+@Table(name="Address")
+public class Address implements Serializable {
+
+    @Id
+    @GeneratedValue
+    @Column(name = "id")
     private Long id;
 
-    public AddressEntity(String city, String street, String postalCode) {
+    @Column(name = "city", nullable = false)
+    private String city;
+
+    @Column(name = "street", nullable = false)
+    private String street;
+
+    @Column(name = "postal_code", nullable = false)
+    private String postalCode;
+
+    public Address(String city, String street, String postalCode) {
         this.city = city;
         this.street = street;
         this.postalCode = postalCode;
     }
 
-    public AddressEntity() {}
+    public Address() {}
 
     public String getCity() {
         return city;

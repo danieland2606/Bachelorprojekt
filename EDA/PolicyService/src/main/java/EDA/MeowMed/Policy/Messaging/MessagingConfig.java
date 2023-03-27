@@ -1,6 +1,6 @@
 package EDA.MeowMed.Policy.Messaging;
 
-import EDA.MeowMed.Policy.PolicyService;
+import EDA.MeowMed.Policy.Logic.PolicyService;
 import org.springframework.amqp.core.*;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;

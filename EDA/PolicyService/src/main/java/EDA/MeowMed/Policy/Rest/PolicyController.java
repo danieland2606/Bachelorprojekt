@@ -1,6 +1,7 @@
-package EDA.MeowMed.Policy;
+package EDA.MeowMed.Policy.Rest;
 
-import EDA.MeowMed.Policy.Entity.PolicyEntity;
+import EDA.MeowMed.Policy.Persistence.Entity.Policy;
+import EDA.MeowMed.Policy.Logic.PolicyService;
 import EDA.MeowMed.Policy.View.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -27,12 +28,12 @@ public class PolicyController {
     }
 
     @GetMapping("/{p_id}")
-    public PolicyEntity getPolicy(@PathVariable long c_id, @PathVariable long p_id) {
+    public Policy getPolicy(@PathVariable long c_id, @PathVariable long p_id) {
         return this.policyService.getPolicyById(c_id, p_id); //TODO: return 404 or something like that?
     }
 
     @PostMapping
-    public long addPolicy(@PathVariable long c_id, @RequestBody PolicyEntity policy) {
+    public long addPolicy(@PathVariable long c_id, @RequestBody Policy policy) {
         return this.policyService.addPolicy(c_id, policy); //TODO: return error when something went wrong?
     }
 }

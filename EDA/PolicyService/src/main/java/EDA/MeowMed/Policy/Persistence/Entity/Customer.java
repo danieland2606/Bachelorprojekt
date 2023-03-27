@@ -1,22 +1,47 @@
-package EDA.MeowMed.Policy.Entity;
+package EDA.MeowMed.Policy.Persistence.Entity;
+
+
+import jakarta.persistence.*;
 
 import java.io.Serializable;
 import java.time.LocalDate;
 
-public class CustomerEntity implements Serializable {
+@Entity
+@Table(name="Customer")
+public class Customer implements Serializable {
 
+    @Id
+    @Column(name = "id")
     private long id;
+
+    @Column(name = "first_name", nullable = false)
     private String firstName;
+
+    @Column(name = "last_name", nullable = false)
     private String lastName;
+
+    @Column(name = "martial_status", nullable = false)
     private String martialStatus;
+
+    @Column(name = "date_of_birth", nullable = false)
     private LocalDate dateOfBirth;
+
+    @Column(name = "employment_status")
     private String employmentStatus;
-    private AddressEntity address;
+
+    @OneToOne(optional = false)
+    private Address address;
+
+    @Column(name = "phone_number", nullable = false)
     private String phoneNumber;
+
+    @Column(name = "e_mail", nullable = false)
     private String email;
+
+    @Column(name = "bank_details", nullable = false)
     private String bankDetails;
 
-    public CustomerEntity(long id, String firstName, String lastName, String martialStatus, LocalDate dateOfBirth, String employmentStatus, AddressEntity address, String phoneNumber, String email, String bankDetails) {
+    public Customer(long id, String firstName, String lastName, String martialStatus, LocalDate dateOfBirth, String employmentStatus, Address address, String phoneNumber, String email, String bankDetails) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -29,7 +54,7 @@ public class CustomerEntity implements Serializable {
         this.bankDetails = bankDetails;
     }
 
-    public CustomerEntity() {
+    public Customer() {
     }
 
     public long getId() {
@@ -79,11 +104,11 @@ public class CustomerEntity implements Serializable {
         this.employmentStatus = employmentStatus;
     }
 
-    public AddressEntity getAddress() {
+    public Address getAddress() {
         return address;
     }
 
-    public void setAddress(AddressEntity address) {
+    public void setAddress(Address address) {
         this.address = address;
     }
 

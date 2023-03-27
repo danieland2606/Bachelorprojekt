@@ -1,27 +1,46 @@
-package EDA.MeowMed.Policy.Entity;
+package EDA.MeowMed.Policy.Persistence.Entity;
+
+import jakarta.persistence.*;
 
 import java.io.Serializable;
 import java.time.LocalDate;
 
-public class ObjectOfInsuranceEntity implements Serializable {
+@Entity
+@Table(name="ObjectOfInsurance")
+public class ObjectOfInsurance implements Serializable {
 
+    @Id
+    @GeneratedValue
+    @Column(name = "id")
+    private long id;
+
+    @Column(name = "name", nullable = false)
     private String name;
 
+    @Column(name = "race", nullable = false)
     private String race;
 
+    @Column(name = "color", nullable = false)
     private String color;
 
+    @Column(name = "date_of_birth", nullable = false)
     private LocalDate dateOfBirth;
 
+
+    @Column(name = "castrated", nullable = false)
     private boolean castrated;
 
+    @Column(name = "personality", nullable = false)
     private String personality;
 
+    @Column(name = "environment", nullable = false)
     private String environment;
 
+
+    @Column(name = "weight", nullable = false)
     private double weight;
 
-    public ObjectOfInsuranceEntity(String name, String race, String color, LocalDate dateOfBirth, boolean castrated, String personality, String environment, double weight) {
+    public ObjectOfInsurance(String name, String race, String color, LocalDate dateOfBirth, boolean castrated, String personality, String environment, double weight) {
         this.name = name;
         this.race = race;
         this.color = color;
@@ -30,6 +49,10 @@ public class ObjectOfInsuranceEntity implements Serializable {
         this.personality = personality;
         this.environment = environment;
         this.weight = weight;
+    }
+
+    public ObjectOfInsurance() {
+
     }
 
     public String getName() {

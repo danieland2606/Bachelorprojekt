@@ -1,25 +1,51 @@
-package EDA.MeowMed.Policy.Entity;
+package EDA.MeowMed.Policy.Persistence.Entity;
+
+import jakarta.persistence.*;
 
 import java.io.Serializable;
 import java.time.LocalDate;
 
-public class PolicyEntity implements Serializable {
+@Entity
+@Table(name="Policy")
+public class Policy implements Serializable {
+
+    @Id
+    @GeneratedValue
+    @Column(name = "id")
     private long id;
+
+
+    @Column(name = "start_date", nullable = false)
     private LocalDate startDate;
+
+
+    @Column(name = "end_date", nullable = true)
     private LocalDate endDate;
+
+    @Column(name = "coverage", nullable = false)
     private int coverage;
 
+
+    @Column(name = "premium", nullable = false)
     private double premium;
 
-    private ObjectOfInsuranceEntity objectOfInsurance;
+    @OneToOne(optional = false)
+    private ObjectOfInsurance objectOfInsurance;
 
-    public PolicyEntity(long id, LocalDate startDate, LocalDate endDate, int coverage, int premium, ObjectOfInsuranceEntity objectOfInsurance) {
+    @ManyToOne(optional = false)
+    private Customer customer;
+
+    public Policy(long id, LocalDate startDate, LocalDate endDate, int coverage, int premium, ObjectOfInsurance objectOfInsurance) {
         this.id = id;
         this.startDate = startDate;
         this.endDate = endDate;
         this.coverage = coverage;
         this.premium = premium;
         this.objectOfInsurance = objectOfInsurance;
+    }
+
+    public Policy() {
+
     }
 
     public long getId() {
@@ -62,11 +88,19 @@ public class PolicyEntity implements Serializable {
         this.premium = premium;
     }
 
-    public ObjectOfInsuranceEntity getObjectOfInsurance() {
+    public ObjectOfInsurance getObjectOfInsurance() {
         return objectOfInsurance;
     }
 
-    public void setObjectOfInsurance(ObjectOfInsuranceEntity objectOfInsurance) {
+    public void setObjectOfInsurance(ObjectOfInsurance objectOfInsurance) {
         this.objectOfInsurance = objectOfInsurance;
+    }
+
+    public Customer getCustomer() {
+        return this.customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
     }
 }
