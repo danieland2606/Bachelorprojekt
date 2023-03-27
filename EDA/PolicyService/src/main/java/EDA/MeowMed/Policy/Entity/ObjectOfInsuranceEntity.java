@@ -1,8 +1,9 @@
-package EDA.MeowMed.Policy.View;
+package EDA.MeowMed.Policy.Entity;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
-public class ObjectOfInsuranceView {
+public class ObjectOfInsuranceEntity implements Serializable {
 
     private String name;
 
@@ -20,7 +21,7 @@ public class ObjectOfInsuranceView {
 
     private double weight;
 
-    public ObjectOfInsuranceView(String name, String race, String color, LocalDate dateOfBirth, boolean castrated, String personality, String environment, double weight) {
+    public ObjectOfInsuranceEntity(String name, String race, String color, LocalDate dateOfBirth, boolean castrated, String personality, String environment, double weight) {
         this.name = name;
         this.race = race;
         this.color = color;

@@ -1,18 +1,19 @@
-package EDA.MeowMed.Policy.View;
+package EDA.MeowMed.Policy.Entity;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
-public class PolicyView {
+public class PolicyEntity implements Serializable {
     private long id;
     private LocalDate startDate;
     private LocalDate endDate;
     private int coverage;
 
-    private int premium;
+    private double premium;
 
-    private ObjectOfInsuranceView objectOfInsurance;
+    private ObjectOfInsuranceEntity objectOfInsurance;
 
-    public PolicyView(long id, LocalDate startDate, LocalDate endDate, int coverage, int premium, ObjectOfInsuranceView objectOfInsurance) {
+    public PolicyEntity(long id, LocalDate startDate, LocalDate endDate, int coverage, int premium, ObjectOfInsuranceEntity objectOfInsurance) {
         this.id = id;
         this.startDate = startDate;
         this.endDate = endDate;
@@ -53,19 +54,19 @@ public class PolicyView {
         this.coverage = coverage;
     }
 
-    public int getPremium() {
+    public double getPremium() {
         return premium;
     }
 
-    public void setPremium(int premium) {
+    public void setPremium(double premium) {
         this.premium = premium;
     }
 
-    public ObjectOfInsuranceView getObjectOfInsurance() {
+    public ObjectOfInsuranceEntity getObjectOfInsurance() {
         return objectOfInsurance;
     }
 
-    public void setObjectOfInsurance(ObjectOfInsuranceView objectOfInsurance) {
+    public void setObjectOfInsurance(ObjectOfInsuranceEntity objectOfInsurance) {
         this.objectOfInsurance = objectOfInsurance;
     }
 }

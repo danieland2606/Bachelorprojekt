@@ -1,5 +1,6 @@
 package EDA.MeowMed.Policy.Messaging;
 
+import EDA.MeowMed.Policy.PolicyService;
 import org.springframework.amqp.core.*;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -19,8 +20,8 @@ public class MessagingConfig {
     }
 
     @Bean
-    public CustomerCreatedReceiver receiver() {
-        return new CustomerCreatedReceiver();
+    public CustomerCreatedReceiver receiver(PolicyService policyService) {
+        return new CustomerCreatedReceiver(policyService);
     }
 
     @Bean(name = "CustomerCreatedTopic")

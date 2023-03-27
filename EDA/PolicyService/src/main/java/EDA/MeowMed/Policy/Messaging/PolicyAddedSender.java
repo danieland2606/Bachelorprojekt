@@ -1,6 +1,6 @@
 package EDA.MeowMed.Policy.Messaging;
 
-import org.springframework.amqp.core.Queue;
+import EDA.MeowMed.Policy.Entity.PolicyEntity;
 import org.springframework.amqp.core.TopicExchange;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,9 +14,8 @@ public class PolicyAddedSender {
     @Qualifier("PolicyAddedTopic")
     private TopicExchange topic;
 
-    public void send() {
-        String message = "Policy has been created: Please send mail PLIIIIIIIIIIIZ";
-        this.template.convertAndSend(topic.getName(), "policy", message);
-        System.out.println(" [x] Sent '" + message + "'");
+    public void send(PolicyEntity policy) {
+        this.template.convertAndSend(topic.getName(), "policy", policy);
+        System.out.println("Sent newly created Policy!");
     }
 }
