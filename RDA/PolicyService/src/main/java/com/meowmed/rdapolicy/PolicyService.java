@@ -4,7 +4,9 @@ import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.springframework.http.converter.json.MappingJacksonValue;
@@ -14,10 +16,8 @@ import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import com.meowmed.rdapolicy.database.ObjectOfInsuranceRepository;
 import com.meowmed.rdapolicy.database.PolicyRepository;
 import com.meowmed.rdapolicy.entity.PolicyEntity;
-import com.meowmed.rdapolicy.entity.PolicyPostResponse;
 import com.meowmed.rdapolicy.entity.PolicyRequest;
 import com.meowmed.rdapolicy.entity.PriceCalculationEntity;
-import com.meowmed.rdapolicy.entity.PriceCalculationReturn;
 
 public class PolicyService {
     
@@ -60,14 +60,17 @@ public class PolicyService {
 		return wrapper;
 	}
 
-    public PolicyPostResponse postPolicy(Long c_id, PolicyRequest pRequest, PolicyRepository pRepository, ObjectOfInsuranceRepository oRepository){
+    public MappingJacksonValue postPolicy(Long c_id, PolicyRequest pRequest, PolicyRepository pRepository, ObjectOfInsuranceRepository oRepository){
 		oRepository.save(pRequest.getObjectOfInsurance());
 		PriceCalculationEntity tempCalc = new PriceCalculationEntity(12150, pRequest.getCoverage(), pRequest.getObjectOfInsurance().getRace(), 
 				pRequest.getObjectOfInsurance().getColor(), pRequest.getObjectOfInsurance().getAge(), pRequest.getObjectOfInsurance().isCastrated(), 
 				pRequest.getObjectOfInsurance().getPersonality(), pRequest.getObjectOfInsurance().getEnviroment(), pRequest.getObjectOfInsurance().getWeight());
 		PolicyEntity policy = new PolicyEntity(c_id, pRequest.getStartDate(), pRequest.getEndDate(), pRequest.getCoverage(), getPolicyPrice(tempCalc), pRequest.getObjectOfInsurance());
-		PolicyEntity returnValue = pRepository.save(policy);
-        return new PolicyPostResponse(returnValue.getId());
+		MappingJacksonValue wrapper = new MappingJacksonValue(pRepository.save(policy));
+		wrapper.setFilters(new SimpleFilterProvider()
+		.addFilter("policyFilter", SimpleBeanPropertyFilter.filterOutAllExcept("id"))
+		.setFailOnUnknownId(false));
+		return wrapper;
 	}
 
     public double getPolicyPrice(PriceCalculationEntity body){
@@ -95,7 +98,7 @@ public class PolicyService {
 		return endbetrag;
 	}
 
-	public PriceCalculationReturn getPolicyPriceRequest(PriceCalculationEntity body){
-		return new PriceCalculationReturn(getPolicyPrice(body));
+	public Map<String,Double> getPolicyPriceRequest(PriceCalculationEntity body){
+		return Collections.singletonMap("premium", getPolicyPrice(body));
 	}
 }

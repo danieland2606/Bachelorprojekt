@@ -1,6 +1,7 @@
 package com.meowmed.rdapolicy;
 
 import java.time.LocalDate;
+import java.util.Map;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -18,10 +19,8 @@ import com.meowmed.rdapolicy.database.ObjectOfInsuranceRepository;
 import com.meowmed.rdapolicy.database.PolicyRepository;
 import com.meowmed.rdapolicy.entity.ObjectOfInsuranceEntity;
 import com.meowmed.rdapolicy.entity.PolicyEntity;
-import com.meowmed.rdapolicy.entity.PolicyPostResponse;
 import com.meowmed.rdapolicy.entity.PolicyRequest;
 import com.meowmed.rdapolicy.entity.PriceCalculationEntity;
-import com.meowmed.rdapolicy.entity.PriceCalculationReturn;
 
 @SpringBootApplication
 @RestController
@@ -46,12 +45,12 @@ public class PolicyApplication {
 	}
 
 	@PostMapping("/customer/{c_id}/policy")
-	public PolicyPostResponse postPolicy(@PathVariable Long c_id, @RequestBody PolicyRequest pRequest){
+	public MappingJacksonValue postPolicy(@PathVariable Long c_id, @RequestBody PolicyRequest pRequest){
 		return pService.postPolicy(c_id, pRequest, pRepository, oRepository);
 	}
 
 	@GetMapping("/policyprice")
-	public PriceCalculationReturn getPolicyPrice(@RequestBody PriceCalculationEntity body){
+	public Map<String,Double> getPolicyPrice(@RequestBody PriceCalculationEntity body){
 		return pService.getPolicyPriceRequest(body);
 	}
 
