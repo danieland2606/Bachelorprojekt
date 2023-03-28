@@ -1,15 +1,26 @@
-package EDA.MeowMed.Entities;
+package EDA.MeowMed.Persistence.Entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+
+import java.io.Serializable;
 
 @Entity
-public class Address {
-    private String city;
-    private String street;
-    private String postalCode;
+@Table(name="Address")
+public class Address implements Serializable {
+
+    @Id
+    @GeneratedValue
+    @Column(name = "id")
     private Long id;
 
+    @Column(name = "city", nullable = false)
+    private String city;
+
+    @Column(name = "street", nullable = false)
+    private String street;
+
+    @Column(name = "postal_code", nullable = false)
+    private String postalCode;
 
     public Address(String city, String street, String postalCode) {
         this.city = city;
@@ -47,7 +58,6 @@ public class Address {
         this.id = id;
     }
 
-    @Id
     public Long getId() {
         return id;
     }

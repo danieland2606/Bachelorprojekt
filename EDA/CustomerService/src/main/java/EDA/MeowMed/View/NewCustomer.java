@@ -1,26 +1,19 @@
-package EDA.MeowMed.Entities;
-
-import jakarta.persistence.*;
+package EDA.MeowMed.View;
 
 import java.time.LocalDate;
 
-@Entity
-public class Customer {
-    @Id
-    @GeneratedValue
-    private long id;
+public class NewCustomer {
     private String firstName;
     private String lastName;
     private String martialStatus;
     private LocalDate dateOfBirth;
     private String employmentStatus;
-    private Address address;
+    private AddressWithoutId address;
     private String phoneNumber;
     private String email;
     private String bankDetails;
 
-    public Customer(long id, String firstName, String lastName, String martialStatus, LocalDate dateOfBirth, String employmentStatus, Address address, String phoneNumber, String email, String bankDetails) {
-        this.id = id;
+    public NewCustomer(String firstName, String lastName, String martialStatus, LocalDate dateOfBirth, String employmentStatus, AddressWithoutId address, String phoneNumber, String email, String bankDetails) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.martialStatus = martialStatus;
@@ -32,15 +25,7 @@ public class Customer {
         this.bankDetails = bankDetails;
     }
 
-    public Customer() {
-    }
-
-    @Id @GeneratedValue
-    public long getId() {
-        return id;
-    }
-    public void setId(long id) {
-        this.id = id;
+    public NewCustomer() {
     }
 
     public String getFirstName() {
@@ -82,13 +67,12 @@ public class Customer {
     public void setEmploymentStatus(String employmentStatus) {
         this.employmentStatus = employmentStatus;
     }
-    @OneToOne
-    @JoinColumn(name = "address_id", nullable = false)
-    public Address getAddress() {
+
+    public AddressWithoutId getAddress() {
         return address;
     }
 
-    public void setAddress(Address address) {
+    public void setAddress(AddressWithoutId address) {
         this.address = address;
     }
 
