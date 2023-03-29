@@ -17,7 +17,7 @@ public class CustomerService {
         MappingJacksonValue wrapper = new MappingJacksonValue(cRepository.findById(id));
 
         wrapper.setFilters(new SimpleFilterProvider()
-        .addFilter("customerFilter", SimpleBeanPropertyFilter.filterOutAllExcept("id"))
+        .addFilter("customerFilter", SimpleBeanPropertyFilter.serializeAllExcept("id"))
         .setFailOnUnknownId(false));
 
         return wrapper;
@@ -28,8 +28,11 @@ public class CustomerService {
 
         List<String> customerList = new ArrayList<String>();
         customerList.addAll(Arrays.asList(fields.split(",")));
+        customerList.add("id");
+        //System.out.println(customerList);
         wrapper.setFilters(new SimpleFilterProvider()
                 .addFilter("customerFilter", SimpleBeanPropertyFilter.filterOutAllExcept(Set.copyOf(customerList)))
+                .addFilter("addressFilter", SimpleBeanPropertyFilter.serializeAll())
                 .setFailOnUnknownId(false));
         return wrapper;
     }

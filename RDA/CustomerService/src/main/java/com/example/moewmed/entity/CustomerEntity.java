@@ -14,7 +14,7 @@ import jakarta.persistence.Table;
 import java.time.LocalDate;
 @Entity
 @Table(name="Customer")
-@JsonFilter("costumerFilter")
+@JsonFilter("customerFilter")
 public class CustomerEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -26,18 +26,18 @@ public class CustomerEntity {
     private LocalDate dateOfBirth;
     private String employmentStatus;
     @OneToOne
-    private AddressEntity adress;
+    private AddressEntity address;
     private String phoneNumber;
     private String email;
     private String bankDetails;
 
-    public CustomerEntity(String firstName, String lastName, String martialStatus, LocalDate dateOfBirth, String employmentStatus, AddressEntity adress, String phoneNumber, String email, String bankDetails) {
+    public CustomerEntity(String firstName, String lastName, String martialStatus, LocalDate dateOfBirth, String employmentStatus, AddressEntity address, String phoneNumber, String email, String bankDetails) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.martialStatus = martialStatus;
         this.dateOfBirth = dateOfBirth;
         this.employmentStatus = employmentStatus;
-        this.adress = adress;
+        this.address = address;
         this.phoneNumber = phoneNumber;
         this.email = email;
         this.bankDetails = bankDetails;
@@ -94,12 +94,12 @@ public class CustomerEntity {
         this.employmentStatus = employmentStatus;
     }
 
-    public AddressEntity getAdress() {
-        return adress;
+    public AddressEntity getAddress() {
+        return address;
     }
 
-    public void setAdress(AddressEntity adress) {
-        this.adress = adress;
+    public void setAddress(AddressEntity address) {
+        this.address = address;
     }
 
     public String getPhoneNumber() {

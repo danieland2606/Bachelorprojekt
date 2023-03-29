@@ -1,5 +1,6 @@
 package com.example.moewmed.entity;
 
+import com.fasterxml.jackson.annotation.JsonFilter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Entity;
@@ -8,6 +9,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 @Entity
+@JsonFilter("addressFilter")
 public class AddressEntity {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
