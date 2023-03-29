@@ -1,7 +1,5 @@
 package com.example.moewmed.entity;
 
-import jakarta.persistence.OneToOne;
-
 import java.time.LocalDate;
 
 public class CustomerRequest {
@@ -11,7 +9,7 @@ public class CustomerRequest {
     private String martialStatus;
     private LocalDate dateOfBirth;
     private String employmentStatus;
-    private Adress adress;
+    private AddressEntity adress;
     private String phoneNumber;
     private String email;
     private String bankDetails;
@@ -19,7 +17,7 @@ public class CustomerRequest {
     public CustomerRequest(){
 
     }
-    public CustomerRequest(String firstName, String lastName, String martialStatus, LocalDate dateOfBirth, String employmentStatus, Adress adress, String phoneNumber, String email, String bankDetails){
+    public CustomerRequest(String firstName, String lastName, String martialStatus, LocalDate dateOfBirth, String employmentStatus, AddressEntity adress, String phoneNumber, String email, String bankDetails){
         this.firstName = firstName;
         this.lastName = lastName;
         this.martialStatus = martialStatus;
@@ -71,11 +69,11 @@ public class CustomerRequest {
         this.employmentStatus = employmentStatus;
     }
 
-    public Adress getAdress() {
+    public AddressEntity getAdress() {
         return adress;
     }
 
-    public void setAdress(Adress adress) {
+    public void setAdress(AddressEntity adress) {
         this.adress = adress;
     }
 

@@ -1,18 +1,30 @@
 package com.example.moewmed.entity;
 
-public class Adress {
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+
+@Entity
+public class AddressEntity {
+    @Id
+    @GeneratedValue(strategy=GenerationType.AUTO)
+    @JsonIgnore
+    private long id;
     private String city;
     private String street;
     private String postalCode;
 
     
-    public Adress(String city, String street, String postalCode) {
+    public AddressEntity(String city, String street, String postalCode) {
         this.city = city;
         this.street = street;
         this.postalCode = postalCode;
     }
 
-    public Adress() {}
+    public AddressEntity() {}
 
     public String getCity() {
         return city;

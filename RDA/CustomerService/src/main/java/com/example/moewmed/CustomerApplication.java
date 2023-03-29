@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import com.example.moewmed.entity.*;
+import com.example.moewmed.database.AddressRepository;
 import com.example.moewmed.database.CustomerRepository;
 
 
@@ -24,6 +25,7 @@ public class CustomerApplication {
 
     CustomerService cService= new CustomerService();
     CustomerRepository cRepository;
+    AddressRepository aRepository;
 
 
     public static void main(String[] args) {
@@ -45,18 +47,23 @@ public class CustomerApplication {
     }
 
     @Bean
-    CommandLineRunner commandLineRunner(CustomerRepository customerRepository) {
+    CommandLineRunner commandLineRunner(CustomerRepository customerRepository, AddressRepository addressRepository) {
         cRepository = customerRepository;
+        aRepository = addressRepository;
         return args -> {
             LocalDate birthdayOfJan= LocalDate.of(1999,11,03);
-            Adress adressJan= new Adress("Hildesheim","Burgerking Hbf","31137");
+            AddressEntity adressJan= new AddressEntity("Hildesheim","Burgerking Hbf","31137");
             CustomerEntity Jan= new CustomerEntity("Jan","Lorenz","ledig",birthdayOfJan,"student", adressJan, "+49123456789", "jan-niklas-johannes.lorenz@stud.hs-hannover.de", "DE2131627312371351232");
 
             LocalDate birthdayofDaniel= LocalDate.of(2002,06,26);
-            Adress adressDaniel= new Adress("Hannover", "Subway Hbf", "12345");
+            AddressEntity adressDaniel= new AddressEntity("Hannover", "Subway Hbf", "12345");
             CustomerEntity Daniel= new CustomerEntity("Daniel", "Arnold", "ledig", birthdayofDaniel, "student", adressDaniel, "+4942069123123", "daniel.arnold@stud.hs-hannover.de", "DE");
-        customerRepository.save(Jan);
-        customerRepository.save(Daniel);
+        
+            addressRepository.save(adressJan);
+            addressRepository.save(adressDaniel);
+        
+            customerRepository.save(Jan);
+            customerRepository.save(Daniel);
         };
 
 

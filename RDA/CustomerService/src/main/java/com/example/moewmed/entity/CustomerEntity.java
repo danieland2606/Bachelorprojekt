@@ -26,12 +26,12 @@ public class CustomerEntity {
     private LocalDate dateOfBirth;
     private String employmentStatus;
     @OneToOne
-    private Adress adress;
+    private AddressEntity adress;
     private String phoneNumber;
     private String email;
     private String bankDetails;
 
-    public CustomerEntity(String firstName, String lastName, String martialStatus, LocalDate dateOfBirth, String employmentStatus, Adress adress, String phoneNumber, String email, String bankDetails) {
+    public CustomerEntity(String firstName, String lastName, String martialStatus, LocalDate dateOfBirth, String employmentStatus, AddressEntity adress, String phoneNumber, String email, String bankDetails) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.martialStatus = martialStatus;
@@ -94,11 +94,11 @@ public class CustomerEntity {
         this.employmentStatus = employmentStatus;
     }
 
-    public Adress getAdress() {
+    public AddressEntity getAdress() {
         return adress;
     }
 
-    public void setAdress(Adress adress) {
+    public void setAdress(AddressEntity adress) {
         this.adress = adress;
     }
 

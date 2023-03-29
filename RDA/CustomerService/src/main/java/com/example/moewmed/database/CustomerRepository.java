@@ -7,6 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.example.moewmed.entity.*;
 
 public interface CustomerRepository extends JpaRepository<CustomerEntity, Long> {
-    List<CustomerEntity> findByid(long id);
+
 }
 

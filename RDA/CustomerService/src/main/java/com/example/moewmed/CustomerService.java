@@ -14,7 +14,7 @@ import java.util.Set;
 public class CustomerService {
 
     public MappingJacksonValue getCustomer(long id, CustomerRepository cRepository){
-        MappingJacksonValue wrapper = new MappingJacksonValue(cRepository.findByid(id));
+        MappingJacksonValue wrapper = new MappingJacksonValue(cRepository.findById(id));
 
         wrapper.setFilters(new SimpleFilterProvider()
         .addFilter("customerFilter", SimpleBeanPropertyFilter.filterOutAllExcept("id"))
