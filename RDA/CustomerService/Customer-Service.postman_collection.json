@@ -12,7 +12,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:8080/api/customer?fields=firstName,lastName,address",
+					"raw": "localhost:8080/api/customer?fields=id,firstName,lastName,address",
 					"host": [
 						"localhost"
 					],
@@ -24,7 +24,7 @@
 					"query": [
 						{
 							"key": "fields",
-							"value": "firstName,lastName,address"
+							"value": "id,firstName,lastName,address"
 						}
 					]
 				}

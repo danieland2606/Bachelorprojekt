@@ -22,16 +22,29 @@ public class CustomerService {
 
         return wrapper;
     }
-
+    //?fields=id,firstName,lastName,address
     public MappingJacksonValue getCustomerList(String fields, CustomerRepository cRepository){
         MappingJacksonValue wrapper = new MappingJacksonValue(cRepository.findAll());
 
         List<String> customerList = new ArrayList<String>();
+        /* 
+        // Im Falle, das address.city benutzt werden soll
+        List<String> addressList = new ArrayList<String>();
+        boolean containsOoI = false;
+		for (String result : customerList) {
+			if(result.contains("address.")){
+				addressList.add(result.substring(8));
+				customerList.remove(result);
+				containsOoI = true;
+			}
+		}
+		if(containsOoI) addressList.add("address");
+        */
         customerList.addAll(Arrays.asList(fields.split(",")));
-        customerList.add("id");
-        //System.out.println(customerList);
+        //customerList.add("id");
         wrapper.setFilters(new SimpleFilterProvider()
                 .addFilter("customerFilter", SimpleBeanPropertyFilter.filterOutAllExcept(Set.copyOf(customerList)))
+                //.addFilter("addressFilter", SimpleBeanPropertyFilter.filterOutAllExcept(Set.copyOf(addressList)))
                 .addFilter("addressFilter", SimpleBeanPropertyFilter.serializeAll())
                 .setFailOnUnknownId(false));
         return wrapper;
