@@ -1,37 +1,25 @@
 package com.example.moewmed.entity;
 
-import com.fasterxml.jackson.annotation.JsonFilter;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
-
 
 import java.time.LocalDate;
-@Entity
-@Table(name="Customer")
-@JsonFilter("costumerFilter")
-public class CustomerEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name="Customer_ID")
-    private long id;
+
+public class CustomerRequest {
+
     private String firstName;
     private String lastName;
     private String martialStatus;
     private LocalDate dateOfBirth;
     private String employmentStatus;
-    @OneToOne
     private Adress adress;
     private String phoneNumber;
     private String email;
     private String bankDetails;
 
-    public CustomerEntity(String firstName, String lastName, String martialStatus, LocalDate dateOfBirth, String employmentStatus, Adress adress, String phoneNumber, String email, String bankDetails) {
+    public CustomerRequest(){
+
+    }
+    public CustomerRequest(String firstName, String lastName, String martialStatus, LocalDate dateOfBirth, String employmentStatus, Adress adress, String phoneNumber, String email, String bankDetails){
         this.firstName = firstName;
         this.lastName = lastName;
         this.martialStatus = martialStatus;
@@ -41,17 +29,6 @@ public class CustomerEntity {
         this.phoneNumber = phoneNumber;
         this.email = email;
         this.bankDetails = bankDetails;
-    }
-
-    public CustomerEntity() {
-
-    }
-
-    public long getId() {
-        return id;
-    }
-    public void setId(long id) {
-        this.id = id;
     }
 
     public String getFirstName() {
@@ -125,11 +102,6 @@ public class CustomerEntity {
     public void setBankDetails(String bankDetails) {
         this.bankDetails = bankDetails;
     }
-
-
-
-
-
 
 
 }
