@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.springframework.http.converter.json.MappingJacksonValue;
+import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
@@ -62,9 +63,16 @@ public class PolicyService {
 
     public MappingJacksonValue postPolicy(Long c_id, PolicyRequest pRequest, PolicyRepository pRepository, ObjectOfInsuranceRepository oRepository){
 		oRepository.save(pRequest.getObjectOfInsurance());
+		/*
+		String customerURL = "http://customer:8080/api/customer/" + c_id;
+		RestTemplate template = new RestTemplate();
+		CustomerEntity customer = template.getForObject(customerURL, CustomerEntity.class,null);
+		customer.getAddress().getPostalCode();
+		*/
 		PriceCalculationEntity tempCalc = new PriceCalculationEntity(12150, pRequest.getCoverage(), pRequest.getObjectOfInsurance().getRace(), 
 				pRequest.getObjectOfInsurance().getColor(), pRequest.getObjectOfInsurance().getAge(), pRequest.getObjectOfInsurance().isCastrated(), 
 				pRequest.getObjectOfInsurance().getPersonality(), pRequest.getObjectOfInsurance().getEnviroment(), pRequest.getObjectOfInsurance().getWeight());
+
 		PolicyEntity policy = new PolicyEntity(c_id, pRequest.getStartDate(), pRequest.getEndDate(), pRequest.getCoverage(), getPolicyPrice(tempCalc), pRequest.getObjectOfInsurance());
 		MappingJacksonValue wrapper = new MappingJacksonValue(pRepository.save(policy));
 		wrapper.setFilters(new SimpleFilterProvider()
