@@ -2,18 +2,18 @@ package EDA.MeowMed.View;
 
 import java.time.LocalDate;
 
-public class NewCustomer {
+public class NoId_Customer {
     private String firstName;
     private String lastName;
     private String martialStatus;
     private LocalDate dateOfBirth;
     private String employmentStatus;
-    private AddressWithoutId address;
+    private NoId_Address address;
     private String phoneNumber;
     private String email;
     private String bankDetails;
 
-    public NewCustomer(String firstName, String lastName, String martialStatus, LocalDate dateOfBirth, String employmentStatus, AddressWithoutId address, String phoneNumber, String email, String bankDetails) {
+    public NoId_Customer(String firstName, String lastName, String martialStatus, LocalDate dateOfBirth, String employmentStatus, NoId_Address address, String phoneNumber, String email, String bankDetails) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.martialStatus = martialStatus;
@@ -25,7 +25,7 @@ public class NewCustomer {
         this.bankDetails = bankDetails;
     }
 
-    public NewCustomer() {
+    public NoId_Customer() {
     }
 
     public String getFirstName() {
@@ -68,11 +68,11 @@ public class NewCustomer {
         this.employmentStatus = employmentStatus;
     }
 
-    public AddressWithoutId getAddress() {
+    public NoId_Address getAddress() {
         return address;
     }
 
-    public void setAddress(AddressWithoutId address) {
+    public void setAddress(NoId_Address address) {
         this.address = address;
     }
 

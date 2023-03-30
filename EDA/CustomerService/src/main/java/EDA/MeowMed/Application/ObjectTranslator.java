@@ -2,66 +2,85 @@ package EDA.MeowMed.Application;
 
 import EDA.MeowMed.Persistence.Entity.Address;
 import EDA.MeowMed.Persistence.Entity.Customer;
-import EDA.MeowMed.View.AddressWithoutId;
-import EDA.MeowMed.View.CustomerOverview;
-import EDA.MeowMed.View.CustomerView;
-import EDA.MeowMed.View.NewCustomer;
+import EDA.MeowMed.View.NoId_Address;
+import EDA.MeowMed.View.Simple_Customer;
+import EDA.MeowMed.View.NoId_Customer;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ObjectTranslator {
-    public static CustomerOverview customerToCustomerOveriew(Customer customer){
+    public Simple_Customer customerToSimple_Customer(Customer customer) {
         if (customer == null)
             return null;
-        CustomerOverview customerOverview = new CustomerOverview();
-        customerOverview.setId(customer.getId());
-        customerOverview.setFirstName(customer.getFirstName());
-        customerOverview.setLastName(customer.getLastName());
-        customerOverview.setAddress(ObjectTranslator.addressToAddresswithoutId(customer.getAddress()));
-        return customerOverview;
+        Simple_Customer simpleCustomer = new Simple_Customer();
+        simpleCustomer.setId(customer.getId());
+        simpleCustomer.setFirstName(customer.getFirstName());
+        simpleCustomer.setLastName(customer.getLastName());
+        simpleCustomer.setAddress(this.addressToNoId_Address(customer.getAddress()));
+        return simpleCustomer;
     }
 
-    public static ArrayList<CustomerOverview> customerListToCustomerOverviewList(List<Customer> customerList){
+    public ArrayList<Simple_Customer> customerListToSimple_CustomerList(List<Customer> customerList) {
         if (customerList == null)
             return null;
-        ArrayList<CustomerOverview> customerOverviewList = new ArrayList<>();
-        for (Customer customer: customerList) {
+        ArrayList<Simple_Customer> simpleCustomerList = new ArrayList<>();
+        for (Customer customer : customerList) {
             if (customer != null)
-                customerOverviewList.add(ObjectTranslator.customerToCustomerOveriew(customer));
+                simpleCustomerList.add(this.customerToSimple_Customer(customer));
         }
-        return customerOverviewList;
+        return simpleCustomerList;
     }
 
-    public static AddressWithoutId addressToAddresswithoutId(Address address){
+    public NoId_Address addressToNoId_Address(Address address) {
         if (address == null)
             return null;
-        AddressWithoutId addressOverview = new AddressWithoutId();
-        addressOverview.setCity(address.getCity());
-        addressOverview.setStreet(address.getStreet());
-        addressOverview.setPostalCode(address.getPostalCode());
-        return addressOverview;
+        NoId_Address noIdAddress = new NoId_Address();
+        noIdAddress.setCity(address.getCity());
+        noIdAddress.setStreet(address.getStreet());
+        noIdAddress.setPostalCode(address.getPostalCode());
+        return noIdAddress;
     }
 
-    public static CustomerView customerToCustomerView(Customer customer) {
+    public Address noId_AddressToAddress(NoId_Address noIdAddress) {
+        if (noIdAddress == null)
+            return null;
+        Address address = new Address();
+        address.setCity(noIdAddress.getCity());
+        address.setStreet(noIdAddress.getStreet());
+        address.setPostalCode(noIdAddress.getPostalCode());
+        return address;
+    }
+
+    public NoId_Customer customerToCustomerView(Customer customer) {
         if (customer == null)
             return null;
-        CustomerView customerView = new CustomerView();
-        customerView.setFirstName(customer.getFirstName());
-        customerView.setLastName(customer.getLastName());
-        customerView.setMartialStatus(customer.getMartialStatus());
-        customerView.setDateOfBirth(customer.getDateOfBirth());
-        customerView.setEmploymentStatus(customer.getEmploymentStatus());
-        customerView.setAddress(ObjectTranslator.addressToAddresswithoutId(customer.getAddress()));
-        customerView.setPhoneNumber(customer.getPhoneNumber());
-        customerView.setEmail(customer.getEmail());
-        customerView.setBankDetails(customer.getBankDetails());
-        return customerView;
+        NoId_Customer noIdCustomer = new NoId_Customer();
+        noIdCustomer.setFirstName(customer.getFirstName());
+        noIdCustomer.setLastName(customer.getLastName());
+        noIdCustomer.setMartialStatus(customer.getMartialStatus());
+        noIdCustomer.setDateOfBirth(customer.getDateOfBirth());
+        noIdCustomer.setEmploymentStatus(customer.getEmploymentStatus());
+        noIdCustomer.setAddress(this.addressToNoId_Address(customer.getAddress()));
+        noIdCustomer.setPhoneNumber(customer.getPhoneNumber());
+        noIdCustomer.setEmail(customer.getEmail());
+        noIdCustomer.setBankDetails(customer.getBankDetails());
+        return noIdCustomer;
     }
-    public static Customer newCustomerToCustomer(NewCustomer newCustomer){
-        if (newCustomer==null)
+
+    public Customer noId_CustomerToCustomer(NoId_Customer noIdCustomer) {
+        if (noIdCustomer == null)
             return null;
         Customer customer = new Customer();
+        customer.setFirstName(noIdCustomer.getFirstName());
+        customer.setLastName(noIdCustomer.getLastName());
+        customer.setMartialStatus(noIdCustomer.getMartialStatus());
+        customer.setDateOfBirth(noIdCustomer.getDateOfBirth());
+        customer.setEmploymentStatus(noIdCustomer.getEmploymentStatus());
+        customer.setAddress(this.noId_AddressToAddress(noIdCustomer.getAddress()));
+        customer.setPhoneNumber(noIdCustomer.getPhoneNumber());
+        customer.setEmail(noIdCustomer.getEmail());
+        customer.setBankDetails(noIdCustomer.getBankDetails());
         return customer;
     }
 }

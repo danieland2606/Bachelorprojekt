@@ -34,7 +34,7 @@ public class CustomerController {
         return List.of(Jan, Daniel);
     }
     @GetMapping("/customer/{c_id}")
-    public Customer getCustomer(@PathVariable Long c_id) {
+    public Customer getCustomer(@PathVariable long c_id) {
         LocalDate birthdayOfJan= LocalDate.of(1999,11,03);
         Address AddressJan= new Address("Hildesheim","Burgerking Hbf","31137");
         return new Customer(c_id,"Jan","Lorenz","ledig",birthdayOfJan,"student", AddressJan, "+49123456789", "jan-niklas-johannes.lorenz@stud.hs-hannover.de", "DE2131627312371351232");

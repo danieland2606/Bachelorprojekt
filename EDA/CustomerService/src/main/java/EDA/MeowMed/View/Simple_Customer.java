@@ -1,25 +1,26 @@
 package EDA.MeowMed.View;
 
-public class CustomerOverview {
-    private long id;
+public class Simple_Customer {
+    private Long id;
     private String firstName;
     private String lastName;
-    private AddressWithoutId address;
+    private NoId_Address address;
 
-    public CustomerOverview(long id, String firstName, String lastName, AddressWithoutId address){
+    public Simple_Customer(Long id, String firstName, String lastName, NoId_Address address) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.address = address;
     }
 
-    public CustomerOverview(){}
+    public Simple_Customer() {
+    }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
@@ -39,11 +40,11 @@ public class CustomerOverview {
         return lastName;
     }
 
-    public void setAddress(AddressWithoutId address) {
+    public void setAddress(NoId_Address address) {
         this.address = address;
     }
 
-    public AddressWithoutId getAddressView(AddressWithoutId address) {
+    public NoId_Address getAddressView(NoId_Address address) {
         return address;
     }
 }

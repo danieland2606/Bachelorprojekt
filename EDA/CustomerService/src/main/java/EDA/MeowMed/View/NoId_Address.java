@@ -1,17 +1,17 @@
 package EDA.MeowMed.View;
 
-public class AddressWithoutId {
+public class NoId_Address {
     private String city;
     private String street;
     private String postalCode;
 
-    public AddressWithoutId(String city, String street, String postalCode) {
+    public NoId_Address(String city, String street, String postalCode) {
         this.city = city;
         this.street = street;
         this.postalCode = postalCode;
     }
 
-    public AddressWithoutId() {}
+    public NoId_Address() {}
 
     public String getCity() {
         return city;
