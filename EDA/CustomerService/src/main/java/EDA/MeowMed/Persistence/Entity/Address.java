@@ -10,7 +10,7 @@ public class Address implements Serializable {
 
     @Id
     @GeneratedValue
-    @Column(name = "id")
+    @Column(name = "a_id")
     private Long id;
 
     @Column(name = "city", nullable = false)

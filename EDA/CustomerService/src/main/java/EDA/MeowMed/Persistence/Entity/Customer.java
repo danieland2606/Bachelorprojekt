@@ -11,8 +11,8 @@ import java.time.LocalDate;
 public class Customer implements Serializable {
 
     @Id
-    @Column(name = "id")
-    private long id;
+    @Column(name = "c_id")
+    private Long id;
 
     @Column(name = "first_name", nullable = false)
     private String firstName;
