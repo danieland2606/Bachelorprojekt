@@ -41,7 +41,7 @@ public class Customer implements Serializable {
     @Column(name = "bank_details", nullable = false)
     private String bankDetails;
 
-    public Customer(long id, String firstName, String lastName, String martialStatus, LocalDate dateOfBirth, String employmentStatus, Address address, String phoneNumber, String email, String bankDetails) {
+    public Customer(Long id, String firstName, String lastName, String martialStatus, LocalDate dateOfBirth, String employmentStatus, Address address, String phoneNumber, String email, String bankDetails) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -57,10 +57,10 @@ public class Customer implements Serializable {
     public Customer() {
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

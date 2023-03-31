@@ -14,7 +14,6 @@ import java.util.List;
 
 @RestController
 public class CustomerController {
-
     private final CustomerService customerService;
 
     CustomerController(CustomerService customerService) {
@@ -24,8 +23,8 @@ public class CustomerController {
     @GetMapping("/customer")
     public MappingJacksonValue getCustomerList() {
         LocalDate birthdayOfJan= LocalDate.of(1999,11,03);
-        Address addressJan= new Address("Hildesheim","Burgerking Hbf","31137");
-        Customer Jan= new Customer(0,"Jan","Lorenz","ledig",birthdayOfJan,"student", addressJan, "+49123456789", "jan-niklas-johannes.lorenz@stud.hs-hannover.de", "DE2131627312371351232");
+        Address addressJan= new Address(new Long(4),"Hildesheim","Burgerking Hbf","31137");
+        Customer Jan= new Customer(new Long(0),"Jan","Lorenz","ledig",birthdayOfJan,"student", addressJan, "+49123456789", "jan-niklas-johannes.lorenz@stud.hs-hannover.de", "DE2131627312371351232");
         LocalDate birthdayofDaniel= LocalDate.of(2002,06,26);
         Address AddressDaniel= new Address(new Long(6),"Hannover", "Subway Hbf", "12345");
         Customer Daniel= new Customer(new Long(1),"Daniel", "Arnold", "ledig", birthdayofDaniel, "student", AddressDaniel, "+4942069123123", "daniel.arnold@stud.hs-hannover.de", "DE");

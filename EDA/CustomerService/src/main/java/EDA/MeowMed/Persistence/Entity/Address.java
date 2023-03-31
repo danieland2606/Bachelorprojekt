@@ -22,7 +22,8 @@ public class Address implements Serializable {
     @Column(name = "postal_code", nullable = false)
     private String postalCode;
 
-    public Address(String city, String street, String postalCode) {
+    public Address(Long id,String city, String street, String postalCode) {
+        this.id = id;
         this.city = city;
         this.street = street;
         this.postalCode = postalCode;
