@@ -3,6 +3,7 @@ package com.meowmed.rdapolicy;
 import java.time.LocalDate;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -36,7 +37,9 @@ import com.meowmed.rdapolicy.entity.PriceCalculationEntity;
 public class PolicyApplication {
 
 	PolicyService pService = new PolicyService();
+	@Autowired
 	PolicyRepository pRepository;
+	@Autowired
 	ObjectOfInsuranceRepository oRepository;
 
 	/**
@@ -164,14 +167,10 @@ public class PolicyApplication {
 
 	/**
 	 * Diese Methode ist für die Erstellung der JPA-Repository und speichern von Beispieldaten
-	 * @param policyRepository JPA-Repository von PolicyEntity übergeben von dem Bean
-	 * @param objectOfInsuranceRepository JPA-Repository von PolicyEntity übergeben von dem Bean
 	 * @return Speichern der Beispieldaten
 	 */
 	@Bean
 	CommandLineRunner commandLineRunner(PolicyRepository policyRepository, ObjectOfInsuranceRepository objectOfInsuranceRepository){
-		pRepository = policyRepository;
-		oRepository = objectOfInsuranceRepository;
 		return args -> {
 			LocalDate startDate = LocalDate.of(2017, 1, 15);
 			LocalDate endDate1 = LocalDate.of(2099, 1, 1);

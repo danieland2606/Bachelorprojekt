@@ -19,7 +19,6 @@ public class CustomerService {
         wrapper.setFilters(new SimpleFilterProvider()
         .addFilter("customerFilter", SimpleBeanPropertyFilter.serializeAllExcept("id"))
         .setFailOnUnknownId(false));
-
         return wrapper;
     }
     //?fields=id,firstName,lastName,address
