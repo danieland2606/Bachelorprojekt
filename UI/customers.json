@@ -11,6 +11,16 @@
       }
     },
     {
+      "id": 2,
+      "firstName": "John",
+      "lastName": "Hastings",
+      "address": {
+        "city": "Hannover",
+        "street": "Berliner Allee 100",
+        "postalCode": "30855"
+      }
+    },
+    {
       "id": 1,
       "firstName": "Jane",
       "lastName": "Eyre",

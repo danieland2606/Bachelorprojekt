@@ -5,24 +5,38 @@
 	<meta name="description" content="MeowMed+ customer management application">
 	<meta name="author" content="Julian Opitz">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link rel="stylesheet" href="meowmed.css"> 
-	<script type ="module" src="render.js"></script>
+	<link rel="stylesheet" href="meowmed.css">
+	<script type ="module" src="render.js" async></script>
 </head>
-<body>
-	<input type="text" placeholder="Suche.." hidden>
-	<button type="button">Neuer Kunde</button>
-	<table>
-		<thead>
-			<tr>
-				<th scope="col">ID</th>
-				<th scope="col">Vorname</th>
-				<th scope="col">Nachname</th>
-				<th scope="col">Adresse</th>
-				<th scope="col">Aktionen</th>
-			</tr>
-		</thead>
-		<tbody id="customer-table">
-		</tbody>
-	</table>
+<body id="top-level" template-container="customer-dashboard">
+	<template id="customer-dashboard">
+		<input type="text" placeholder="Suche.." hidden>
+		<button type="button">Neuer Kunde</button>
+		<table>
+			<thead>
+				<tr>
+					<th scope="col">ID</th>
+					<th scope="col">Vorname</th>
+					<th scope="col">Nachname</th>
+					<th scope="col">Adresse</th>
+					<th scope="col">Aktionen</th>
+				</tr>
+			</thead>
+			<tbody bind-array="fetchCustomerList">
+				<template>
+					<tr>
+						<td>{{id}}</td>
+						<td>{{firstName}}</td>
+						<td>{{lastName}}</td>
+						<td>{{address.street}}, {{address.postalCode}} {{address.city}}</td>
+						<td>
+							<button type="button">test</button>
+							<button type="button">test</button>
+						</td>
+					</tr>
+				</template>
+			</tbody>
+		</table>
+	</template>
 </body>
 </html>
