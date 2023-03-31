@@ -1,11 +1,13 @@
 package EDA.MeowMed.Persistence.Entity;
 
+import com.fasterxml.jackson.annotation.JsonFilter;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
 
 @Entity
 @Table(name="Address")
+@JsonFilter("Address")
 public class Address implements Serializable {
 
     @Id

@@ -11,8 +11,12 @@ public class CustomerCreatedSender {
     private RabbitTemplate template;
 
     @Autowired
-    private DirectExchange exchange;
+    private DirectExchange direct;
 
-    private final String[] keys = null;
+    private final String key = "customer_created";
 
+    public void send(String message) {
+        template.convertAndSend(direct.getName(), key, message);
+        System.out.println(" [x] Sent '" + message + "'");
+    }
 }
