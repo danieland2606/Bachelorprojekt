@@ -3,6 +3,6 @@ export async function documentReady() {
     if (document.readyState !== 'loading') {
       resolve();
     }
-    document.addEventListener('DOMContentLoaded', () => {resolve();});
+    document.addEventListener('DOMContentLoaded', () => { resolve(); });
   });
 }
