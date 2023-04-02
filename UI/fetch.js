@@ -1,14 +1,14 @@
-export async function fetchCustomerList() {
+export async function fetchCustomerList(fields) {
   const body = await fetchLocal('customers.json');
   return body.customerList;
 }
 
-export async function fetchCustomer() {
+export async function fetchCustomer(id) {
   const body = await fetchLocal('customer.json');
   return body;
 }
 
-export async function fetchPolicyList() {
+export async function fetchPolicyList(fields) {
   const body = await fetchLocal('policies.json');
   return body.policyList;
 }
