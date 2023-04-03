@@ -41,6 +41,7 @@ export class Application {
   }
 
   #display(state) {
+    console.log(state);
     if (!state)
       return;
     const page = this.#pages.get(state.page);

@@ -14,7 +14,7 @@ export async function fetchPolicyList(fields) {
 }
 
 async function fetchLocal(path) {
-  const response = await fetch(path);
+  const response = await fetch('test_data/' + path);
   const json = await response.text();
   return JSON.parse(json);
 }
