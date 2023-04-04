@@ -1,4 +1,4 @@
-package com.example.moewmed.entity;
+package com.moewmed.rdacustomer.entity;
 
 import com.fasterxml.jackson.annotation.JsonFilter;
 

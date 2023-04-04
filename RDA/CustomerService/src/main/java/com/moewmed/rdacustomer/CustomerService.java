@@ -1,10 +1,10 @@
-package com.example.moewmed;
+package com.moewmed.rdacustomer;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
+import com.moewmed.rdacustomer.database.CustomerRepository;
+import com.moewmed.rdacustomer.entity.CustomerEntity;
+import com.moewmed.rdacustomer.entity.CustomerRequest;
 
-import com.example.moewmed.database.CustomerRepository;
-import com.example.moewmed.entity.CustomerEntity;
-import com.example.moewmed.entity.CustomerRequest;
 import org.springframework.http.converter.json.MappingJacksonValue;
 import java.util.ArrayList;
 import java.util.List;

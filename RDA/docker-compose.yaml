@@ -28,12 +28,12 @@ services:
   #    - "default"
   #  ports:
   #    - 82:8080
-  #customer:
-  #  build:
-  #    context: ./CustomerService
-  #    dockerfile: Dockerfile
-  #  container_name: customer-service
-  #  networks:
-  #    - "default"
-  #  ports:
-  #    - 83:8080   
+  customer:
+    build:
+      context: ./CustomerService
+      dockerfile: Dockerfile
+    container_name: customer-service
+    networks:
+      - "default"
+    ports:
+      - 83:8080   

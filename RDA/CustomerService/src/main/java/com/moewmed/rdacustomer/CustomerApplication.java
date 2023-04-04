@@ -1,8 +1,6 @@
-package com.example.moewmed;
+package com.moewmed.rdacustomer;
 
 import java.time.LocalDate;
-import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -12,9 +10,9 @@ import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import com.example.moewmed.entity.*;
-import com.example.moewmed.database.AddressRepository;
-import com.example.moewmed.database.CustomerRepository;
+import com.moewmed.rdacustomer.database.AddressRepository;
+import com.moewmed.rdacustomer.database.CustomerRepository;
+import com.moewmed.rdacustomer.entity.*;
 
 
 
