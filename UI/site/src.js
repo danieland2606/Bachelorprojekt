@@ -1,11 +1,9 @@
-import { fetchCustomerList, fetchCustomer, fetchPolicyList } from "./fetch.js";
-import { Application } from "./framework.js";
+import { fetchCustomerList, fetchCustomer, fetchPolicyList } from "./test_data/fetch.js";
+import { Application } from "./framework/Application.js";
 
 const customerFields = ['firstName', 'lastName', 'address'];
 const policyFields = ['objectOfInsurance.name', 'startDate', 'endDate', 'coverage'];
 
-const test = ['load', 'unload', 'beforeunload', 'popstate', 'hashchange'];
-test.forEach(t => window.addEventListener(t, e => console.log(t)));
 
 export class MyApp extends Application {
   async fetchCustomerDetails(id) {

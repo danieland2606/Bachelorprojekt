@@ -11,10 +11,11 @@
 </head>
 
 <body application="MyApp">
+
   <template id="dashboard" page="start">
     <h1>Mitarbeiter Dashboard</h1>
     <input type="text" placeholder="Suche.." hidden>
-    <button type="button">Neuer Kunde</button>
+    <button type="button" onclick="app.navigate('customer-new')">Neuer Kunde</button>
     <table>
       <thead>
         <tr>
@@ -40,6 +41,7 @@
       </tbody>
     </table>
   </template>
+
   <template id="customer-details" page>
     <h1>Kundendetails</h1>
     <section>
@@ -103,6 +105,83 @@
       </tbody>
     </table>
   </template>
+
+  <template id="customer-new" page>
+    <h1>Neuen Kunden anlegen</h1>
+    <form>
+      <label>
+        Anrede
+        <select data-bind="formOfAdress">
+          <option value="herr">Herr</option>
+          <option value="frau">Frau</option>
+        </select>
+      </label>
+      <label>
+        Titel
+        <select data-bind="title">
+          <option value="doctor">Dr.</option>
+          <option value="professor">Prof.</option>
+        </select>
+      </label>
+      <label>
+        Vorname
+        <input type="text" data-bind="firstName">
+      </label>
+      <label>
+        Nachname
+        <input type="text" data-bind="lastName">
+      </label>
+      <label>
+        Rufnummer
+        <input type="tel" data-bind="phoneNumber">
+      </label>
+      <label>
+        Email
+        <input type="email" data-bind="email">
+      </label>
+      <label>
+        Geburtsdatum
+        <input type="date" data-bind="dateOfBirth">
+      </label>
+      <label>
+        Familienstatus
+        <select data-bind="maritalStatus">
+          <option value="ledig">Ledig</option>
+          <option value="verheiratet">Verheiratet</option>
+          <option value="verwitwet">Verwitwet</option>
+        </select>
+      </label>
+      <label>
+        Berufsstand
+        <select data-bind="employmentStatus">
+          <option value="selbstständig">Selbstständig</option>
+          <option value="angestellt">Angestellt</option>
+          <option value="arbeitslos">Arbeitslos</option>
+          <option value="arbeitssuchend">Arbeitssuchend</option>
+          <option value="ausbildung">In Ausbildung</option>
+        </select>
+      </label>
+      <label>
+        Wohnort
+        <input type="text" data-bind="address.city">
+      </label>
+      <label>
+        Straße
+        <input type="text" data-bind="address.street">
+      </label>
+      <label>
+        Postleitzahl
+        <input type="text" data-bind="address.postalCode">
+      </label>
+      <label>
+        IBAN
+        <input type="text" data-bind="bankDetails">
+      </label>
+    </form>
+    <button type="button" onclick="window.history.back()">Abbrechen</button>
+    <button type="button" onclick="console.log(JSON.stringify(app.data))">Anlegen</button>
+  </template>
+
 </body>
 
 </html>
