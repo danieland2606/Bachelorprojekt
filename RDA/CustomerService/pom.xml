@@ -8,11 +8,11 @@
         <version>3.0.4</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.example</groupId>
-    <artifactId>moewmed</artifactId>
+    <groupId>com.meowmed</groupId>
+    <artifactId>rdacustomer</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>moewmed</name>
-    <description>moewmed</description>
+    <name>RDA-customer</name>
+    <description>Customer Service der Firma Meowmed</description>
     <properties>
         <java.version>17</java.version>
     </properties>
