@@ -1,6 +1,15 @@
 # Für das komplette Projekt später
 version: '3.7'
 services:
+  ui:
+    build:
+      context: ../UI
+      dockerfile: Dockerfile
+    container_name: ui-service
+    networks:
+      - "default"
+    ports:
+      - 80:80 
   policy:
     build:
       context: ./PolicyService
