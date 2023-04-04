@@ -3,6 +3,8 @@ package com.meowmed.rdapolicy.entity;
 
 import java.time.LocalDate;
 
+import org.springframework.stereotype.Repository;
+
 import com.fasterxml.jackson.annotation.JsonFilter;
 
 import jakarta.persistence.Column;
@@ -14,7 +16,7 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 
-
+@Repository
 @Entity
 @Table(name="Contract")
 @JsonFilter("policyFilter")

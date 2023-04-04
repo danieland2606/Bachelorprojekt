@@ -9,7 +9,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.converter.json.MappingJacksonValue;
+import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
@@ -26,7 +28,19 @@ import com.meowmed.rdapolicy.entity.PriceCalculationEntity;
  * @author Alexander Hampel, Mozamil Ahmadzaei
  * 
  */
+@Service
 public class PolicyService {
+
+
+	private final PolicyRepository pRepository;
+	private final ObjectOfInsuranceRepository oRepository;
+
+	@Autowired
+	public PolicyService(PolicyRepository policyRepository, ObjectOfInsuranceRepository objectOfInsuranceRepository) {
+		this.pRepository = policyRepository;
+		this.oRepository = objectOfInsuranceRepository;
+	}
+
     /**
 	 * Diese Methode nimmt die Anfrage des REST-Controllers für die PolicyListe an und gibt diese gefiltert zurück.
 	 * @param c_id ID des Customers dessen Policys angefragt werden. 
@@ -53,7 +67,7 @@ public class PolicyService {
 			}
 		]
 	 */
-    public MappingJacksonValue getPolicyList(Long c_id, String fields, PolicyRepository pRepository) {
+    public MappingJacksonValue getPolicyList(Long c_id, String fields) {
 		MappingJacksonValue wrapper = new MappingJacksonValue(pRepository.findByCid(c_id));
 		
 		List<String> policyList = new ArrayList<String>();
@@ -103,7 +117,7 @@ public class PolicyService {
 				}
 			}
 	 */
-    public MappingJacksonValue getPolicy(Long c_id, Long p_id, PolicyRepository pRepository){
+    public MappingJacksonValue getPolicy(Long c_id, Long p_id){
 		MappingJacksonValue wrapper = new MappingJacksonValue(pRepository.findById(p_id));
 		wrapper.setFilters(new SimpleFilterProvider()
 		.addFilter("policyFilter", SimpleBeanPropertyFilter.serializeAllExcept("id", "c_id"))
@@ -138,7 +152,7 @@ public class PolicyService {
 			}
 	 * 
 	 */
-    public MappingJacksonValue postPolicy(Long c_id, PolicyRequest pRequest, PolicyRepository pRepository, ObjectOfInsuranceRepository oRepository){
+    public MappingJacksonValue postPolicy(Long c_id, PolicyRequest pRequest){
 		oRepository.save(pRequest.getObjectOfInsurance());
 		/*
 		String customerURL = "http://customer:8080/api/customer/" + c_id;

@@ -2,6 +2,8 @@ package com.meowmed.rdapolicy.entity;
 
 import java.time.LocalDate;
 
+import org.springframework.stereotype.Repository;
+
 import com.fasterxml.jackson.annotation.JsonFilter;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -10,7 +12,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
-
+@Repository
 @Entity
 @JsonFilter("objectOfInsuranceFilter")
 public class ObjectOfInsuranceEntity {
