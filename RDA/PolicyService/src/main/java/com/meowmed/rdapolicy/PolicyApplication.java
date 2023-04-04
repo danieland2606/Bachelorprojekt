@@ -1,27 +1,17 @@
 package com.meowmed.rdapolicy;
 
 import java.time.LocalDate;
-import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import org.springframework.http.converter.json.MappingJacksonValue;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 
 import com.meowmed.rdapolicy.database.ObjectOfInsuranceRepository;
 import com.meowmed.rdapolicy.database.PolicyRepository;
 import com.meowmed.rdapolicy.entity.ObjectOfInsuranceEntity;
 import com.meowmed.rdapolicy.entity.PolicyEntity;
-import com.meowmed.rdapolicy.entity.PolicyRequest;
-import com.meowmed.rdapolicy.entity.PriceCalculationEntity;
+
 
 /**
  * Diese Klasse ist die Rest-Schnittstelle. 
@@ -29,18 +19,10 @@ import com.meowmed.rdapolicy.entity.PriceCalculationEntity;
  * 
  * @apiNote Die Schnittstelle ist definiert in der Datei MeowMed_REST_Interface_1.1.md im Root-Verzeichnis des Git-Repos
  * @author Alexander Hampel, Mozamil Ahmadzaei
- * 
  */
 
 @SpringBootApplication
-@RestController
 public class PolicyApplication {
-
-	@Autowired
-	PolicyRepository pRepository;
-	@Autowired
-	ObjectOfInsuranceRepository oRepository;
-
 	/**
 	 * Main-Applikation
 	 * @param args Argumente beim Programmstart
