@@ -8,5 +8,4 @@ services:
     networks:
       - "default"
     ports:
-      - 82:8080
-
+      - 80:80
