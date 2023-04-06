@@ -5,6 +5,7 @@ import EDA.MeowMed.Persistence.Entity.Customer;
 import java.time.LocalDate;
 
 public class View_Customer {
+    private Long id;
     private String firstName;
     private String lastName;
     private String martialStatus;
@@ -19,6 +20,7 @@ public class View_Customer {
     }
 
     public View_Customer(Customer customer) {
+        this.id = customer.getId();
         this.firstName = customer.getFirstName();
         this.lastName = customer.getLastName();
         this.martialStatus = customer.getMartialStatus();
@@ -40,6 +42,14 @@ public class View_Customer {
         this.phoneNumber = phoneNumber;
         this.email = email;
         this.bankDetails = bankDetails;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getFirstName() {
