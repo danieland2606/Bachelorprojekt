@@ -1,12 +1,13 @@
 package EDA.MeowMed.Persistence.Entity;
 
+import EDA.MeowMed.REST.Objects.View_Address;
 import com.fasterxml.jackson.annotation.JsonFilter;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
 
 @Entity
-@Table(name="Address")
+@Table(name = "Address")
 @JsonFilter("Address")
 public class Address implements Serializable {
 
@@ -24,14 +25,21 @@ public class Address implements Serializable {
     @Column(name = "postal_code", nullable = false)
     private String postalCode;
 
-    public Address(Long id,String city, String street, String postalCode) {
+    public Address(Long id, String city, String street, String postalCode) {
         this.id = id;
         this.city = city;
         this.street = street;
         this.postalCode = postalCode;
     }
 
-    public Address() {}
+    public Address() {
+    }
+
+    public Address(View_Address address) {
+        this.city = address.getCity();
+        this.street = address.getStreet();
+        this.postalCode = address.getPostalCode();
+    }
 
     public String getCity() {
         return city;
