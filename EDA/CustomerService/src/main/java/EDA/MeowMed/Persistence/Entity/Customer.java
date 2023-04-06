@@ -11,11 +11,12 @@ import java.time.LocalDate;
 
 @Entity
 @Table(name = "Customer")
-@JsonFilter("Customer")
 public class Customer implements Serializable {
 
     @Id
-    @Column(name = "c_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "c_id", unique = true, nullable = false)
     private Long id;
 
     @Column(name = "first_name", nullable = false)
@@ -33,7 +34,8 @@ public class Customer implements Serializable {
     @Column(name = "employment_status")
     private String employmentStatus;
 
-    @OneToOne(optional = false)
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "a_id", nullable = false)
     private Address address;
 
     @Column(name = "phone_number", nullable = false)
