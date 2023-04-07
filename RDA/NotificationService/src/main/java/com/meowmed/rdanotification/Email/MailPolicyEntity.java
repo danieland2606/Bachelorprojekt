@@ -38,6 +38,7 @@ public class MailPolicyEntity {
                             String personality, String environment, int weight) {
         this.firstName = firstName;
         this.lastName = lastName;
+        this.formOfAdress = formOfAdress;
         this.martialStatus = martialStatus;
         this.dateOfBirth = dateOfBirth;
         this.employmentStatus = employmentStatus;
@@ -135,10 +136,10 @@ public class MailPolicyEntity {
     public void setPostalCode(int postalCode) {
         this.postalCode = postalCode;
     }
-    public long getId() {
+    public long getPid() {
         return pid;
     }
-    public void setId(long pid) {
+    public void setPid(long pid) {
         this.pid = pid;
     }
     public long getCid() {
