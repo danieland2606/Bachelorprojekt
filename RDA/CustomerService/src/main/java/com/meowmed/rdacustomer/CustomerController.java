@@ -24,18 +24,24 @@ public class CustomerController{
         this.cService =  costumerService;
     }
 
+    /**
+     * Diese Methode nimmt die GET-Anfrage für die CustomerListe an und gibt diese gefiltert zurück.
+     * @url "http://domain:port/customer"
+     * @param fields ist eine Liste von Komma-separierten Daten, diese können aus Vorname, Nachname und Addresse bestehen.
+     * @return CONTINUE HERE
+     */
     @GetMapping("/customer")
     public MappingJacksonValue getCustomerList(@RequestParam(value = "fields") String fields) {
-        return cService.getCustomerList(fields, cRepository);
+        return cService.getCustomerList(fields);
     }
     @GetMapping("/customer/{c_id}")
     public MappingJacksonValue getCustomer(@PathVariable Long c_id) {
-        return cService.getCustomer(c_id,cRepository);
+        return cService.getCustomer(c_id);
 
     }
     @PostMapping("/customer")
     public MappingJacksonValue postCustomer(@RequestBody CustomerRequest cRequest) {
-        return cService.postCustomer(cRequest, cRepository);
+        return cService.postCustomer(cRequest);
 
     }
 }

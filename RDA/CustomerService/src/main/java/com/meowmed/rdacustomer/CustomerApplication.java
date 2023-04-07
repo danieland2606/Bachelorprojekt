@@ -22,8 +22,6 @@ import com.meowmed.rdacustomer.entity.*;
  */
 
 @SpringBootApplication
-@RestController
-@RequestMapping("/api")
 public class CustomerApplication {
 
     /**
