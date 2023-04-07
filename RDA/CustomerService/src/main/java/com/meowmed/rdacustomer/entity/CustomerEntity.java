@@ -22,6 +22,8 @@ public class CustomerEntity {
     private long id;
     private String firstName;
     private String lastName;
+
+    private String formofAdress;
     private String martialStatus;
     private LocalDate dateOfBirth;
     private String employmentStatus;
@@ -31,9 +33,10 @@ public class CustomerEntity {
     private String email;
     private String bankDetails;
 
-    public CustomerEntity(String firstName, String lastName, String martialStatus, LocalDate dateOfBirth, String employmentStatus, AddressEntity address, String phoneNumber, String email, String bankDetails) {
+    public CustomerEntity(String firstName, String lastName, String formofAdress, String martialStatus, LocalDate dateOfBirth, String employmentStatus, AddressEntity address, String phoneNumber, String email, String bankDetails) {
         this.firstName = firstName;
         this.lastName = lastName;
+        this.formofAdress= formofAdress;
         this.martialStatus = martialStatus;
         this.dateOfBirth = dateOfBirth;
         this.employmentStatus = employmentStatus;
@@ -68,6 +71,14 @@ public class CustomerEntity {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public String getFormofAdress() {
+        return formofAdress;
+    }
+
+    public void setFormofAdress(String formofAdress) {
+        this.formofAdress = formofAdress;
     }
 
     public String getMartialStatus() {

@@ -1,23 +1,26 @@
 package com.meowmed.rdanotification;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 @RestController
 public class NotificationController {
 
     private final NotificationService nService;
-    @Autowired
-    public NotificationController(NotificatinService notificatinService) {
-        this.nService = notificatinService;
+    public NotificationController(NotificationService notificationService) {
+        this.nService = notificationService;
     }
 
     @PostMapping("/customernotification")
-    public RequestStatusCode postNotificationCustomer() {
-        nService.
-        return 200
+    public int postNotificationCustomer() {
+        return nService.customerNotification();
+
     }
 
     @PostMapping("/policynotification")
-    public RequestStatusCode postNotificationPolicy() {
-        return
+    public int postNotificationPolicy() {
+        return nService.policyNotification();
     }
 
     
