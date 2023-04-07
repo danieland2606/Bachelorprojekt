@@ -6,6 +6,8 @@ public class CustomerRequest {
 
     private String firstName;
     private String lastName;
+
+    private String formOfAdress;
     private String martialStatus;
     private LocalDate dateOfBirth;
     private String employmentStatus;
@@ -17,9 +19,10 @@ public class CustomerRequest {
     public CustomerRequest(){
 
     }
-    public CustomerRequest(String firstName, String lastName, String martialStatus, LocalDate dateOfBirth, String employmentStatus, AddressEntity adress, String phoneNumber, String email, String bankDetails){
+    public CustomerRequest(String firstName, String lastName,String formOfAdress, String martialStatus, LocalDate dateOfBirth, String employmentStatus, AddressEntity adress, String phoneNumber, String email, String bankDetails){
         this.firstName = firstName;
         this.lastName = lastName;
+        this.formOfAdress = formOfAdress;
         this.martialStatus = martialStatus;
         this.dateOfBirth = dateOfBirth;
         this.employmentStatus = employmentStatus;
@@ -45,6 +48,13 @@ public class CustomerRequest {
         this.lastName = lastName;
     }
 
+    public String getFormOfAdress() {
+        return formOfAdress;
+    }
+
+    public void setFormOfAdress(String formOfAdress) {
+        this.formOfAdress = formOfAdress;
+    }
     public String getMartialStatus() {
         return martialStatus;
     }
