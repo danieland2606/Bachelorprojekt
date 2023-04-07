@@ -22,4 +22,4 @@ COPY --from=build ${DEPENDENCY}/BOOT-INF/classes /app
 
 # Hier, am Ende, steht der Package- und Klassenname euer Klasse, die main enthält
 # Beipiel: komplettes-package.klassenname
-ENTRYPOINT ["java","-cp","app:app/lib/*","com.moewmed.rdacustomer.CustomerApplication"]
+ENTRYPOINT ["java","-cp","app:app/lib/*","com.meowmed.rdacustomer.CustomerApplication"]

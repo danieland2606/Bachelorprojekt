@@ -2,8 +2,6 @@ package com.meowmed.rdacustomer;
 
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,11 +15,11 @@ import com.meowmed.rdacustomer.entity.CustomerRequest;
 @RestController
 public class CustomerController{
 
-    private final CustomerService = cService;
+    private final CustomerService cService;
 
     @Autowired
     public CustomerController(CustomerService customerService) {
-        this.cService =  costumerService;
+        this.cService =  customerService;
     }
 
     /**
