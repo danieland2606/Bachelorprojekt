@@ -32,7 +32,8 @@ public class View_Customer {
         this.bankDetails = customer.getBankDetails();
     }
 
-    public View_Customer(String firstName, String lastName, String martialStatus, LocalDate dateOfBirth, String employmentStatus, View_Address address, String phoneNumber, String email, String bankDetails) {
+    public View_Customer(Long id, String firstName, String lastName, String martialStatus, LocalDate dateOfBirth, String employmentStatus, View_Address address, String phoneNumber, String email, String bankDetails) {
+        this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.martialStatus = martialStatus;
