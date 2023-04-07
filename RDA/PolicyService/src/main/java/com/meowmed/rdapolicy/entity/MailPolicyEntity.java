@@ -5,6 +5,7 @@ import java.time.LocalDate;
 public class MailPolicyEntity {
     private String firstName;
     private String lastName;
+    private String formOfAdress;
     private String martialStatus;
     private LocalDate dateOfBirth;
     private String employmentStatus;
@@ -30,7 +31,7 @@ public class MailPolicyEntity {
     private int weight;
     public MailPolicyEntity() {
     }
-    public MailPolicyEntity(String firstName, String lastName, String martialStatus, LocalDate dateOfBirth,
+    public MailPolicyEntity(String firstName, String lastName, String formOfAdress, String martialStatus, LocalDate dateOfBirth,
             String employmentStatus, String phoneNumber, String email, String bankDetails,
             String city, String street, int postalCode, long pid, long cid, LocalDate startDate, LocalDate endDate,
             int coverage, double premium, String name, String race, String color, LocalDate age, boolean castrated,
@@ -64,15 +65,16 @@ public class MailPolicyEntity {
     public MailPolicyEntity(PolicyEntity pEntity, CustomerRequest cRequest){
         this.firstName = cRequest.getFirstName();
         this.lastName = cRequest.getLastName();
+        this.formOfAdress = cRequest.getFormOfAdress();
         this.martialStatus = cRequest.getMartialStatus();
         this.dateOfBirth = cRequest.getDateOfBirth();
         this.employmentStatus = cRequest.getEmploymentStatus();
         this.phoneNumber = cRequest.getPhoneNumber();
         this.email = cRequest.getEmail();
         this.bankDetails = cRequest.getBankDetails();
-        this.city = cRequest.getAdress().getCity();
-        this.street = cRequest.getAdress().getStreet();
-        this.postalCode = cRequest.getAdress().getPostalCode();
+        this.city = cRequest.getAddress().getCity();
+        this.street = cRequest.getAddress().getStreet();
+        this.postalCode = cRequest.getAddress().getPostalCode();
         this.pid = pEntity.getId();
         this.cid = pEntity.getC_id();
         this.startDate = pEntity.getStartDate();
@@ -99,6 +101,12 @@ public class MailPolicyEntity {
     }
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+    public String getFormOfAdress() {
+        return lastName;
+    }
+    public void setFormOfAdress(String formOfAdress) {
+        this.formOfAdress = formOfAdress;
     }
     public String getMartialStatus() {
         return martialStatus;
@@ -244,6 +252,7 @@ public class MailPolicyEntity {
         int result = 1;
         result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
         result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
+        result = prime * result + ((formOfAdress == null) ? 0 : formOfAdress.hashCode());
         result = prime * result + ((martialStatus == null) ? 0 : martialStatus.hashCode());
         result = prime * result + ((dateOfBirth == null) ? 0 : dateOfBirth.hashCode());
         result = prime * result + ((employmentStatus == null) ? 0 : employmentStatus.hashCode());
@@ -289,6 +298,11 @@ public class MailPolicyEntity {
             if (other.lastName != null)
                 return false;
         } else if (!lastName.equals(other.lastName))
+            return false;
+        if (formOfAdress == null) {
+            if (other.formOfAdress != null)
+                return false;
+        } else if (!formOfAdress.equals(other.formOfAdress))
             return false;
         if (martialStatus == null) {
             if (other.martialStatus != null)
@@ -388,15 +402,16 @@ public class MailPolicyEntity {
     }
     @Override
     public String toString() {
-        return "MailEntity [firstName=" + firstName + ", lastName=" + lastName + ", martialStatus=" + martialStatus
-                + ", dateOfBirth=" + dateOfBirth + ", employmentStatus=" + employmentStatus + ", phoneNumber=" 
-                + phoneNumber + ", email=" + email + ", bankDetails=" + bankDetails + ", city="
-                + city + ", street=" + street + ", postalCode=" + postalCode + ", pid=" + pid + ", cid=" + cid
-                + ", startDate=" + startDate + ", endDate=" + endDate + ", coverage=" + coverage + ", premium="
-                + premium + ", name=" + name + ", race=" + race + ", color=" + color + ", age=" + age + ", castrated="
-                + castrated + ", personality=" + personality + ", environment=" + environment + ", weight=" + weight
-                + "]";
+        return "MailPolicyEntity [firstName=" + firstName + ", lastName=" + lastName + ", formOfAdress=" + formOfAdress
+                + ", martialStatus=" + martialStatus + ", dateOfBirth=" + dateOfBirth + ", employmentStatus="
+                + employmentStatus + ", phoneNumber=" + phoneNumber + ", email=" + email + ", bankDetails="
+                + bankDetails + ", city=" + city + ", street=" + street + ", postalCode=" + postalCode + ", pid=" + pid
+                + ", cid=" + cid + ", startDate=" + startDate + ", endDate=" + endDate + ", coverage=" + coverage
+                + ", premium=" + premium + ", name=" + name + ", race=" + race + ", color=" + color + ", age=" + age
+                + ", castrated=" + castrated + ", personality=" + personality + ", environment=" + environment
+                + ", weight=" + weight + "]";
     }
+
 
     
 }
