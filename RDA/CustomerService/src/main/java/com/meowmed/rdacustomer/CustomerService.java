@@ -33,10 +33,10 @@ public class CustomerService {
         this.aRepository = adressRepository;
     }
 
-    /**
-     * Diese Methode nimmt eine ID eines Kunden entgegen und gibt 
-     * @param id
-     * @return
+    /** TODO
+     * Diese Methode nimmt eine ID eines Customers entgegen und gibt ein CustomerEntity zurück
+     * @param id ID des gefragten Customers
+     * @return CustomerEntity ohne seine ID
      */
     public MappingJacksonValue getCustomer(long id){
         MappingJacksonValue wrapper = new MappingJacksonValue(cRepository.findById(id));
@@ -47,10 +47,10 @@ public class CustomerService {
         return wrapper;
     }
 
-    /**
-     *
-     * @param fields
-     * @return
+    /** TODO
+     * Diese Methode nimmt einen String entgegen welcher aus Vorname, Nachname und Addresse bestehen kann.
+     * @param fields String aus Vorname, Nachname und Addresse. Attribute sind mit "," getrennt.
+     * @return Gibt eine Liste mit CustomerObjekten zurück, welche die gleichen Attribute aus fields haben.
      */
     //?fields=id,firstName,lastName,address
     public MappingJacksonValue getCustomerList(String fields){
@@ -81,9 +81,9 @@ public class CustomerService {
     }
 
     /**
-     *
-     * @param cRequest
-     * @return
+     * Diese Methode speichert ein CustomerEntity.
+     * @param cRequest ist das zu speichernde Customer Objekt
+     * @return Die ID des erstellten Objekts.
      */
     public MappingJacksonValue postCustomer(CustomerRequest cRequest) {
         aRepository.save(cRequest.getAdress());

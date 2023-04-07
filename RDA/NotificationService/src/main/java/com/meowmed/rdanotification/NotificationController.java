@@ -26,6 +26,4 @@ public class NotificationController {
         //System.out.println(details);
         return nService.policyNotification(details);
     }
-
-    
 }
