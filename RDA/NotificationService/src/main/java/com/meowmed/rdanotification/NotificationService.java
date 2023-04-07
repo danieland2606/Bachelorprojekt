@@ -24,7 +24,7 @@ public class NotificationService {
     public NotificationService() {}
 
 
-    public String customerNotification(MailCustomerEntity details) throws IOException {
+    public String customerNotification(MailCustomerEntity details) {
 
 
         MimeMessage mimeMessage
