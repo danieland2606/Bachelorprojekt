@@ -1,4 +1,4 @@
-package com.moewmed.rdacustomer.entity;
+package com.meowmed.rdacustomer.entity;
 
 import java.time.LocalDate;
 

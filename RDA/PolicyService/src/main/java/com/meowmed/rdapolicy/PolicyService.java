@@ -9,14 +9,19 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.hibernate.cfg.Environment;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClientException;
+import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import com.meowmed.rdapolicy.database.ObjectOfInsuranceRepository;
 import com.meowmed.rdapolicy.database.PolicyRepository;
+import com.meowmed.rdapolicy.entity.CustomerRequest;
 import com.meowmed.rdapolicy.entity.PolicyEntity;
 import com.meowmed.rdapolicy.entity.PolicyRequest;
 import com.meowmed.rdapolicy.entity.PriceCalculationEntity;
@@ -31,6 +36,11 @@ import com.meowmed.rdapolicy.entity.PriceCalculationEntity;
 @Service
 public class PolicyService {
 
+	@Autowired
+	private Environment env;
+	
+	@Value("${docker.customerurl}")
+	private String customerUrl;
 
 	private final PolicyRepository pRepository;
 	private final ObjectOfInsuranceRepository oRepository;
@@ -154,13 +164,21 @@ public class PolicyService {
 	 */
     public MappingJacksonValue postPolicy(Long c_id, PolicyRequest pRequest){
 		oRepository.save(pRequest.getObjectOfInsurance());
+		CustomerRequest customer;
+		try {
+			String customerURL = "http://" + customerUrl + "/api/customer/" + c_id;
+			RestTemplate template = new RestTemplate();
+			customer = template.getForObject(customerURL, CustomerRequest.class,null);
+		} catch (RestClientException e) {
+			// TODO: handle exception
+		}
 		/*
-		String customerURL = "http://customer:8080/api/customer/" + c_id;
+		String customerURL = "http://" + env.getProperties("docker.customerurl") + "/api/customer/" + c_id;
 		RestTemplate template = new RestTemplate();
-		CustomerEntity customer = template.getForObject(customerURL, CustomerEntity.class,null);
-		customer.getAddress().getPostalCode();
+		CustomerRequest customer = template.getForObject(customerURL, CustomerRequest.class,null);
+		customer.getAdress().getPostalCode();
 		*/
-		PriceCalculationEntity tempCalc = new PriceCalculationEntity(12150, pRequest.getCoverage(), pRequest.getObjectOfInsurance().getRace(), 
+		PriceCalculationEntity tempCalc = new PriceCalculationEntity(customer.getAdress().getPostalCode(), pRequest.getCoverage(), pRequest.getObjectOfInsurance().getRace(), 
 				pRequest.getObjectOfInsurance().getColor(), pRequest.getObjectOfInsurance().getAge(), pRequest.getObjectOfInsurance().isCastrated(), 
 				pRequest.getObjectOfInsurance().getPersonality(), pRequest.getObjectOfInsurance().getEnviroment(), pRequest.getObjectOfInsurance().getWeight());
 

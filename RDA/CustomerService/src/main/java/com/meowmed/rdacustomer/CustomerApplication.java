@@ -1,4 +1,4 @@
-package com.moewmed.rdacustomer;
+package com.meowmed.rdacustomer;
 
 import java.time.LocalDate;
 
@@ -10,9 +10,9 @@ import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import com.moewmed.rdacustomer.database.AddressRepository;
-import com.moewmed.rdacustomer.database.CustomerRepository;
-import com.moewmed.rdacustomer.entity.*;
+import com.meowmed.rdacustomer.database.AddressRepository;
+import com.meowmed.rdacustomer.database.CustomerRepository;
+import com.meowmed.rdacustomer.entity.*;
 
 
 

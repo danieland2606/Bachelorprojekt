@@ -1,9 +1,9 @@
-package com.moewmed.rdacustomer;
+package com.meowmed.rdacustomer;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
-import com.moewmed.rdacustomer.database.CustomerRepository;
-import com.moewmed.rdacustomer.entity.CustomerEntity;
-import com.moewmed.rdacustomer.entity.CustomerRequest;
+import com.meowmed.rdacustomer.database.CustomerRepository;
+import com.meowmed.rdacustomer.entity.CustomerEntity;
+import com.meowmed.rdacustomer.entity.CustomerRequest;
 
 import org.springframework.http.converter.json.MappingJacksonValue;
 import java.util.ArrayList;
@@ -40,7 +40,7 @@ public class CustomerService {
 		if(containsOoI) addressList.add("address");
         */
         customerList.addAll(Arrays.asList(fields.split(",")));
-        //customerList.add("id");
+        customerList.add("id");
         wrapper.setFilters(new SimpleFilterProvider()
                 .addFilter("customerFilter", SimpleBeanPropertyFilter.filterOutAllExcept(Set.copyOf(customerList)))
                 //.addFilter("addressFilter", SimpleBeanPropertyFilter.filterOutAllExcept(Set.copyOf(addressList)))

@@ -1,4 +1,4 @@
-package com.moewmed.rdacustomer.entity;
+package com.meowmed.rdapolicy.entity;
 
 import com.fasterxml.jackson.annotation.JsonFilter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -17,10 +17,10 @@ public class AddressEntity {
     private long id;
     private String city;
     private String street;
-    private String postalCode;
+    private int postalCode;
 
     
-    public AddressEntity(String city, String street, String postalCode) {
+    public AddressEntity(String city, String street, int postalCode) {
         this.city = city;
         this.street = street;
         this.postalCode = postalCode;
@@ -44,12 +44,11 @@ public class AddressEntity {
         this.street = street;
     }
 
-    public String getPostalCode() {
+    public int getPostalCode() {
         return postalCode;
     }
 
-    public void setPostalCode(String postalCode) {
+    public void setPostalCode(int postalCode) {
         this.postalCode = postalCode;
     }
-
 }

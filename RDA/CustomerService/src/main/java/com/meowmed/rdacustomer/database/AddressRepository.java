@@ -1,8 +1,8 @@
-package com.moewmed.rdacustomer.database;
+package com.meowmed.rdacustomer.database;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.moewmed.rdacustomer.entity.AddressEntity;
+import com.meowmed.rdacustomer.entity.AddressEntity;
 
 public interface AddressRepository extends JpaRepository<AddressEntity, Long> {
     
