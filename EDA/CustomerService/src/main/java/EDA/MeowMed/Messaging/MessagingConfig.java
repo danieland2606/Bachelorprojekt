@@ -9,7 +9,7 @@ public class MessagingConfig {
 
     @Bean
     public DirectExchange direct() {
-        return new DirectExchange("customer-sender");
+        return new DirectExchange("customer.sender");
     }
 
     @Bean

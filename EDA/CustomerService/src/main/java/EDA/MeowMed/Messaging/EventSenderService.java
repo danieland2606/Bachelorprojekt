@@ -27,13 +27,12 @@ public class EventSenderService {
 
     public boolean sendNewCustomerEvent(Customer customer) {
         try {
-
+            template.convertAndSend(direct.getName(), key, customer);
+            System.out.println(" [x] Sent");
         } catch (Exception e) {
             System.out.println("Fehler beim Senden");
             e.printStackTrace();
         }
-        template.convertAndSend(direct.getName(), key, customer);
-        System.out.println(" [x] Sent");
         return true;
     }
 }

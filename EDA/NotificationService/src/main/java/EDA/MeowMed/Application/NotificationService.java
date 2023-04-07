@@ -1,13 +1,9 @@
 package EDA.MeowMed.Application;
 
-import EDA.MeowMed.Messaging.EventObjects.NewCustomerEvent;
+import EDA.MeowMed.Messaging.EventObjects.CustomerCreatedEvent;
 
-import EDA.MeowMed.Messaging.EventObjects.NewPolicyEvent;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -17,7 +13,7 @@ public class NotificationService {
     private final String ownMail= "noreply@meowmed.paw";
     private final String subject = "Willkommen bei Meowmed!";
 
-    public void sendNewCustomerMail(NewCustomerEvent newCustomer) {
+    public void sendCustomerCreatedMail(CustomerCreatedEvent newCustomer) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom(ownMail);
         message.setTo("receiver.meowmed@gmail.com");
@@ -26,7 +22,7 @@ public class NotificationService {
         mailSender.send(message);
     }
 
-//    public void sendNewPolicyMail(NewPolicyEvent newPolicy) {
+//    public void sendPolicyCreatedMail(NewPolicyEvent newPolicy) {
 //        SimpleMailMessage message = new SimpleMailMessage();
 //        message.setFrom("noreply@meowmed.com");
 //        message.setTo(to);
