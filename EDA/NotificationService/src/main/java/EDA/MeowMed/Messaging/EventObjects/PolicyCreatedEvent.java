@@ -1,4 +1,10 @@
 package EDA.MeowMed.Messaging.EventObjects;
 
-public class PolicyCreatedEvent {
+import java.io.Serial;
+import java.io.Serializable;
+
+public class PolicyCreatedEvent implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 3L;
+
 }

@@ -19,9 +19,9 @@ public class EventReceiver {
     private NotificationService notificationService;
 
     @RabbitListener(queues = "#{autoDeleteQueue1.name}")
-    public void receiveCustomer(String in) throws InterruptedException {
+    public void receiveCustomer(CustomerCreatedEvent in) throws InterruptedException {
         System.out.println("Empfangen!");
-        //notificationService.sendCustomerCreatedMail(in);
+        notificationService.sendCustomerCreatedMail(in);
     }
 
 //    @RabbitListener(queues = "#{autoDeleteQueue2.name}")
