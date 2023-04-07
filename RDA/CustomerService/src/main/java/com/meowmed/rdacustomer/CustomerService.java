@@ -1,11 +1,15 @@
 package com.meowmed.rdacustomer;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
+import com.meowmed.rdacustomer.database.AddressRepository;
 import com.meowmed.rdacustomer.database.CustomerRepository;
 import com.meowmed.rdacustomer.entity.CustomerEntity;
 import com.meowmed.rdacustomer.entity.CustomerRequest;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.converter.json.MappingJacksonValue;
+import org.springframework.stereotype.Service;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Arrays;
@@ -15,15 +19,15 @@ import java.util.Set;
 public class CustomerService {
 
     private final CustomerRepository cRepository;
-    private final AdressRepository aRepository;
+    private final AddressRepository aRepository;
 
     @Autowired
-    public CustomerService(CustomerRepository customerRepository, AdressRepository adressRepository) {
+    public CustomerService(CustomerRepository customerRepository, AddressRepository adressRepository) {
         this.cRepository = customerRepository;
         this.aRepository = adressRepository;
     }
 
-    public MappingJacksonValue getCustomer(long id, CustomerRepository cRepository){
+    public MappingJacksonValue getCustomer(long id){
         MappingJacksonValue wrapper = new MappingJacksonValue(cRepository.findById(id));
 
         wrapper.setFilters(new SimpleFilterProvider()
@@ -32,7 +36,7 @@ public class CustomerService {
         return wrapper;
     }
     //?fields=id,firstName,lastName,address
-    public MappingJacksonValue getCustomerList(String fields, CustomerRepository cRepository){
+    public MappingJacksonValue getCustomerList(String fields){
         MappingJacksonValue wrapper = new MappingJacksonValue(cRepository.findAll());
 
         List<String> customerList = new ArrayList<String>();
@@ -59,14 +63,14 @@ public class CustomerService {
         return wrapper;
     }
 
-    public MappingJacksonValue postCustomer(CustomerRequest cRequest, CustomerRepository cRepository) {
-        CustomerEntity customer= new CustomerEntity(cRequest.getFirstName(), cRequest.getLastName(), cRequest.getMartialStatus(), cRequest.getDateOfBirth(), cRequest.getEmploymentStatus(), cRequest.getAdress(), cRequest.getPhoneNumber(),cRequest.getEmail(),cRequest.getBankDetails());
+    public MappingJacksonValue postCustomer(CustomerRequest cRequest) {
+        aRepository.save(cRequest.getAdress());
+        CustomerEntity customer= new CustomerEntity(cRequest.getFirstName(), cRequest.getLastName(), cRequest.getFormOfAdress(), cRequest.getMartialStatus(), cRequest.getDateOfBirth(), cRequest.getEmploymentStatus(), cRequest.getAdress(), cRequest.getPhoneNumber(),cRequest.getEmail(),cRequest.getBankDetails());
         MappingJacksonValue wrapper = new MappingJacksonValue(cRepository.save(customer));
         wrapper.setFilters(new SimpleFilterProvider()
                 .addFilter("customerFilter", SimpleBeanPropertyFilter.filterOutAllExcept("id"))
                 .setFailOnUnknownId(false));
         return wrapper;
-
     }
 }
 

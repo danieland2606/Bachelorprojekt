@@ -6,9 +6,6 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import org.springframework.http.converter.json.MappingJacksonValue;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import com.meowmed.rdacustomer.database.AddressRepository;
 import com.meowmed.rdacustomer.database.CustomerRepository;
@@ -22,8 +19,6 @@ import com.meowmed.rdacustomer.entity.*;
  */
 
 @SpringBootApplication
-@RestController
-@RequestMapping("/api")
 public class CustomerApplication {
 
     /**
@@ -43,11 +38,11 @@ public class CustomerApplication {
         return args -> {
             LocalDate birthdayOfJan= LocalDate.of(1999,11,03);
             AddressEntity adressJan= new AddressEntity("Hildesheim","Burgerking Hbf",31137);
-            CustomerEntity Jan= new CustomerEntity("Jan","Lorenz","ledig",birthdayOfJan,"student", adressJan, "+49123456789", "jan-niklas-johannes.lorenz@stud.hs-hannover.de", "DE2131627312371351232");
+            CustomerEntity Jan= new CustomerEntity("Jan","Lorenz","Mr.","ledig",birthdayOfJan,"student", adressJan, "+49123456789", "jan-niklas-johannes.lorenz@stud.hs-hannover.de", "DE2131627312371351232");
 
             LocalDate birthdayofDaniel= LocalDate.of(2002,06,26);
             AddressEntity adressDaniel= new AddressEntity("Hannover", "Subway Hbf", 12345);
-            CustomerEntity Daniel= new CustomerEntity("Daniel", "Arnold", "ledig", birthdayofDaniel, "student", adressDaniel, "+4942069123123", "daniel.arnold@stud.hs-hannover.de", "DE");
+            CustomerEntity Daniel= new CustomerEntity("Daniel", "Arnold","Mr.", "ledig", birthdayofDaniel, "student", adressDaniel, "+4942069123123", "daniel.arnold@stud.hs-hannover.de", "DE");
         
             addressRepository.save(adressJan);
             addressRepository.save(adressDaniel);

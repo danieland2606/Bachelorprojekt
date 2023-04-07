@@ -1,20 +1,6 @@
 package com.meowmed.rdapolicy.entity;
 
-import com.fasterxml.jackson.annotation.JsonFilter;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-
-@Entity
-@JsonFilter("addressFilter")
 public class AddressEntity {
-    @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
-    @JsonIgnore
-    private long id;
     private String city;
     private String street;
     private int postalCode;
