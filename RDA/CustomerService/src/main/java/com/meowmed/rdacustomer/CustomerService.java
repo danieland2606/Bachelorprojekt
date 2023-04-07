@@ -15,6 +15,12 @@ import java.util.List;
 import java.util.Arrays;
 import java.util.Set;
 
+/**
+ * Diese Klasse ist die Service-Klasse des REST-Controllers
+ *
+ * @apiNote Die Schnittstelle ist definiert in der Datei MeowMed_REST_Interface_1.1.md im Root-Verzeichnis des Git-Repos
+ * @author Daniel Arnold, Jan Lorenz
+ */
 @Service
 public class CustomerService {
 
@@ -27,6 +33,11 @@ public class CustomerService {
         this.aRepository = adressRepository;
     }
 
+    /**
+     * Diese Methode nimmt eine ID eines Kunden entgegen und gibt 
+     * @param id
+     * @return
+     */
     public MappingJacksonValue getCustomer(long id){
         MappingJacksonValue wrapper = new MappingJacksonValue(cRepository.findById(id));
 
@@ -35,6 +46,12 @@ public class CustomerService {
         .setFailOnUnknownId(false));
         return wrapper;
     }
+
+    /**
+     *
+     * @param fields
+     * @return
+     */
     //?fields=id,firstName,lastName,address
     public MappingJacksonValue getCustomerList(String fields){
         MappingJacksonValue wrapper = new MappingJacksonValue(cRepository.findAll());
@@ -63,6 +80,11 @@ public class CustomerService {
         return wrapper;
     }
 
+    /**
+     *
+     * @param cRequest
+     * @return
+     */
     public MappingJacksonValue postCustomer(CustomerRequest cRequest) {
         aRepository.save(cRequest.getAdress());
         CustomerEntity customer= new CustomerEntity(cRequest.getFirstName(), cRequest.getLastName(), cRequest.getFormOfAdress(), cRequest.getMartialStatus(), cRequest.getDateOfBirth(), cRequest.getEmploymentStatus(), cRequest.getAdress(), cRequest.getPhoneNumber(),cRequest.getEmail(),cRequest.getBankDetails());
