@@ -5,10 +5,16 @@ import com.meowmed.rdacustomer.database.AddressRepository;
 import com.meowmed.rdacustomer.database.CustomerRepository;
 import com.meowmed.rdacustomer.entity.CustomerEntity;
 import com.meowmed.rdacustomer.entity.CustomerRequest;
+import com.meowmed.rdacustomer.entity.MailCustomerEntity;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +29,10 @@ import java.util.Set;
  */
 @Service
 public class CustomerService {
+
+    @Value("${docker.notificationurl}")
+    private String notificationUrl;
+
 
     private final CustomerRepository cRepository;
     private final AddressRepository aRepository;
@@ -55,21 +65,22 @@ public class CustomerService {
     //?fields=id,firstName,lastName,address
     public MappingJacksonValue getCustomerList(String fields){
         MappingJacksonValue wrapper = new MappingJacksonValue(cRepository.findAll());
-
         List<String> customerList = new ArrayList<String>();
-        /* 
-        // Im Falle, das address.city benutzt werden soll
-        List<String> addressList = new ArrayList<String>();
-        boolean containsOoI = false;
-		for (String result : customerList) {
-			if(result.contains("address.")){
-				addressList.add(result.substring(8));
-				customerList.remove(result);
-				containsOoI = true;
-			}
-		}
-		if(containsOoI) addressList.add("address");
-        */
+
+        MailCustomerEntity mail = new MailCustomerEntity();
+        String notificationURL = "http://" + notificationUrl + ":8080";
+        WebClient notificationClient = WebClient.create(notificationURL);
+        WebClient.UriSpec<WebClient.RequestBodySpec> uriSpec = notificationClient.method(HttpMethod.POST);
+        //WebClient.ResponseSpec responseSpec = notificationClient.get().uri(customerURL,c_id).retrieve();
+
+        Mono<String> result = notificationClient.post()
+                .uri("/policynotification")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(mail)
+                .retrieve()
+                .bodyToMono(String.class);
+
+
         customerList.addAll(Arrays.asList(fields.split(",")));
         customerList.add("id");
         wrapper.setFilters(new SimpleFilterProvider()

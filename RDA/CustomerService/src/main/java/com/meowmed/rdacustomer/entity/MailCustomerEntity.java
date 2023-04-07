@@ -2,7 +2,7 @@ package com.meowmed.rdacustomer.entity;
 
 import java.time.LocalDate;
 
-public class CustomerRequest {
+public class MailCustomerEntity {
 
     private String firstName;
     private String lastName;
@@ -16,10 +16,10 @@ public class CustomerRequest {
     private String email;
     private String bankDetails;
 
-    public CustomerRequest(){
+    public MailCustomerEntity(){
 
     }
-    public CustomerRequest(String firstName, String lastName,String formOfAdress, String martialStatus, LocalDate dateOfBirth, String employmentStatus, AddressEntity address, String phoneNumber, String email, String bankDetails){
+    public MailCustomerEntity(String firstName, String lastName, String formOfAdress, String martialStatus, LocalDate dateOfBirth, String employmentStatus, AddressEntity address, String phoneNumber, String email, String bankDetails){
         this.firstName = firstName;
         this.lastName = lastName;
         this.formOfAdress = formOfAdress;
@@ -83,8 +83,8 @@ public class CustomerRequest {
         return address;
     }
 
-    public void setAdress(AddressEntity adress) {
-        this.address = adress;
+    public void setAdress(AddressEntity address) {
+        this.address = address;
     }
 
     public String getPhoneNumber() {
