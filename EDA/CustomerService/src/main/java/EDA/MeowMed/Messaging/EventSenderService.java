@@ -28,11 +28,8 @@ public class EventSenderService {
 
     public boolean sendCustomerCreatedEvent(Customer customer) {
         try {
-<<<<<<< HEAD
-            template.convertAndSend(direct.getName(), key, customer);
-=======
+
             template.convertAndSend(direct.getName(), key, new CustomerCreatedEvent(customer));
->>>>>>> 55f8fd38db3bc96e8cbac095c1f8f02d9c2ef17c
             System.out.println(" [x] Sent");
         } catch (Exception e) {
             System.out.println("Fehler beim Senden");

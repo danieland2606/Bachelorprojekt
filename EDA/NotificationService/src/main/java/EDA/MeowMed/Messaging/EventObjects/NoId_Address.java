@@ -1,6 +1,11 @@
 package EDA.MeowMed.Messaging.EventObjects;
 
-public class NoId_Address {
+import java.io.Serial;
+import java.io.Serializable;
+
+public class NoId_Address implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 2L;
     private String city;
     private String street;
     private String postalCode;
