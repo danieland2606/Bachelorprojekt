@@ -162,26 +162,11 @@ public class PolicyService {
 		oRepository.save(pRequest.getObjectOfInsurance());
 		CustomerRequest customer;
 		String customerURL = "http://" + customerUrl + ":8080/customer/{c_id}";
-		//RestTemplate template = new RestTemplate();
-		//customer = template.getForObject(customerURL, CustomerRequest.class, c_id);
-		
 		WebClient client = WebClient.create();
 		WebClient.ResponseSpec responseSpec = client.get().uri(customerURL,c_id).retrieve();
 		customer = responseSpec.bodyToMono(CustomerRequest.class).block();
 
-		
-		/*
-		String customerURL = "http://" + customerUrl + ":8080/api/customer/{id}";
-		RestTemplate template = new RestTemplate();
-		CustomerRequest customer = template.getForObject(customerURL, CustomerRequest.class,null);
-		customer.getAdress().getPostalCode();
-		*/
-		int temp = 100000;
-		if(Objects.nonNull(customer)){
-			temp = customer.getAdress().getPostalCode();
-		}
-
-		PriceCalculationEntity tempCalc = new PriceCalculationEntity(temp, pRequest.getCoverage(), pRequest.getObjectOfInsurance().getRace(), 
+		PriceCalculationEntity tempCalc = new PriceCalculationEntity(customer.getAdress().getPostalCode(), pRequest.getCoverage(), pRequest.getObjectOfInsurance().getRace(), 
 				pRequest.getObjectOfInsurance().getColor(), pRequest.getObjectOfInsurance().getAge(), pRequest.getObjectOfInsurance().isCastrated(), 
 				pRequest.getObjectOfInsurance().getPersonality(), pRequest.getObjectOfInsurance().getEnviroment(), pRequest.getObjectOfInsurance().getWeight());
 

@@ -2,7 +2,7 @@ package EDA.MeowMed.Messaging.EventObjects;
 
 import java.time.LocalDate;
 
-public class NewCustomerEvent {
+public class CustomerCreatedEvent {
     private Long id;
     private String firstName;
     private String lastName;
@@ -14,10 +14,10 @@ public class NewCustomerEvent {
     private String email;
     private String bankDetails;
 
-    public NewCustomerEvent() {
+    public CustomerCreatedEvent() {
     }
 
-    public NewCustomerEvent(Long id, String firstName, String lastName, String martialStatus, LocalDate dateOfBirth, String employmentStatus, NoId_Address address, String phoneNumber, String email, String bankDetails) {
+    public CustomerCreatedEvent(Long id, String firstName, String lastName, String martialStatus, LocalDate dateOfBirth, String employmentStatus, NoId_Address address, String phoneNumber, String email, String bankDetails) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
