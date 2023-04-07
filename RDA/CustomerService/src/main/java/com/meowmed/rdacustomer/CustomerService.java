@@ -11,7 +11,17 @@ import java.util.List;
 import java.util.Arrays;
 import java.util.Set;
 
+@Service
 public class CustomerService {
+
+    private final CustomerRepository cRepository;
+    private final AdressRepository aRepository;
+
+    @Autowired
+    public CustomerService(CustomerRepository customerRepository, AdressRepository adressRepository) {
+        this.cRepository = customerRepository;
+        this.aRepository = adressRepository;
+    }
 
     public MappingJacksonValue getCustomer(long id, CustomerRepository cRepository){
         MappingJacksonValue wrapper = new MappingJacksonValue(cRepository.findById(id));

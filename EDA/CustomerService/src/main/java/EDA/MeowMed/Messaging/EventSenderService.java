@@ -1,6 +1,7 @@
 package EDA.MeowMed.Messaging;
 
 
+import EDA.MeowMed.Messaging.EventObjects.CustomerCreatedEvent;
 import EDA.MeowMed.Persistence.Entity.Customer;
 import org.springframework.amqp.core.DirectExchange;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -15,7 +16,7 @@ public class EventSenderService {
     @Autowired
     private DirectExchange direct;
 
-    public EventSenderService(){
+    public EventSenderService() {
     }
 
     private final String key = "customer_created";
@@ -25,9 +26,13 @@ public class EventSenderService {
         System.out.println(" [x] Sent '" + message + "'");
     }
 
-    public boolean sendNewCustomerEvent(Customer customer) {
+    public boolean sendCustomerCreatedEvent(Customer customer) {
         try {
+<<<<<<< HEAD
             template.convertAndSend(direct.getName(), key, customer);
+=======
+            template.convertAndSend(direct.getName(), key, new CustomerCreatedEvent(customer));
+>>>>>>> 55f8fd38db3bc96e8cbac095c1f8f02d9c2ef17c
             System.out.println(" [x] Sent");
         } catch (Exception e) {
             System.out.println("Fehler beim Senden");
