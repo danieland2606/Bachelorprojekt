@@ -1,11 +1,13 @@
 package com.meowmed.rdanotification;
 
-import com.meowmed.rdanotification.Email.EmailDetails;
+import com.meowmed.rdanotification.Email.MailCustomerEntity;
+import com.meowmed.rdanotification.Email.MailPolicyEntity;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -21,19 +23,19 @@ public class NotificationService {
 
     public NotificationService() {}
 
-    public String customerNotification(EmailDetails details) {
+
+    public String customerNotification(MailCustomerEntity details) {
         MimeMessage mimeMessage
                 = javaMailSender.createMimeMessage();
         MimeMessageHelper mimeMessageHelper;
 
         try {
 
-            // Setting multipart as true for attachments to
-            // be send
+
             mimeMessageHelper
                     = new MimeMessageHelper(mimeMessage, true);
             mimeMessageHelper.setFrom(sender);
-            mimeMessageHelper.setTo(details.getRecipient());
+            mimeMessageHelper.setTo(details.getEmail());
             mimeMessageHelper.setText(details.getMsgBody());
             mimeMessageHelper.setSubject(
                     details.getSubject());
@@ -46,30 +48,28 @@ public class NotificationService {
             mimeMessageHelper.addAttachment(
                     file.getFilename(), file);
 
-            // Sending the mail
             javaMailSender.send(mimeMessage);
             return "Mail sent Successfully";
         }
 
-        // Catch block to handle MessagingException
+
         catch (MessagingException e) {
 
-            // Display message when exception occurred
+
             return "Error while sending mail!!!";
         }
 
 
     }
 
-    public String policyNotification(EmailDetails details) {
+    public String policyNotification(MailPolicyEntity details) {
         MimeMessage mimeMessage
                 = javaMailSender.createMimeMessage();
         MimeMessageHelper mimeMessageHelper;
 
         try {
 
-            // Setting multipart as true for attachments to
-            // be send
+
             mimeMessageHelper
                     = new MimeMessageHelper(mimeMessage, true);
             mimeMessageHelper.setFrom(sender);
@@ -78,7 +78,7 @@ public class NotificationService {
             mimeMessageHelper.setSubject(
                     details.getSubject());
 
-            // Adding the attachment
+
             FileSystemResource file
                     = new FileSystemResource(
                     new File(details.getAttachment()));
@@ -86,15 +86,14 @@ public class NotificationService {
             mimeMessageHelper.addAttachment(
                     file.getFilename(), file);
 
-            // Sending the mail
+
             javaMailSender.send(mimeMessage);
             return "Mail sent Successfully";
         }
 
-        // Catch block to handle MessagingException
+
         catch (MessagingException e) {
 
-            // Display message when exception occurred
             return "Error while sending mail!!!";
         }
 
