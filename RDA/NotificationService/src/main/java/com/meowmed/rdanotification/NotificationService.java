@@ -24,10 +24,14 @@ public class NotificationService {
     public NotificationService() {}
 
 
-    public String customerNotification(MailCustomerEntity details) {
+    public String customerNotification(MailCustomerEntity details) throws IOException {
+
+
         MimeMessage mimeMessage
                 = javaMailSender.createMimeMessage();
         MimeMessageHelper mimeMessageHelper;
+        String subject= "Willkommen bei Moewmed+";
+        String html = Files.readString(Path.of("./template/Customer.html"));
 
         try {
 
@@ -37,8 +41,7 @@ public class NotificationService {
             mimeMessageHelper.setFrom(sender);
             mimeMessageHelper.setTo(details.getEmail());
             mimeMessageHelper.setText(details.getMsgBody());
-            mimeMessageHelper.setSubject(
-                    details.getSubject());
+            mimeMessageHelper.setSubject(subject);
 
             // Adding the attachment
             FileSystemResource file
