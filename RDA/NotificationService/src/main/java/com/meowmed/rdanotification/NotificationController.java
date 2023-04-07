@@ -1,6 +1,7 @@
 package com.meowmed.rdanotification;
 
-import com.meowmed.rdanotification.Email.EmailDetails;
+import com.meowmed.rdanotification.Email.MailCustomerEntity;
+import com.meowmed.rdanotification.Email.MailPolicyEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,12 +17,13 @@ public class NotificationController {
     }
 
     @PostMapping("/customernotification")
-    public String postNotificationCustomer(@RequestBody EmailDetails details) {
+    public String postNotificationCustomer(@RequestBody MailCustomerEntity details) {
         return nService.customerNotification(details);
     }
 
     @PostMapping("/policynotification")
-    public String postNotificationPolicy(@RequestBody EmailDetails details) {
+    public String postNotificationPolicy(@RequestBody MailPolicyEntity details) {
+        //System.out.println(details);
         return nService.policyNotification(details);
     }
 
