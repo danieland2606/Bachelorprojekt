@@ -53,7 +53,7 @@ public class CustomerService {
         Customer customer = new Customer(newCustomer);
         this.customerRepository.save(customer);
         //this.addressRepository.save(customer.getAddress());
-        eventSenderService.sendNewCustomerEvent(customer);
+        eventSenderService.sendCustomerCreatedEvent(customer);
         return customer.getId();
     }
 

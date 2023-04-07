@@ -4,7 +4,7 @@ import EDA.MeowMed.Persistence.Entity.Customer;
 
 import java.time.LocalDate;
 
-public class NewCustomerEvent {
+public class CustomerCreatedEvent {
     private Long id;
     private String firstName;
     private String lastName;
@@ -16,10 +16,10 @@ public class NewCustomerEvent {
     private String email;
     private String bankDetails;
 
-    public NewCustomerEvent() {
+    public CustomerCreatedEvent() {
     }
 
-    public NewCustomerEvent(Customer customer) {
+    public CustomerCreatedEvent(Customer customer) {
         this.id = customer.getId();
         this.firstName = customer.getFirstName();
         this.lastName = customer.getLastName();
@@ -32,7 +32,7 @@ public class NewCustomerEvent {
         this.bankDetails = customer.getBankDetails();
     }
 
-    public NewCustomerEvent(Long id, String firstName, String lastName, String martialStatus, LocalDate dateOfBirth, String employmentStatus, NoId_Address address, String phoneNumber, String email, String bankDetails) {
+    public CustomerCreatedEvent(Long id, String firstName, String lastName, String martialStatus, LocalDate dateOfBirth, String employmentStatus, NoId_Address address, String phoneNumber, String email, String bankDetails) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
