@@ -1,6 +1,5 @@
 package com.meowmed.rdanotification;
 
-import ch.qos.logback.core.net.SyslogOutputStream;
 import com.meowmed.rdanotification.Email.MailCustomerEntity;
 import com.meowmed.rdanotification.Email.MailPolicyEntity;
 import jakarta.mail.MessagingException;
@@ -9,27 +8,16 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.FileSystemResource;
-import org.springframework.mail.SimpleMailMessage;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring5.SpringTemplateEngine;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.FileSystems;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 
 @Service
@@ -45,27 +33,29 @@ public class NotificationService {
 
 
 
-    public String customerNotification(MailCustomerEntity details) {
-
-
-        MimeMessage mimeMessage
-                = javaMailSender.createMimeMessage();
-        MimeMessageHelper mimeMessageHelper;
-        String subject= "Willkommen bei Moewmed+";
-
-        
-
+    public ResponseEntity<String> customerNotification(MailCustomerEntity details) {
         try {
-            String html = Files.readString(Path.of("./template/Customer.html"));
-
-            mimeMessageHelper
-                    = new MimeMessageHelper(mimeMessage, true);
+            MimeMessage mimeMessage = emailSender.createMimeMessage();
+            MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED, StandardCharsets.UTF_8.name());
             mimeMessageHelper.setFrom(sender);
             mimeMessageHelper.setTo(details.getEmail());
-            mimeMessageHelper.setText("details.getMsgBody()");
-            mimeMessageHelper.setSubject(subject);
-
-            // Adding the attachment
+            mimeMessageHelper.setSubject("Vielen Dank für ihr Vertrauen in MeowMed+");
+            Map<String,Object> properties = new HashMap<>();
+            properties.put("formOfAdress", details.getFormOfAdress());
+            properties.put("firstName", details.getFirstName());
+            properties.put("lastName", details.getLastName());
+            
+            //properties.put("cid", details.getId());
+            properties.put("martialStatus", details.getMartialStatus());
+            properties.put("dateOfBirth", details.getDateOfBirth());
+            properties.put("employmentStatus", details.getEmploymentStatus());
+            properties.put("phoneNumber", details.getPhoneNumber());
+            properties.put("bankDetails", details.getBankDetails());
+            properties.put("adress", details.getAdress().getStreet() + ", " + details.getAdress().getPostalCode() + " " + details.getAdress().getCity());
+            Context context = new Context();
+            context.setVariables(properties);
+            String html = templateEngine.process("customernotification.html", context);
+            mimeMessageHelper.setText(html, true);
             /*
             FileSystemResource file
                     = new FileSystemResource(
@@ -75,27 +65,17 @@ public class NotificationService {
                     file.getFilename(), file);
             */
             javaMailSender.send(mimeMessage);
-            return "Mail sent Successfully";
+            return new ResponseEntity<String>("Mail wurde erfolgreich versendet",HttpStatusCode.valueOf(200));
         }
-
-
         catch (MessagingException e) {
-
-
-            return "Error while sending mail!!!";
+            System.out.println(e);
         }
-        catch (IOException e){
-            return "Couldn´t find File";
-        }
-
-
-
+        return new ResponseEntity<String>("Fehler beim Versand",HttpStatusCode.valueOf(500));
     }
 
-    public String policyNotification(MailPolicyEntity details){
-        MimeMessage mimeMessage = emailSender.createMimeMessage();
-        System.out.println(details);
+    public ResponseEntity<String> policyNotification(MailPolicyEntity details){
         try {
+            MimeMessage mimeMessage = emailSender.createMimeMessage();
             MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED, StandardCharsets.UTF_8.name());
             mimeMessageHelper.setFrom(sender);
             mimeMessageHelper.setTo(details.getEmail());
@@ -108,7 +88,11 @@ public class NotificationService {
             properties.put("startDate", details.getStartDate());
             properties.put("endDate", details.getEndDate());
             properties.put("coverage", details.getCoverage());
-            properties.put("castrated", details.isCastrated());
+            if(details.isCastrated()){
+                properties.put("castrated", "Ja");
+            }else{
+                properties.put("castrated", "Nein");
+            }
             properties.put("personality", details.getPersonality());
             properties.put("environment", details.getEnvironment());
             properties.put("weight", details.getWeight());
@@ -116,40 +100,20 @@ public class NotificationService {
             context.setVariables(properties);
             String html = templateEngine.process("policynotification.html", context);
             mimeMessageHelper.setText(html, true);
-
             /*
-            mimeMessageHelper
-                    = new MimeMessageHelper(mimeMessage, true);
-            mimeMessageHelper.setFrom(sender);
-            mimeMessageHelper.setTo(details.getEmail());
-            mimeMessageHelper.setText(details.getMsgBody());
-            mimeMessageHelper.setSubject("Vielen Dank für ihr Vertrauen in MeowMed+");
-            */
-    /*
             FileSystemResource file
                     = new FileSystemResource(
                     new File(details.getAttachment()));
 
             mimeMessageHelper.addAttachment(
                     file.getFilename(), file);
-    */
-
+            */
             javaMailSender.send(mimeMessage);
-            return "Mail sent Successfully";
-        }catch(Exception e){
+            return new ResponseEntity<String>("Mail wurde erfolgreich versendet",HttpStatusCode.valueOf(200));
+        }catch(MessagingException e){
             System.out.println(e);
-        }
-        return "Mail sent Successfully";
-        /*
-        catch (MessagingException e) {
-
-            return "Error while sending mail!!!";
-        }
-        */
-        
+        }        
+        return new ResponseEntity<String>("Fehler beim Versand",HttpStatusCode.valueOf(500));
+       
     }
-
-
-
-    
 }

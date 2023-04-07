@@ -1,6 +1,5 @@
 package com.meowmed.rdapolicy;
 
-import java.net.URI;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -12,14 +11,11 @@ import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.stereotype.Service;
-import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
-import org.springframework.web.reactive.function.client.WebClient.RequestBodySpec;
-import org.springframework.web.reactive.function.client.WebClient.UriSpec;
 
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
@@ -182,23 +178,21 @@ public class PolicyService {
 
 		PolicyEntity policy = new PolicyEntity(c_id, pRequest.getStartDate(), pRequest.getEndDate(), pRequest.getCoverage(), getPolicyPrice(tempCalc), pRequest.getObjectOfInsurance());
 		
-		MailPolicyEntity mail = new MailPolicyEntity(policy, customer);
-		String notificationURL = "http://" + notificationUrl + ":8080";
-		WebClient notificationClient = WebClient.create(notificationURL);
-		UriSpec<RequestBodySpec> uriSpec = notificationClient.method(HttpMethod.POST);
-		//WebClient.ResponseSpec responseSpec = notificationClient.get().uri(customerURL,c_id).retrieve();
-
-		Mono<String> result = notificationClient.post()
-					.uri("/policynotification")
-					.contentType(MediaType.APPLICATION_JSON)
-					.bodyValue(mail)
-					.retrieve()
-					.bodyToMono(String.class);
-					
 		MappingJacksonValue wrapper = new MappingJacksonValue(pRepository.save(policy));
 		wrapper.setFilters(new SimpleFilterProvider()
 		.addFilter("policyFilter", SimpleBeanPropertyFilter.filterOutAllExcept("id"))
 		.setFailOnUnknownId(false));
+
+		MailPolicyEntity mail = new MailPolicyEntity(policy, customer);
+		String notificationURL = "http://" + notificationUrl + ":8080";
+		System.out.println(notificationURL);
+		Mono<ResponseEntity<String>> result = WebClient.create(notificationURL).post()
+					.uri("/policynotification")
+					.contentType(MediaType.APPLICATION_JSON)
+					.bodyValue(mail)
+					.retrieve()
+					.toEntity(String.class);
+		//result.cast(ResponseEntity.class);		
 		return wrapper;
 	}
 

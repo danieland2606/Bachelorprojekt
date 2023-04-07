@@ -19,15 +19,9 @@ services:
       - "default"
     ports:
       - 81:8080
-  #notification:
-  #  build:
-  #    context: ./NotificationService
-  #    dockerfile: Dockerfile
-  #  container_name: notification-service
-  #  networks:
-  #    - "default"
-  #  ports:
-  #    - 82:8080
+    environment:
+      - docker_customerurl=customer
+      - docker.notificationurl=notification
   customer:
     build:
       context: ./CustomerService
@@ -36,6 +30,15 @@ services:
     networks:
       - "default"
     ports:
-      - 83:8080   
+      - 82:8080   
     environment:
-      - docker.customerurl=customer12
+      - docker.notificationurl=notification
+  notification:
+    build:
+      context: ./NotificationService
+      dockerfile: Dockerfile
+    container_name: notification-service
+    networks:
+      - "default"
+    ports:
+      - 83:8080

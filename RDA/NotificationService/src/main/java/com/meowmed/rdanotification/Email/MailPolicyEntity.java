@@ -31,11 +31,11 @@ public class MailPolicyEntity {
     private int weight;
     public MailPolicyEntity() {
     }
-    public MailPolicyEntity(String firstName, String lastName, String formOfAdress, String martialStatus, LocalDate dateOfBirth,
-                            String employmentStatus, String phoneNumber, String email, String bankDetails,
-                            String city, String street, int postalCode, long pid, long cid, LocalDate startDate, LocalDate endDate,
-                            int coverage, double premium, String name, String race, String color, LocalDate age, boolean castrated,
-                            String personality, String environment, int weight) {
+    public MailPolicyEntity(String firstName, String lastName, String formOfAdress, String martialStatus,
+            LocalDate dateOfBirth, String employmentStatus, String phoneNumber, String email, String bankDetails,
+            String city, String street, int postalCode, long pid, long cid, LocalDate startDate, LocalDate endDate,
+            int coverage, double premium, String name, String race, String color, LocalDate age, boolean castrated,
+            String personality, String environment, int weight) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.formOfAdress = formOfAdress;
@@ -63,7 +63,6 @@ public class MailPolicyEntity {
         this.environment = environment;
         this.weight = weight;
     }
-
     public String getFirstName() {
         return firstName;
     }
@@ -77,7 +76,7 @@ public class MailPolicyEntity {
         this.lastName = lastName;
     }
     public String getFormOfAdress() {
-        return lastName;
+        return formOfAdress;
     }
     public void setFormOfAdress(String formOfAdress) {
         this.formOfAdress = formOfAdress;
