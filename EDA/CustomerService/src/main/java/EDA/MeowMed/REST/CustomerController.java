@@ -2,19 +2,11 @@ package EDA.MeowMed.REST;
 
 import EDA.MeowMed.Application.CustomerService;
 import EDA.MeowMed.REST.Objects.New_Customer;
-
 import EDA.MeowMed.REST.Objects.Simple_Customer;
 import EDA.MeowMed.REST.Objects.View_Customer;
-import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
-import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
-import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 
 @RestController

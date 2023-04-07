@@ -11,7 +11,7 @@ public class MessagingConfig {
 
     @Bean
     public DirectExchange directCustomer() {
-        return new DirectExchange("customer.direct");
+        return new DirectExchange("customer-sender");
     }
 
     @Bean
@@ -19,12 +19,11 @@ public class MessagingConfig {
         return new DirectExchange("policy.direct");
     }
 
-    @Profile("receiver")
     private static class ReceiverConfig {
 
         @Bean
         public Queue autoDeleteQueue1() {
-            return new AnonymousQueue();
+            return new Queue("test");
         }
 
         @Bean
@@ -34,7 +33,7 @@ public class MessagingConfig {
 
         @Bean
         public Binding binding1a(DirectExchange direct, Queue autoDeleteQueue1) {
-            return BindingBuilder.bind(autoDeleteQueue1).to(direct).with("crated");
+            return BindingBuilder.bind(autoDeleteQueue1).to(direct).with("created");
         }
 
         @Bean

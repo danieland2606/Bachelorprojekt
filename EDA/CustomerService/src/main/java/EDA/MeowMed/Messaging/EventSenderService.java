@@ -2,19 +2,21 @@ package EDA.MeowMed.Messaging;
 
 
 import EDA.MeowMed.Persistence.Entity.Customer;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.amqp.core.DirectExchange;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-public class EventSender {
+@Service
+public class EventSenderService {
 
     @Autowired
     private RabbitTemplate template;
-
     @Autowired
     private DirectExchange direct;
+
+    public EventSenderService(){
+    }
 
     private final String key = "customer_created";
 
@@ -24,13 +26,14 @@ public class EventSender {
     }
 
     public boolean sendNewCustomerEvent(Customer customer) {
-        String customerJson = null;
         try {
-            customerJson = new ObjectMapper().writeValueAsString(customer);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
+
+        } catch (Exception e) {
+            System.out.println("Fehler beim Senden");
+            e.printStackTrace();
         }
-        sendEvent(customerJson);
+        template.convertAndSend(direct.getName(), key, customer);
+        System.out.println(" [x] Sent");
         return true;
     }
 }

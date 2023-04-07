@@ -1,5 +1,7 @@
 package EDA.MeowMed.Messaging;
 
+import EDA.MeowMed.Application.NotificationService;
+import EDA.MeowMed.Messaging.EventObjects.NewCustomerEvent;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.amqp.core.DirectExchange;
@@ -16,13 +18,16 @@ public class EventReceiver {
     @Autowired
     private DirectExchange direct;
 
+    @Autowired
+    private NotificationService notificationService;
+
     @RabbitListener(queues = "#{autoDeleteQueue1.name}")
-    public void receive1(String in) throws InterruptedException {
-        receive(in, 1);
+    public void receiveCustomer(NewCustomerEvent in) throws InterruptedException {
+        notificationService.sendNewCustomerMail(in);
     }
 
     @RabbitListener(queues = "#{autoDeleteQueue2.name}")
-    public void receive2(String in) throws InterruptedException {
+    public void receivePolicy(String in) throws InterruptedException {
         receive(in, 2);
     }
 
