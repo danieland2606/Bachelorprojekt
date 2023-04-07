@@ -1,5 +1,6 @@
 package com.meowmed.rdapolicy;
 
+import java.net.URI;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -7,24 +8,30 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClient.RequestBodySpec;
+import org.springframework.web.reactive.function.client.WebClient.UriSpec;
 
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import com.meowmed.rdapolicy.database.ObjectOfInsuranceRepository;
 import com.meowmed.rdapolicy.database.PolicyRepository;
 import com.meowmed.rdapolicy.entity.CustomerRequest;
+import com.meowmed.rdapolicy.entity.MailPolicyEntity;
 import com.meowmed.rdapolicy.entity.PolicyEntity;
 import com.meowmed.rdapolicy.entity.PolicyRequest;
 import com.meowmed.rdapolicy.entity.PriceCalculationEntity;
+
+import reactor.core.publisher.Mono;
 
 /**
  * Diese Klasse ist die Service-Klasse des REST-Controllers 
@@ -37,6 +44,8 @@ import com.meowmed.rdapolicy.entity.PriceCalculationEntity;
 public class PolicyService {
 	@Value("${docker.customerurl}")
 	private String customerUrl;
+	@Value("${docker.notificationurl}")
+	private String notificationUrl;
 
 	private final PolicyRepository pRepository;
 	private final ObjectOfInsuranceRepository oRepository;
@@ -160,17 +169,32 @@ public class PolicyService {
 	 */
     public MappingJacksonValue postPolicy(Long c_id, PolicyRequest pRequest){
 		oRepository.save(pRequest.getObjectOfInsurance());
-		CustomerRequest customer;
 		String customerURL = "http://" + customerUrl + ":8080/customer/{c_id}";
-		WebClient client = WebClient.create();
-		WebClient.ResponseSpec responseSpec = client.get().uri(customerURL,c_id).retrieve();
-		customer = responseSpec.bodyToMono(CustomerRequest.class).block();
+		System.out.println(customerURL);
+		WebClient customerClient = WebClient.create();
+		WebClient.ResponseSpec responseSpec = customerClient.get().uri(customerURL,c_id).retrieve();
+		CustomerRequest customer = responseSpec.bodyToMono(CustomerRequest.class).block();
+		System.out.println(customer);
 
-		PriceCalculationEntity tempCalc = new PriceCalculationEntity(customer.getAdress().getPostalCode(), pRequest.getCoverage(), pRequest.getObjectOfInsurance().getRace(), 
+		PriceCalculationEntity tempCalc = new PriceCalculationEntity(customer.getAddress().getPostalCode(), pRequest.getCoverage(), pRequest.getObjectOfInsurance().getRace(), 
 				pRequest.getObjectOfInsurance().getColor(), pRequest.getObjectOfInsurance().getAge(), pRequest.getObjectOfInsurance().isCastrated(), 
 				pRequest.getObjectOfInsurance().getPersonality(), pRequest.getObjectOfInsurance().getEnviroment(), pRequest.getObjectOfInsurance().getWeight());
 
 		PolicyEntity policy = new PolicyEntity(c_id, pRequest.getStartDate(), pRequest.getEndDate(), pRequest.getCoverage(), getPolicyPrice(tempCalc), pRequest.getObjectOfInsurance());
+		
+		MailPolicyEntity mail = new MailPolicyEntity(policy, customer);
+		String notificationURL = "http://" + notificationUrl + ":8080";
+		WebClient notificationClient = WebClient.create(notificationURL);
+		UriSpec<RequestBodySpec> uriSpec = notificationClient.method(HttpMethod.POST);
+		//WebClient.ResponseSpec responseSpec = notificationClient.get().uri(customerURL,c_id).retrieve();
+
+		Mono<String> result = notificationClient.post()
+					.uri("/policynotification")
+					.contentType(MediaType.APPLICATION_JSON)
+					.bodyValue(mail)
+					.retrieve()
+					.bodyToMono(String.class);
+					
 		MappingJacksonValue wrapper = new MappingJacksonValue(pRepository.save(policy));
 		wrapper.setFilters(new SimpleFilterProvider()
 		.addFilter("policyFilter", SimpleBeanPropertyFilter.filterOutAllExcept("id"))
