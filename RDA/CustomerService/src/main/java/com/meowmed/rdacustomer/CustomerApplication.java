@@ -14,7 +14,12 @@ import com.meowmed.rdacustomer.database.AddressRepository;
 import com.meowmed.rdacustomer.database.CustomerRepository;
 import com.meowmed.rdacustomer.entity.*;
 
-
+/**
+ * Diese Klasse ist die Rest-Schnittstelle
+ *
+ * @apiNote Die Schnittstelle ist definiert in der Datei MeowMed_REST_Interface_1.1.md im Root-Verzeichnis der Git-Repo
+ * @author Daniel Arnold, Jan Lorenz
+ */
 
 @SpringBootApplication
 @RestController
