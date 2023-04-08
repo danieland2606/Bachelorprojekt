@@ -1,32 +1,32 @@
-package com.moewmed.rdacustomer.entity;
+package EDA.MeowMed.Messaging.EventObjects;
 
-import com.fasterxml.jackson.annotation.JsonFilter;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import EDA.MeowMed.Persistence.Entity.Address;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import java.io.Serial;
+import java.io.Serializable;
 
-@Entity
-@JsonFilter("addressFilter")
-public class AddressEntity {
-    @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
-    @JsonIgnore
-    private long id;
+public class NoId_Address implements Serializable{
+    @Serial
+    private static final long serialVersionUID = 2L;
     private String city;
     private String street;
     private String postalCode;
 
-    
-    public AddressEntity(String city, String street, String postalCode) {
+    public NoId_Address() {
+
+    }
+
+    public NoId_Address(Address address) {
+        this.city = address.getCity();
+        this.street = address.getStreet();
+        this.postalCode = address.getPostalCode();
+    }
+
+    public NoId_Address(String city, String street, String postalCode) {
         this.city = city;
         this.street = street;
         this.postalCode = postalCode;
     }
-
-    public AddressEntity() {}
 
     public String getCity() {
         return city;
@@ -51,5 +51,4 @@ public class AddressEntity {
     public void setPostalCode(String postalCode) {
         this.postalCode = postalCode;
     }
-
 }

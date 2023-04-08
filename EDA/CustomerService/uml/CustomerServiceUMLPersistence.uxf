@@ -4,8 +4,8 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>260</x>
-      <y>410</y>
+      <x>250</x>
+      <y>390</y>
       <w>370</w>
       <h>100</h>
     </coordinates>
@@ -21,8 +21,8 @@ JPARepository&lt;T, ID&gt;
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>670</x>
-      <y>510</y>
+      <x>660</x>
+      <y>490</y>
       <w>260</w>
       <h>40</h>
     </coordinates>
@@ -34,8 +34,8 @@ CustomerRepository&lt;Customer, Long&gt;
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>970</x>
-      <y>510</y>
+      <x>960</x>
+      <y>490</y>
       <w>240</w>
       <h>40</h>
     </coordinates>
@@ -46,8 +46,8 @@ AddressRepository&lt;Address, Long&gt;</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>620</x>
-      <y>450</y>
+      <x>610</x>
+      <y>430</y>
       <w>490</w>
       <h>80</h>
     </coordinates>
@@ -57,8 +57,8 @@ AddressRepository&lt;Address, Long&gt;</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>790</x>
-      <y>450</y>
+      <x>780</x>
+      <y>430</y>
       <w>30</w>
       <h>80</h>
     </coordinates>
@@ -68,34 +68,37 @@ AddressRepository&lt;Address, Long&gt;</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>890</x>
-      <y>370</y>
+      <x>880</x>
+      <y>350</y>
       <w>30</w>
       <h>160</h>
     </coordinates>
-    <panel_attributes>lt=&lt;-</panel_attributes>
+    <panel_attributes>lt=&lt;-
+fg=gray</panel_attributes>
     <additional_attributes>10.0;140.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>990</x>
-      <y>370</y>
+      <x>980</x>
+      <y>350</y>
       <w>30</w>
       <h>160</h>
     </coordinates>
-    <panel_attributes>lt=&lt;-</panel_attributes>
+    <panel_attributes>lt=&lt;-
+fg=gray</panel_attributes>
     <additional_attributes>10.0;140.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>880</x>
-      <y>350</y>
+      <x>870</x>
+      <y>330</y>
       <w>140</w>
       <h>30</h>
     </coordinates>
-    <panel_attributes>CustomerService</panel_attributes>
+    <panel_attributes>CustomerService
+fg=gray</panel_attributes>
     <additional_attributes/>
   </element>
 </diagram>

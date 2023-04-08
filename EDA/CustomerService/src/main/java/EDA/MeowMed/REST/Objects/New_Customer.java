@@ -1,57 +1,22 @@
-package EDA.MeowMed.Persistence.Entity;
+package EDA.MeowMed.REST.Objects;
 
-
-import EDA.MeowMed.REST.Objects.New_Customer;
-import EDA.MeowMed.REST.Objects.View_Address;
-import com.fasterxml.jackson.annotation.JsonFilter;
-import jakarta.persistence.*;
-
-import java.io.Serializable;
 import java.time.LocalDate;
 
-@Entity
-@Table(name = "Customer")
-public class Customer implements Serializable {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "c_id", unique = true, nullable = false)
-    private Long id;
-
-    @Column(name = "first_name", nullable = false)
+public class New_Customer {
     private String firstName;
-
-    @Column(name = "last_name", nullable = false)
     private String lastName;
-
-    @Column(name = "martial_status", nullable = false)
     private String martialStatus;
-
-    @Column(name = "date_of_birth", nullable = false)
     private LocalDate dateOfBirth;
-
-    @Column(name = "employment_status")
     private String employmentStatus;
-
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "a_id", nullable = false)
-    private Address address;
-
-    @Column(name = "phone_number", nullable = false)
+    private View_Address address;
     private String phoneNumber;
-
-    @Column(name = "e_mail", nullable = false)
     private String email;
-
-    @Column(name = "bank_details", nullable = false)
     private String bankDetails;
 
-    public Customer() {
+    public New_Customer() {
     }
 
-    public Customer(Long id, String firstName, String lastName, String martialStatus, LocalDate dateOfBirth, String employmentStatus, Address address, String phoneNumber, String email, String bankDetails) {
-        this.id = id;
+    public New_Customer(String firstName, String lastName, String martialStatus, LocalDate dateOfBirth, String employmentStatus, View_Address address, String phoneNumber, String email, String bankDetails) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.martialStatus = martialStatus;
@@ -61,26 +26,6 @@ public class Customer implements Serializable {
         this.phoneNumber = phoneNumber;
         this.email = email;
         this.bankDetails = bankDetails;
-    }
-
-    public Customer(New_Customer customer) {
-        this.firstName = customer.getFirstName();
-        this.lastName = customer.getLastName();
-        this.martialStatus = customer.getMartialStatus();
-        this.dateOfBirth = customer.getDateOfBirth();
-        this.employmentStatus = customer.getEmploymentStatus();
-        this.address = new Address(customer.getAddress());
-        this.phoneNumber = customer.getPhoneNumber();
-        this.email = customer.getEmail();
-        this.bankDetails = customer.getBankDetails();
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getFirstName() {
@@ -123,11 +68,11 @@ public class Customer implements Serializable {
         this.employmentStatus = employmentStatus;
     }
 
-    public Address getAddress() {
+    public View_Address getAddress() {
         return address;
     }
 
-    public void setAddress(Address address) {
+    public void setAddress(View_Address address) {
         this.address = address;
     }
 
@@ -154,5 +99,4 @@ public class Customer implements Serializable {
     public void setBankDetails(String bankDetails) {
         this.bankDetails = bankDetails;
     }
-
 }

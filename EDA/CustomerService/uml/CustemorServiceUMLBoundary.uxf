@@ -4,17 +4,17 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>400</x>
+      <x>460</x>
       <y>390</y>
-      <w>400</w>
+      <w>340</w>
       <h>90</h>
     </coordinates>
     <panel_attributes>CustomerController
 --
 --
-+ getCustomerList(): MappingJacksonValue
-+ getCustomer(c_id: Long): MappingJacksonValue 
-+ postCustomer(customer: Customer): MappingJacksonValue </panel_attributes>
++ getCustomerList(): View_Customer
++ getCustomer(c_id: Long): List&lt;Simple_Customer&gt; 
++ postCustomer(customer: New_Customer): Long </panel_attributes>
     <additional_attributes/>
   </element>
   <element>
@@ -25,7 +25,8 @@
       <w>140</w>
       <h>30</h>
     </coordinates>
-    <panel_attributes>CustomerService</panel_attributes>
+    <panel_attributes>CustomerService
+fg=gray</panel_attributes>
     <additional_attributes/>
   </element>
   <element>

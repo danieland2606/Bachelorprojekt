@@ -1,39 +1,28 @@
-package com.moewmed.rdacustomer.entity;
-
-import com.fasterxml.jackson.annotation.JsonFilter;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
-
+package com.meowmed.rdacustomer.entity;
 
 import java.time.LocalDate;
-@Entity
-@Table(name="Customer")
-@JsonFilter("customerFilter")
-public class CustomerEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name="Customer_ID")
-    private long id;
+
+public class MailCustomerEntity {
+
     private String firstName;
     private String lastName;
+
+    private String formOfAdress;
     private String martialStatus;
     private LocalDate dateOfBirth;
     private String employmentStatus;
-    @OneToOne
     private AddressEntity address;
     private String phoneNumber;
     private String email;
     private String bankDetails;
 
-    public CustomerEntity(String firstName, String lastName, String martialStatus, LocalDate dateOfBirth, String employmentStatus, AddressEntity address, String phoneNumber, String email, String bankDetails) {
+    public MailCustomerEntity(){
+
+    }
+    public MailCustomerEntity(String firstName, String lastName, String formOfAdress, String martialStatus, LocalDate dateOfBirth, String employmentStatus, AddressEntity address, String phoneNumber, String email, String bankDetails){
         this.firstName = firstName;
         this.lastName = lastName;
+        this.formOfAdress = formOfAdress;
         this.martialStatus = martialStatus;
         this.dateOfBirth = dateOfBirth;
         this.employmentStatus = employmentStatus;
@@ -41,17 +30,6 @@ public class CustomerEntity {
         this.phoneNumber = phoneNumber;
         this.email = email;
         this.bankDetails = bankDetails;
-    }
-
-    public CustomerEntity() {
-
-    }
-
-    public long getId() {
-        return id;
-    }
-    public void setId(long id) {
-        this.id = id;
     }
 
     public String getFirstName() {
@@ -70,6 +48,13 @@ public class CustomerEntity {
         this.lastName = lastName;
     }
 
+    public String getFormOfAdress() {
+        return formOfAdress;
+    }
+
+    public void setFormOfAdress(String formOfAdress) {
+        this.formOfAdress = formOfAdress;
+    }
     public String getMartialStatus() {
         return martialStatus;
     }
@@ -94,11 +79,11 @@ public class CustomerEntity {
         this.employmentStatus = employmentStatus;
     }
 
-    public AddressEntity getAddress() {
+    public AddressEntity getAdress() {
         return address;
     }
 
-    public void setAddress(AddressEntity address) {
+    public void setAdress(AddressEntity address) {
         this.address = address;
     }
 
@@ -125,11 +110,6 @@ public class CustomerEntity {
     public void setBankDetails(String bankDetails) {
         this.bankDetails = bankDetails;
     }
-
-
-
-
-
 
 
 }

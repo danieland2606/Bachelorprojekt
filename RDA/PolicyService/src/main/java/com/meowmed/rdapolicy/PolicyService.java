@@ -10,16 +10,24 @@ import java.util.Map;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import com.meowmed.rdapolicy.database.ObjectOfInsuranceRepository;
 import com.meowmed.rdapolicy.database.PolicyRepository;
+import com.meowmed.rdapolicy.entity.CustomerRequest;
+import com.meowmed.rdapolicy.entity.MailPolicyEntity;
 import com.meowmed.rdapolicy.entity.PolicyEntity;
 import com.meowmed.rdapolicy.entity.PolicyRequest;
 import com.meowmed.rdapolicy.entity.PriceCalculationEntity;
+
+import reactor.core.publisher.Mono;
 
 /**
  * Diese Klasse ist die Service-Klasse des REST-Controllers 
@@ -30,7 +38,10 @@ import com.meowmed.rdapolicy.entity.PriceCalculationEntity;
  */
 @Service
 public class PolicyService {
-
+	@Value("${docker.customerurl}")
+	private String customerUrl;
+	@Value("${docker.notificationurl}")
+	private String notificationUrl;
 
 	private final PolicyRepository pRepository;
 	private final ObjectOfInsuranceRepository oRepository;
@@ -154,21 +165,34 @@ public class PolicyService {
 	 */
     public MappingJacksonValue postPolicy(Long c_id, PolicyRequest pRequest){
 		oRepository.save(pRequest.getObjectOfInsurance());
-		/*
-		String customerURL = "http://customer:8080/api/customer/" + c_id;
-		RestTemplate template = new RestTemplate();
-		CustomerEntity customer = template.getForObject(customerURL, CustomerEntity.class,null);
-		customer.getAddress().getPostalCode();
-		*/
-		PriceCalculationEntity tempCalc = new PriceCalculationEntity(12150, pRequest.getCoverage(), pRequest.getObjectOfInsurance().getRace(), 
+		String customerURL = "http://" + customerUrl + ":8080/customer/{c_id}";
+		System.out.println(customerURL);
+		WebClient customerClient = WebClient.create();
+		WebClient.ResponseSpec responseSpec = customerClient.get().uri(customerURL,c_id).retrieve();
+		CustomerRequest customer = responseSpec.bodyToMono(CustomerRequest.class).block();
+		System.out.println(customer);
+
+		PriceCalculationEntity tempCalc = new PriceCalculationEntity(customer.getAddress().getPostalCode(), pRequest.getCoverage(), pRequest.getObjectOfInsurance().getRace(), 
 				pRequest.getObjectOfInsurance().getColor(), pRequest.getObjectOfInsurance().getAge(), pRequest.getObjectOfInsurance().isCastrated(), 
 				pRequest.getObjectOfInsurance().getPersonality(), pRequest.getObjectOfInsurance().getEnviroment(), pRequest.getObjectOfInsurance().getWeight());
 
 		PolicyEntity policy = new PolicyEntity(c_id, pRequest.getStartDate(), pRequest.getEndDate(), pRequest.getCoverage(), getPolicyPrice(tempCalc), pRequest.getObjectOfInsurance());
+		
 		MappingJacksonValue wrapper = new MappingJacksonValue(pRepository.save(policy));
 		wrapper.setFilters(new SimpleFilterProvider()
 		.addFilter("policyFilter", SimpleBeanPropertyFilter.filterOutAllExcept("id"))
 		.setFailOnUnknownId(false));
+
+		MailPolicyEntity mail = new MailPolicyEntity(policy, customer);
+		String notificationURL = "http://" + notificationUrl + ":8080";
+		System.out.println(notificationURL);
+		Mono<ResponseEntity<String>> result = WebClient.create(notificationURL).post()
+					.uri("/policynotification")
+					.contentType(MediaType.APPLICATION_JSON)
+					.bodyValue(mail)
+					.retrieve()
+					.toEntity(String.class);
+		//result.cast(ResponseEntity.class);		
 		return wrapper;
 	}
 

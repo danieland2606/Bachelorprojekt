@@ -1,0 +1,64 @@
+{
+	"info": {
+		"_postman_id": "430b3300-9c8f-4dc9-aaf5-049a5cfa7107",
+		"name": "Notification-Service",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "20976194"
+	},
+	"item": [
+		{
+			"name": "Customernotification",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"firstName\": \"Jan\",\r\n    \"lastName\": \"Lorenz\",\r\n    \"formofAdress\": \"Mr.\",\r\n    \"martialStatus\": \"ledig\",\r\n    \"dateOfBirth\": \"1999-11-03\",\r\n    \"employmentStatus\": \"student\",\r\n    \"address\": {\r\n        \"city\": \"Hildesheim\",\r\n        \"street\": \"Burgerking Hbf\",\r\n        \"postalCode\": 31137\r\n    },\r\n    \"phoneNumber\": \"+49123456789\",\r\n    \"email\": \"jan-niklas-johannes.lorenz@stud.hs-hannover.de\",\r\n    \"bankDetails\": \"DE2131627312371351232\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/customernotification",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"customernotification"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PolicyNotification",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"firstName\" : \"Alexander\",\r\n    \"lastName\" : \"Hampel\",\r\n    \"formOfAdress\": \"Herr\",\r\n    \"martialStatus\" : \"erledigt\",\r\n    \"dateOfBirth\" : \"1996-01-14\",\r\n    \"employmentStatus\": \"student\",\r\n    \"phoneNumber\": \"0123456789\",\r\n    \"email\": \"alexander.hampel@stud.hs-hannover.de\",\r\n    \"bankDetails\": \"DE123456789123456789\",\r\n    \"city\": \"Hannover\",\r\n    \"street\": \"Ricklinger Stadtweg 120\",\r\n    \"postalCode\": \"30149\",\r\n    \"pid\": 1,\r\n    \"cid\": 1,\r\n    \"startDate\": \"2023-05-07\",\r\n    \"endDate\": \"2023-05-08\",\r\n    \"coverage\": 10000,\r\n    \"premium\": 975.0,\r\n    \"name\": \"Nello\",\r\n    \"race\": \"Bengalisch\",\r\n    \"color\": \"alpine-weiss\",\r\n    \"age\": \"2023-08-07\",\r\n    \"castrated\": false,\r\n    \"personality\": \"verspielt\",\r\n    \"environment\": \"freiläufer\",\r\n    \"weight\" : 4\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/policynotification",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"policynotification"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

@@ -1,4 +1,4 @@
-package com.moewmed.rdacustomer.entity;
+package com.meowmed.rdapolicy.entity;
 
 import java.time.LocalDate;
 
@@ -6,10 +6,12 @@ public class CustomerRequest {
 
     private String firstName;
     private String lastName;
+
+    private String formOfAdress;
     private String martialStatus;
     private LocalDate dateOfBirth;
     private String employmentStatus;
-    private AddressEntity adress;
+    private AddressEntity address;
     private String phoneNumber;
     private String email;
     private String bankDetails;
@@ -17,13 +19,14 @@ public class CustomerRequest {
     public CustomerRequest(){
 
     }
-    public CustomerRequest(String firstName, String lastName, String martialStatus, LocalDate dateOfBirth, String employmentStatus, AddressEntity adress, String phoneNumber, String email, String bankDetails){
+    public CustomerRequest(String firstName, String lastName,String formOfAdress, String martialStatus, LocalDate dateOfBirth, String employmentStatus, AddressEntity adress, String phoneNumber, String email, String bankDetails){
         this.firstName = firstName;
         this.lastName = lastName;
+        this.formOfAdress = formOfAdress;
         this.martialStatus = martialStatus;
         this.dateOfBirth = dateOfBirth;
         this.employmentStatus = employmentStatus;
-        this.adress = adress;
+        this.address = adress;
         this.phoneNumber = phoneNumber;
         this.email = email;
         this.bankDetails = bankDetails;
@@ -45,6 +48,13 @@ public class CustomerRequest {
         this.lastName = lastName;
     }
 
+    public String getFormOfAdress() {
+        return formOfAdress;
+    }
+
+    public void setFormOfAdress(String formOfAdress) {
+        this.formOfAdress = formOfAdress;
+    }
     public String getMartialStatus() {
         return martialStatus;
     }
@@ -69,12 +79,12 @@ public class CustomerRequest {
         this.employmentStatus = employmentStatus;
     }
 
-    public AddressEntity getAdress() {
-        return adress;
+    public AddressEntity getAddress() {
+        return address;
     }
 
-    public void setAdress(AddressEntity adress) {
-        this.adress = adress;
+    public void setAddress(AddressEntity adress) {
+        this.address = adress;
     }
 
     public String getPhoneNumber() {
@@ -99,6 +109,13 @@ public class CustomerRequest {
 
     public void setBankDetails(String bankDetails) {
         this.bankDetails = bankDetails;
+    }
+    @Override
+    public String toString() {
+        return "CustomerRequest [firstName=" + firstName + ", lastName=" + lastName + ", formOfAdress=" + formOfAdress
+                + ", martialStatus=" + martialStatus + ", dateOfBirth=" + dateOfBirth + ", employmentStatus="
+                + employmentStatus + ", address=" + address + ", phoneNumber=" + phoneNumber + ", email=" + email
+                + ", bankDetails=" + bankDetails + "]";
     }
 
 

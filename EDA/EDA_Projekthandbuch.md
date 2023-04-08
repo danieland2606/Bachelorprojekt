@@ -11,7 +11,7 @@ Maven
 
 ### CustomerService
 
-#### CustomerCreated Event (json Objekt)
+#### CustomerCreatedEvent (json Objekt)
 ```json
 {
   "firstName": "John",
