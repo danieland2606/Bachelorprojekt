@@ -1,6 +1,23 @@
 <script setup>
-defineProps({ customerList: Array });
+import { reactive, ref, computed } from 'vue';
+import { formatAddress } from '../util.js';
+import SimpleTable from './SimpleTable.vue';
 
+let customerList = ref(null);
+
+fetch('http://localhost:8000/customers')
+    .then(response => response.json())
+    .then(customers => { customerList.value = customers.customerList });
+
+const columnData = computed(() =>
+    customerList.value?.map(customer =>
+        [customer.id, customer.firstName, customer.lastName, formatAddress(customer.address)])
+);
+
+const tableProps = reactive({
+    columnLabels: ['ID', 'Vorname', 'Nachname', 'Adresse'],
+    data: columnData
+});
 </script>
 
 <template>
@@ -8,29 +25,10 @@ defineProps({ customerList: Array });
         <h1>Mitarbeiter Dashboard</h1>
         <input type="text" placeholder="Suche.." hidden />
         <button type="button">Neuer Kunde</button>
-        <table>
-            <thead>
-                <tr>
-                    <th scope="col">ID</th>
-                    <th scope="col">Vorname</th>
-                    <th scope="col">Nachname</th>
-                    <th scope="col">Adresse</th>
-                    <th scope="col">Aktionen</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="customer in customerList">
-                    <td>{{ customer.id }}</td>
-                    <td>{{ customer.firstName }}</td>
-                    <td>{{ customer.lastName }}</td>
-                    <td>
-                        {{ customer?.address?.street }}, {{ customer?.address?.postalCode }} {{ customer?.address?.city }}
-                    </td>
-                    <td>
-                        <button type="button">details</button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+        <SimpleTable v-bind="tableProps">
+            <template #end="{ item }">
+                <button type="button">details</button>
+            </template>
+        </SimpleTable>
     </main>
 </template>
