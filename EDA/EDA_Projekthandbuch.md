@@ -16,7 +16,7 @@ Maven
 {
   "firstName": "John",
   "lastName": "Doe",
-  "formOfAdress": "Mr",
+  "formOfAddress": "Mr",
   "title": "",
   "maritalStatus": "single",
   "dateOfBirth": "2000-12-30",
