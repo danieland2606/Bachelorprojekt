@@ -38,8 +38,10 @@ import reactor.core.publisher.Mono;
  */
 @Service
 public class PolicyService {
+	//Variable, initialisiert durch application.properties
 	@Value("${docker.customerurl}")
 	private String customerUrl;
+	//Variable, initialisiert durch application.properties
 	@Value("${docker.notificationurl}")
 	private String notificationUrl;
 
@@ -57,26 +59,6 @@ public class PolicyService {
 	 * @param c_id ID des Customers dessen Policys angefragt werden. 
 	 * @param fields Eine Liste an Komma-separierten an benötigten Feldern (z.B. startDate,endDate,coverage,objectOfInsurance.name)
 	 * @return Zurück kommt eine gefilterte Liste an PolicyEntitys, die ähnlich dem Beispiel aussieht:
-	 *	   "policyList": [
-			{
-			"id": 0,
-			"startDate": "1990-01-01",
-			"endDate": "2030-12-31",
-			"coverage": 50000,
-			"objectOfInsurance": {
-				"name": "Tomato"
-			}
-			},
-			{
-			"id": 1,
-			"startDate": "1992-11-01",
-			"endDate": "2024-11-01",
-			"coverage": 10000,
-			"objectOfInsurance": {
-				"name": "Perry"
-			}
-			}
-		]
 	 */
     public MappingJacksonValue getPolicyList(Long c_id, String fields) {
 		MappingJacksonValue wrapper = new MappingJacksonValue(pRepository.findByCid(c_id));
@@ -111,22 +93,6 @@ public class PolicyService {
 	 * @param c_id ID des Customers dessen Policys angefragt werden.
 	 * @param p_id ID der Policy des Kunden.
 	 * @return Zurückkommt ein PolicyEntity, bei der die Policy- und Customer-ID herausgefiltert wird
-	 * 		{
-				"startDate": "1990-01-01",
-				"endDate": "2030-12-31",
-				"coverage": 50000,
-				"premium": 75,
-				"objectOfInsurance": {
-					"name": "Tomato",
-					"race": "Bengal",
-					"color": "Braun",
-					"dateOfBirth": "2015-07-22",
-					"castrated": true,
-					"personality": "anhänglich",
-					"environment": "drinnen",
-					"weight": 4
-				}
-			}
 	 */
     public MappingJacksonValue getPolicy(Long c_id, Long p_id){
 		MappingJacksonValue wrapper = new MappingJacksonValue(pRepository.findById(p_id));
@@ -142,25 +108,7 @@ public class PolicyService {
 	 * Diese Methode speichert ein PolicyEntity. PostalCode vom Customer wird beim CustomerService angefragt.
 	 * @param c_id ID des Customers bei dem die Policys gespeichert wird.
 	 * @param pRequest Das zu speichernde Objekt
-	 * 			{
-					"startDate": "1990-01-01",
-					"endDate": "2030-12-31",
-					"coverage": 50000,
-					"objectOfInsurance": {
-						"name": "Tomato",
-						"race": "Bengal",
-						"color": "Braun",
-						"dateOfBirth": "2015-07-22",
-						"castrated": true,
-						"personality": "anhänglich",
-						"environment": "drinnen",
-						"weight": 4
-					}
-				}
 	 * @return Die ID der gerade erstellten Objekts
-	 * 		{
-			"id": 0
-			}
 	 * 
 	 */
     public MappingJacksonValue postPolicy(Long c_id, PolicyRequest pRequest){
@@ -230,10 +178,7 @@ public class PolicyService {
 	 * Die Wert für die monatliche Kosten werden in ein JSONObjekt umgewandelt
 	 * @param body Übergeben werden die Parameter als PriceCalculationEntity
 	 * @return Ein zu JSON umwandelbarer Wert
-	 * {
-		"premium": 75
-		}
-	 */
+	*/
 	public Map<String,Double> getPolicyPriceRequest(PriceCalculationEntity body){
 		return Collections.singletonMap("premium", getPolicyPrice(body));
 	}

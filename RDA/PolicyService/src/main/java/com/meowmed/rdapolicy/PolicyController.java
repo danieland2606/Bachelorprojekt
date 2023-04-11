@@ -14,11 +14,23 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.meowmed.rdapolicy.entity.PolicyRequest;
 import com.meowmed.rdapolicy.entity.PriceCalculationEntity;
 
+/**
+ * Diese Klasse ist der REST-Controller
+ * 
+ * @apiNote Die Schnittstelle ist definiert in der Datei MeowMed_REST_Interface_1.1.md im Root-Verzeichnis des Git-Repos
+ * @author Alexander Hampel, Mozamil Ahmadzaei
+ * 
+ */
+
 @RestController
 public class PolicyController {
 
     private final PolicyService pService;
 
+	/**
+	 * Diese Methode ist die Initialisierung des REST-Controllers
+	 * @param policyService Dependency-Injektion von Spring Boot
+	 */
     @Autowired
     public PolicyController(PolicyService policyService){
         this.pService = policyService;

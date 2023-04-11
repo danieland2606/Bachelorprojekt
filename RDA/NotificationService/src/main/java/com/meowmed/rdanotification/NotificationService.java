@@ -6,7 +6,6 @@ import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -20,18 +19,29 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Diese Klasse ist die Service-Klasse des REST-Controllers 
+ * Dependency-Injektion durch @RequiredArgsConstructor
+ * @apiNote Die Schnittstelle ist in der Postman-Collection verzeichnet und steht in den Aufrufen
+ * @author Alexander Hampel, Mozamil Ahmadzaei
+ * 
+ */
+
 @Service
 @RequiredArgsConstructor
 public class NotificationService {
-    @Autowired
-    private JavaMailSender javaMailSender;
+	//Variable, initialisiert durch application.properties
     @Value("${spring.mail.username}")
     private String sender;
 
     private final JavaMailSender emailSender;
     private final SpringTemplateEngine templateEngine;
 
-
+    /**
+     * Diese Methode nimmt die Anfrage des REST-Controllers für den Customer-Emailversand und versendet diese
+     * @param details Ein Customer-Objekt, dessen Inhalt in der EMail verwendet wird
+     * @return Zurück kommt ein HTTP-Statuscode, der aussagt, ob die Mail versendet wurde
+     */
 
     public ResponseEntity<String> customerNotification(MailCustomerEntity details) {
         try {
@@ -64,7 +74,7 @@ public class NotificationService {
             mimeMessageHelper.addAttachment(
                     file.getFilename(), file);
             */
-            javaMailSender.send(mimeMessage);
+            emailSender.send(mimeMessage);
             return new ResponseEntity<String>("Mail wurde erfolgreich versendet",HttpStatusCode.valueOf(200));
         }
         catch (MessagingException e) {
@@ -72,6 +82,12 @@ public class NotificationService {
         }
         return new ResponseEntity<String>("Fehler beim Versand",HttpStatusCode.valueOf(500));
     }
+
+    /**
+     * Diese Methode nimmt die Anfrage des REST-Controllers für den Vertrags-Emailversand und versendet diese
+     * @param details Ein Vertrags-Objekt mit zusätzlichen Infos, dessen Inhalt in der EMail verwendet wird
+     * @return Zurück kommt ein HTTP-Statuscode, der aussagt, ob die Mail versendet wurde
+     */
 
     public ResponseEntity<String> policyNotification(MailPolicyEntity details){
         try {
@@ -99,7 +115,7 @@ public class NotificationService {
             Context context = new Context();
             context.setVariables(properties);
             String html = templateEngine.process("policynotification.html", context);
-            mimeMessageHelper.setText(html, true);
+            mimeMessageHelper.setText(html, true);  //Der schreibt das in mimeMessage?????
             /*
             FileSystemResource file
                     = new FileSystemResource(
@@ -108,7 +124,7 @@ public class NotificationService {
             mimeMessageHelper.addAttachment(
                     file.getFilename(), file);
             */
-            javaMailSender.send(mimeMessage);
+            emailSender.send(mimeMessage);
             return new ResponseEntity<String>("Mail wurde erfolgreich versendet",HttpStatusCode.valueOf(200));
         }catch(MessagingException e){
             System.out.println(e);
