@@ -6,6 +6,10 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDate;
 
+/**
+ * Object with select customer information
+ * Can be serialized and sent as event payload
+ */
 public class CustomerCreatedEvent implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;

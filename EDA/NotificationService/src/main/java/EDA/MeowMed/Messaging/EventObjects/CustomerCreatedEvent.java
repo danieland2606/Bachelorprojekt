@@ -4,6 +4,10 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDate;
 
+
+/**
+ * event
+ */
 public class CustomerCreatedEvent implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;

@@ -5,6 +5,10 @@ import EDA.MeowMed.Persistence.Entity.Address;
 import java.io.Serial;
 import java.io.Serializable;
 
+/**
+ * Object with address information of a customer
+ * Can ben serialized and sent as event payload
+ */
 public class NoId_Address implements Serializable{
     @Serial
     private static final long serialVersionUID = 2L;

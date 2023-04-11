@@ -8,6 +8,9 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+/**
+ * Class for publishing events to specific exchanges
+ */
 @Service
 public class EventSenderService {
 

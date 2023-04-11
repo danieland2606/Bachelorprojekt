@@ -4,6 +4,10 @@ import org.springframework.amqp.core.TopicExchange;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * Class for configuration of RabbitMQ messaging properties
+ * such as exchanges, queues and bindings
+ */
 @Configuration
 public class MessagingConfig {
 
