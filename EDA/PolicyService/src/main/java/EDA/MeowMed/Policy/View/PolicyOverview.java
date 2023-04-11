@@ -1,14 +1,30 @@
 package EDA.MeowMed.Policy.View;
 
+import jakarta.persistence.*;
+
 import java.time.LocalDate;
 
-public class PolicyOverview {
-    private long id;
-    private LocalDate startDate;
-    private LocalDate endDate;
-    private int coverage;
 
-    private ObjectOfInsuranceOverview objectOfInsurance;
+public class PolicyOverview {
+
+
+    private  long id;
+    private  LocalDate startDate;
+    private  LocalDate endDate;
+    private  int coverage;
+    private  ObjectOfInsuranceOverview objectOfInsurance;
+
+
+
+    //Wichtig für die Projection von getPolicyByCustomerIdAndPolicyId
+    public PolicyOverview(long id, LocalDate startDate, LocalDate endDate, int coverage) {
+        this.id = id;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.coverage = coverage;
+        //this.objectOfInsurance = objectOfInsurance;
+    }
+
 
     public PolicyOverview(long id, LocalDate startDate, LocalDate endDate, int coverage, ObjectOfInsuranceOverview objectOfInsurance) {
         this.id = id;
@@ -16,6 +32,10 @@ public class PolicyOverview {
         this.endDate = endDate;
         this.coverage = coverage;
         this.objectOfInsurance = objectOfInsurance;
+    }
+
+    public PolicyOverview() {
+
     }
 
     public long getId() {

@@ -1,9 +1,9 @@
 package EDA.MeowMed.Policy.Persistence.Entity;
 
 import jakarta.persistence.*;
-
 import java.io.Serializable;
 import java.time.LocalDate;
+
 
 @Entity
 @Table(name="Policy")
@@ -26,7 +26,7 @@ public class Policy implements Serializable {
     private int coverage;
 
 
-    @Column(name = "premium", nullable = false)
+    @Column(name = "premium", nullable = false  )
     private double premium;
 
     @OneToOne(optional = false)
@@ -46,6 +46,20 @@ public class Policy implements Serializable {
 
     public Policy() {
 
+    }
+
+    /**
+     * Konstruktor, der die ausgewählten Attribute als Parameter akzeptiert.
+     * Dieser Konstruktor wird benötigt, damit Spring Data JPA in der Lage ist, die Ergebnisse
+     * der Abfrage in eine "Policy"-Instanz zu konvertieren.
+     */
+    public Policy(long id,double premium , ObjectOfInsurance objectOfInsurance , LocalDate startDate, LocalDate endDate, int coverage) {
+        this.id = id;
+        this.coverage = coverage;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.objectOfInsurance = objectOfInsurance;
+        this.premium = premium;
     }
 
     public long getId() {
