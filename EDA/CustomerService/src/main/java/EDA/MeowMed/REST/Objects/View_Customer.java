@@ -27,7 +27,7 @@ public class View_Customer {
         this.lastName = customer.getLastName();
         this.formOfAddress = customer.getFormOfAddress();
         this.title = customer.getTitle();
-        this.martialStatus = customer.getMartialStatus();
+        this.martialStatus = customer.getMaritalStatus();
         this.dateOfBirth = customer.getDateOfBirth();
         this.employmentStatus = customer.getEmploymentStatus();
         this.address = new View_Address(customer.getAddress());

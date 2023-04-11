@@ -7,7 +7,7 @@ public class New_Customer {
     private String lastName;
     private String formOfAddress;
     private String title;
-    private String martialStatus;
+    private String maritalStatus;
     private LocalDate dateOfBirth;
     private String employmentStatus;
     private View_Address address;
@@ -18,12 +18,12 @@ public class New_Customer {
     public New_Customer() {
     }
 
-    public New_Customer(String firstName, String lastName, String formOfAddress, String title, String martialStatus, LocalDate dateOfBirth, String employmentStatus, View_Address address, String phoneNumber, String email, String bankDetails) {
+    public New_Customer(String firstName, String lastName, String formOfAddress, String title, String maritalStatus, LocalDate dateOfBirth, String employmentStatus, View_Address address, String phoneNumber, String email, String bankDetails) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.formOfAddress = formOfAddress;
         this.title = title;
-        this.martialStatus = martialStatus;
+        this.maritalStatus = maritalStatus;
         this.dateOfBirth = dateOfBirth;
         this.employmentStatus = employmentStatus;
         this.address = address;
@@ -56,12 +56,12 @@ public class New_Customer {
 
     public void setTitle(String title) {this.title = title;}
 
-    public String getMartialStatus() {
-        return martialStatus;
+    public String getMaritalStatus() {
+        return maritalStatus;
     }
 
-    public void setMartialStatus(String martialStatus) {
-        this.martialStatus = martialStatus;
+    public void setMaritalStatus(String maritalStatus) {
+        this.maritalStatus = maritalStatus;
     }
 
     public LocalDate getDateOfBirth() {

@@ -29,8 +29,8 @@ public class Customer implements Serializable {
     @Column(name = "last_name", nullable = false)
     private String lastName;
 
-    @Column(name = "martial_status", nullable = false)
-    private String martialStatus;
+    @Column(name = "marital_status", nullable = false)
+    private String maritalStatus;
 
     @Column(name = "date_of_birth", nullable = false)
     private LocalDate dateOfBirth;
@@ -54,13 +54,13 @@ public class Customer implements Serializable {
     public Customer() {
     }
 
-    public Customer(Long id, String firstName, String lastName, String formOfAddress, String title, String martialStatus, LocalDate dateOfBirth, String employmentStatus, Address address, String phoneNumber, String email, String bankDetails) {
+    public Customer(Long id, String firstName, String lastName, String formOfAddress, String title, String maritalStatus, LocalDate dateOfBirth, String employmentStatus, Address address, String phoneNumber, String email, String bankDetails) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.formOfAddress = formOfAddress;
         this.title = title;
-        this.martialStatus = martialStatus;
+        this.maritalStatus = maritalStatus;
         this.dateOfBirth = dateOfBirth;
         this.employmentStatus = employmentStatus;
         this.address = address;
@@ -74,7 +74,7 @@ public class Customer implements Serializable {
         this.lastName = customer.getLastName();
         this.formOfAddress = customer.getFormOfAddress();
         this.title = customer.getTitle();
-        this.martialStatus = customer.getMartialStatus();
+        this.maritalStatus = customer.getMaritalStatus();
         this.dateOfBirth = customer.getDateOfBirth();
         this.employmentStatus = customer.getEmploymentStatus();
         this.address = new Address(customer.getAddress());
@@ -115,12 +115,12 @@ public class Customer implements Serializable {
 
     public void setTitle(String title) {this.title = title;}
 
-    public String getMartialStatus() {
-        return martialStatus;
+    public String getMaritalStatus() {
+        return maritalStatus;
     }
 
-    public void setMartialStatus(String martialStatus) {
-        this.martialStatus = martialStatus;
+    public void setMaritalStatus(String martialStatus) {
+        this.maritalStatus = martialStatus;
     }
 
     public LocalDate getDateOfBirth() {

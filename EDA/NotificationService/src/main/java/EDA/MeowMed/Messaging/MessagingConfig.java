@@ -21,12 +21,6 @@ public class MessagingConfig {
         return new TopicExchange(exchangeName);
     }
 
-//    @Bean
-//    public DirectExchange directPolicy() {
-//        return new DirectExchange("policy.direct");
-//    }
-
-
     private static class ReceiverConfig {
 
         /**
@@ -57,8 +51,8 @@ public class MessagingConfig {
         }
 
         @Bean
-        public Binding policyBinding(DirectExchange direct, Queue autoDeleteQueue2) {
-            return BindingBuilder.bind(autoDeleteQueue2).to(direct).with("policy.created");
+        public Binding policyBinding(TopicExchange topicExchange, Queue autoDeleteQueue2) {
+            return BindingBuilder.bind(autoDeleteQueue2).to(topicExchange).with("policy.created");
         }
 
         @Bean

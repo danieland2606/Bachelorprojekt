@@ -14,7 +14,7 @@
 - id: Long
 - firstName: String
 - lastName: String
-- martialStatus: String
+- maritalStatus: String
 - dateOfBirth: LocalDate
 - employmentStatus: String
 - phoneNumber: String

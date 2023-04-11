@@ -13,7 +13,7 @@ public class CustomerCreatedEvent implements Serializable {
     private String lastName;
     private String formOfAddress;
     private String title;
-    private String martialStatus;
+    private String maritalStatus;
     private LocalDate dateOfBirth;
     private String employmentStatus;
     private NoId_Address address;
@@ -23,14 +23,14 @@ public class CustomerCreatedEvent implements Serializable {
 
     public CustomerCreatedEvent() {
     }
-    
-    public CustomerCreatedEvent(Long id, String firstName, String lastName, String formOfAddress, String title, String martialStatus, LocalDate dateOfBirth, String employmentStatus, NoId_Address address, String phoneNumber, String email, String bankDetails) {
+
+    public CustomerCreatedEvent(Long id, String firstName, String lastName, String formOfAddress, String title, String maritalStatus, LocalDate dateOfBirth, String employmentStatus, NoId_Address address, String phoneNumber, String email, String bankDetails) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.formOfAddress = formOfAddress;
         this.title = title;
-        this.martialStatus = martialStatus;
+        this.maritalStatus = maritalStatus;
         this.dateOfBirth = dateOfBirth;
         this.employmentStatus = employmentStatus;
         this.address = address;
@@ -71,12 +71,12 @@ public class CustomerCreatedEvent implements Serializable {
 
     public void setTitle(String title) {this.title = title;}
 
-    public String getMartialStatus() {
-        return martialStatus;
+    public String getMaritalStatus() {
+        return maritalStatus;
     }
 
-    public void setMartialStatus(String martialStatus) {
-        this.martialStatus = martialStatus;
+    public void setMaritalStatus(String maritalStatus) {
+        this.maritalStatus = maritalStatus;
     }
 
     public LocalDate getDateOfBirth() {
