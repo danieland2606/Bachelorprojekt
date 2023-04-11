@@ -32,11 +32,11 @@ Maven
 }
 ```
 #### Datenbank Tupel
-Customer(<u>customer_id</u>, firstName, lastName, formOfAdress, title, maritalStatus, dateOfBirth, employmentStatus, address_id, phoneNumber, email, bankDetails)
+Customer(<u>customer_id</u>, first_name, last_name, form_of_adress, title, marital_status, date_of_birth, employment_status, address_id, phone_number, e_mail, bank_details)
 
 Foreign Key (address_id) References Address(address_id)
 
-Address(<u>adress_id</u>, city, street, postalCode)
+Address(<u>adress_id</u>, city, street, postal_code)
 ___
 ### PolicyService
 
