@@ -1,0 +1,32 @@
+version: '3.7'
+services:
+  customer:
+    build:
+      context: ./CustomerService
+      dockerfile: Dockerfile
+    container_name: customer-service
+    networks:
+      - "default"
+    ports:
+      - "82:8080"
+    environment:
+      - docker.notificationurl=notification
+  notification:
+    build:
+      context: ./NotificationService
+      dockerfile: Dockerfile
+    container_name: notification-service
+    networks:
+      - "default"
+    ports:
+      - "83:8080"
+  rabbitmq:
+    image: rabbitmq:management-alpine
+    container_name: rabbitmq
+    networks:
+      - "default"
+    ports:
+      - "15671:15671"
+      - "15672:15672"
+      - "5671:5671"
+      - "5672:5672"
