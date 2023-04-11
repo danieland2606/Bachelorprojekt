@@ -51,7 +51,7 @@ public class NotificationService {
             mimeMessageHelper.setTo(details.getEmail());
             mimeMessageHelper.setSubject("Vielen Dank für ihr Vertrauen in MeowMed+");
             Map<String,Object> properties = new HashMap<>();
-            properties.put("formOfAdress", details.getFormOfAdress());
+            properties.put("formOfAddress", details.getFormOfAdress());
             properties.put("firstName", details.getFirstName());
             properties.put("lastName", details.getLastName());
             
@@ -61,7 +61,7 @@ public class NotificationService {
             properties.put("employmentStatus", details.getEmploymentStatus());
             properties.put("phoneNumber", details.getPhoneNumber());
             properties.put("bankDetails", details.getBankDetails());
-            properties.put("adress", details.getAdress().getStreet() + ", " + details.getAdress().getPostalCode() + " " + details.getAdress().getCity());
+            properties.put("address", details.getAdress().getStreet() + ", " + details.getAdress().getPostalCode() + " " + details.getAdress().getCity());
             Context context = new Context();
             context.setVariables(properties);
             String html = templateEngine.process("customernotification.html", context);
@@ -90,6 +90,7 @@ public class NotificationService {
      */
 
     public ResponseEntity<String> policyNotification(MailPolicyEntity details){
+        System.out.println(details.toString());
         try {
             MimeMessage mimeMessage = emailSender.createMimeMessage();
             MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED, StandardCharsets.UTF_8.name());

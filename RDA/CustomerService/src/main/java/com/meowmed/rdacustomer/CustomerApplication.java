@@ -44,11 +44,18 @@ public class CustomerApplication {
             AddressEntity adressDaniel= new AddressEntity("Hannover", "Subway Hbf", 12345);
             CustomerEntity Daniel= new CustomerEntity("Daniel", "Arnold","Mr.", "ledig", birthdayofDaniel, "student", adressDaniel, "+4942069123123", "daniel.arnold@stud.hs-hannover.de", "DE");
         
+            LocalDate birthdayOfAlex= LocalDate.of(1996,01,14);
+            AddressEntity adressAlex= new AddressEntity("Hildesheim","Burgerking Hbf",31137);
+            CustomerEntity Alex= new CustomerEntity("Alexander","Hampel","Mr.","ledig",birthdayOfAlex,"student", adressAlex, "+49123456789", "alexander.hampel@stud.hs-hannover.de", "DE2131627312371351232");
+
+
             addressRepository.save(adressJan);
             addressRepository.save(adressDaniel);
+            addressRepository.save(adressAlex);
         
             customerRepository.save(Jan);
             customerRepository.save(Daniel);
+            customerRepository.save(Alex);
         };
 
 
