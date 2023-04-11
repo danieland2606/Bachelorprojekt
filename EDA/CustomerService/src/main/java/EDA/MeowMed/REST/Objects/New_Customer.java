@@ -5,6 +5,8 @@ import java.time.LocalDate;
 public class New_Customer {
     private String firstName;
     private String lastName;
+    private String formOfAddress;
+    private String title;
     private String martialStatus;
     private LocalDate dateOfBirth;
     private String employmentStatus;
@@ -16,9 +18,11 @@ public class New_Customer {
     public New_Customer() {
     }
 
-    public New_Customer(String firstName, String lastName, String martialStatus, LocalDate dateOfBirth, String employmentStatus, View_Address address, String phoneNumber, String email, String bankDetails) {
+    public New_Customer(String firstName, String lastName, String formOfAddress, String title, String martialStatus, LocalDate dateOfBirth, String employmentStatus, View_Address address, String phoneNumber, String email, String bankDetails) {
         this.firstName = firstName;
         this.lastName = lastName;
+        this.formOfAddress = formOfAddress;
+        this.title = title;
         this.martialStatus = martialStatus;
         this.dateOfBirth = dateOfBirth;
         this.employmentStatus = employmentStatus;
@@ -43,6 +47,14 @@ public class New_Customer {
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
+
+    public String getFormOfAddress() {return formOfAddress;}
+
+    public void setFormOfAddress(String formOfAddress) {this.formOfAddress = formOfAddress;}
+
+    public String getTitle() {return title;}
+
+    public void setTitle(String title) {this.title = title;}
 
     public String getMartialStatus() {
         return martialStatus;

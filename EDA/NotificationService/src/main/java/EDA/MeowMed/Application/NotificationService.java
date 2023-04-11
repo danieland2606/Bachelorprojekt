@@ -5,13 +5,10 @@ import EDA.MeowMed.Messaging.EventObjects.CustomerCreatedEvent;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.FileSystemResource;
-import org.springframework.mail.MailSender;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.spring6.SpringTemplateEngine;
 
 import java.io.File;
 
@@ -20,9 +17,14 @@ public class NotificationService {
 
     @Autowired
     private JavaMailSender mailSender;
+    private final SpringTemplateEngine templateEngine;
     private final String sender = "noreply@meowmed.paw";
     private final String subject = "Willkommen bei Meowmed!";
 
+    /**
+     *
+     * @param newCustomer
+     */
     public void sendCustomerCreatedMail(CustomerCreatedEvent newCustomer) {
         MimeMessage mimeMessage = mailSender.createMimeMessage();
         MimeMessageHelper mimeMessageHelper;

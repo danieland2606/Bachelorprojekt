@@ -8,6 +8,8 @@ public class View_Customer {
     private Long id;
     private String firstName;
     private String lastName;
+    private String formOfAddress;
+    private String title;
     private String martialStatus;
     private LocalDate dateOfBirth;
     private String employmentStatus;
@@ -23,6 +25,8 @@ public class View_Customer {
         this.id = customer.getId();
         this.firstName = customer.getFirstName();
         this.lastName = customer.getLastName();
+        this.formOfAddress = customer.getFormOfAddress();
+        this.title = customer.getTitle();
         this.martialStatus = customer.getMartialStatus();
         this.dateOfBirth = customer.getDateOfBirth();
         this.employmentStatus = customer.getEmploymentStatus();
@@ -36,6 +40,8 @@ public class View_Customer {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.formOfAddress = formOfAddress;
+        this.title = title;
         this.martialStatus = martialStatus;
         this.dateOfBirth = dateOfBirth;
         this.employmentStatus = employmentStatus;
@@ -68,6 +74,14 @@ public class View_Customer {
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
+
+    public String getFormOfAddress() {return formOfAddress;}
+
+    public void setFormOfAddress(String formOfAddress) {this.formOfAddress = formOfAddress;}
+
+    public String getTitle() {return title;}
+
+    public void setTitle(String title) {this.title = title;}
 
     public String getMartialStatus() {
         return martialStatus;

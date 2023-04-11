@@ -7,6 +7,9 @@ import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 
+/**
+ * Class for receiving AMQP events via RabbitMQ
+ */
 public class EventReceiver {
 
     @Autowired

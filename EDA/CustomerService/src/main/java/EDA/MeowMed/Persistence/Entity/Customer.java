@@ -2,8 +2,6 @@ package EDA.MeowMed.Persistence.Entity;
 
 
 import EDA.MeowMed.REST.Objects.New_Customer;
-import EDA.MeowMed.REST.Objects.View_Address;
-import com.fasterxml.jackson.annotation.JsonFilter;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
@@ -16,8 +14,14 @@ public class Customer implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "c_id", unique = true, nullable = false)
+    @Column(name = "customer_id", unique = true, nullable = false)
     private Long id;
+
+    @Column(name = "form_Of_Address")
+    private String formOfAddress;
+
+    @Column(name = "title")
+    private String title;
 
     @Column(name = "first_name", nullable = false)
     private String firstName;
@@ -35,7 +39,7 @@ public class Customer implements Serializable {
     private String employmentStatus;
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "a_id", nullable = false)
+    @JoinColumn(name = "address_id", nullable = false)
     private Address address;
 
     @Column(name = "phone_number", nullable = false)
@@ -50,10 +54,12 @@ public class Customer implements Serializable {
     public Customer() {
     }
 
-    public Customer(Long id, String firstName, String lastName, String martialStatus, LocalDate dateOfBirth, String employmentStatus, Address address, String phoneNumber, String email, String bankDetails) {
+    public Customer(Long id, String firstName, String lastName, String formOfAddress, String title, String martialStatus, LocalDate dateOfBirth, String employmentStatus, Address address, String phoneNumber, String email, String bankDetails) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.formOfAddress = formOfAddress;
+        this.title = title;
         this.martialStatus = martialStatus;
         this.dateOfBirth = dateOfBirth;
         this.employmentStatus = employmentStatus;
@@ -66,6 +72,8 @@ public class Customer implements Serializable {
     public Customer(New_Customer customer) {
         this.firstName = customer.getFirstName();
         this.lastName = customer.getLastName();
+        this.formOfAddress = customer.getFormOfAddress();
+        this.title = customer.getTitle();
         this.martialStatus = customer.getMartialStatus();
         this.dateOfBirth = customer.getDateOfBirth();
         this.employmentStatus = customer.getEmploymentStatus();
@@ -98,6 +106,14 @@ public class Customer implements Serializable {
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
+
+    public String getFormOfAddress() {return formOfAddress;}
+
+    public void setFormOfAddress(String formOfAddress) {this.formOfAddress = formOfAddress;}
+
+    public String getTitle() {return title;}
+
+    public void setTitle(String title) {this.title = title;}
 
     public String getMartialStatus() {
         return martialStatus;
