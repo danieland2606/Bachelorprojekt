@@ -126,14 +126,18 @@ public class PolicyService {
 
 		PolicyEntity policy = new PolicyEntity(c_id, pRequest.getStartDate(), pRequest.getEndDate(), pRequest.getCoverage(), getPolicyPrice(tempCalc), pRequest.getObjectOfInsurance());
 		
-		MappingJacksonValue wrapper = new MappingJacksonValue(pRepository.save(policy));
-		wrapper.setFilters(new SimpleFilterProvider()
-		.addFilter("policyFilter", SimpleBeanPropertyFilter.filterOutAllExcept("id"))
-		.setFailOnUnknownId(false));
-
 		MailPolicyEntity mail = new MailPolicyEntity(policy, customer);
-		Mono<ResponseEntity<String>> result = WebClient.create().post()
-											.uri("http://notification:8080/policynotification")
+
+		WebClient notificationClient = WebClient.create("http://" + notificationUrl + ":8080");
+
+		try {		
+			WebClient.ResponseSpec responseSpec2 = notificationClient.post().uri("/policynotification").bodyValue(mail).retrieve();
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+		//WebClient.ResponseSpec responseSpec2 = notificationClient.post().uri("http://notification:8080/policynotification").body(Mono.just(mail), MailPolicyEntity.class).retrieve();
+		/*
+		Mono<ResponseEntity<String>> result = WebClient.create().post().uri("http://notification:8080/policynotification")
 											//.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
 											.contentType(MediaType.APPLICATION_JSON)
 											.bodyValue(mail)
@@ -141,6 +145,11 @@ public class PolicyService {
 											.toEntity(String.class);
 		System.out.println(result.cast(ResponseEntity.class).toString());
 		System.out.println(mail);
+		*/
+		MappingJacksonValue wrapper = new MappingJacksonValue(pRepository.save(policy));
+		wrapper.setFilters(new SimpleFilterProvider()
+		.addFilter("policyFilter", SimpleBeanPropertyFilter.filterOutAllExcept("id"))
+		.setFailOnUnknownId(false));
 
 		return wrapper;
 	}
