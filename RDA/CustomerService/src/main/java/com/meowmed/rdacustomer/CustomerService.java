@@ -10,9 +10,12 @@ import com.meowmed.rdacustomer.entity.MailCustomerEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
@@ -67,6 +70,7 @@ public class CustomerService {
         MappingJacksonValue wrapper = new MappingJacksonValue(cRepository.findAll());
         List<String> customerList = new ArrayList<String>();
 
+        /*  Warum ist das hier????
         MailCustomerEntity mail = new MailCustomerEntity();
         String notificationURL = "http://" + notificationUrl + ":8080";
         WebClient notificationClient = WebClient.create(notificationURL);
@@ -79,7 +83,7 @@ public class CustomerService {
                 .bodyValue(mail)
                 .retrieve()
                 .bodyToMono(String.class);
-
+        */
 
         customerList.addAll(Arrays.asList(fields.split(",")));
         customerList.add("id");
@@ -97,8 +101,22 @@ public class CustomerService {
      * @return Die ID des erstellten Objekts.
      */
     public MappingJacksonValue postCustomer(CustomerRequest cRequest) {
-        aRepository.save(cRequest.getAdress());
-        CustomerEntity customer= new CustomerEntity(cRequest.getFirstName(), cRequest.getLastName(), cRequest.getFormOfAdress(), cRequest.getMartialStatus(), cRequest.getDateOfBirth(), cRequest.getEmploymentStatus(), cRequest.getAdress(), cRequest.getPhoneNumber(),cRequest.getEmail(),cRequest.getBankDetails());
+        aRepository.save(cRequest.getAddress());
+        CustomerEntity customer= new CustomerEntity(cRequest.getFirstName(), cRequest.getLastName(), cRequest.getTitle(), cRequest.getFormOfAdress(), cRequest.getMaritalStatus(), cRequest.getDateOfBirth(), cRequest.getEmploymentStatus(), cRequest.getAddress(), cRequest.getPhoneNumber(),cRequest.getEmail(),cRequest.getBankDetails());
+        
+        MailCustomerEntity mail = new MailCustomerEntity(cRequest);
+		System.out.println(mail);
+		//WebClient notificationClient = WebClient.create("http://" + notificationUrl + ":8080");
+		String url = "http://" + notificationUrl + ":8080/customernotification";
+		RestTemplate restTemplate = new RestTemplate();
+		ResponseEntity<String> response = restTemplate.postForEntity(url, mail, String.class);
+		if (response.getStatusCode() == HttpStatus.OK) {
+			System.out.println("Request Successful");
+		} else {
+			System.out.println("Request Failed");
+		}
+		
+        
         MappingJacksonValue wrapper = new MappingJacksonValue(cRepository.save(customer));
         wrapper.setFilters(new SimpleFilterProvider()
                 .addFilter("customerFilter", SimpleBeanPropertyFilter.filterOutAllExcept("id"))

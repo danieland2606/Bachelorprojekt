@@ -56,12 +56,12 @@ public class NotificationService {
             properties.put("lastName", details.getLastName());
             
             //properties.put("cid", details.getId());
-            properties.put("martialStatus", details.getMartialStatus());
+            properties.put("martialStatus", details.getMaritalStatus());
             properties.put("dateOfBirth", details.getDateOfBirth());
             properties.put("employmentStatus", details.getEmploymentStatus());
             properties.put("phoneNumber", details.getPhoneNumber());
             properties.put("bankDetails", details.getBankDetails());
-            properties.put("address", details.getAdress().getStreet() + ", " + details.getAdress().getPostalCode() + " " + details.getAdress().getCity());
+            properties.put("address", details.getStreet() + ", " + details.getPostalCode() + " " + details.getCity());
             Context context = new Context();
             context.setVariables(properties);
             String html = templateEngine.process("customernotification.html", context);

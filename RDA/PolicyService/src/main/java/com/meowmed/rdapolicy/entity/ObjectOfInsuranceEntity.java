@@ -27,7 +27,7 @@ public class ObjectOfInsuranceEntity {
 
     private String color;
 
-    private LocalDate age;
+    private LocalDate dateOfBirth;
 
     private boolean castrated;
 
@@ -40,12 +40,12 @@ public class ObjectOfInsuranceEntity {
     public ObjectOfInsuranceEntity() {
     }
 
-    public ObjectOfInsuranceEntity(String name, String race, String color, LocalDate age, boolean castrated,
+    public ObjectOfInsuranceEntity(String name, String race, String color, LocalDate dateOfBirth, boolean castrated,
             String personality, String environment, int weight) {
         this.name = name;
         this.race = race;
         this.color = color;
-        this.age = age;
+        this.dateOfBirth = dateOfBirth;
         this.castrated = castrated;
         this.personality = personality;
         this.environment = environment;
@@ -76,12 +76,12 @@ public class ObjectOfInsuranceEntity {
         this.color = color;
     }
 
-    public LocalDate getAge() {
-        return age;
+    public LocalDate getDateOfBirth() {
+        return dateOfBirth;
     }
 
-    public void setAge(LocalDate age) {
-        this.age = age;
+    public void setDateOfBirth(LocalDate dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
     }
 
     public boolean isCastrated() {
@@ -100,11 +100,11 @@ public class ObjectOfInsuranceEntity {
         this.personality = personality;
     }
 
-    public String getEnviroment() {
+    public String getEnvironment() {
         return environment;
     }
 
-    public void setEnviroment(String environment) {
+    public void setEnvironment(String environment) {
         this.environment = environment;
     }
 
@@ -117,20 +117,13 @@ public class ObjectOfInsuranceEntity {
     }
 
     @Override
-    public String toString() {
-        return "ObjectOfInsuranceEntity [name=" + name + ", race=" + race + ", color=" + color + ", age=" + age
-                + ", castrated=" + castrated + ", personality=" + personality + ", environment=" + environment
-                + ", weight=" + weight + "]";
-    }
-
-    @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((name == null) ? 0 : name.hashCode());
         result = prime * result + ((race == null) ? 0 : race.hashCode());
         result = prime * result + ((color == null) ? 0 : color.hashCode());
-        result = prime * result + ((age == null) ? 0 : age.hashCode());
+        result = prime * result + ((dateOfBirth == null) ? 0 : dateOfBirth.hashCode());
         result = prime * result + (castrated ? 1231 : 1237);
         result = prime * result + ((personality == null) ? 0 : personality.hashCode());
         result = prime * result + ((environment == null) ? 0 : environment.hashCode());
@@ -162,10 +155,10 @@ public class ObjectOfInsuranceEntity {
                 return false;
         } else if (!color.equals(other.color))
             return false;
-        if (age == null) {
-            if (other.age != null)
+        if (dateOfBirth == null) {
+            if (other.dateOfBirth != null)
                 return false;
-        } else if (!age.equals(other.age))
+        } else if (!dateOfBirth.equals(other.dateOfBirth))
             return false;
         if (castrated != other.castrated)
             return false;
@@ -184,6 +177,12 @@ public class ObjectOfInsuranceEntity {
         return true;
     }
 
+    @Override
+    public String toString() {
+        return "ObjectOfInsuranceEntity [name=" + name + ", race=" + race + ", color=" + color + ", dateOfBirth="
+                + dateOfBirth + ", castrated=" + castrated + ", personality=" + personality + ", environment="
+                + environment + ", weight=" + weight + "]";
+    }
 
     
 }

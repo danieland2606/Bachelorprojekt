@@ -29,22 +29,34 @@ services:
       - "default"
     environment:
       - RABBIT_HOST=rabbitmq
-#  policy:
-#    build:
-#      context: ./PolicyService
-#      dockerfile: Dockerfile
-#    container_name: policy-service
-#    networks:
-#      - "default"
-#    environment:
-#      - RABBIT_HOST=rabbitmq
-#  policydb:
-#    image: mariadb:latest
-#    container_name: policydb
-#    networks:
-#      - "default"
-#    environment:
-#      - MARIADB_ROOT_PASSWORD=test
+  policy:
+    build:
+      context: ./PolicyService
+      dockerfile: Dockerfile
+    container_name: policy-service
+    depends_on: 
+      - policydb
+    networks:
+      - "default"
+    environment:
+      - RABBIT_HOST=rabbitmq
+      - spring.datasource.url=jdbc:mariadb://policydb:3306/Policy
+      - spring.datasource.username=user
+      - spring.datasource.password=123456789
+  policydb:
+    image: mariadb:latest
+    container_name: policydb
+    networks:
+      - "default"
+    environment:
+      MARIADB_ROOT_PASSWORD: test
+      MYSQL_DATABASE: Policy
+      MYSQL_USER: user
+      MYSQL_PASSWORD: 123456789
+    #ports:
+    #  - "3306:3306"
+    volumes:
+      - policydb_data:/var/lib/mysql
   rabbitmq:
     image: rabbitmq:management-alpine
     container_name: rabbitmq
@@ -55,3 +67,6 @@ services:
       - "15672:15672"
       - "5671:5671"
       - "5672:5672"
+
+volumes:
+  policydb_data:

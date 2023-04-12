@@ -79,6 +79,11 @@ public class PolicyRequest {
             return false;
         return true;
     }
+    @Override
+    public String toString() {
+        return "PolicyRequest [startDate=" + startDate + ", endDate=" + endDate + ", coverage=" + coverage
+                + ", objectOfInsurance=" + objectOfInsurance + "]";
+    }
 
     
 }

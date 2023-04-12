@@ -11,10 +11,14 @@ import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
@@ -121,21 +125,24 @@ public class PolicyService {
 		System.out.println(customer);
 
 		PriceCalculationEntity tempCalc = new PriceCalculationEntity(customer.getAddress().getPostalCode(), pRequest.getCoverage(), pRequest.getObjectOfInsurance().getRace(), 
-				pRequest.getObjectOfInsurance().getColor(), pRequest.getObjectOfInsurance().getAge(), pRequest.getObjectOfInsurance().isCastrated(), 
-				pRequest.getObjectOfInsurance().getPersonality(), pRequest.getObjectOfInsurance().getEnviroment(), pRequest.getObjectOfInsurance().getWeight());
+				pRequest.getObjectOfInsurance().getColor(), pRequest.getObjectOfInsurance().getDateOfBirth(), pRequest.getObjectOfInsurance().isCastrated(), 
+				pRequest.getObjectOfInsurance().getPersonality(), pRequest.getObjectOfInsurance().getEnvironment(), pRequest.getObjectOfInsurance().getWeight());
 
 		PolicyEntity policy = new PolicyEntity(c_id, pRequest.getStartDate(), pRequest.getEndDate(), pRequest.getCoverage(), getPolicyPrice(tempCalc), pRequest.getObjectOfInsurance());
-		
+		policy = pRepository.save(policy);
+
 		MailPolicyEntity mail = new MailPolicyEntity(policy, customer);
-
-		WebClient notificationClient = WebClient.create("http://" + notificationUrl + ":8080");
-
-		try {		
-			WebClient.ResponseSpec responseSpec2 = notificationClient.post().uri("/policynotification").bodyValue(mail).retrieve();
-		} catch (Exception e) {
-			System.out.println(e);
+		System.out.println(mail);
+		//WebClient notificationClient = WebClient.create("http://" + notificationUrl + ":8080");
+		String url = "http://" + notificationUrl + ":8080/policynotification";
+		RestTemplate restTemplate = new RestTemplate();
+		ResponseEntity<String> response = restTemplate.postForEntity(url, mail, String.class);
+		if (response.getStatusCode() == HttpStatus.OK) {
+			System.out.println("Request Successful");
+		} else {
+			System.out.println("Request Failed");
 		}
-		//WebClient.ResponseSpec responseSpec2 = notificationClient.post().uri("http://notification:8080/policynotification").body(Mono.just(mail), MailPolicyEntity.class).retrieve();
+		
 		/*
 		Mono<ResponseEntity<String>> result = WebClient.create().post().uri("http://notification:8080/policynotification")
 											//.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
@@ -146,7 +153,7 @@ public class PolicyService {
 		System.out.println(result.cast(ResponseEntity.class).toString());
 		System.out.println(mail);
 		*/
-		MappingJacksonValue wrapper = new MappingJacksonValue(pRepository.save(policy));
+		MappingJacksonValue wrapper = new MappingJacksonValue(policy);
 		wrapper.setFilters(new SimpleFilterProvider()
 		.addFilter("policyFilter", SimpleBeanPropertyFilter.filterOutAllExcept("id"))
 		.setFailOnUnknownId(false));
