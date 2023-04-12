@@ -1,5 +1,6 @@
 package EDA.MeowMed.Policy.Persistence.Entity;
 
+import com.fasterxml.jackson.annotation.JsonFilter;
 import jakarta.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -7,6 +8,7 @@ import java.time.LocalDate;
 
 @Entity
 @Table(name="Policy")
+@JsonFilter("policyFilter")
 public class Policy implements Serializable {
 
     @Id
@@ -30,9 +32,11 @@ public class Policy implements Serializable {
     private double premium;
 
     @OneToOne(optional = false)
+    @JoinColumn(name = "object_of_insurance_id")
     private ObjectOfInsurance objectOfInsurance;
 
     @ManyToOne(optional = false)
+    @JoinColumn(name = "customer_id")
     private Customer customer;
 
     public Policy(long id, LocalDate startDate, LocalDate endDate, int coverage, int premium, ObjectOfInsurance objectOfInsurance) {

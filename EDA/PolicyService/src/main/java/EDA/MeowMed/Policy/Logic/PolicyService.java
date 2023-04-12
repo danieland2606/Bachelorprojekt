@@ -1,11 +1,6 @@
 package EDA.MeowMed.Policy.Logic;
 
-import java.security.InvalidParameterException;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
+import java.util.*;
 import EDA.MeowMed.Policy.Persistence.AddressRepository;
 import EDA.MeowMed.Policy.Persistence.CustomerRepository;
 import EDA.MeowMed.Policy.Persistence.Entity.Customer;
@@ -13,12 +8,11 @@ import EDA.MeowMed.Policy.Persistence.Entity.Policy;
 import EDA.MeowMed.Policy.Messaging.PolicyAddedSender;
 import EDA.MeowMed.Policy.Persistence.ObjectOfInsuranceRepository;
 import EDA.MeowMed.Policy.Persistence.PolicyRepository;
-import EDA.MeowMed.Policy.View.*;
-import org.hibernate.boot.model.relational.Database;
+import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
+import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
 import org.springframework.data.crossstore.ChangeSetPersister;
-import org.springframework.messaging.MessagingException;
+import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -60,12 +54,6 @@ public class PolicyService {
         this.addressRepository = addressRepository;
     }
 
-
-    // public PolicyOverviewProjection findPolicyByCustomerIDAndPolicyID(long customerID, long policyID) {
-    //     return this.policyRepository.findPolicyOverviewByCustomerIDAndPolicyID(customerID, policyID);
-    // }
-
-
     /**
      This method searches for a "Policy" in the database based on its ID and the ID of the associated customer.
      It executes a JPQL query to load the "id", "coverage", "startDate", "endDate", "objectOfInsurance", and
@@ -79,16 +67,18 @@ public class PolicyService {
 
      @throws ChangeSetPersister.NotFoundException if the requested policy is not found.
      */
-    public PolicyOverviewProjection findPolicyByCustomerIDAndPolicyID(long customerID, long policyID) throws ChangeSetPersister.NotFoundException {
-        PolicyOverviewProjection policy = this.policyRepository.findPolicyOverviewByCustomerIDAndPolicyID(customerID, policyID);
+    public MappingJacksonValue findPolicyByCustomerIDAndPolicyID(long customerID, long policyID) throws ChangeSetPersister.NotFoundException {
+        Policy policy = this.policyRepository.findPolicyByCustomerIDAndPolicyID(customerID, policyID);
         if (policy == null) {
-            throw new ChangeSetPersister.NotFoundException();// TODO in Controller, oder nicht?
+            throw new ChangeSetPersister.NotFoundException();
         }
-        return policy;
+        MappingJacksonValue wrapper = new MappingJacksonValue(policy);
+        wrapper.setFilters(new SimpleFilterProvider()
+                .addFilter("policyFilter", SimpleBeanPropertyFilter.serializeAllExcept("id", "customer"))
+                .addFilter("objectOfInsuranceFilter", SimpleBeanPropertyFilter.serializeAll())
+                .setFailOnUnknownId(false));
+        return wrapper;
     }
-
-
-
 
     /**
      Adds a policy for a customer and calculates its premium based on several factors.
@@ -100,11 +90,8 @@ public class PolicyService {
      @return The added policy.
 
      @throws Exception If the customer with the given ID is not found.
-
-     TODO: Throws müssen noch gemacht werden
      */
-
-    public Policy addPolicy(long customerID, Policy policy) throws Exception {
+    public MappingJacksonValue addPolicy(long customerID, Policy policy) throws Exception {
         Optional<Customer> customerForPolicy = null;
         customerForPolicy = this.customerRepository.findById(customerID);
         if(!customerForPolicy.isPresent())
@@ -115,8 +102,12 @@ public class PolicyService {
         policy.setPremium(this.getPremium(policy.getCustomer(), policy));
         this.objectOfInsuranceRepository.save(policy.getObjectOfInsurance());
         this.policyRepository.save(policy);
+        MappingJacksonValue wrapper = new MappingJacksonValue(this.policyRepository.save(policy));
+        wrapper.setFilters(new SimpleFilterProvider()
+                .addFilter("policyFilter", SimpleBeanPropertyFilter.filterOutAllExcept("id"))
+                .setFailOnUnknownId(false));
         this.policyAddedSender.send(policy);
-        return policy;
+        return wrapper;
     }
 //    public Policy addPolicy2(long customerID, Policy policy) throws ChangeSetPersister.NotFoundException, DataAccessException, MessagingException {
 //        Optional<Customer> customerForPolicy = this.customerRepository.findById(customerID);
@@ -137,22 +128,35 @@ public class PolicyService {
 //            throw new MessagingException("Error sending policy added message", ex);
 //        }
 //        return policy;
-//    }
+//    } //TODO: die Fehlermeldungen im auskommentierten Code soll in die Funktion rein
 
+    public MappingJacksonValue getPolicyList(long customerID, String fields) {
+        MappingJacksonValue wrapper = new MappingJacksonValue(this.policyRepository.getPolicyList(customerID));
 
-    //TODO: Bisschen darüber reden welche Parameter wir übergeben bekommen.
-    public List<PolicyOverview> getPolicyList(long customerID, String objectOfInsuranceName, String startDate, String endDate, Integer coverage) {
-        ArrayList<PolicyOverview> listOfPolicies = new ArrayList<>();
-        for (Policy p : this.policyRepository.findAll()) { //TODO: filter this inside SQL-Query and not in Code
-            if (p.getCustomer().getId() == customerID &&
-                    (objectOfInsuranceName == null || p.getObjectOfInsurance().getName().equals(objectOfInsuranceName)) &&
-                    (startDate == null || p.getStartDate().equals(LocalDate.parse(startDate))) &&
-                    (endDate == null || p.getEndDate().equals(LocalDate.parse(endDate))) &&
-                    (coverage == null || p.getCoverage() == coverage)) {
-                listOfPolicies.add(new PolicyOverview(p.getId(), p.getStartDate(), p.getEndDate(), p.getCoverage(), new ObjectOfInsuranceOverview(p.getObjectOfInsurance().getName())));
+        List<String> fieldList = Arrays.asList(fields.split(","));
+        List<String> policyList = new ArrayList<>();
+        List<String> ooIList = new ArrayList<>();
+
+        boolean containsOoI = false;
+        for (String result : fieldList) {
+            if(result.contains("objectOfInsurance.")){
+                ooIList.add(result.substring(18));
+                policyList.remove(result);
+                containsOoI = true;
+            } else {
+                policyList.add(result);
             }
         }
-        return listOfPolicies;
+        if(containsOoI) {
+            policyList.add("objectOfInsurance");
+        }
+        policyList.add("id");
+
+        wrapper.setFilters(new SimpleFilterProvider()
+                .addFilter("policyFilter", SimpleBeanPropertyFilter.filterOutAllExcept(Set.copyOf(policyList)))
+                .addFilter("objectOfInsuranceFilter", SimpleBeanPropertyFilter.filterOutAllExcept(Set.copyOf(ooIList)))
+                .setFailOnUnknownId(false));
+        return wrapper;
     }
 
 
@@ -174,8 +178,6 @@ public class PolicyService {
         this.addressRepository.save(customer.getAddress());
         this.customerRepository.save(customer);
     }
-
-
 
     /**
      Calculates the premium for a given customer and policy
@@ -221,6 +223,6 @@ public class PolicyService {
         //TODO
 
 
-        return base + added;
+        return base + added; //TODO: als JSON in vernünftiger Form returnen
     }
 }
