@@ -1,8 +1,6 @@
 package com.meowmed.rdapolicy;
 
-import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
-import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -13,18 +11,11 @@ import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.stereotype.Service;
-import org.springframework.web.reactive.function.BodyInserter;
-import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
-import org.springframework.web.reactive.function.client.WebClient.RequestBodySpec;
-import org.springframework.web.reactive.function.client.WebClient.RequestHeadersSpec;
-import org.springframework.web.reactive.function.client.WebClient.ResponseSpec;
-import org.springframework.web.reactive.function.client.WebClient.UriSpec;
 
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
@@ -36,7 +27,6 @@ import com.meowmed.rdapolicy.entity.PolicyEntity;
 import com.meowmed.rdapolicy.entity.PolicyRequest;
 import com.meowmed.rdapolicy.entity.PriceCalculationEntity;
 
-import jakarta.security.auth.message.callback.PrivateKeyCallback.Request;
 import reactor.core.publisher.Mono;
 
 /**
@@ -126,8 +116,8 @@ public class PolicyService {
 		String customerURL = "http://" + customerUrl + ":8080/customer/{c_id}";
 		System.out.println(customerURL);
 		WebClient customerClient = WebClient.create();
-		WebClient.ResponseSpec responseSpec2 = customerClient.get().uri(customerURL,c_id).retrieve();
-		CustomerRequest customer = responseSpec2.bodyToMono(CustomerRequest.class).block();
+		WebClient.ResponseSpec responseSpec = customerClient.get().uri(customerURL,c_id).retrieve();
+		CustomerRequest customer = responseSpec.bodyToMono(CustomerRequest.class).block();
 		System.out.println(customer);
 
 		PriceCalculationEntity tempCalc = new PriceCalculationEntity(customer.getAddress().getPostalCode(), pRequest.getCoverage(), pRequest.getObjectOfInsurance().getRace(), 
@@ -142,37 +132,16 @@ public class PolicyService {
 		.setFailOnUnknownId(false));
 
 		MailPolicyEntity mail = new MailPolicyEntity(policy, customer);
-		String notificationURL = "http://" + notificationUrl + ":8080";
-		System.out.println(notificationURL);
-		WebClient client = WebClient.create(notificationURL);
-		UriSpec<RequestBodySpec> uriSpec = client.post();
-		RequestBodySpec bodySpec = uriSpec.uri("/policynotification");
-		RequestHeadersSpec<?> headersSpec = bodySpec.bodyValue("data");
-		ResponseSpec responseSpec = headersSpec.header(
-			HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-		  .accept(MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML)
-		  .acceptCharset(StandardCharsets.UTF_8)
-		  .ifNoneMatch("*")
-		  .ifModifiedSince(ZonedDateTime.now())
-		  .retrieve();
-		  Mono<String> response = headersSpec.retrieve()
-		  .bodyToMono(String.class);
-		  System.out.println(response);
-		//WebClient postClient = WebClient.create(notificationURL);
-		//WebClient.ResponseSpec postResponseSpec = postClient.post().uri("/policynotification").header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE).body(Mono.just(mail), MailPolicyEntity.class).retrieve();
-		//System.out.println(postResponseSpec);
-		/*/
-					customerClient.post()
-					.uri(notificationURL)
-					.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-					//.contentType(MediaType.APPLICATION_JSON)
-					.body(Mono.just(mail), MailPolicyEntity.class)
-					//.bodyValue(mail)
-					.exchange();
-					//.bodyToMono(ResponseEntity<String>.class);
-					//.toEntity(String.class);
-		//System.out.println(result.cast(ResponseEntity.class).toString());
-		*/
+		Mono<ResponseEntity<String>> result = WebClient.create().post()
+											.uri("http://notification:8080/policynotification")
+											//.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+											.contentType(MediaType.APPLICATION_JSON)
+											.bodyValue(mail)
+											.retrieve()
+											.toEntity(String.class);
+		System.out.println(result.cast(ResponseEntity.class).toString());
+		System.out.println(mail);
+
 		return wrapper;
 	}
 
