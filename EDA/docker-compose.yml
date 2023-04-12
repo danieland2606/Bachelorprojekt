@@ -7,10 +7,10 @@ services:
     container_name: customer-service
     networks:
       - "default"
+    environment:
+      - RABBIT_HOST=rabbitmq
     ports:
       - "82:8080"
-    environment:
-      - docker.notificationurl=notification
   notification:
     build:
       context: ./NotificationService
@@ -18,8 +18,8 @@ services:
     container_name: notification-service
     networks:
       - "default"
-    ports:
-      - "83:8080"
+    environment:
+      - RABBIT_HOST=rabbitmq
   rabbitmq:
     image: rabbitmq:management-alpine
     container_name: rabbitmq
