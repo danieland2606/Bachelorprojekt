@@ -8,7 +8,12 @@ services:
     networks:
       - "default"
     environment:
-      - RABBIT_HOST=rabbitmq
+      - spring.rabbitmq.host=rabbitmq
+      - spring.datasource.url=jdbc:mariadb://customerdb:3306/Customer
+      - spring.datasource.username=root
+      - spring.datasource.password=test
+      - spring.datasource.driver-class-name=org.mariadb.jdbc.Driver
+      - spring.jpa.database-platform=org.hibernate.dialect.MariaDBDialect
     ports:
       - "81:8081"
     depends_on:
@@ -20,6 +25,7 @@ services:
       - "default"
     environment:
       - MARIADB_ROOT_PASSWORD=test
+      - MYSQL_DATABASE=Customer
   notification:
     build:
       context: ./NotificationService
@@ -28,7 +34,7 @@ services:
     networks:
       - "default"
     environment:
-      - RABBIT_HOST=rabbitmq
+      - spring.rabbitmq.host=rabbitmq
   policy:
     build:
       context: ./PolicyService
