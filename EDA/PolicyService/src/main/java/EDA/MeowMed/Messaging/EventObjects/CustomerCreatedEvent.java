@@ -1,6 +1,7 @@
 package EDA.MeowMed.Messaging.EventObjects;
 
 import EDA.MeowMed.Persistence.Entity.Customer;
+
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDate;

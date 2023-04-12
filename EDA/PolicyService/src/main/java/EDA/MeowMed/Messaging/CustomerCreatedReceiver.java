@@ -1,7 +1,7 @@
-package EDA.MeowMed.Policy.Messaging;
+package EDA.MeowMed.Messaging;
 
-import EDA.MeowMed.Policy.Persistence.Entity.Customer;
-import EDA.MeowMed.Policy.Logic.PolicyService;
+import EDA.MeowMed.Messaging.EventObjects.CustomerCreatedEvent;
+import EDA.MeowMed.Logic.PolicyService;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -16,8 +16,8 @@ public class CustomerCreatedReceiver {
     }
 
     @RabbitListener(queues = "#{CustomerCreatedQueue.name}")
-    public void receive(Customer customer) {
+    public void receive(CustomerCreatedEvent customerCreatedEvent) {
         System.out.println("Newly created Customer received!");
-        this.policyService.addNewCustomer(customer);
+        this.policyService.addNewCustomer(customerCreatedEvent);
     }
 }

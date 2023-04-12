@@ -1,5 +1,6 @@
-package EDA.MeowMed.Policy.Persistence.Entity;
+package EDA.MeowMed.Persistence.Entity;
 
+import EDA.MeowMed.Messaging.EventObjects.NoId_Address;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
@@ -26,6 +27,12 @@ public class Address implements Serializable {
         this.city = city;
         this.street = street;
         this.postalCode = postalCode;
+    }
+
+    public Address(NoId_Address a) {
+        this.city = a.getCity();
+        this.street = a.getStreet();
+        this.postalCode = a.getPostalCode();
     }
 
     public Address() {}

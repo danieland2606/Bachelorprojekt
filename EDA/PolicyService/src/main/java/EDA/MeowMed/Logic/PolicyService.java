@@ -1,13 +1,16 @@
-package EDA.MeowMed.Policy.Logic;
+package EDA.MeowMed.Logic;
 
 import java.util.*;
-import EDA.MeowMed.Policy.Persistence.AddressRepository;
-import EDA.MeowMed.Policy.Persistence.CustomerRepository;
-import EDA.MeowMed.Policy.Persistence.Entity.Customer;
-import EDA.MeowMed.Policy.Persistence.Entity.Policy;
-import EDA.MeowMed.Policy.Messaging.PolicyAddedSender;
-import EDA.MeowMed.Policy.Persistence.ObjectOfInsuranceRepository;
-import EDA.MeowMed.Policy.Persistence.PolicyRepository;
+
+import EDA.MeowMed.Messaging.EventObjects.CustomerCreatedEvent;
+import EDA.MeowMed.Messaging.PolicyCreatedSender;
+import EDA.MeowMed.Persistence.CustomerRepository;
+import EDA.MeowMed.Persistence.Entity.Address;
+import EDA.MeowMed.Persistence.Entity.Customer;
+import EDA.MeowMed.Persistence.Entity.Policy;
+import EDA.MeowMed.Persistence.ObjectOfInsuranceRepository;
+import EDA.MeowMed.Persistence.PolicyRepository;
+import EDA.MeowMed.Persistence.AddressRepository;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +21,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class PolicyService {
 
-    private final PolicyAddedSender policyAddedSender;
+    private final PolicyCreatedSender policyCreatedSender;
 
     private final PolicyRepository policyRepository;
 
@@ -31,7 +34,7 @@ public class PolicyService {
     /**
      Constructor for PolicyService class.
 
-     @param policyAddedSender a sender object used to send notifications when a new policy is added
+     @param policyCreatedSender a sender object used to send notifications when a new policy is added
 
      @param policyRepository a repository object used to access policies data
 
@@ -42,12 +45,12 @@ public class PolicyService {
      @param addressRepository a repository object used to access address data
      */
     @Autowired
-    public PolicyService(PolicyAddedSender policyAddedSender,
+    public PolicyService(PolicyCreatedSender policyCreatedSender,
                          PolicyRepository policyRepository,
                          ObjectOfInsuranceRepository objectOfInsuranceRepository,
                          CustomerRepository customerRepository,
                          AddressRepository addressRepository) {
-        this.policyAddedSender = policyAddedSender;
+        this.policyCreatedSender = policyCreatedSender;
         this.policyRepository = policyRepository;
         this.objectOfInsuranceRepository = objectOfInsuranceRepository;
         this.customerRepository = customerRepository;
@@ -106,7 +109,7 @@ public class PolicyService {
         wrapper.setFilters(new SimpleFilterProvider()
                 .addFilter("policyFilter", SimpleBeanPropertyFilter.filterOutAllExcept("id"))
                 .setFailOnUnknownId(false));
-        this.policyAddedSender.send(policy);
+        this.policyCreatedSender.send(policy);
         return wrapper;
     }
 //    public Policy addPolicy2(long customerID, Policy policy) throws ChangeSetPersister.NotFoundException, DataAccessException, MessagingException {
@@ -172,7 +175,8 @@ public class PolicyService {
      //Catch von diesem Fehler ist TODO in Controller, oder nicht?
      @throws AddressValidationException If there is an error validating the address object before saving.
      */
-    public void addNewCustomer(Customer customer) {
+    public void addNewCustomer(CustomerCreatedEvent customerCreatedEvent) {
+        Customer customer = new Customer(customerCreatedEvent);
         this.addressRepository.save(customer.getAddress());
         this.customerRepository.save(customer);
     }

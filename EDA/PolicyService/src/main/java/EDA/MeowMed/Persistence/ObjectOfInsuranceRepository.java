@@ -1,6 +1,6 @@
-package EDA.MeowMed.Policy.Persistence;
+package EDA.MeowMed.Persistence;
 
-import EDA.MeowMed.Policy.Persistence.Entity.ObjectOfInsurance;
+import EDA.MeowMed.Persistence.Entity.ObjectOfInsurance;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class MessagingConfig {
 
-    private final String exchangeName = "exchange";
+    private final String exchangeName = "customer";
 
     /**
      * Creates a new RabbitMQ exchange named after the 'exchangeName' variable

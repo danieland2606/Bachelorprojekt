@@ -1,4 +1,4 @@
-package EDA.MeowMed.Policy.Persistence.Entity;
+package EDA.MeowMed.Persistence.Entity;
 
 import com.fasterxml.jackson.annotation.JsonFilter;
 import jakarta.persistence.*;

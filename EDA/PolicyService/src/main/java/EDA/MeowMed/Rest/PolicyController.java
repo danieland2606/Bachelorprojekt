@@ -1,15 +1,13 @@
-package EDA.MeowMed.Policy.Rest;
+package EDA.MeowMed.Rest;
 
-import EDA.MeowMed.Policy.Persistence.Entity.Policy;
-import EDA.MeowMed.Policy.Logic.PolicyService;
+import EDA.MeowMed.Persistence.Entity.Policy;
+import EDA.MeowMed.Logic.PolicyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.web.bind.annotation.*;
-import EDA.MeowMed.Policy.View.PolicyOverviewProjection;
-
 
 @RestController
 @RequestMapping("/customer/{c_id}/policy")

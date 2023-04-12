@@ -1,6 +1,6 @@
-package EDA.MeowMed.Policy.Messaging;
+package EDA.MeowMed.Messaging;
 
-import EDA.MeowMed.Policy.Logic.PolicyService;
+import EDA.MeowMed.Logic.PolicyService;
 import org.springframework.amqp.core.*;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -10,11 +10,11 @@ import org.springframework.context.annotation.Configuration;
 public class MessagingConfig {
 
     @Bean
-    public PolicyAddedSender sender() {
-        return new PolicyAddedSender();
+    public PolicyCreatedSender sender() {
+        return new PolicyCreatedSender();
     }
 
-    @Bean(name = "PolicyAddedTopic")
+    @Bean(name = "PolicyTopic")
     public TopicExchange policyAddedTopic() {
         return new TopicExchange("policy");
     }
@@ -24,7 +24,7 @@ public class MessagingConfig {
         return new CustomerCreatedReceiver(policyService);
     }
 
-    @Bean(name = "CustomerCreatedTopic")
+    @Bean(name = "CustomerTopic")
     public TopicExchange customerCreatedTopic() {
         return new TopicExchange("customer");
     }
@@ -35,7 +35,7 @@ public class MessagingConfig {
     }
 
     @Bean
-    public Binding bindToCustomerCreatedTopic(@Qualifier("CustomerCreatedTopic") TopicExchange topic, @Qualifier("CustomerCreatedQueue") Queue queue) {
-        return BindingBuilder.bind(queue).to(topic).with("customer");
+    public Binding bindToCustomerCreatedTopic(@Qualifier("CustomerTopic") TopicExchange topic, @Qualifier("CustomerCreatedQueue") Queue queue) {
+        return BindingBuilder.bind(queue).to(topic).with("customer.created");
     }
 }
