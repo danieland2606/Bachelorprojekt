@@ -52,20 +52,6 @@ public class Policy implements Serializable {
 
     }
 
-    /**
-     * Konstruktor, der die ausgewählten Attribute als Parameter akzeptiert.
-     * Dieser Konstruktor wird benötigt, damit Spring Data JPA in der Lage ist, die Ergebnisse
-     * der Abfrage in eine "Policy"-Instanz zu konvertieren.
-     */
-    public Policy(long id,double premium , ObjectOfInsurance objectOfInsurance , LocalDate startDate, LocalDate endDate, int coverage) {
-        this.id = id;
-        this.coverage = coverage;
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.objectOfInsurance = objectOfInsurance;
-        this.premium = premium;
-    }
-
     public long getId() {
         return id;
     }

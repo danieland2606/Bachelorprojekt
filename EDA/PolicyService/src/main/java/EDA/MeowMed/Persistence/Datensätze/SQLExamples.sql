@@ -7,7 +7,7 @@ INSERT INTO customer VALUES (1, "Bank Bla Bli Blub", '2000-12-19', "yeet@yeet.co
 --"startDate": "1990-01-04",
 --  "endDate": "2030-12-31",
 --  "coverage": 50000,
---  "objectOfInsurance": {
+--  "objectOfInsurancePojo": {
 --    "name": "Tomato",
 --    "race": "Bengal",
 --    "color": "Braun",

@@ -5,7 +5,6 @@ import EDA.MeowMed.Messaging.EventObjects.CustomerCreatedEvent;
 import EDA.MeowMed.Messaging.EventObjects.PolicyCreatedEvent;
 import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -79,22 +78,22 @@ public class NotificationService {
      */
     public void sendPolicyCreatedMail(PolicyCreatedEvent policyCreated) {
         Email email = new Email();
-        email.setTo("");//ToDo: add Email of customer
+        email.setTo(policyCreated.getCustomer().getEmail());
         email.setFrom(sender);
         email.setSubject(subjectPolicy);
         email.setTemplate(templatePolicy);
         Map<String, Object> properties = new HashMap<>();
-        properties.put("formOfAddress","");//ToDo: add form of address of customer
-        properties.put("firstName","");//ToDo: add firstname of customer
-        properties.put("lastName","");//ToDo: add lastname of customer
-        properties.put("pid", "");//ToDo: add policy id
-        properties.put("startDate", "");//ToDo: add start date of policy
-        properties.put("endDate","");//ToDo: add end date of policy
-        properties.put("coverage", "");//ToDo: add coverage of policy
-        properties.put("castrated", "");//ToDo: add castrated status of cat
-        properties.put("personality", "");//ToDo: add personality of cat
-        properties.put("environment", "");//ToDo: add environment of cat
-        properties.put("weight", "");//ToDo: add weight of cat
+        properties.put("formOfAddress",policyCreated.getCustomer().getFormOfAddress());
+        properties.put("firstName",policyCreated.getCustomer().getFirstName());
+        properties.put("lastName",policyCreated.getCustomer().getLastName());
+        properties.put("pid", policyCreated.getId());
+        properties.put("startDate", policyCreated.getStartDate());
+        properties.put("endDate",policyCreated.getEndDate());
+        properties.put("coverage", policyCreated.getCoverage());
+        properties.put("castrated", policyCreated.getObjectOfInsurance().isCastrated());
+        properties.put("personality", policyCreated.getObjectOfInsurance().getPersonality());
+        properties.put("environment", policyCreated.getObjectOfInsurance().getEnvironment());
+        properties.put("weight", policyCreated.getObjectOfInsurance().getWeight());
         email.setProperties(properties);
 
         try {

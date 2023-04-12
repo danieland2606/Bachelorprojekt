@@ -1,6 +1,7 @@
 package EDA.MeowMed.Messaging;
 
 import org.springframework.amqp.core.*;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -10,15 +11,14 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class MessagingConfig {
 
-    private final String exchangeName = "exchange";
+    @Bean(name = "CustomerTopic")
+    public TopicExchange customerTopic() {
+        return new TopicExchange("customer");
+    }
 
-    /**
-     * Creates a new RabbitMQ exchange named after the 'exchangeName' variable
-     * @return a new TopicExchange object with name of 'exchangeName' variable
-     */
-    @Bean
-    public TopicExchange topicExchange() {
-        return new TopicExchange(exchangeName);
+    @Bean(name = "PolicyTopic")
+    public TopicExchange policyTopic() {
+        return new TopicExchange("policy");
     }
 
     private static class ReceiverConfig {
@@ -46,12 +46,12 @@ public class MessagingConfig {
          * @return Topic Exchange object
          */
         @Bean
-        public Binding customerBinding(TopicExchange topic, Queue autoDeleteQueue1) {
+        public Binding customerBinding(@Qualifier("CustomerTopic") TopicExchange topic, Queue autoDeleteQueue1) {
             return BindingBuilder.bind(autoDeleteQueue1).to(topic).with("customer.created");
         }
 
         @Bean
-        public Binding policyBinding(TopicExchange topicExchange, Queue autoDeleteQueue2) {
+        public Binding policyBinding(@Qualifier("PolicyTopic") TopicExchange topicExchange, Queue autoDeleteQueue2) {
             return BindingBuilder.bind(autoDeleteQueue2).to(topicExchange).with("policy.created");
         }
 

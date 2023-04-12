@@ -15,7 +15,7 @@ public class MessagingConfig {
     }
 
     @Bean(name = "PolicyTopic")
-    public TopicExchange policyAddedTopic() {
+    public TopicExchange policyTopic() {
         return new TopicExchange("policy");
     }
 
@@ -25,7 +25,7 @@ public class MessagingConfig {
     }
 
     @Bean(name = "CustomerTopic")
-    public TopicExchange customerCreatedTopic() {
+    public TopicExchange customerTopic() {
         return new TopicExchange("customer");
     }
 

@@ -3,6 +3,7 @@ package EDA.MeowMed.Logic;
 import java.util.*;
 
 import EDA.MeowMed.Messaging.EventObjects.CustomerCreatedEvent;
+import EDA.MeowMed.Messaging.EventObjects.PolicyCreatedEvent;
 import EDA.MeowMed.Messaging.PolicyCreatedSender;
 import EDA.MeowMed.Persistence.CustomerRepository;
 import EDA.MeowMed.Persistence.Entity.Address;
@@ -109,7 +110,7 @@ public class PolicyService {
         wrapper.setFilters(new SimpleFilterProvider()
                 .addFilter("policyFilter", SimpleBeanPropertyFilter.filterOutAllExcept("id"))
                 .setFailOnUnknownId(false));
-        this.policyCreatedSender.send(policy);
+        this.policyCreatedSender.send(new PolicyCreatedEvent(policy));
         return wrapper;
     }
 //    public Policy addPolicy2(long customerID, Policy policy) throws ChangeSetPersister.NotFoundException, DataAccessException, MessagingException {

@@ -1,6 +1,6 @@
 package EDA.MeowMed.Messaging;
 
-import EDA.MeowMed.Persistence.Entity.Policy;
+import EDA.MeowMed.Messaging.EventObjects.PolicyCreatedEvent;
 import org.springframework.amqp.core.TopicExchange;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +14,8 @@ public class PolicyCreatedSender {
     @Qualifier("PolicyTopic")
     private TopicExchange topic;
 
-    public void send(Policy policy) {
-        this.template.convertAndSend(topic.getName(), "policy.created", policy);
+    public void send(PolicyCreatedEvent policyCreatedEvent) {
+        this.template.convertAndSend(topic.getName(), "policy.created", policyCreatedEvent);
         System.out.println("Sent newly created Policy!");
     }
 }
