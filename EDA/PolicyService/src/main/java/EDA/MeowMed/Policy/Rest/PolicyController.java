@@ -42,12 +42,11 @@ public class PolicyController {
 
      Finally, the policy is sent to a message broker using the policyAddedSender.
 
-     @param customerID - the ID of the customer for which the policy is being added
+     @param c_id - the ID of the customer for which the policy is being added
 
-     @param policy - the policy object being added for the customer
+     @param p_id - the policy object being added for the customer
 
      @return the policy object that was added
-
      */
     @GetMapping("/{p_id}")
     public ResponseEntity<?> findPolicyByCustomerIDAndPolicyID(@PathVariable long c_id, @PathVariable long p_id) {
@@ -72,9 +71,6 @@ public class PolicyController {
      @param policy the policy information to be added
 
      @return the added policy
-
-     //TODO: Fehlerbehandelung für NotFoundException
-     @throws ChangeSetPersister.NotFoundException if the customer with the given ID is not found
      */
     @PostMapping
     public ResponseEntity<?> addPolicy(@PathVariable long c_id, @RequestBody Policy policy) {

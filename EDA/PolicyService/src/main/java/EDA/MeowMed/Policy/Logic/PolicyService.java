@@ -159,8 +159,6 @@ public class PolicyService {
         return wrapper;
     }
 
-
-
     /**
      Adds a new customer to the system, along with their associated address information.
      @param customer The customer object to be added to the system.
