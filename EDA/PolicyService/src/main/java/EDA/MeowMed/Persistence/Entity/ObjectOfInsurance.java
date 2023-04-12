@@ -1,5 +1,6 @@
-package EDA.MeowMed.Policy.Persistence.Entity;
+package EDA.MeowMed.Persistence.Entity;
 
+import com.fasterxml.jackson.annotation.JsonFilter;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
@@ -7,6 +8,7 @@ import java.time.LocalDate;
 
 @Entity
 @Table(name="ObjectOfInsurance")
+@JsonFilter("objectOfInsuranceFilter")
 public class ObjectOfInsurance implements Serializable {
 
     @Id

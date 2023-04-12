@@ -1,7 +1,7 @@
-package EDA.MeowMed.Policy.Persistence;
+package EDA.MeowMed.Persistence;
 
 
-import EDA.MeowMed.Policy.Persistence.Entity.Address;
+import EDA.MeowMed.Persistence.Entity.Address;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
