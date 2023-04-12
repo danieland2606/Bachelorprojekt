@@ -10,7 +10,16 @@ services:
     environment:
       - RABBIT_HOST=rabbitmq
     ports:
-      - "82:8080"
+      - "81:8081"
+    depends_on:
+      - customerdb
+  customerdb:
+    image: mariadb:latest
+    container_name: customerdb
+    networks:
+      - "default"
+    environment:
+      - MARIADB_ROOT_PASSWORD=test
   notification:
     build:
       context: ./NotificationService
@@ -20,6 +29,22 @@ services:
       - "default"
     environment:
       - RABBIT_HOST=rabbitmq
+#  policy:
+#    build:
+#      context: ./PolicyService
+#      dockerfile: Dockerfile
+#    container_name: policy-service
+#    networks:
+#      - "default"
+#    environment:
+#      - RABBIT_HOST=rabbitmq
+#  policydb:
+#    image: mariadb:latest
+#    container_name: policydb
+#    networks:
+#      - "default"
+#    environment:
+#      - MARIADB_ROOT_PASSWORD=test
   rabbitmq:
     image: rabbitmq:management-alpine
     container_name: rabbitmq
