@@ -77,7 +77,7 @@
       </dl>
     </section>
     <input type="text" placeholder="Suche.." hidden>
-    <button type="button">Neuer Vertrag</button>
+    <button type="button" onclick="app.navigate('policy-new')">Neuer Vertrag</button>
     <table>
       <thead>
         <tr>
@@ -178,8 +178,94 @@
         <input type="text" data-bind="bankDetails">
       </label>
     </form>
-    <button type="button" onclick="window.history.back()">Abbrechen</button>
+    <button type="button" onclick="history.back()">Abbrechen</button>
     <button type="button" onclick="console.log(JSON.stringify(app.data))">Anlegen</button>
+  </template>
+
+
+  <template id="policy-new" page>
+    <h1>Neuen Vertrag anlegen</h1>
+    <form>
+      <label>
+        Begin
+        <input type="date" data-bind="policy.startDate">
+      </label>
+      <label>
+        Ende
+        <input type="date" data-bind="policy.endDate">
+      </label>
+      <label>
+        Deckung
+        <input type="number" data-bind="policy.coverage">
+      </label>
+      <div>
+        <h2>Katze</h2>
+        <label>
+          Name
+          <input type="text" data-bind="policy.objectOfInsurance.name">
+        </label>
+        <label>
+          Rasse
+          <select data-bind="policy.objectOfInsurance.race">
+            <option value="siamese">Siamese</option>
+            <option value="perser">Perser</option>
+            <option value="bengal">Bengal</option>
+            <option value="maine-coon">Maine Coon</option>
+            <option value="sphynx">Sphynx</option>
+            <option value="scottish-fold">Scottish Fold</option>
+            <option value="british-shorthair">British Shorthair</option>
+            <option value="abyssinian">Abyssinian</option>
+            <option value="ragdoll">Ragdoll</option>
+          </select>
+        </label>
+        <label>
+          Farbe
+          <select data-bind="policy.objectOfInsurance.color">
+            <option value="seal">Seal</option>
+            <option value="blau">Blau</option>
+            <option value="lilac">Lilac</option>
+            <option value="creme">Creme</option>
+            <option value="weiss">Weiß</option>
+            <option value="schildpatt">Schildpatt</option>
+            <option value="schwarz">Schwarz</option>
+            <option value="braun">Braun</option>
+            <option value="marmor">Marmor</option>
+            <option value="grau">Grau</option>
+            <option value="rot">Rot</option>
+            <option value="zimt">Zimt</option>
+          </select>
+        </label>
+        <label>
+          Geburtsdatum
+          <input type="date" data-bind="policy.objectOfInsurance.dateOfBirth">
+        </label>
+        <label>
+          Kastriert
+          <input type="checkbox" data-bind="policy.objectOfInsurance.castrated">
+        </label>
+        <label>
+          Persönlichkeit
+          <select data-bind="policy.objectOfInsurance.personality">
+            <option value="anhaenglich">Anhänglich</option>
+            <option value="spielerisch">Spielerisch</option>
+          </select>
+        </label>
+        <label>
+          Umgebung
+          <select data-bind="policy.objectOfInsurance.environment">
+            <option value="hauskatze">Hauskatze</option>
+            <option value="freigaenger">Freigänger</option>
+          </select>
+          <label>
+            Gewicht
+            <input type="number" data-bind="policy.objectOfInsurance.weight">
+          </label>
+        </label>
+      </div>
+    </form>
+    <div data-bind="premium"></div>
+    <button type="button" onclick="history.back()">Abbrechen</button>
+    <button type="button" onclick="console.log(JSON.stringify(app.data.policy))">Vertrag abschließen</button>
   </template>
 
 </body>

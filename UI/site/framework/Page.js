@@ -20,7 +20,9 @@ export class Page {
 
     static #bindData(node, data) {
         const binding = node.getAttribute('data-bind').split('\.');
-        const observable = new Observable('');
+        let observable = this.#getProperty(binding, data);
+        if(!observable || !(bind in observable))
+            observable = new Observable('');
         observable.bind(node);
         this.#setProperty(data, binding, observable);
     }
