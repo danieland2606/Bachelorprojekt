@@ -179,7 +179,7 @@
       </label>
     </form>
     <button type="button" onclick="history.back()">Abbrechen</button>
-    <button type="button" onclick="console.log(JSON.stringify(app.data))">Anlegen</button>
+    <button type="button" onclick="app.createCustomer(app.data)">Anlegen</button>
   </template>
 
 
@@ -263,9 +263,9 @@
         </label>
       </div>
     </form>
-    <div data-bind="premium"></div>
+    <button type="button" data-bind="premium" onclick="app.data.premium.update(app.data)"></button>
     <button type="button" onclick="history.back()">Abbrechen</button>
-    <button type="button" onclick="console.log(JSON.stringify(app.data.policy))">Vertrag abschließen</button>
+    <button type="button" onclick="app.createPolicy(app.data.customerId, app.data.policy)">Vertrag abschließen</button>
   </template>
 
 </body>

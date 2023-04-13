@@ -1,9 +1,29 @@
-import { getCustomerList, getCustomer, getPolicyList } from "./fetch.js";
+import { getCustomerList, getCustomer, getPolicyList, getPolicy, postCustomer, postPolicy, getPremium } from "./fetch.js";
 import { Application } from "./framework/Application.js";
+import { Observable } from "./framework/Observable.js";
 
 const customerFields = ['firstName', 'lastName', 'address'];
 const policyFields = ['objectOfInsurance.name', 'startDate', 'endDate', 'coverage'];
 
+class PremiumFetcher extends Observable {
+  constructor() {
+    super(0);
+  }
+
+  async update(data) {
+    const calcObject = {};
+    calcObject.postalCode = data.postalCode;
+    calcObject.coverage = data.policy.coverage;
+    calcObject.race = data.policy.objectOfInsurance.race;
+    calcObject.color = data.policy.objectOfInsurance.color;
+    calcObject.dateOfBirth = data.policy.objectOfInsurance.dateOfBirth;
+    calcObject.castrated = data.policy.objectOfInsurance.castrated;
+    calcObject.personality = data.policy.objectOfInsurance.personality;
+    calcObject.environment = data.policy.objectOfInsurance.environment;
+    calcObject.weight = data.policy.objectOfInsurance.weight;
+    this.value = await getPremium(calcObject);
+  }
+}
 
 export class MyApp extends Application {
   async fetchCustomerDetails(id) {
@@ -22,24 +42,20 @@ export class MyApp extends Application {
 
   async fetchPolicyNew() {
     const data = {};
-    class PremiumFetcher {
-      #value = 0;
-      get value() {
-        return this.#value;
-      }
-
-      bind(input) {
-        input.value = this.#value;
-        this.subscribe(() => input.value = this.#value);
-        input.oninput = () => this.#value = input.value;
-      }
-
-      async update() {
-
-      }
-    }
+    data.customerId = this.data.customer.id;
+    data.postalCode = this.data.customer.address.postalCode;
     data.premium = new PremiumFetcher();
     return data;
+  }
+
+  createPolicy(customerId, policy) {
+    postPolicy(customerId, policy);
+    this.navigate('customer-details', customerId);
+  }
+
+  createCustomer(customer) {
+    postCustomer(customer);
+    this.navigate('dashboard');
   }
 }
 

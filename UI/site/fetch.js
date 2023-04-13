@@ -1,3 +1,5 @@
+import { encodeCalcObject } from "./framework/util.js";
+
 const customerAddress = 'http://localhost:82';
 const policyAddress = 'http://localhost:81';
 
@@ -39,6 +41,11 @@ export async function postPolicy(customerId, policy) {
   return post(policyPath(customerId), policy);
 }
 
+export async function getPremium(calcObject) {
+  const args = { details: encodeCalcObject(calcObject) };
+  return get(`${policyAddress}/policyprice`, args);
+}
+
 async function post(address, payload) {
   const request = {
     method: 'POST',
@@ -53,7 +60,6 @@ async function get(address, args) {
   const url = address + encodeArgs(args);
   const response = await fetch(url);
   const json = await response.json();
-  console.log(json);
   return json;
 }
 
