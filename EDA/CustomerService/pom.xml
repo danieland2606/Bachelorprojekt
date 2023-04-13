@@ -12,7 +12,7 @@
 	<groupId>EDA</groupId>
 	<artifactId>MeowMed</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>MeowMed</name>
+	<name>EDACustomerService</name>
 	<description>Demo project for MeowMed</description>
 	<properties>
 		<java.version>19</java.version>
