@@ -21,7 +21,7 @@ export class Page {
     static #bindData(node, data) {
         const binding = node.getAttribute('data-bind').split('\.');
         let observable = this.#getProperty(binding, data);
-        if(!observable || !(bind in observable))
+        if(!observable || !('bind' in observable))
             observable = new Observable('');
         observable.bind(node);
         this.#setProperty(data, binding, observable);
@@ -62,6 +62,8 @@ export class Page {
     }
 
     static #getProperty(property, obj) {
+        if(!property || !obj)
+            return undefined;
         if (property.length === 1)
             return obj[property[0]];
         else

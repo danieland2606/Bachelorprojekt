@@ -22,3 +22,8 @@ export function add(a, b) {
 export function toCamelCase(string) {
   return string.split('-').map(capitalize).reduce(add);
 }
+
+export function encodeCalcObject(obj) {
+  let base64 = btoa(JSON.stringify(obj));
+  return base64;
+}
