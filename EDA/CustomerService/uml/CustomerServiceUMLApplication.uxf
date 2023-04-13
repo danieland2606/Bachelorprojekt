@@ -4,41 +4,41 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>300</x>
-      <y>408</y>
-      <w>408</w>
+      <x>204</x>
+      <y>396</y>
+      <w>444</w>
       <h>108</h>
     </coordinates>
     <panel_attributes>CustomerService
 --
 --
-getCustomer(id: Long): View_Customer
-getCustomerList(id: Long): List&lt;Simple_Customer&gt;
-addCustomer(customer: Customer): Long</panel_attributes>
+getCustomer(id: Long): Map&lt;String, Object&gt;
+getCustomerList(id: Long): List&lt;Map&lt;String, Object&gt;&gt;
+addCustomer(customer: Customer): Map&lt;String, Object&gt;</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>912</x>
-      <y>408</y>
-      <w>384</w>
+      <x>924</x>
+      <y>396</y>
+      <w>480</w>
       <h>120</h>
     </coordinates>
-    <panel_attributes>EventSender
+    <panel_attributes>EventSenderService
 --
 template: RabbitTemplate
 direct: DirectExchange
 --
 - sendEvent(message: String)
-+ sendNewCustomerEvent(customer: Customer)</panel_attributes>
++ sendCustomerCreatedEvent(customer: Customer): boolean</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>996</x>
-      <y>264</y>
+      <x>1056</x>
+      <y>252</y>
       <w>204</w>
       <h>84</h>
     </coordinates>
@@ -52,8 +52,8 @@ direct: DirectExchange
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>420</x>
-      <y>264</y>
+      <x>348</x>
+      <y>252</y>
       <w>168</w>
       <h>36</h>
     </coordinates>
@@ -64,21 +64,21 @@ fg=gray</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>696</x>
-      <y>432</y>
-      <w>240</w>
+      <x>636</x>
+      <y>420</y>
+      <w>312</w>
       <h>60</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 r2=1
-m2=eventSender</panel_attributes>
-    <additional_attributes>10.0;20.0;180.0;20.0</additional_attributes>
+m2=eventSenderService</panel_attributes>
+    <additional_attributes>10.0;20.0;240.0;20.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1092</x>
-      <y>336</y>
+      <x>1152</x>
+      <y>324</y>
       <w>36</w>
       <h>96</h>
     </coordinates>
@@ -88,8 +88,8 @@ m2=eventSender</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>492</x>
-      <y>288</y>
+      <x>420</x>
+      <y>276</y>
       <w>36</w>
       <h>144</h>
     </coordinates>
@@ -100,8 +100,8 @@ fg=gray</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>540</x>
-      <y>660</y>
+      <x>480</x>
+      <y>648</y>
       <w>168</w>
       <h>48</h>
     </coordinates>
@@ -113,8 +113,8 @@ fg=gray</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>300</x>
-      <y>660</y>
+      <x>204</x>
+      <y>648</y>
       <w>168</w>
       <h>48</h>
     </coordinates>
@@ -126,8 +126,8 @@ fg=gray</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>372</x>
-      <y>504</y>
+      <x>276</x>
+      <y>492</y>
       <w>180</w>
       <h>180</h>
     </coordinates>
@@ -139,8 +139,8 @@ m2=customerRepository</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>612</x>
-      <y>504</y>
+      <x>552</x>
+      <y>492</y>
       <w>180</w>
       <h>180</h>
     </coordinates>
