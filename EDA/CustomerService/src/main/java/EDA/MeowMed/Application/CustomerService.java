@@ -47,12 +47,12 @@ public class CustomerService {
         }
     }
 
-    public Long addCustomer(Customer customer) {
+    public Map<String, Object> addCustomer(Customer customer) {
         //Customer customer = new Customer(newCustomer);
         this.customerRepository.save(customer);
         //this.addressRepository.save(customer.getAddress());
         eventSenderService.sendCustomerCreatedEvent(customer);
-        return customer.getId();
+        return filterCustomer(customer.toMap(), "id");
     }
 
     private Map<String, Object> filterCustomer(Map<String, Object> customer, String fields) {

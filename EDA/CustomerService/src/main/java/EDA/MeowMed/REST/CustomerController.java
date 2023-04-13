@@ -31,7 +31,7 @@ public class CustomerController {
     }
 
     @PostMapping("/customer")
-    public Long postCustomer(@RequestBody Customer customer) {
+    public Map<String, Object> postCustomer(@RequestBody Customer customer) {
         return customerService.addCustomer(customer);
     }
 }
