@@ -4,15 +4,11 @@ import EDA.MeowMed.Messaging.EventSenderService;
 import EDA.MeowMed.Persistence.AddressRepository;
 import EDA.MeowMed.Persistence.CustomerRepository;
 import EDA.MeowMed.Persistence.Entity.Customer;
-import EDA.MeowMed.REST.Objects.New_Customer;
-import EDA.MeowMed.REST.Objects.Simple_Customer;
-import EDA.MeowMed.REST.Objects.View_Customer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class CustomerService {
@@ -27,34 +23,71 @@ public class CustomerService {
         this.eventSenderService = eventSenderService;
     }
 
-    public View_Customer getCustomer(Long id) {
+    public Map<String, Object> getCustomer(Long id) {
         Optional<Customer> request = customerRepository.findById(id);
         if (request.isEmpty()) {
             return null;
         } else {
-            return new View_Customer(request.get());
+            String fields = "firstName,lastName,formOfAddress,title,maritalStatus,dateOfBirth,employmentStatus,address,phoneNumber,email,bankDetails";
+            return filterCustomer(request.get().toMap(), fields);
         }
     }
 
-    public List<Simple_Customer> getCustomerList() {
+    public List<Map<String, Object>> getCustomerList(String fields) {
         List<Customer> request = customerRepository.findAll();
         if (request.isEmpty()) {
             return null;
         } else {
-            List<Simple_Customer> customerList = new ArrayList<>();
-            for (var customer : request) {
-                customerList.add(new Simple_Customer(customer));
+            fields = "id," + fields;
+            List<Map<String, Object>> customerList = new ArrayList<>();
+            for (Customer customer : request) {
+                customerList.add(filterCustomer(customer.toMap(), fields));
             }
             return customerList;
         }
     }
 
-    public Long addCustomer(New_Customer newCustomer) {
-        Customer customer = new Customer(newCustomer);
+    public Long addCustomer(Customer customer) {
+        //Customer customer = new Customer(newCustomer);
         this.customerRepository.save(customer);
         //this.addressRepository.save(customer.getAddress());
         eventSenderService.sendCustomerCreatedEvent(customer);
         return customer.getId();
     }
 
+    private Map<String, Object> filterCustomer(Map<String, Object> customer, String fields) {
+        Map<String, Object> filtered = new LinkedHashMap<>();
+        List<String> fitlerList = Arrays.asList(fields.split(","));
+        for (String filter : fitlerList) {
+            if (!customer.containsKey(filter) && !filter.contains("address")) {
+                throw new IllegalArgumentException("\"" + filter + "\" is not a valid argument for customer!");
+            } else if (filter.contains("address") && !filtered.containsKey("address")) {
+                String addressFields = fitlerList.stream()
+                        .filter(s -> s.contains("address"))
+                        .collect(Collectors.joining(","));
+                filtered.put("address", filterAddress((Map<String, Object>) customer.get("address"), addressFields));
+            } else if (!filter.contains("address")) {
+                filtered.put(filter, customer.get(filter));
+            }
+        }
+        return filtered;
+    }
+
+    private Map<String, Object> filterAddress(Map<String, Object> address, String fields) {
+        List<String> fitlerList = Arrays.asList(fields.split(","));
+        if (fitlerList.contains("address")) { //If address.x returns the complete address object, this doesn't work
+            return address;
+        }
+
+        Map<String, Object> filtered = new LinkedHashMap<>();
+        for (String filter : fitlerList) {
+            filter = filter.replace("address.", "");
+            if (!address.containsKey(filter)) {
+                throw new IllegalArgumentException("\"" + filter + "\" is not a valid argument for address!");
+            } else {
+                filtered.put(filter, address.get(filter));
+            }
+        }
+        return filtered;
+    }
 }

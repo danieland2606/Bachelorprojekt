@@ -1,12 +1,11 @@
 package EDA.MeowMed.REST;
 
 import EDA.MeowMed.Application.CustomerService;
-import EDA.MeowMed.REST.Objects.New_Customer;
-import EDA.MeowMed.REST.Objects.Simple_Customer;
-import EDA.MeowMed.REST.Objects.View_Customer;
+import EDA.MeowMed.Persistence.Entity.Customer;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 
 @RestController
@@ -19,17 +18,20 @@ public class CustomerController {
     }
 
     @GetMapping("/customer")
-    public List<Simple_Customer> getCustomerList() {
-        return customerService.getCustomerList();
+    public List<Map<String, Object>> getCustomerList(@RequestParam(value = "fields", required = false) String fields) {
+        if (fields == null) {
+            fields = "";
+        }
+        return customerService.getCustomerList(fields);
     }
 
     @GetMapping("/customer/{c_id}")
-    public View_Customer getCustomer(@PathVariable Long c_id) {
+    public Map<String, Object> getCustomer(@PathVariable Long c_id) {
         return customerService.getCustomer(c_id);
     }
 
     @PostMapping("/customer")
-    public Long postCustomer(@RequestBody New_Customer customer) {
+    public Long postCustomer(@RequestBody Customer customer) {
         return customerService.addCustomer(customer);
     }
 }
