@@ -6,7 +6,7 @@ public class PriceCalculationEntity {
     
     private int postalCode;
     private int coverage;
-    private String Bengal;
+    private String race;
     private String color;
     private LocalDate age;
     private boolean castrated;
@@ -17,11 +17,11 @@ public class PriceCalculationEntity {
     public PriceCalculationEntity() {
     }
 
-    public PriceCalculationEntity(int postalCode, int coverage, String bengal, String color, LocalDate age,
+    public PriceCalculationEntity(int postalCode, int coverage, String race, String color, LocalDate age,
             boolean castrated, String personality, String environment, int weight) {
         this.postalCode = postalCode;
         this.coverage = coverage;
-        Bengal = bengal;
+        this.race = race;
         this.color = color;
         this.age = age;
         this.castrated = castrated;
@@ -46,12 +46,12 @@ public class PriceCalculationEntity {
         this.coverage = coverage;
     }
 
-    public String getBengal() {
-        return Bengal;
+    public String getRace() {
+        return race;
     }
 
-    public void setBengal(String bengal) {
-        Bengal = bengal;
+    public void setRace(String race) {
+        this.race = race;
     }
 
     public String getColor() {
@@ -108,7 +108,7 @@ public class PriceCalculationEntity {
         int result = 1;
         result = prime * result + postalCode;
         result = prime * result + coverage;
-        result = prime * result + ((Bengal == null) ? 0 : Bengal.hashCode());
+        result = prime * result + ((race == null) ? 0 : race.hashCode());
         result = prime * result + ((color == null) ? 0 : color.hashCode());
         result = prime * result + ((age == null) ? 0 : age.hashCode());
         result = prime * result + (castrated ? 1231 : 1237);
@@ -131,10 +131,10 @@ public class PriceCalculationEntity {
             return false;
         if (coverage != other.coverage)
             return false;
-        if (Bengal == null) {
-            if (other.Bengal != null)
+        if (race == null) {
+            if (other.race != null)
                 return false;
-        } else if (!Bengal.equals(other.Bengal))
+        } else if (!race.equals(other.race))
             return false;
         if (color == null) {
             if (other.color != null)

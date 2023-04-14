@@ -23,8 +23,10 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
+import com.meowmed.rdapolicy.database.CatRepository;
 import com.meowmed.rdapolicy.database.ObjectOfInsuranceRepository;
 import com.meowmed.rdapolicy.database.PolicyRepository;
+import com.meowmed.rdapolicy.entity.CatEntity;
 import com.meowmed.rdapolicy.entity.CustomerRequest;
 import com.meowmed.rdapolicy.entity.MailPolicyEntity;
 import com.meowmed.rdapolicy.entity.PolicyEntity;
@@ -51,11 +53,13 @@ public class PolicyService {
 
 	private final PolicyRepository pRepository;
 	private final ObjectOfInsuranceRepository oRepository;
+	private final CatRepository cRepository;
 
 	@Autowired
-	public PolicyService(PolicyRepository policyRepository, ObjectOfInsuranceRepository objectOfInsuranceRepository) {
+	public PolicyService(PolicyRepository policyRepository, ObjectOfInsuranceRepository objectOfInsuranceRepository, CatRepository catRepository) {
 		this.pRepository = policyRepository;
 		this.oRepository = objectOfInsuranceRepository;
+		this.cRepository = catRepository;
 	}
 
     /**
@@ -167,8 +171,13 @@ public class PolicyService {
 	 * @return Zurück kommt ein Wert als double für die monatlichen Kosten
 	 */
     public double getPolicyPrice(PriceCalculationEntity body){
+		CatEntity cat = cRepository.findByRace(body.getRace());
+		if (cat==null) return 0;
 		double grundpreis = 0;
 		double endbetrag = 0;
+		// Die Jahresdeckung dient als Startwert
+
+		// Ist die Katze Schwarz, ist die Versicherung Teurer
 		switch(body.getColor()){
 			case "schwarz":
 				grundpreis = 0.02*body.getCoverage();
@@ -176,17 +185,27 @@ public class PolicyService {
 			default:
 				grundpreis = 0.015*body.getCoverage();
 		}
+		//  Der aktuelle Preis startet als Grundpreis. Später wird der Preis um Prozentteile des Grundpreises erhöht
 		endbetrag = grundpreis;
-		endbetrag += Math.abs((body.getWeight()-4)*5);
-		//krankheitsberechnungsmagie
-		endbetrag += 0.1*grundpreis;
-		if(ChronoUnit.YEARS.between(body.getAge(), LocalDate.now())>4){
+		// Erhöhe die Kosten um 5€ für jedes Kilo abweichung vom Durchschnittsgewichtes der Rasse
+		endbetrag += Math.abs((cat.getUpperAverageWeight()-body.getWeight())*5);
+		// Erhöhe die Kosten um 1% des Grundpreises für jeden Punkt in der Krankheitsanfälligkeitsskala
+		endbetrag += grundpreis*(cat.getIllnessFactor()*0.01);
+		// Ist es eine Draußenkatze, steigere den Preis um 1% des Grundwertes
+		if(body.getEnvironment() == "draußen") endbetrag += 0.01*grundpreis;
+		// Falls die Katze im oberen Quantil des Durchschnittsalters oder älter ist, erhöhe den Preis um 20% des Grundpreises
+		// Ist die Katze Jung, erhöhe den Preis um 5€
+		if(ChronoUnit.YEARS.between(body.getAge(), LocalDate.now())>(cat.getUpperAverageAge()*0.75)){
 			endbetrag += 0.2*grundpreis;
 		} else if (ChronoUnit.YEARS.between(body.getAge(), LocalDate.now())<=2){
 			endbetrag+=5;
 		};
+		// Ist die Katze kastriert, erhöhe den Preis um 5€
 		if(body.isCastrated()) endbetrag+=5;
+		// Hat der Besitzer eine PLZ die mit 0 oder 1 startet, erhöhe den Preis um 5% des Grundpreises
 		if(body.getPostalCode()<20000) endbetrag+= 0.05*grundpreis;
+
+		// Auf 2 Nachkommastellen runden
 		endbetrag = ((int)(endbetrag*100))/100;
 		return endbetrag;
 	}
