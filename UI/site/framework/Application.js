@@ -39,7 +39,7 @@ export class Application {
   }
 
   #gotoHash(hash) {
-    if (hash) {
+    if (hash && !hash.endsWith('#')) {
       const { page, args } = decodeHash(hash);
       this.navigate(page, args);
     } else
