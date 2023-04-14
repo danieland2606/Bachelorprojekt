@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="15.0.0">
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>UMLHierarchy</id>
+    <coordinates>
+      <x>430</x>
+      <y>170</y>
+      <w>270</w>
+      <h>650</h>
+    </coordinates>
+    <panel_attributes>type=Package
+EDA
+	CustomerService
+		REST
+		Application
+		Persistence
+			Entity
+		Messaging
+			EventObjects
+	PolicyService
+		Logic
+		Messaging
+			EventObjects
+		Persistence
+			Datensätze
+			Entity
+		Rest
+	NotificationService
+		Application
+		Messaging
+			EventObjects</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>
