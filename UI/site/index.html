@@ -11,12 +11,15 @@
 </head>
 
 <body application="MyApp">
-
+  
   <template id="dashboard" page="start">
     <h1>Mitarbeiter Dashboard</h1>
     <div class="box-row">
-      <input type="text" placeholder="Suche.." hidden>
-      <button type="button" onclick="app.navigate('customer-new')">Neuer Kunde</button>
+      <div class="search-container">
+        <input type="text" placeholder="Suche..">
+        <img src="assets/search.svg" alt="lupe">
+      </div>
+      <button type="button" id="newCustomer" onclick="app.navigate('customer-new')">Neuer Kunde</button>
     </div>
     <table>
       <thead>

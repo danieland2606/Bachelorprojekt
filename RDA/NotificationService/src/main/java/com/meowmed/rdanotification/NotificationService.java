@@ -68,7 +68,7 @@ public class NotificationService {
             context.setVariables(properties);
             String html = templateEngine.process("customernotification.html", context);
             mimeMessageHelper.setText(html, true);
-            mimeMessageHelper.addInline("myLogo", new File("/app/images/logo.png"));
+            //mimeMessageHelper.addInline("myLogo", new File("/images/logo.png"));
 
             /*
             FileSystemResource file
