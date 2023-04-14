@@ -52,7 +52,7 @@ export class Page {
         const template = node.querySelector('template').content.firstElementChild;
         const property = node.getAttribute('data-array');
         const values = data[property];
-        const nodes = values.map(val => Page.#renderRow(val, template));
+        const nodes = values?.map(val => Page.#renderRow(val, template));
         node.append(...nodes);
     }
 

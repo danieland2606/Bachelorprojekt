@@ -25,7 +25,7 @@ export function toCamelCase(string) {
 
 export function encodeCalcObject(obj) {
   let base64 = btoa(JSON.stringify(obj));
-  return base64;
+  return base64.replaceAll('+', '-').replaceAll('/', '_').replaceAll('=', '');
 }
 
 export function encodeArgs(args) {
