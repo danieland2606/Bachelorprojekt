@@ -10,7 +10,7 @@ services:
     environment:
       - spring.rabbitmq.host=rabbitmq
       - spring.datasource.url=jdbc:mariadb://customerdb:3306/Customer
-      - spring.datasource.username=root
+      - spring.datasource.username=user
       - spring.datasource.password=test
       - spring.datasource.driver-class-name=org.mariadb.jdbc.Driver
       - spring.jpa.database-platform=org.hibernate.dialect.MariaDBDialect
@@ -44,6 +44,8 @@ services:
       - policydb
     networks:
       - "default"
+    ports:
+      - "82:8080"
     environment:
       - RABBIT_HOST=rabbitmq
       - spring.datasource.url=jdbc:mariadb://policydb:3306/Policy
