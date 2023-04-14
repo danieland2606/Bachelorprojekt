@@ -4,7 +4,7 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>250</x>
+      <x>90</x>
       <y>390</y>
       <w>370</w>
       <h>100</h>
@@ -21,7 +21,7 @@ JPARepository&lt;T, ID&gt;
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>660</x>
+      <x>500</x>
       <y>490</y>
       <w>260</w>
       <h>40</h>
@@ -34,7 +34,7 @@ CustomerRepository&lt;Customer, Long&gt;
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>960</x>
+      <x>800</x>
       <y>490</y>
       <w>240</w>
       <h>40</h>
@@ -46,7 +46,7 @@ AddressRepository&lt;Address, Long&gt;</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>610</x>
+      <x>450</x>
       <y>430</y>
       <w>490</w>
       <h>80</h>
@@ -57,7 +57,7 @@ AddressRepository&lt;Address, Long&gt;</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>780</x>
+      <x>620</x>
       <y>430</y>
       <w>30</w>
       <h>80</h>
@@ -68,7 +68,7 @@ AddressRepository&lt;Address, Long&gt;</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>880</x>
+      <x>720</x>
       <y>350</y>
       <w>30</w>
       <h>160</h>
@@ -80,7 +80,7 @@ fg=gray</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>980</x>
+      <x>820</x>
       <y>350</y>
       <w>30</w>
       <h>160</h>
@@ -92,7 +92,7 @@ fg=gray</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>870</x>
+      <x>710</x>
       <y>330</y>
       <w>140</w>
       <h>30</h>
