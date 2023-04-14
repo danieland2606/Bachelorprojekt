@@ -27,7 +27,6 @@ Returns customer list with each customer containing id and requested fields. Thi
     }
   }
 ]
-
 ```
 
 ### GET /customer/{c_id}
