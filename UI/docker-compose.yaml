@@ -3,7 +3,7 @@ services:
   ui:
     build:
       args:
-        testing: true
+        mode: test
       context: .
       dockerfile: Dockerfile
     container_name: ui-services
