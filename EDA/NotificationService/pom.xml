@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>EDA</groupId>
-	<artifactId>MeowMed</artifactId>
+	<artifactId>NotificatonService</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>EDANotificationService</name>
 	<description>Demo project for MeowMed</description>

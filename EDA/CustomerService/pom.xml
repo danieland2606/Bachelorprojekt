@@ -10,7 +10,7 @@
 	</parent>
 
 	<groupId>EDA</groupId>
-	<artifactId>MeowMed</artifactId>
+	<artifactId>CustomerService</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>EDACustomerService</name>
 	<description>Demo project for MeowMed</description>
