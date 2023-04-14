@@ -7,6 +7,7 @@ import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring5.SpringTemplateEngine;
 
+import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
@@ -66,6 +68,8 @@ public class NotificationService {
             context.setVariables(properties);
             String html = templateEngine.process("customernotification.html", context);
             mimeMessageHelper.setText(html, true);
+            mimeMessageHelper.addInline("myLogo", new File("/app/images/logo.png"));
+
             /*
             FileSystemResource file
                     = new FileSystemResource(

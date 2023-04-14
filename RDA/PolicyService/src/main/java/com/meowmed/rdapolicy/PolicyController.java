@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -147,8 +148,8 @@ public class PolicyController {
 		}
 	 */
 	@GetMapping("/policyprice")
-	public Map<String,Double> getPolicyPrice(@RequestBody PriceCalculationEntity body){
-		return pService.getPolicyPriceRequest(body);
+	public ResponseEntity<String> getPolicyPrice(@RequestParam(value = "details") String details){
+		return pService.getPolicyPriceRequest(details);
 	}
 
 
