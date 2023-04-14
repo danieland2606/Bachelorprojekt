@@ -2,13 +2,16 @@ package com.meowmed.rdapolicy.entity;
 
 import java.time.LocalDate;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 public class PriceCalculationEntity {
     
     private int postalCode;
     private int coverage;
     private String race;
     private String color;
-    private LocalDate age;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    private LocalDate dateOfBirth;
     private boolean castrated;
     private String personality;
     private String environment;
@@ -17,13 +20,13 @@ public class PriceCalculationEntity {
     public PriceCalculationEntity() {
     }
 
-    public PriceCalculationEntity(int postalCode, int coverage, String race, String color, LocalDate age,
+    public PriceCalculationEntity(int postalCode, int coverage, String race, String color, LocalDate dateOfBirth,
             boolean castrated, String personality, String environment, int weight) {
         this.postalCode = postalCode;
         this.coverage = coverage;
         this.race = race;
         this.color = color;
-        this.age = age;
+        this.dateOfBirth = dateOfBirth;
         this.castrated = castrated;
         this.personality = personality;
         this.environment = environment;
@@ -62,12 +65,12 @@ public class PriceCalculationEntity {
         this.color = color;
     }
 
-    public LocalDate getAge() {
-        return age;
+    public LocalDate getDateOfBirth() {
+        return dateOfBirth;
     }
 
-    public void setAge(LocalDate age) {
-        this.age = age;
+    public void setDateOfBirth(LocalDate dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
     }
 
     public boolean isCastrated() {
@@ -110,7 +113,7 @@ public class PriceCalculationEntity {
         result = prime * result + coverage;
         result = prime * result + ((race == null) ? 0 : race.hashCode());
         result = prime * result + ((color == null) ? 0 : color.hashCode());
-        result = prime * result + ((age == null) ? 0 : age.hashCode());
+        result = prime * result + ((dateOfBirth == null) ? 0 : dateOfBirth.hashCode());
         result = prime * result + (castrated ? 1231 : 1237);
         result = prime * result + ((personality == null) ? 0 : personality.hashCode());
         result = prime * result + ((environment == null) ? 0 : environment.hashCode());
@@ -141,10 +144,10 @@ public class PriceCalculationEntity {
                 return false;
         } else if (!color.equals(other.color))
             return false;
-        if (age == null) {
-            if (other.age != null)
+        if (dateOfBirth == null) {
+            if (other.dateOfBirth != null)
                 return false;
-        } else if (!age.equals(other.age))
+        } else if (!dateOfBirth.equals(other.dateOfBirth))
             return false;
         if (castrated != other.castrated)
             return false;
@@ -162,4 +165,12 @@ public class PriceCalculationEntity {
             return false;
         return true;
     }
+
+    @Override
+    public String toString() {
+        return "PriceCalculationEntity [postalCode=" + postalCode + ", coverage=" + coverage + ", race=" + race
+                + ", color=" + color + ", dateOfBirth=" + dateOfBirth + ", castrated=" + castrated + ", personality="
+                + personality + ", environment=" + environment + ", weight=" + weight + "]";
+    }
+    
 }

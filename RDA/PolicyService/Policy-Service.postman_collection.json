@@ -85,29 +85,23 @@
 		},
 		{
 			"name": "postPolicyPrice",
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
 			"request": {
 				"method": "GET",
 				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n  \"postalCode\": \"10855\",\r\n  \"coverage\": 50000,\r\n  \"race\": \"Bengal\",\r\n  \"color\": \"Braun\",\r\n  \"age\": 8,\r\n  \"castrated\": true,\r\n  \"personality\": \"anhänglich\",\r\n  \"environment\": \"drinnen\",\r\n  \"weight\": 4\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
 				"url": {
-					"raw": "localhost:81/policyprice",
+					"raw": "localhost:81/policyprice?details=eyJwb3N0YWxDb2RlIjozMTEzNywiY292ZXJhZ2UiOiIxMDAwMCIsInJhY2UiOiJhYnlzc2luaWFuIiwiY29sb3IiOiJyb3QiLCJkYXRlT2ZCaXJ0aCI6IjIwMjMtMDQtMDUiLCJjYXN0cmF0ZWQiOiIiLCJwZXJzb25hbGl0eSI6ImFuaGFlbmdsaWNoIiwiZW52aXJvbm1lbnQiOiJoYXVza2F0emUiLCJ3ZWlnaHQiOiI5In0",
 					"host": [
 						"localhost"
 					],
 					"port": "81",
 					"path": [
 						"policyprice"
+					],
+					"query": [
+						{
+							"key": "details",
+							"value": "eyJwb3N0YWxDb2RlIjozMTEzNywiY292ZXJhZ2UiOiIxMDAwMCIsInJhY2UiOiJhYnlzc2luaWFuIiwiY29sb3IiOiJyb3QiLCJkYXRlT2ZCaXJ0aCI6IjIwMjMtMDQtMDUiLCJjYXN0cmF0ZWQiOiIiLCJwZXJzb25hbGl0eSI6ImFuaGFlbmdsaWNoIiwiZW52aXJvbm1lbnQiOiJoYXVza2F0emUiLCJ3ZWlnaHQiOiI5In0"
+						}
 					]
 				}
 			},

@@ -55,15 +55,15 @@ public class PolicyApplication {
 			policyRepository.save(policy1);
 			policyRepository.save(policy2);
 			ArrayList<CatEntity> entities = new ArrayList<>();
-			entities.add(new CatEntity("Siamese", 12, 15, 4, 7, 2, new String[]{"Seal","Blau","Lilac","Creme"})) ;
-			entities.add(new CatEntity("Perser", 12, 16, 4, 7, 3, new String[]{"Weiß", "Schildpatt","Schwarz"}));
-			entities.add(new CatEntity("Bengal", 12, 16, 4, 6, 4, new String[]{"Braun", "Schildpatt","Marmor"}));
-			entities.add(new CatEntity("Maine Cone", 12, 15, 5, 10, 2, new String[]{"Grau","Braun","Weiß"}));
-			entities.add(new CatEntity("Sphynx", 12, 15, 4, 6, 5, new String[]{}));
-			entities.add(new CatEntity("Scottish Fold", 12, 15, 4, 6, 6, new String[]{}));
-			entities.add(new CatEntity("British Shorthair", 12, 15, 4, 6, 0, new String[]{}));
-			entities.add(new CatEntity("Abyssinian", 12, 15, 3, 5, 4, new String[]{"Rot", "Schildpatt", "Zimt"}));
-			entities.add(new CatEntity("Ragdoll", 12, 15, 4, 7, 3, new String[]{"Blau", "Seal", "Lilac", "Schildpatt"}));
+			entities.add(new CatEntity("siamese", 12, 15, 4, 7, 2, new String[]{"seal","blau","lilac","creme"})) ;
+			entities.add(new CatEntity("perser", 12, 16, 4, 7, 3, new String[]{"weiß", "schildpatt","schwarz"}));
+			entities.add(new CatEntity("bengal", 12, 16, 4, 6, 4, new String[]{"braun", "schildpatt","marmor"}));
+			entities.add(new CatEntity("maine-cone", 12, 15, 5, 10, 2, new String[]{"grau","braun","weiß"}));
+			entities.add(new CatEntity("sphynx", 12, 15, 4, 6, 5, new String[]{}));
+			entities.add(new CatEntity("scottish Fold", 12, 15, 4, 6, 6, new String[]{}));
+			entities.add(new CatEntity("british-shorthair", 12, 15, 4, 6, 0, new String[]{}));
+			entities.add(new CatEntity("abyssinian", 12, 15, 3, 5, 4, new String[]{"rot", "schildpatt", "zimt"}));
+			entities.add(new CatEntity("ragdoll", 12, 15, 4, 7, 3, new String[]{"blau", "seal", "lilac", "schildpatt"}));
 			catRepository.saveAll(entities);
 		};
 	}
