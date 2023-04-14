@@ -17,15 +17,15 @@ public class EventReceiver {
     private NotificationService notificationService;
 
     @RabbitListener(queues = "#{autoDeleteQueue1.name}")
-    public void receiveCustomer(CustomerCreatedEvent in) throws InterruptedException {
+    public void receiveCustomer(CustomerCreatedEvent customerCreatedEvent) throws InterruptedException {
         System.out.println("Empfangen!");
-        notificationService.sendCustomerCreatedMail(in);
+        notificationService.sendCustomerCreatedMail(customerCreatedEvent);
     }
 
     @RabbitListener(queues = "#{autoDeleteQueue2.name}")
-    public void receivePolicy(PolicyCreatedEvent in) throws InterruptedException {
+    public void receivePolicy(PolicyCreatedEvent policyCreatedEvent) throws InterruptedException {
         System.out.println("Empfangen!");
-        notificationService.sendPolicyCreatedMail(in);
+        notificationService.sendPolicyCreatedMail(policyCreatedEvent);
     }
 
     public void receive(String in, int receiver) throws InterruptedException {

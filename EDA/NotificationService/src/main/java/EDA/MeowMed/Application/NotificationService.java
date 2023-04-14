@@ -35,6 +35,7 @@ public class NotificationService {
      * to send the HTML message using the Email object.
      * If any exception occurs during the email sending process, it will be caught and printed
      * to the standard error stream.
+     *
      * @param customerCreated the CustomerCreatedEvent containing all valuable data concerning the CustomerCreatedMail
      */
     public void sendCustomerCreatedMail(CustomerCreatedEvent customerCreated) {
@@ -44,11 +45,11 @@ public class NotificationService {
         email.setSubject(subjectCustomer);
         email.setTemplate(templateCustomer);
         Map<String, Object> properties = new HashMap<>();
-        properties.put("formOfAddress",customerCreated.getFormOfAddress());
-        properties.put("firstName",customerCreated.getFirstName());
-        properties.put("lastName",customerCreated.getLastName());
+        properties.put("formOfAddress", customerCreated.getFormOfAddress());
+        properties.put("firstName", customerCreated.getFirstName());
+        properties.put("lastName", customerCreated.getLastName());
         properties.put("cid", customerCreated.getId());
-        properties.put("maritalStatus",  customerCreated.getMaritalStatus());
+        properties.put("maritalStatus", customerCreated.getMaritalStatus());
         properties.put("dateOfBirth", customerCreated.getDateOfBirth());
         properties.put("employmentStatus", customerCreated.getEmploymentStatus());
         properties.put("phoneNumber", customerCreated.getPhoneNumber());
@@ -58,7 +59,7 @@ public class NotificationService {
 
         try {
             emailSenderService.sendHtmlMessage(email);
-        } catch (MessagingException e){
+        } catch (MessagingException e) {
             e.printStackTrace();
         }
     }
@@ -74,6 +75,7 @@ public class NotificationService {
      * to send the HTML message using the Email object.
      * If any exception occurs during the email sending process, it will be caught and printed
      * to the standard error stream.
+     *
      * @param policyCreated the PolicyCreatedEvent containing all valuable data concerning the PolicyCreatedMail
      */
     public void sendPolicyCreatedMail(PolicyCreatedEvent policyCreated) {
@@ -83,12 +85,12 @@ public class NotificationService {
         email.setSubject(subjectPolicy);
         email.setTemplate(templatePolicy);
         Map<String, Object> properties = new HashMap<>();
-        properties.put("formOfAddress",policyCreated.getCustomer().getFormOfAddress());
-        properties.put("firstName",policyCreated.getCustomer().getFirstName());
-        properties.put("lastName",policyCreated.getCustomer().getLastName());
+        properties.put("formOfAddress", policyCreated.getCustomer().getFormOfAddress());
+        properties.put("firstName", policyCreated.getCustomer().getFirstName());
+        properties.put("lastName", policyCreated.getCustomer().getLastName());
         properties.put("pid", policyCreated.getId());
         properties.put("startDate", policyCreated.getStartDate());
-        properties.put("endDate",policyCreated.getEndDate());
+        properties.put("endDate", policyCreated.getEndDate());
         properties.put("coverage", policyCreated.getCoverage());
         properties.put("castrated", policyCreated.getObjectOfInsurance().isCastrated());
         properties.put("personality", policyCreated.getObjectOfInsurance().getPersonality());
@@ -98,7 +100,7 @@ public class NotificationService {
 
         try {
             emailSenderService.sendHtmlMessage(email);
-        } catch (MessagingException e){
+        } catch (MessagingException e) {
             e.printStackTrace();
         }
     }

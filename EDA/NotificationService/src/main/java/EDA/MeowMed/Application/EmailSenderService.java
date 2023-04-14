@@ -21,7 +21,7 @@ public class EmailSenderService {
     @Autowired
     private final SpringTemplateEngine templateEngine;
 
-    public void sendHtmlMessage (Email email) throws MessagingException {
+    public void sendHtmlMessage(Email email) throws MessagingException {
         MimeMessage mimeMessage = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(mimeMessage,
                 MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED, StandardCharsets.UTF_8.name());

@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="15.0.0">
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>490</x>
+      <y>550</y>
+      <w>180</w>
+      <h>230</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Event&gt;&gt;
+CustomerCreatedEvent
+--
+- id: Long
+- firstName: String
+- lastName: String
+- formOfAddress: String
+- title: String
+- maritalStatus: String
+- dateOfBirth: LocalDate
+- employmentStatus: String
+- phoneNumber: String
+- email: String
+- bankDetails: String</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>490</x>
+      <y>210</y>
+      <w>160</w>
+      <h>130</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Event&gt;&gt;
+PolicyCreatedEvent
+--
+- id: long
+- startDate: LocalDate
+- endDate: LocalDate
+- coverage: int
+- premium: double</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>780</x>
+      <y>300</y>
+      <w>180</w>
+      <h>210</h>
+    </coordinates>
+    <panel_attributes>CustomerPoJo
+--
+- id: Long
+- firstName: String
+- lastName: String
+- formOfAddress: String
+- title: String
+- maritalStatus: String
+- dateOfBirth: LocalDate
+- employmentStatus: String
+- phoneNumber: String
+- email: String
+- bankDetails: String</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1020</x>
+      <y>220</y>
+      <w>180</w>
+      <h>160</h>
+    </coordinates>
+    <panel_attributes>ObjectOfInsurancePoJo
+--
+- name: String
+- race: String
+- color: String
+- dateOfBirth: LocalDate
+- castrated: boolean
+- personality: String
+- environment: String
+- weight: double</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>640</x>
+      <y>210</y>
+      <w>400</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;
+r2=1
+m2=objectOfInsurancePojo</panel_attributes>
+    <additional_attributes>10.0;20.0;380.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>640</x>
+      <y>290</y>
+      <w>160</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;
+r2=1
+m2=customer</panel_attributes>
+    <additional_attributes>10.0;20.0;140.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>800</x>
+      <y>690</y>
+      <w>140</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>NoId_Address
+--
+- city: String
+- street: String
+- postalCode: String</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>660</x>
+      <y>710</y>
+      <w>160</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;
+r2=1
+m2=address</panel_attributes>
+    <additional_attributes>10.0;20.0;140.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>860</x>
+      <y>500</y>
+      <w>80</w>
+      <h>210</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;
+r2=1
+m2=address</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;190.0</additional_attributes>
+  </element>
+</diagram>

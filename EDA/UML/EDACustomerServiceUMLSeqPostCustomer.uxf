@@ -32,7 +32,7 @@
       <h>40</h>
     </coordinates>
     <panel_attributes>lt=-&gt;&gt;&gt;
-postCustomer(newCustomer)</panel_attributes>
+postCustomer(customer)</panel_attributes>
     <additional_attributes>10.0;20.0;240.0;20.0</additional_attributes>
   </element>
   <element>
@@ -110,7 +110,7 @@ postCustomer(newCustomer)</panel_attributes>
       <h>40</h>
     </coordinates>
     <panel_attributes>lt=-&gt;&gt;&gt;
-addCustomer(newCustomer)</panel_attributes>
+addCustomer(customer)</panel_attributes>
     <additional_attributes>10.0;20.0;240.0;20.0</additional_attributes>
   </element>
   <element>
@@ -287,12 +287,12 @@ id</panel_attributes>
     <coordinates>
       <x>1070</x>
       <y>470</y>
-      <w>210</w>
+      <w>240</w>
       <h>40</h>
     </coordinates>
     <panel_attributes>lt=&lt;-
-CustomerCreatedEvent</panel_attributes>
-    <additional_attributes>190.0;20.0;10.0;20.0</additional_attributes>
+r1=CustomerCreatedEvent</panel_attributes>
+    <additional_attributes>220.0;20.0;10.0;20.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
@@ -308,7 +308,7 @@ CustomerCreatedEvent</panel_attributes>
   <element>
     <id>UMLActor</id>
     <coordinates>
-      <x>1250</x>
+      <x>1280</x>
       <y>450</y>
       <w>80</w>
       <h>120</h>

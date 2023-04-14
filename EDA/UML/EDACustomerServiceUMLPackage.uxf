@@ -6,7 +6,7 @@
     <coordinates>
       <x>200</x>
       <y>330</y>
-      <w>680</w>
+      <w>660</w>
       <h>380</h>
     </coordinates>
     <panel_attributes>CustomerService</panel_attributes>
@@ -134,7 +134,7 @@ Controller
   <element>
     <id>UMLPackage</id>
     <coordinates>
-      <x>550</x>
+      <x>540</x>
       <y>370</y>
       <w>300</w>
       <h>210</h>
@@ -145,7 +145,7 @@ Controller
   <element>
     <id>UMLPackage</id>
     <coordinates>
-      <x>570</x>
+      <x>560</x>
       <y>410</y>
       <w>140</w>
       <h>150</h>
@@ -156,7 +156,7 @@ Controller
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>590</x>
+      <x>580</x>
       <y>450</y>
       <w>100</w>
       <h>40</h>
@@ -169,7 +169,7 @@ CreatedEvent
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>590</x>
+      <x>580</x>
       <y>510</y>
       <w>100</w>
       <h>30</h>
@@ -180,7 +180,7 @@ CreatedEvent
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>730</x>
+      <x>720</x>
       <y>440</y>
       <w>100</w>
       <h>40</h>
@@ -192,7 +192,7 @@ Service</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>730</x>
+      <x>720</x>
       <y>510</y>
       <w>100</w>
       <h>40</h>
@@ -204,7 +204,7 @@ Config</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>660</x>
+      <x>650</x>
       <y>620</y>
       <w>100</w>
       <h>40</h>
