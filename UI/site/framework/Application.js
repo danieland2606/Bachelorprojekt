@@ -1,4 +1,4 @@
-import { documentReady, getId, toCamelCase } from "./util.js";
+import { documentReady, getId, toCamelCase, encodeArgs, decodeHash } from "./util.js";
 import { Page } from "./Page.js";
 
 export class Application {
@@ -29,7 +29,7 @@ export class Application {
     } catch (_) { }
     const state = { 'page': page, 'data': data };
     const url = new URL(location);
-    url.hash = (opt !== undefined) ? `${page}?${opt}` : page;
+    url.hash = (page + encodeArgs(opt));
     window.history.pushState(state, '', url);
     this.#display(state);
   }
@@ -40,8 +40,8 @@ export class Application {
 
   #gotoHash(hash) {
     if (hash) {
-      const args = hash.slice(1).split('?');
-      this.navigate(args[0], args[1]);
+      const { page, args } = decodeHash(hash);
+      this.navigate(page, args);
     } else
       this.navigate(this.#start);
   }

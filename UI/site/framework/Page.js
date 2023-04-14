@@ -20,6 +20,12 @@ export class Page {
 
     static #bindData(node, data) {
         const binding = node.getAttribute('data-bind').split('\.');
+        if(node.parentNode?.nodeName?.toLowerCase() === 'label') {
+            const parent = node.parentNode;
+            node.setAttribute('id', binding);
+            parent.setAttribute('for', binding);
+            parent.parentNode.append(node);
+        }
         let observable = this.#getProperty(binding, data);
         if(!observable || !('bind' in observable))
             observable = new Observable('');

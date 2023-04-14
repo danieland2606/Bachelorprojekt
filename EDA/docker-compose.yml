@@ -11,7 +11,7 @@ services:
       - spring.rabbitmq.host=rabbitmq
       - spring.datasource.url=jdbc:mariadb://customerdb:3306/Customer
       - spring.datasource.username=user
-      - spring.datasource.password=test
+      - spring.datasource.password=test12345
       - spring.datasource.driver-class-name=org.mariadb.jdbc.Driver
       - spring.jpa.database-platform=org.hibernate.dialect.MariaDBDialect
     ports:
@@ -26,6 +26,8 @@ services:
     environment:
       - MARIADB_ROOT_PASSWORD=test
       - MYSQL_DATABASE=Customer
+      - MYSQL_USER=user
+      - MYSQL_PASSWORD=test12345
   notification:
     build:
       context: ./NotificationService
