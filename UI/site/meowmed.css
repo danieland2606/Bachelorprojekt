@@ -1,53 +1,102 @@
-thead,
-tfoot {
-  background-color: #3f87a6;
-  color: #fff;
+.box-column {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  max-height: 50vh;
+  max-width: fit-content;
 }
 
-tbody {
-  background-color: #e4f0f5;
+.box-row {
+  display: flex;
+  flex-direction: row;
 }
 
-caption {
-  padding: 10px;
-  caption-side: bottom;
+.box-table-buttons {
+  margin: 0 1em;
+  position: relative;
+  display: flex;
+  height: min-content;
+  width: 100%;
+}
+
+.box-table-buttons:last-child {
+  position: absolute;
+  right: 5px;
+  background-color: red;
+}
+
+.cell {
+  display: flex;
+  flex-direction: row;
+  margin: .2em 1em;
+}
+
+.cell>* {
+  display: flex;
+  padding: .5em .5em .5em 1em;
+  flex: 2 0 auto;
+}
+
+.label,
+label,
+dt {
+  max-width: 8em;
+  min-width: 8em;
+  text-overflow: ellipsis;
+  border: 2px solid black;
+  background-color: #a88b6c;
+  flex: 1;
 }
 
 table {
-  border-collapse: collapse;
-  border: 2px solid rgb(200, 200, 200);
-  letter-spacing: 1px;
-  font-family: sans-serif;
-  font-size: 0.8rem;
+  width: calc(100% - 2em);
+  margin: 1em;
+  flex: 1 0 auto;
+  border-spacing: 0;
+}
+
+th {
+  text-align: start;
+  border-top: 2px solid black;
+  border-bottom: 2px solid black;
+}
+
+h1,
+h2,
+h3 {
+  padding: .5em;
 }
 
 td,
 th {
-  border: 1px solid rgb(190, 190, 190);
-  padding: 5px 10px;
+  padding: .5em;
 }
 
-td {
-  text-align: center;
+tr:nth-child(even) {
+  background-color: #dfd9d3;
 }
 
-dl {
-    display: flex;
-    flex-flow: row wrap;
-    border: solid #333;
-    border-width: 1px 1px 0 0;
-  }
-  dt {
-    flex-basis: 20%;
-    padding: 2px 4px;
-    background: #333;
-    text-align: right;
-    color: #fff;
-  }
-  dd {
-    flex-basis: 70%;
-    flex-grow: 1;
-    margin: 0;
-    padding: 2px 4px;
-    border-bottom: 1px solid #333;
-  }
+tr:last-child>td {
+  border-bottom: 2px solid black;
+}
+
+button,
+input[type=button] {
+  font-size: 12pt;
+  padding: .5em;
+  background-color: #a88b6c;
+  border: 2px solid black;
+  max-width: fit-content;
+  max-height: fit-content;
+}
+
+.cell>select,
+.cell>input {
+  border: 2px solid black;
+  border-left: none;
+  background-color: white;
+}
+
+.dynamic {
+  background-color: #272936;
+}

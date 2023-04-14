@@ -1,79 +1,41 @@
 import { encodeCalcObject } from "./framework/util.js";
 
-const customerAddress = 'http://localhost:82';
-const policyAddress = 'http://localhost:81';
-
-function customerPath(id) {
-  let base = `${customerAddress}/customer`;
-  if(id)
-    base += `/${id}`;
-  return base;
-}
-
-function policyPath(customerId, id) {
-  let base = `${policyAddress}/customer/${customerId}/policy`;
-  if(id)
-    base += `/${id}`;
-  return base;
-}
-
 export async function getCustomerList(args) {
-  return get(customerPath(), args);
+  const body = await fetchLocal('customers.json');
+  return body.customerList;
 }
 
 export async function getCustomer(id) {
-  return get(customerPath(id));
+  const body = await fetchLocal('customer.json');
+  return body;
 }
 
 export async function getPolicyList(customerId, args) {
-  return get(policyPath(customerId), args);
+  const body = await fetchLocal('policies.json');
+  return body.policyList;
 }
 
 export async function getPolicy(customerId, id) {
-  return get(policyPath(customerId, id));
+  const body = await fetchLocal('policy.json');
+  return body;
 }
 
 export async function postCustomer(customer) {
-  return post(customerPath(), customer);
+  console.log(JSON.stringify(customer));
 }
 
 export async function postPolicy(customerId, policy) {
-  return post(policyPath(customerId), policy);
+  console.log(JSON.stringify(policy));
 }
+
+let counter = 0;
 
 export async function getPremium(calcObject) {
-  const args = { details: encodeCalcObject(calcObject) };
-  return get(`${policyAddress}/policyprice`, args);
+  console.log(encodeCalcObject(calcObject));
+  return ++counter;
 }
 
-async function post(address, payload) {
-  const request = {
-    method: 'POST',
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(payload)
-  }
-  const response = await fetch(address, request);
-  return response.json();
-}
-
-async function get(address, args) {
-  const url = address + encodeArgs(args);
-  const response = await fetch(url);
-  const json = await response.json();
-  return json;
-}
-
-function encodeArgs(args) {
-  let urlParams = '?';
-  if(typeof args === 'object')
-    for(const [ name, arg ] of Object.entries(args)) {
-      urlParams += `${name}=`;
-      if(Array.isArray(arg)) {
-        urlParams += arg.join(',');
-      } else {
-        urlParams += arg;
-      }
-      urlParams += '&';
-    }
-  return urlParams.slice(0, -1);
+async function fetchLocal(path) {
+  const response = await fetch('test_data/' + path);
+  return await response.json();
 }

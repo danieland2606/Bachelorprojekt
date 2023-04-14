@@ -26,7 +26,7 @@ class PremiumFetcher extends Observable {
 }
 
 export class MyApp extends Application {
-  async fetchCustomerDetails(id) {
+  async fetchCustomerDetails({id}) {
     const data = {};
     data.customer = await getCustomer(id);
     data.customer.id = id;
@@ -40,17 +40,17 @@ export class MyApp extends Application {
     return data;
   }
 
-  async fetchPolicyNew() {
+  async fetchPolicyNew({id, postalCode}) {
     const data = {};
-    data.customerId = this.data.customer.id;
-    data.postalCode = this.data.customer.address.postalCode;
+    data.customerId = id;
+    data.postalCode = postalCode;
     data.premium = new PremiumFetcher();
     return data;
   }
 
   createPolicy(customerId, policy) {
     postPolicy(customerId, policy);
-    this.navigate('customer-details', customerId);
+    this.navigate('customer-details', { id: customerId });
   }
 
   createCustomer(customer) {
