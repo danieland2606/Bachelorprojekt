@@ -59,9 +59,10 @@ export function decodeArgs(argString) {
 }
 
 export function decodeHash(hash) {
-  const pageStart = hash.indexOf('#');
-  const argsStart = hash.indexOf('?');
-  const page = hash.substring(pageStart + 1, argsStart);
-  const argString = argsStart >= 0 ? hash.substring(argsStart + 1, hash.length) : ''; 
-  return { page: page, args: decodeArgs(argString) };
+  if(!hash.includes('?')) 
+    return { page: hash.slice(1) };
+  const argStart = hash.indexOf('?');
+  const pageString = hash.slice(1, argStart);
+  const argString = hash.slice(argStart + 1);
+  return { page: pageString, args: decodeArgs(argString) };
 }

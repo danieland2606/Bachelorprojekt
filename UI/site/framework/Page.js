@@ -53,7 +53,7 @@ export class Page {
         const property = node.getAttribute('data-array');
         const values = data[property];
         const nodes = values?.map(val => Page.#renderRow(val, template));
-        node.append(...nodes);
+        node.append(...(nodes ?? []));
     }
 
     static #renderRow(data, template) {

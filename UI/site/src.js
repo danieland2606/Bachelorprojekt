@@ -59,4 +59,7 @@ export class MyApp extends Application {
   }
 }
 
+//const test = ['load', 'unload', 'beforeunload', 'popstate', 'hashchange'];
+//test.forEach(t => window.addEventListener(t, _ => console.log(t)));
+
 window.app = new MyApp();

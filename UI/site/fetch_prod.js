@@ -59,7 +59,11 @@ async function post(address, payload) {
 
 async function get(address, args) {
   const url = address + encodeArgs(args);
+  const request = {
+    method: 'GET',
+    mode: 'no-cors'
+  }
   const response = await fetch(url);
-  const json = await response.json();
+  const json = await response?.json() ?? Promise.resolve(undefined);
   return json;
 }
