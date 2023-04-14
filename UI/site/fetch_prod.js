@@ -43,7 +43,8 @@ export async function postPolicy(customerId, policy) {
 
 export async function getPremium(calcObject) {
   const args = { details: encodeCalcObject(calcObject) };
-  return get(`${policyAddress}/policyprice`, args);
+  const { premium } = await get(`${policyAddress}/policyprice`, args);
+  return premium;
 }
 
 async function post(address, payload) {

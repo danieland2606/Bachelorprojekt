@@ -5,30 +5,29 @@ Returns customer list with each customer containing id and requested fields. Thi
 
 #### Response body:
 ```json
-{
-  "customerList": [
-    {
-      "id": 0,
-      "firstName": "John",
-      "lastName": "Doe",
-      "address": {
-        "city": "Hannover",
-        "street": "Berliner Allee 100",
-        "postalCode": "30855"
-      }
-    },
-    {
-      "id": 1,
-      "firstName": "Jane",
-      "lastName": "Eyre",
-      "address": {
-        "city": "Hannover",
-        "street": "Berliner Allee 101",
-        "postalCode": "30855"
-      }
+[
+  {
+    "id": 0,
+    "firstName": "John",
+    "lastName": "Doe",
+    "address": {
+      "city": "Hannover",
+      "street": "Berliner Allee 100",
+      "postalCode": "30855"
     }
-  ]
-}
+  },
+  {
+    "id": 1,
+    "firstName": "Jane",
+    "lastName": "Eyre",
+    "address": {
+      "city": "Hannover",
+      "street": "Berliner Allee 101",
+      "postalCode": "30855"
+    }
+  }
+]
+
 ```
 
 ### GET /customer/{c_id}
@@ -89,28 +88,26 @@ Returns all policies for customer with id=={c_id}, with each policy containing p
 
 #### Response body:
 ```json
-{
-  "policyList": [
-    {
-      "id": 0,
-      "startDate": "1990-01-01",
-      "endDate": "2030-12-31",
-      "coverage": 50000,
-      "objectOfInsurance": {
-        "name": "Tomato"
-      }
-    },
-    {
-      "id": 1,
-      "startDate": "1992-11-01",
-      "endDate": "2024-11-01",
-      "coverage": 10000,
-      "objectOfInsurance": {
-        "name": "Perry"
-      }
+[
+  {
+    "id": 0,
+    "startDate": "1990-01-01",
+    "endDate": "2030-12-31",
+    "coverage": 50000,
+    "objectOfInsurance": {
+      "name": "Tomato"
     }
-  ]
-}
+  },
+  {
+    "id": 1,
+    "startDate": "1992-11-01",
+    "endDate": "2024-11-01",
+    "coverage": 10000,
+    "objectOfInsurance": {
+      "name": "Perry"
+    }
+  }
+]
 ```
 ### GET /customer/{c_id}/policy/{p_id}
 Returns policy resource for customer with id=={c_id}, with policy id={p_id}.
@@ -189,56 +186,50 @@ The request
 
 produces a response like this:
 ```json
-{
-  "customerList": [
-    {
-      "id": 0,
-    },
-    {
-      "id": 1,
-    }
-  ]
-}
+[
+  {
+    "id": 0,
+  },
+  {
+    "id": 1,
+  }
+]
 ```
 > GET /customer?fields=firstName
 
 produces a response like this:
 ```json
-{
-  "customerList": [
-    {
-      "id": 0,
-      "firstName": "John",
-    },
-    {
-      "id": 1,
-      "firstName": "Jane",
-    }
-  ]
-}
+[
+  {
+    "id": 0,
+    "firstName": "John",
+  },
+  {
+    "id": 1,
+    "firstName": "Jane",
+  }
+]
 ```
 > GET /customer?fields=maritalStatus,dateOfBirth,address.street
 
 produces a response like this:
 ```json
-{
-  "customerList": [
-    {
-      "id": 0,
-      "maritalStatus": "single",
-      "dateOfBirth": "2000-12-30",
-      "address": {
-        "street": "Berliner Allee 100"
-      }
-    },
-    {
-      "id": 1,
-      "maritalStatus": "married",
-      "dateOfBirth": "1998-06-22",
-      "address": {
-        "street": "Berliner Allee 101"
-      }
+[
+  {
+    "id": 0,
+    "maritalStatus": "single",
+    "dateOfBirth": "2000-12-30",
+    "address": {
+      "street": "Berliner Allee 100"
     }
-  ]
-}
+  },
+  {
+    "id": 1,
+    "maritalStatus": "married",
+    "dateOfBirth": "1998-06-22",
+    "address": {
+      "street": "Berliner Allee 101"
+    }
+  }
+]
 ```
