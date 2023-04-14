@@ -9,6 +9,8 @@
 .box-row {
   display: flex;
   flex-direction: row;
+  padding-left: 1em;
+  padding-right: 1em;
 }
 
 .box-table-buttons {
@@ -99,4 +101,8 @@ input[type=button] {
 
 .dynamic {
   background-color: #272936;
+}
+
+#newCustomer {
+  margin-left: auto;
 }
