@@ -11,7 +11,7 @@
 </head>
 
 <body application="MyApp">
-  
+
   <template id="dashboard" page="start">
     <h1>Mitarbeiter Dashboard</h1>
     <div class="box-row">
@@ -110,7 +110,7 @@
       </dl>
     </section>
     <div class="box-table-buttons">
-      <input type="text" placeholder="Suche..">
+      <input type="text" placeholder="Suche.." hidden>
       <button type="button"
         onclick="app.navigate('policy-new', {id: app.data.customer.id, postalCode: app.data.customer.address.postalCode})">Neuer
         Vertrag</button>
