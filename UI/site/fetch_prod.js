@@ -1,7 +1,7 @@
 import { encodeCalcObject, encodeArgs } from "./framework/util.js";
 
-const customerAddress = 'http://localhost:82';
-const policyAddress = 'http://localhost:81';
+const customerAddress = '${customerService}';
+const policyAddress = '${policyService}';
 
 function customerPath(id) {
   let base = `${customerAddress}/customer`;
@@ -59,10 +59,6 @@ async function post(address, payload) {
 
 async function get(address, args) {
   const url = address + encodeArgs(args);
-  const request = {
-    method: 'GET',
-    mode: 'no-cors'
-  }
   const response = await fetch(url);
   const json = await response?.json() ?? Promise.resolve(undefined);
   return json;

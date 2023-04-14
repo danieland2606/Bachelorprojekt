@@ -4,7 +4,9 @@ services:
   ui:
     build:
       args:
-        testing: true
+        mode: "prod"
+        customerService: "http://localhost:82"
+        policyService: "http://localhost:81"
       context: ../UI
       dockerfile: Dockerfile
     container_name: ui-service
