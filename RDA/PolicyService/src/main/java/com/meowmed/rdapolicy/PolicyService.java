@@ -74,18 +74,22 @@ public class PolicyService {
 		List<String> policyList = new ArrayList<String>();
 		policyList.addAll(Arrays.asList(fields.split(",")));
 		List<String> ooIList = new ArrayList<String>();
+		List<String> removeList = new ArrayList<String>();
 
 		boolean containsOoI = false;
 		for (String result : policyList) {
 			if(result.contains("objectOfInsurance.")){
 				ooIList.add(result.substring(18));
-				policyList.remove(result);
+				removeList.add(result);
+				//policyList.remove(result);
 				containsOoI = true;
 				//if(!policyList.contains("objectOfInsurance")){
 				//	policyList.add("objectOfInsurance");
 				//}
 			}
 		}
+		policyList.removeAll(removeList);
+
 		if(containsOoI) policyList.add("objectOfInsurance");
 		policyList.add("id");
 		
