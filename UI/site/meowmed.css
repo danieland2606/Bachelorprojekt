@@ -106,3 +106,29 @@ input[type=button] {
 #newCustomer {
   margin-left: auto;
 }
+
+.search-container {
+  display: flex;
+}
+
+.search-container img {
+  width: 30px;
+  border: 1px solid;
+  padding-left: 5px;
+  border-left: transparent;
+  padding-right: 5px;
+  background: #a88b6c;
+}
+
+.search-container input {
+  border: 1px solid;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+body {
+  background: #ececec;
+  margin: 0 auto;
+  font-family: Helvetica, sans-serif;
+  max-width: 1400px;
+}
