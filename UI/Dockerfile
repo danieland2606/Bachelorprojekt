@@ -1,4 +1,14 @@
-FROM httpd:2.4-alpine
-ARG testing=false
-COPY ./site/ /usr/local/apache2/htdocs/
-RUN if ! ${testing} ; then rm /usr/local/apache2/htdocs/fetch.js ; mv /usr/local/apache2/htdocs/fetch_prod.js /usr/local/apache2/htdocs/fetch.js ; rm -r /usr/local/apache2/htdocs/test_data ; else rm /usr/local/apache2/htdocs/fetch_prod.js ; fi
+ARG mode='prod'
+
+FROM httpd:2.4-alpine AS base
+COPY ./site/index.html ./site/meowmed.css ./site/src.js ./site/favicon.ico /usr/local/apache2/htdocs/
+COPY ./site/framework /usr/local/apache2/htdocs/framework
+
+FROM base AS meowmed-ui-test
+COPY ./site/fetch.js /usr/local/apache2/htdocs/
+COPY ./site/test_data /usr/local/apache2/htdocs/test_data
+
+FROM base AS meowmed-ui-prod
+COPY ./site/fetch_prod.js /usr/local/apache2/htdocs/fetch.js
+
+FROM meowmed-ui-${mode} AS meowmed-ui

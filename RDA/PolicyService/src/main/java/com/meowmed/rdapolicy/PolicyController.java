@@ -2,8 +2,6 @@ package com.meowmed.rdapolicy;
 
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.MappingJacksonValue;
@@ -13,7 +11,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import com.meowmed.rdapolicy.entity.PolicyRequest;
-import com.meowmed.rdapolicy.entity.PriceCalculationEntity;
 
 /**
  * Diese Klasse ist der REST-Controller
