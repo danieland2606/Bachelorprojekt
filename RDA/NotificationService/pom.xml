@@ -11,8 +11,8 @@
 	<groupId>com.meowmed</groupId>
 	<artifactId>rdanotification</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>rdanotification</name>
-	<description>Demo project for Spring Boot</description>
+	<name>RDA-Notification</name>
+	<description>Notification Service der Firma Meowmed</description>
 	<properties>
 		<java.version>17</java.version>
 	</properties>
