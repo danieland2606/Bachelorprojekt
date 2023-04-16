@@ -1,5 +1,6 @@
 package EDA.MeowMed.Persistence.Entity;
 
+import EDA.MeowMed.JSON.MappableObject;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
@@ -9,7 +10,7 @@ import java.util.Map;
 
 @Entity
 @Table(name = "Customer")
-public class Customer implements Serializable {
+public class Customer implements Serializable, MappableObject {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
