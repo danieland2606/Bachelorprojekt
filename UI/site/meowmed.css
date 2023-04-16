@@ -76,7 +76,7 @@ th {
 
 td:last-child,
 th:last-child {
-  text-align: end;
+  max-width: 2em;
   justify-content: end;
 }
 

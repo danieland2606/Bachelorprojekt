@@ -4,6 +4,8 @@ FROM httpd:2.4-alpine AS base
 COPY ./site/index.html ./site/meowmed.css ./site/src.js ./site/favicon.ico /usr/local/apache2/htdocs/
 COPY ./site/framework /usr/local/apache2/htdocs/framework
 COPY ./site/assets /usr/local/apache2/htdocs/assets
+COPY ./httpd.conf /usr/local/apache2/conf/
+COPY ./cors.conf /usr/local/apache2/conf/extra/
 
 FROM base AS meowmed-ui-test
 COPY ./site/fetch.js /usr/local/apache2/htdocs/
