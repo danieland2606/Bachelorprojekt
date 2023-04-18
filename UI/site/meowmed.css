@@ -19,6 +19,12 @@
   display: flex;
   height: min-content;
   width: 100%;
+  padding: 0 2em;
+  box-sizing: border-box;
+}
+
+.box-table-buttons :last-child {
+  margin-left: auto;
 }
 
 .box-table-buttons:last-child {
@@ -137,4 +143,14 @@ body {
   margin: 0 auto;
   font-family: Helvetica, sans-serif;
   max-width: 1400px;
+}
+
+.box-row.buttons {
+  max-width: 750px;
+  justify-content: space-evenly;
+  margin-top: 2em;
+}
+
+dd {
+  margin-left: 10px;
 }
