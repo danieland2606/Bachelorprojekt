@@ -5,16 +5,17 @@ import java.time.LocalDate;
 public class MailPolicyEntity {
     private String firstName;
     private String lastName;
+    private String title;
     private String formOfAdress;
-    private String martialStatus;
-    private LocalDate dateOfBirth;
+    private String maritalStatus;
+    private LocalDate cDateOfBirth;
     private String employmentStatus;
-    private String phoneNumber;
-    private String email;
-    private String bankDetails;
     private String city;
     private String street;
     private int postalCode;
+    private String phoneNumber;
+    private String email;
+    private String bankDetails;
     private long pid;
     private long cid;
     private LocalDate startDate;
@@ -24,30 +25,31 @@ public class MailPolicyEntity {
     private String name;
     private String race;
     private String color;
-    private LocalDate age;
+    private LocalDate oDateOfBirth;
     private boolean castrated;
     private String personality;
     private String environment;
     private int weight;
     public MailPolicyEntity() {
     }
-    public MailPolicyEntity(String firstName, String lastName, String formOfAdress, String martialStatus,
-            LocalDate dateOfBirth, String employmentStatus, String phoneNumber, String email, String bankDetails,
-            String city, String street, int postalCode, long pid, long cid, LocalDate startDate, LocalDate endDate,
-            int coverage, double premium, String name, String race, String color, LocalDate age, boolean castrated,
-            String personality, String environment, int weight) {
+    public MailPolicyEntity(String firstName, String lastName, String title, String formOfAdress, String maritalStatus,
+            LocalDate cDateOfBirth, String employmentStatus, String city, String street, int postalCode,
+            String phoneNumber, String email, String bankDetails, long pid, long cid, LocalDate startDate,
+            LocalDate endDate, int coverage, double premium, String name, String race, String color,
+            LocalDate oDateOfBirth, boolean castrated, String personality, String environment, int weight) {
         this.firstName = firstName;
         this.lastName = lastName;
+        this.title = title;
         this.formOfAdress = formOfAdress;
-        this.martialStatus = martialStatus;
-        this.dateOfBirth = dateOfBirth;
+        this.maritalStatus = maritalStatus;
+        this.cDateOfBirth = cDateOfBirth;
         this.employmentStatus = employmentStatus;
-        this.phoneNumber = phoneNumber;
-        this.email = email;
-        this.bankDetails = bankDetails;
         this.city = city;
         this.street = street;
         this.postalCode = postalCode;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
+        this.bankDetails = bankDetails;
         this.pid = pid;
         this.cid = cid;
         this.startDate = startDate;
@@ -57,7 +59,7 @@ public class MailPolicyEntity {
         this.name = name;
         this.race = race;
         this.color = color;
-        this.age = age;
+        this.oDateOfBirth = oDateOfBirth;
         this.castrated = castrated;
         this.personality = personality;
         this.environment = environment;
@@ -75,47 +77,35 @@ public class MailPolicyEntity {
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
+    public String getTitle() {
+        return title;
+    }
+    public void setTitle(String title) {
+        this.title = title;
+    }
     public String getFormOfAdress() {
         return formOfAdress;
     }
     public void setFormOfAdress(String formOfAdress) {
         this.formOfAdress = formOfAdress;
     }
-    public String getMartialStatus() {
-        return martialStatus;
+    public String getMaritalStatus() {
+        return maritalStatus;
     }
-    public void setMartialStatus(String martialStatus) {
-        this.martialStatus = martialStatus;
+    public void setMaritalStatus(String maritalStatus) {
+        this.maritalStatus = maritalStatus;
     }
-    public LocalDate getDateOfBirth() {
-        return dateOfBirth;
+    public LocalDate getcDateOfBirth() {
+        return cDateOfBirth;
     }
-    public void setDateOfBirth(LocalDate dateOfBirth) {
-        this.dateOfBirth = dateOfBirth;
+    public void setcDateOfBirth(LocalDate cDateOfBirth) {
+        this.cDateOfBirth = cDateOfBirth;
     }
     public String getEmploymentStatus() {
         return employmentStatus;
     }
     public void setEmploymentStatus(String employmentStatus) {
         this.employmentStatus = employmentStatus;
-    }
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-    public String getEmail() {
-        return email;
-    }
-    public void setEmail(String email) {
-        this.email = email;
-    }
-    public String getBankDetails() {
-        return bankDetails;
-    }
-    public void setBankDetails(String bankDetails) {
-        this.bankDetails = bankDetails;
     }
     public String getCity() {
         return city;
@@ -134,6 +124,24 @@ public class MailPolicyEntity {
     }
     public void setPostalCode(int postalCode) {
         this.postalCode = postalCode;
+    }
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+    public String getEmail() {
+        return email;
+    }
+    public void setEmail(String email) {
+        this.email = email;
+    }
+    public String getBankDetails() {
+        return bankDetails;
+    }
+    public void setBankDetails(String bankDetails) {
+        this.bankDetails = bankDetails;
     }
     public long getPid() {
         return pid;
@@ -189,11 +197,11 @@ public class MailPolicyEntity {
     public void setColor(String color) {
         this.color = color;
     }
-    public LocalDate getAge() {
-        return age;
+    public LocalDate getoDateOfBirth() {
+        return oDateOfBirth;
     }
-    public void setAge(LocalDate age) {
-        this.age = age;
+    public void setoDateOfBirth(LocalDate oDateOfBirth) {
+        this.oDateOfBirth = oDateOfBirth;
     }
     public boolean isCastrated() {
         return castrated;
@@ -225,16 +233,17 @@ public class MailPolicyEntity {
         int result = 1;
         result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
         result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
+        result = prime * result + ((title == null) ? 0 : title.hashCode());
         result = prime * result + ((formOfAdress == null) ? 0 : formOfAdress.hashCode());
-        result = prime * result + ((martialStatus == null) ? 0 : martialStatus.hashCode());
-        result = prime * result + ((dateOfBirth == null) ? 0 : dateOfBirth.hashCode());
+        result = prime * result + ((maritalStatus == null) ? 0 : maritalStatus.hashCode());
+        result = prime * result + ((cDateOfBirth == null) ? 0 : cDateOfBirth.hashCode());
         result = prime * result + ((employmentStatus == null) ? 0 : employmentStatus.hashCode());
-        result = prime * result + ((phoneNumber == null) ? 0 : phoneNumber.hashCode());
-        result = prime * result + ((email == null) ? 0 : email.hashCode());
-        result = prime * result + ((bankDetails == null) ? 0 : bankDetails.hashCode());
         result = prime * result + ((city == null) ? 0 : city.hashCode());
         result = prime * result + ((street == null) ? 0 : street.hashCode());
         result = prime * result + postalCode;
+        result = prime * result + ((phoneNumber == null) ? 0 : phoneNumber.hashCode());
+        result = prime * result + ((email == null) ? 0 : email.hashCode());
+        result = prime * result + ((bankDetails == null) ? 0 : bankDetails.hashCode());
         result = prime * result + (int) (pid ^ (pid >>> 32));
         result = prime * result + (int) (cid ^ (cid >>> 32));
         result = prime * result + ((startDate == null) ? 0 : startDate.hashCode());
@@ -246,7 +255,7 @@ public class MailPolicyEntity {
         result = prime * result + ((name == null) ? 0 : name.hashCode());
         result = prime * result + ((race == null) ? 0 : race.hashCode());
         result = prime * result + ((color == null) ? 0 : color.hashCode());
-        result = prime * result + ((age == null) ? 0 : age.hashCode());
+        result = prime * result + ((oDateOfBirth == null) ? 0 : oDateOfBirth.hashCode());
         result = prime * result + (castrated ? 1231 : 1237);
         result = prime * result + ((personality == null) ? 0 : personality.hashCode());
         result = prime * result + ((environment == null) ? 0 : environment.hashCode());
@@ -272,25 +281,42 @@ public class MailPolicyEntity {
                 return false;
         } else if (!lastName.equals(other.lastName))
             return false;
+        if (title == null) {
+            if (other.title != null)
+                return false;
+        } else if (!title.equals(other.title))
+            return false;
         if (formOfAdress == null) {
             if (other.formOfAdress != null)
                 return false;
         } else if (!formOfAdress.equals(other.formOfAdress))
             return false;
-        if (martialStatus == null) {
-            if (other.martialStatus != null)
+        if (maritalStatus == null) {
+            if (other.maritalStatus != null)
                 return false;
-        } else if (!martialStatus.equals(other.martialStatus))
+        } else if (!maritalStatus.equals(other.maritalStatus))
             return false;
-        if (dateOfBirth == null) {
-            if (other.dateOfBirth != null)
+        if (cDateOfBirth == null) {
+            if (other.cDateOfBirth != null)
                 return false;
-        } else if (!dateOfBirth.equals(other.dateOfBirth))
+        } else if (!cDateOfBirth.equals(other.cDateOfBirth))
             return false;
         if (employmentStatus == null) {
             if (other.employmentStatus != null)
                 return false;
         } else if (!employmentStatus.equals(other.employmentStatus))
+            return false;
+        if (city == null) {
+            if (other.city != null)
+                return false;
+        } else if (!city.equals(other.city))
+            return false;
+        if (street == null) {
+            if (other.street != null)
+                return false;
+        } else if (!street.equals(other.street))
+            return false;
+        if (postalCode != other.postalCode)
             return false;
         if (phoneNumber == null) {
             if (other.phoneNumber != null)
@@ -306,18 +332,6 @@ public class MailPolicyEntity {
             if (other.bankDetails != null)
                 return false;
         } else if (!bankDetails.equals(other.bankDetails))
-            return false;
-        if (city == null) {
-            if (other.city != null)
-                return false;
-        } else if (!city.equals(other.city))
-            return false;
-        if (street == null) {
-            if (other.street != null)
-                return false;
-        } else if (!street.equals(other.street))
-            return false;
-        if (postalCode != other.postalCode)
             return false;
         if (pid != other.pid)
             return false;
@@ -352,10 +366,10 @@ public class MailPolicyEntity {
                 return false;
         } else if (!color.equals(other.color))
             return false;
-        if (age == null) {
-            if (other.age != null)
+        if (oDateOfBirth == null) {
+            if (other.oDateOfBirth != null)
                 return false;
-        } else if (!age.equals(other.age))
+        } else if (!oDateOfBirth.equals(other.oDateOfBirth))
             return false;
         if (castrated != other.castrated)
             return false;
@@ -375,16 +389,17 @@ public class MailPolicyEntity {
     }
     @Override
     public String toString() {
-        return "MailPolicyEntity [firstName=" + firstName + ", lastName=" + lastName + ", formOfAdress=" + formOfAdress
-                + ", martialStatus=" + martialStatus + ", dateOfBirth=" + dateOfBirth + ", employmentStatus="
-                + employmentStatus + ", phoneNumber=" + phoneNumber + ", email=" + email + ", bankDetails="
-                + bankDetails + ", city=" + city + ", street=" + street + ", postalCode=" + postalCode + ", pid=" + pid
-                + ", cid=" + cid + ", startDate=" + startDate + ", endDate=" + endDate + ", coverage=" + coverage
-                + ", premium=" + premium + ", name=" + name + ", race=" + race + ", color=" + color + ", age=" + age
-                + ", castrated=" + castrated + ", personality=" + personality + ", environment=" + environment
-                + ", weight=" + weight + "]";
+        return "MailPolicyEntity [firstName=" + firstName + ", lastName=" + lastName + ", title=" + title
+                + ", formOfAdress=" + formOfAdress + ", maritalStatus=" + maritalStatus + ", cDateOfBirth="
+                + cDateOfBirth + ", employmentStatus=" + employmentStatus + ", city=" + city + ", street=" + street
+                + ", postalCode=" + postalCode + ", phoneNumber=" + phoneNumber + ", email=" + email + ", bankDetails="
+                + bankDetails + ", pid=" + pid + ", cid=" + cid + ", startDate=" + startDate + ", endDate=" + endDate
+                + ", coverage=" + coverage + ", premium=" + premium + ", name=" + name + ", race=" + race + ", color="
+                + color + ", oDateOfBirth=" + oDateOfBirth + ", castrated=" + castrated + ", personality=" + personality
+                + ", environment=" + environment + ", weight=" + weight + "]";
     }
 
-
+    
+    
     
 }

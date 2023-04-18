@@ -1,60 +1,52 @@
 package EDA.MeowMed.Application;
 
+import EDA.MeowMed.JSON.MapFilter;
 import EDA.MeowMed.Messaging.EventSenderService;
 import EDA.MeowMed.Persistence.AddressRepository;
 import EDA.MeowMed.Persistence.CustomerRepository;
 import EDA.MeowMed.Persistence.Entity.Customer;
-import EDA.MeowMed.REST.Objects.New_Customer;
-import EDA.MeowMed.REST.Objects.Simple_Customer;
-import EDA.MeowMed.REST.Objects.View_Customer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class CustomerService {
-    private final CustomerRepository customerRepository;
-    private final AddressRepository addressRepository;
-    private final EventSenderService eventSenderService;
-
     @Autowired
-    public CustomerService(CustomerRepository customerRepository, AddressRepository addressRepository, EventSenderService eventSenderService) {
-        this.customerRepository = customerRepository;
-        this.addressRepository = addressRepository;
-        this.eventSenderService = eventSenderService;
-    }
+    private CustomerRepository customerRepository;
+    @Autowired
+    private EventSenderService eventSenderService;
+    @Autowired
+    private MapFilter mapFilter;
 
-    public View_Customer getCustomer(Long id) {
+    public Map<String, Object> getCustomer(Long id) {
         Optional<Customer> request = customerRepository.findById(id);
         if (request.isEmpty()) {
             return null;
         } else {
-            return new View_Customer(request.get());
+            String fields = "firstName,lastName,formOfAddress,title,maritalStatus,dateOfBirth,employmentStatus,address,phoneNumber,email,bankDetails";
+            return mapFilter.filterMap(request.get().toMap(), fields);
         }
     }
 
-    public List<Simple_Customer> getCustomerList() {
+    public List<Map<String, Object>> getCustomerList(String fields) {
         List<Customer> request = customerRepository.findAll();
         if (request.isEmpty()) {
             return null;
         } else {
-            List<Simple_Customer> customerList = new ArrayList<>();
-            for (var customer : request) {
-                customerList.add(new Simple_Customer(customer));
+            fields = "id," + fields;
+            List<Map<String, Object>> customerList = new ArrayList<>();
+            for (Customer customer : request) {
+                customerList.add(mapFilter.filterMap(customer.toMap(), fields));
             }
             return customerList;
         }
     }
 
-    public Long addCustomer(New_Customer newCustomer) {
-        Customer customer = new Customer(newCustomer);
+    public Map<String, Object> addCustomer(Customer customer) {
         this.customerRepository.save(customer);
-        //this.addressRepository.save(customer.getAddress());
         eventSenderService.sendCustomerCreatedEvent(customer);
-        return customer.getId();
+        return mapFilter.filterMap(customer.toMap(), "id");
     }
-
 }

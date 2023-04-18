@@ -3,6 +3,10 @@ version: '3.7'
 services:
   ui:
     build:
+      args:
+        mode: "prod"
+        customerService: "http://localhost:82"
+        policyService: "http://localhost:81"
       context: ../UI
       dockerfile: Dockerfile
     container_name: ui-service
@@ -21,7 +25,7 @@ services:
       - 81:8080
     environment:
       - docker_customerurl=customer
-      - docker.notificationurl=notification
+      - docker_notificationurl=notification
   customer:
     build:
       context: ./CustomerService
@@ -32,7 +36,7 @@ services:
     ports:
       - 82:8080   
     environment:
-      - docker.notificationurl=notification
+      - docker_notificationurl=notification
   notification:
     build:
       context: ./NotificationService
@@ -42,3 +46,10 @@ services:
       - "default"
     ports:
       - 83:8080
+    environment:
+      - spring_mail_host=smtp.gmail.com
+      - spring_mail_port=587
+      - spring_mail_username=meowmedservice@gmail.com
+      - spring_mail_password=yqanpbjhupnllbcz
+      - spring_mail_properties.mail.smtp.auth=true
+      - spring_mail_properties.mail.smtp.starttls.enable=true

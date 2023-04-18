@@ -15,10 +15,54 @@ export function capitalize(word) {
   return word.charAt(0).toUpperCase() + word.slice(1);
 }
 
-export function add(a, b) {
+function add(a, b) {
   return a + b;
 }
 
 export function toCamelCase(string) {
   return string.split('-').map(capitalize).reduce(add);
+}
+
+export function encodeCalcObject(obj) {
+  let base64 = btoa(JSON.stringify(obj));
+  return base64.replaceAll('+', '-').replaceAll('/', '_').replaceAll('=', '');
+}
+
+export function encodeArgs(args) {
+  let urlParams = '?';
+  if(typeof args === 'object')
+    for(const [ name, arg ] of Object.entries(args)) {
+      urlParams += `${name}=`;
+      if(Array.isArray(arg)) {
+        urlParams += arg.join(',');
+      } else {
+        urlParams += arg;
+      }
+      urlParams += '&';
+    }
+  return urlParams.slice(0, -1);
+}
+
+export function decodeArgs(argString) {
+  if(!argString)
+    return undefined;
+  const args = {};
+  const argArray = argString.split('&');
+  for (const arg of argArray) {
+    const [ key, val ] = arg.split('=');
+    if(val.match(','))
+      args[key] = val.split(',');
+    else
+      args[key] = val;
+  }
+  return args;
+}
+
+export function decodeHash(hash) {
+  if(!hash.includes('?')) 
+    return { page: hash.slice(1) };
+  const argStart = hash.indexOf('?');
+  const pageString = hash.slice(1, argStart);
+  const argString = hash.slice(argStart + 1);
+  return { page: pageString, args: decodeArgs(argString) };
 }

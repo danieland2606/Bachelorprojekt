@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="15.0.0">
+  <zoom_level>8</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>624</x>
+      <y>416</y>
+      <w>296</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>CustomerService
+--
+--
++ getCustomer(id: Long): Map&lt;String, Object&gt;
++ getCustomerList(id: Long): List&lt;Map&lt;String, Object&gt;
++ addCustomer(customer: Customer): Map&lt;String, Object&gt;</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1080</x>
+      <y>416</y>
+      <w>320</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>EventSenderService
+--
+- template: RabbitTemplate
+- direct: DirectExchange
+--
+- sendEvent(message: String)
++ sendCustomerCreatedEvent(customer: Customer): boolean</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1168</x>
+      <y>320</y>
+      <w>136</w>
+      <h>56</h>
+    </coordinates>
+    <panel_attributes>MessagingConfig
+--
+--
++ direct(): DirectExchange
++ sender(): EventSender</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>720</x>
+      <y>320</y>
+      <w>112</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>CustomerController
+fg=gray</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>912</x>
+      <y>432</y>
+      <w>184</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;
+r2=1
+m2=eventSenderService</panel_attributes>
+    <additional_attributes>10.0;20.0;210.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1232</x>
+      <y>368</y>
+      <w>24</w>
+      <h>64</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.</panel_attributes>
+    <additional_attributes>10.0;60.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>768</x>
+      <y>336</y>
+      <w>24</w>
+      <h>96</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;
+fg=gray</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;100.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>720</x>
+      <y>584</y>
+      <w>112</w>
+      <h>32</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;interface&gt;&gt;
+CustomerRepository
+fg=gray</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>768</x>
+      <y>480</y>
+      <w>120</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;
+r2=1
+m2=customerRepository</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;130.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>512</x>
+      <y>432</y>
+      <w>128</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+r1=1
+m1=mapFilter</panel_attributes>
+    <additional_attributes>10.0;20.0;140.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>96</x>
+      <y>416</y>
+      <w>424</w>
+      <h>48</h>
+    </coordinates>
+    <panel_attributes>MapFilter
+--
+--
++ filterMap(mapOfObject: Map&lt;String, Object&gt;, filters: String): Map&lt;String, Object&gt;</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>

@@ -1,14 +1,17 @@
 package com.meowmed.rdapolicy;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
+import com.meowmed.rdapolicy.database.CatRepository;
 import com.meowmed.rdapolicy.database.ObjectOfInsuranceRepository;
 import com.meowmed.rdapolicy.database.PolicyRepository;
+import com.meowmed.rdapolicy.entity.CatEntity;
 import com.meowmed.rdapolicy.entity.ObjectOfInsuranceEntity;
 import com.meowmed.rdapolicy.entity.PolicyEntity;
 
@@ -36,7 +39,7 @@ public class PolicyApplication {
 	 * @return Speichern der Beispieldaten
 	 */
 	@Bean
-	CommandLineRunner commandLineRunner(PolicyRepository policyRepository, ObjectOfInsuranceRepository objectOfInsuranceRepository){
+	CommandLineRunner commandLineRunner(PolicyRepository policyRepository, ObjectOfInsuranceRepository objectOfInsuranceRepository, CatRepository catRepository){
 		return args -> {
 			LocalDate startDate = LocalDate.of(2017, 1, 15);
 			LocalDate endDate1 = LocalDate.of(2099, 1, 1);
@@ -49,7 +52,18 @@ public class PolicyApplication {
 			objectOfInsuranceRepository.save(cat1);
 			objectOfInsuranceRepository.save(cat2);
 			policyRepository.save(policy1);
-			policyRepository.save(policy2);			
+			policyRepository.save(policy2);
+			ArrayList<CatEntity> entities = new ArrayList<>();
+			entities.add(new CatEntity("siamese", 12, 15, 4, 7, 2, new String[]{"seal","blau","lilac","creme"})) ;
+			entities.add(new CatEntity("perser", 12, 16, 4, 7, 3, new String[]{"weiß", "schildpatt","schwarz"}));
+			entities.add(new CatEntity("bengal", 12, 16, 4, 6, 4, new String[]{"braun", "schildpatt","marmor"}));
+			entities.add(new CatEntity("maine-cone", 12, 15, 5, 10, 2, new String[]{"grau","braun","weiß"}));
+			entities.add(new CatEntity("sphynx", 12, 15, 4, 6, 5, new String[]{}));
+			entities.add(new CatEntity("scottish Fold", 12, 15, 4, 6, 6, new String[]{}));
+			entities.add(new CatEntity("british-shorthair", 12, 15, 4, 6, 0, new String[]{}));
+			entities.add(new CatEntity("abyssinian", 12, 15, 3, 5, 4, new String[]{"rot", "schildpatt", "zimt"}));
+			entities.add(new CatEntity("ragdoll", 12, 15, 4, 7, 3, new String[]{"blau", "seal", "lilac", "schildpatt"}));
+			catRepository.saveAll(entities);
 		};
 	}
 }

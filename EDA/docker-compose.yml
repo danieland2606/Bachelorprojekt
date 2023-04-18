@@ -1,0 +1,82 @@
+version: '3.7'
+services:
+  customer:
+    build:
+      context: ./CustomerService
+      dockerfile: Dockerfile
+    container_name: customer-service
+    networks:
+      - "default"
+    environment:
+      - spring.rabbitmq.host=rabbitmq
+      - spring.datasource.url=jdbc:mariadb://customerdb:3306/Customer
+      - spring.datasource.username=user
+      - spring.datasource.password=test12345
+      - spring.datasource.driver-class-name=org.mariadb.jdbc.Driver
+      - spring.jpa.database-platform=org.hibernate.dialect.MariaDBDialect
+    ports:
+      - "81:8081"
+    depends_on:
+      - customerdb
+  customerdb:
+    image: mariadb:latest
+    container_name: customerdb
+    networks:
+      - "default"
+    environment:
+      - MARIADB_ROOT_PASSWORD=test
+      - MYSQL_DATABASE=Customer
+      - MYSQL_USER=user
+      - MYSQL_PASSWORD=test12345
+  notification:
+    build:
+      context: ./NotificationService
+      dockerfile: Dockerfile
+    container_name: notification-service
+    networks:
+      - "default"
+    environment:
+      - spring.rabbitmq.host=rabbitmq
+  policy:
+    build:
+      context: ./PolicyService
+      dockerfile: Dockerfile
+    container_name: policy-service
+    depends_on: 
+      - policydb
+    networks:
+      - "default"
+    ports:
+      - "82:8080"
+    environment:
+      - RABBIT_HOST=rabbitmq
+      - spring.datasource.url=jdbc:mariadb://policydb:3306/Policy
+      - spring.datasource.username=user
+      - spring.datasource.password=123456789
+  policydb:
+    image: mariadb:latest
+    container_name: policydb
+    networks:
+      - "default"
+    environment:
+      MARIADB_ROOT_PASSWORD: test
+      MYSQL_DATABASE: Policy
+      MYSQL_USER: user
+      MYSQL_PASSWORD: 123456789
+    #ports:
+    #  - "3306:3306"
+    volumes:
+      - policydb_data:/var/lib/mysql
+  rabbitmq:
+    image: rabbitmq:management-alpine
+    container_name: rabbitmq
+    networks:
+      - "default"
+    ports:
+      - "15671:15671"
+      - "15672:15672"
+      - "5671:5671"
+      - "5672:5672"
+
+volumes:
+  policydb_data:

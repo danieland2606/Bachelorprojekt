@@ -13,7 +13,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"firstName\": \"Jan\",\r\n    \"lastName\": \"Lorenz\",\r\n    \"formofAdress\": \"Mr.\",\r\n    \"martialStatus\": \"ledig\",\r\n    \"dateOfBirth\": \"1999-11-03\",\r\n    \"employmentStatus\": \"student\",\r\n    \"address\": {\r\n        \"city\": \"Hildesheim\",\r\n        \"street\": \"Burgerking Hbf\",\r\n        \"postalCode\": 31137\r\n    },\r\n    \"phoneNumber\": \"+49123456789\",\r\n    \"email\": \"jan-niklas-johannes.lorenz@stud.hs-hannover.de\",\r\n    \"bankDetails\": \"DE2131627312371351232\"\r\n}",
+					"raw": "{\r\n    \"firstName\": \"Alexander\",\r\n    \"lastName\": \"Hampel\",\r\n    \"title\": \"\",\r\n    \"formOfAdress\": \"Herr\",\r\n    \"maritalStatus\": \"ledig\",\r\n    \"dateOfBirth\": \"1996-01-14\",\r\n    \"employmentStatus\": \"student\",\r\n    \"city\": \"Hannover\",\r\n    \"street\": \"Ricklinger Stadtweg 120\",\r\n    \"postalCode\": 30159,\r\n    \"phoneNumber\": \"+4951177488375\",\r\n    \"email\": \"alexander.hampel@stud.hs-hannover.de\",\r\n    \"bankDetails\": \"IE12BOFI90000112345678\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -21,11 +21,11 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/customernotification",
+					"raw": "localhost:83/customernotification",
 					"host": [
 						"localhost"
 					],
-					"port": "8080",
+					"port": "83",
 					"path": [
 						"customernotification"
 					]
@@ -40,7 +40,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"firstName\" : \"Alexander\",\r\n    \"lastName\" : \"Hampel\",\r\n    \"formOfAdress\": \"Herr\",\r\n    \"martialStatus\" : \"erledigt\",\r\n    \"dateOfBirth\" : \"1996-01-14\",\r\n    \"employmentStatus\": \"student\",\r\n    \"phoneNumber\": \"0123456789\",\r\n    \"email\": \"alexander.hampel@stud.hs-hannover.de\",\r\n    \"bankDetails\": \"DE123456789123456789\",\r\n    \"city\": \"Hannover\",\r\n    \"street\": \"Ricklinger Stadtweg 120\",\r\n    \"postalCode\": \"30149\",\r\n    \"pid\": 1,\r\n    \"cid\": 1,\r\n    \"startDate\": \"2023-05-07\",\r\n    \"endDate\": \"2023-05-08\",\r\n    \"coverage\": 10000,\r\n    \"premium\": 975.0,\r\n    \"name\": \"Nello\",\r\n    \"race\": \"Bengalisch\",\r\n    \"color\": \"alpine-weiss\",\r\n    \"age\": \"2023-08-07\",\r\n    \"castrated\": false,\r\n    \"personality\": \"verspielt\",\r\n    \"environment\": \"freiläufer\",\r\n    \"weight\" : 4\r\n}",
+					"raw": "{\r\n    \"firstName\": \"Alexander\",\r\n    \"lastName\": \"Hampel\",\r\n    \"title\": \"\",\r\n    \"formOfAdress\": \"Herr\",\r\n    \"maritalStatus\": \"ledig\",\r\n    \"cDateOfBirth\": \"1996-01-14\",\r\n    \"employmentStatus\": \"student\",\r\n    \"city\": \"Hannover\",\r\n    \"street\": \"Ricklinger Stadtweg 120\",\r\n    \"postalCode\": 30159,\r\n    \"phoneNumber\": \"+4951177488375\",\r\n    \"email\": \"alexander.hampel@stud.hs-hannover.de\",\r\n    \"bankDetails\": \"IE12BOFI90000112345678\",\r\n    \"pid\": 1,\r\n    \"cid\": 3,\r\n    \"startDate\": \"1990-01-01\",\r\n    \"endDate\": \"2030-12-31\",\r\n    \"coverage\": 50000,\r\n    \"premium\": 75,\r\n    \"name\": \"Tomato\",\r\n    \"race\": \"Bengal\",\r\n    \"color\": \"Braun\",\r\n    \"oDateOfBirth\": \"2015-07-22\",\r\n    \"castrated\": true,\r\n    \"personality\": \"anhänglich\",\r\n    \"environment\": \"drinnen\",\r\n    \"weight\": 4\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -48,11 +48,11 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/policynotification",
+					"raw": "localhost:83/policynotification",
 					"host": [
 						"localhost"
 					],
-					"port": "8080",
+					"port": "83",
 					"path": [
 						"policynotification"
 					]

@@ -1,24 +1,41 @@
-export async function fetchCustomerList(fields) {
-  const body = await fromGateway('customers.json');
+import { encodeCalcObject } from "./framework/util.js";
+
+export async function getCustomerList(args) {
+  const body = await fetchLocal('customers.json');
   return body.customerList;
 }
 
-export async function fetchCustomer(id) {
-  const body = await fromGateway('customer.json');
+export async function getCustomer(id) {
+  const body = await fetchLocal('customer.json');
   return body;
 }
 
-export async function fetchPolicyList(fields) {
-  const body = await fromGateway('policies.json');
+export async function getPolicyList(customerId, args) {
+  const body = await fetchLocal('policies.json');
   return body.policyList;
 }
 
-async function get(path, args) {
-
+export async function getPolicy(customerId, id) {
+  const body = await fetchLocal('policy.json');
+  return body;
 }
 
-async function fromGateway(path, request) {
-  const response = await fetch('gateway/' + path, request);
-  const json = await response.text();
-  return JSON.parse(json);
+export async function postCustomer(customer) {
+  console.log(JSON.stringify(customer));
+}
+
+export async function postPolicy(customerId, policy) {
+  console.log(JSON.stringify(policy));
+}
+
+let counter = 0;
+
+export async function getPremium(calcObject) {
+  console.log(encodeCalcObject(calcObject));
+  return ++counter;
+}
+
+async function fetchLocal(path) {
+  const response = await fetch('test_data/' + path);
+  return await response.json();
 }

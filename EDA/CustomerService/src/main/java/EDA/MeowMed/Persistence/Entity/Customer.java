@@ -1,23 +1,28 @@
 package EDA.MeowMed.Persistence.Entity;
 
-
-import EDA.MeowMed.REST.Objects.New_Customer;
-import EDA.MeowMed.REST.Objects.View_Address;
-import com.fasterxml.jackson.annotation.JsonFilter;
+import EDA.MeowMed.JSON.MappableObject;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 @Entity
 @Table(name = "Customer")
-public class Customer implements Serializable {
+public class Customer implements Serializable, MappableObject {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "c_id", unique = true, nullable = false)
+    @Column(name = "customer_id", unique = true, nullable = false)
     private Long id;
+
+    @Column(name = "form_Of_Address")
+    private String formOfAddress;
+
+    @Column(name = "title")
+    private String title;
 
     @Column(name = "first_name", nullable = false)
     private String firstName;
@@ -25,8 +30,8 @@ public class Customer implements Serializable {
     @Column(name = "last_name", nullable = false)
     private String lastName;
 
-    @Column(name = "martial_status", nullable = false)
-    private String martialStatus;
+    @Column(name = "marital_status", nullable = false)
+    private String maritalStatus;
 
     @Column(name = "date_of_birth", nullable = false)
     private LocalDate dateOfBirth;
@@ -35,7 +40,7 @@ public class Customer implements Serializable {
     private String employmentStatus;
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "a_id", nullable = false)
+    @JoinColumn(name = "address_id", nullable = false)
     private Address address;
 
     @Column(name = "phone_number", nullable = false)
@@ -50,29 +55,19 @@ public class Customer implements Serializable {
     public Customer() {
     }
 
-    public Customer(Long id, String firstName, String lastName, String martialStatus, LocalDate dateOfBirth, String employmentStatus, Address address, String phoneNumber, String email, String bankDetails) {
+    public Customer(Long id, String firstName, String lastName, String formOfAddress, String title, String maritalStatus, LocalDate dateOfBirth, String employmentStatus, Address address, String phoneNumber, String email, String bankDetails) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.martialStatus = martialStatus;
+        this.formOfAddress = formOfAddress;
+        this.title = title;
+        this.maritalStatus = maritalStatus;
         this.dateOfBirth = dateOfBirth;
         this.employmentStatus = employmentStatus;
         this.address = address;
         this.phoneNumber = phoneNumber;
         this.email = email;
         this.bankDetails = bankDetails;
-    }
-
-    public Customer(New_Customer customer) {
-        this.firstName = customer.getFirstName();
-        this.lastName = customer.getLastName();
-        this.martialStatus = customer.getMartialStatus();
-        this.dateOfBirth = customer.getDateOfBirth();
-        this.employmentStatus = customer.getEmploymentStatus();
-        this.address = new Address(customer.getAddress());
-        this.phoneNumber = customer.getPhoneNumber();
-        this.email = customer.getEmail();
-        this.bankDetails = customer.getBankDetails();
     }
 
     public Long getId() {
@@ -99,12 +94,28 @@ public class Customer implements Serializable {
         this.lastName = lastName;
     }
 
-    public String getMartialStatus() {
-        return martialStatus;
+    public String getFormOfAddress() {
+        return formOfAddress;
     }
 
-    public void setMartialStatus(String martialStatus) {
-        this.martialStatus = martialStatus;
+    public void setFormOfAddress(String formOfAddress) {
+        this.formOfAddress = formOfAddress;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getMaritalStatus() {
+        return maritalStatus;
+    }
+
+    public void setMaritalStatus(String martialStatus) {
+        this.maritalStatus = martialStatus;
     }
 
     public LocalDate getDateOfBirth() {
@@ -153,6 +164,28 @@ public class Customer implements Serializable {
 
     public void setBankDetails(String bankDetails) {
         this.bankDetails = bankDetails;
+    }
+
+    /**
+     * ToDo: need Comment
+     *
+     * @return
+     */
+    public Map<String, Object> toMap() {
+        Map<String, Object> customer = new LinkedHashMap<>();
+        customer.put("id", id);
+        customer.put("firstName", firstName);
+        customer.put("lastName", lastName);
+        customer.put("formOfAddress", formOfAddress);
+        customer.put("title", title);
+        customer.put("maritalStatus", maritalStatus);
+        customer.put("dateOfBirth", dateOfBirth);
+        customer.put("employmentStatus", employmentStatus);
+        customer.put("address", address.toMap());
+        customer.put("phoneNumber", phoneNumber);
+        customer.put("email", email);
+        customer.put("bankDetails", bankDetails);
+        return customer;
     }
 
 }

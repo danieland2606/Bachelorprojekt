@@ -1,6 +1,20 @@
 package com.meowmed.rdapolicy.entity;
 
+import com.fasterxml.jackson.annotation.JsonFilter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+
+@Entity
+@JsonFilter("addressFilter")
 public class AddressEntity {
+    @Id
+    @GeneratedValue(strategy=GenerationType.AUTO)
+    @JsonIgnore
+    private long id;
     private String city;
     private String street;
     private int postalCode;
@@ -37,4 +51,44 @@ public class AddressEntity {
     public void setPostalCode(int postalCode) {
         this.postalCode = postalCode;
     }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((city == null) ? 0 : city.hashCode());
+        result = prime * result + ((street == null) ? 0 : street.hashCode());
+        result = prime * result + postalCode;
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        AddressEntity other = (AddressEntity) obj;
+        if (city == null) {
+            if (other.city != null)
+                return false;
+        } else if (!city.equals(other.city))
+            return false;
+        if (street == null) {
+            if (other.street != null)
+                return false;
+        } else if (!street.equals(other.street))
+            return false;
+        if (postalCode != other.postalCode)
+            return false;
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "AddressEntity [id=" + id + ", city=" + city + ", street=" + street + ", postalCode=" + postalCode + "]";
+    }
+
 }

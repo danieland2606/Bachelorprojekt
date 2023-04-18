@@ -42,4 +42,9 @@ public class NoId_Address implements Serializable {
     public void setPostalCode(String postalCode) {
         this.postalCode = postalCode;
     }
+
+    @Override
+    public String toString(){
+        return postalCode + " " + city + ", " + street;
+    }
 }

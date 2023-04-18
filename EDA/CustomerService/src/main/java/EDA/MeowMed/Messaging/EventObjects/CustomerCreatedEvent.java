@@ -1,11 +1,14 @@
 package EDA.MeowMed.Messaging.EventObjects;
 
 import EDA.MeowMed.Persistence.Entity.Customer;
-
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDate;
 
+/**
+ * Object with select customer information
+ * Can be serialized and sent as event payload
+ */
 public class CustomerCreatedEvent implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
@@ -13,7 +16,9 @@ public class CustomerCreatedEvent implements Serializable {
     private Long id;
     private String firstName;
     private String lastName;
-    private String martialStatus;
+    private String formOfAddress;
+    private String title;
+    private String maritalStatus;
     private LocalDate dateOfBirth;
     private String employmentStatus;
     private NoId_Address address;
@@ -28,7 +33,9 @@ public class CustomerCreatedEvent implements Serializable {
         this.id = customer.getId();
         this.firstName = customer.getFirstName();
         this.lastName = customer.getLastName();
-        this.martialStatus = customer.getMartialStatus();
+        this.formOfAddress = customer.getFormOfAddress();
+        this.title = customer.getTitle();
+        this.maritalStatus = customer.getMaritalStatus();
         this.dateOfBirth = customer.getDateOfBirth();
         this.employmentStatus = customer.getEmploymentStatus();
         this.address = new NoId_Address(customer.getAddress());
@@ -37,11 +44,13 @@ public class CustomerCreatedEvent implements Serializable {
         this.bankDetails = customer.getBankDetails();
     }
 
-    public CustomerCreatedEvent(Long id, String firstName, String lastName, String martialStatus, LocalDate dateOfBirth, String employmentStatus, NoId_Address address, String phoneNumber, String email, String bankDetails) {
+    public CustomerCreatedEvent(Long id, String firstName, String lastName, String formOfAddress, String title, String maritalStatus, LocalDate dateOfBirth, String employmentStatus, NoId_Address address, String phoneNumber, String email, String bankDetails) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.martialStatus = martialStatus;
+        this.formOfAddress = formOfAddress;
+        this.title = title;
+        this.maritalStatus = maritalStatus;
         this.dateOfBirth = dateOfBirth;
         this.employmentStatus = employmentStatus;
         this.address = address;
@@ -74,12 +83,20 @@ public class CustomerCreatedEvent implements Serializable {
         this.lastName = lastName;
     }
 
-    public String getMartialStatus() {
-        return martialStatus;
+    public String getFormOfAddress() {return formOfAddress;}
+
+    public void setFormOfAddress(String formOfAddress) {this.formOfAddress = formOfAddress;}
+
+    public String getTitle() {return title;}
+
+    public void setTitle(String title) {this.title = title;}
+
+    public String getMaritalStatus() {
+        return maritalStatus;
     }
 
-    public void setMartialStatus(String martialStatus) {
-        this.martialStatus = martialStatus;
+    public void setMaritalStatus(String maritalStatus) {
+        this.maritalStatus = maritalStatus;
     }
 
     public LocalDate getDateOfBirth() {
@@ -129,4 +146,5 @@ public class CustomerCreatedEvent implements Serializable {
     public void setBankDetails(String bankDetails) {
         this.bankDetails = bankDetails;
     }
+
 }

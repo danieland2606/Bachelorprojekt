@@ -20,7 +20,15 @@ export class Page {
 
     static #bindData(node, data) {
         const binding = node.getAttribute('data-bind').split('\.');
-        const observable = new Observable('');
+        if(node.parentNode?.nodeName?.toLowerCase() === 'label') {
+            const parent = node.parentNode;
+            node.setAttribute('id', binding);
+            parent.setAttribute('for', binding);
+            parent.parentNode.append(node);
+        }
+        let observable = this.#getProperty(binding, data);
+        if(!observable || !('bind' in observable))
+            observable = new Observable('');
         observable.bind(node);
         this.#setProperty(data, binding, observable);
     }
@@ -44,8 +52,8 @@ export class Page {
         const template = node.querySelector('template').content.firstElementChild;
         const property = node.getAttribute('data-array');
         const values = data[property];
-        const nodes = values.map(val => Page.#renderRow(val, template));
-        node.append(...nodes);
+        const nodes = values?.map(val => Page.#renderRow(val, template));
+        node.append(...(nodes ?? []));
     }
 
     static #renderRow(data, template) {
@@ -60,6 +68,8 @@ export class Page {
     }
 
     static #getProperty(property, obj) {
+        if(!property || !obj)
+            return undefined;
         if (property.length === 1)
             return obj[property[0]];
         else
