@@ -75,6 +75,7 @@ public class NotificationService {
                     = new FileSystemResource(
                     new File(details.getAttachment()));
 
+
             mimeMessageHelper.addAttachment(
                     file.getFilename(), file);
             */
