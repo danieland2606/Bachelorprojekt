@@ -1,5 +1,6 @@
 package EDA.MeowMed.Persistence.Entity;
 
+import EDA.MeowMed.Rest.PremiumCalculationData;
 import com.fasterxml.jackson.annotation.JsonFilter;
 import jakarta.persistence.*;
 
@@ -12,8 +13,9 @@ import java.time.LocalDate;
 public class ObjectOfInsurance implements Serializable {
 
     @Id
-    @GeneratedValue
-    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "id", unique = true, nullable = false)
     private long id;
 
     @Column(name = "name", nullable = false)
@@ -51,6 +53,16 @@ public class ObjectOfInsurance implements Serializable {
         this.personality = personality;
         this.environment = environment;
         this.weight = weight;
+    }
+
+    public ObjectOfInsurance(PremiumCalculationData calculationData) {
+        this.race = calculationData.getRace();
+        this.color = calculationData.getColor();
+        this.dateOfBirth = calculationData.getDateOfBirth();
+        this.castrated = calculationData.isCastrated();
+        this.personality = calculationData.getPersonality();
+        this.environment = calculationData.getEnvironment();
+        this.weight = calculationData.getWeight();
     }
 
     public ObjectOfInsurance() {

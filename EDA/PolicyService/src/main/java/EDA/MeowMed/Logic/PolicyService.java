@@ -6,12 +6,12 @@ import EDA.MeowMed.Messaging.EventObjects.CustomerCreatedEvent;
 import EDA.MeowMed.Messaging.EventObjects.PolicyCreatedEvent;
 import EDA.MeowMed.Messaging.PolicyCreatedSender;
 import EDA.MeowMed.Persistence.CustomerRepository;
-import EDA.MeowMed.Persistence.Entity.Address;
 import EDA.MeowMed.Persistence.Entity.Customer;
 import EDA.MeowMed.Persistence.Entity.Policy;
 import EDA.MeowMed.Persistence.ObjectOfInsuranceRepository;
 import EDA.MeowMed.Persistence.PolicyRepository;
 import EDA.MeowMed.Persistence.AddressRepository;
+import EDA.MeowMed.Rest.PremiumCalculationData;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -180,6 +180,17 @@ public class PolicyService {
         Customer customer = new Customer(customerCreatedEvent);
         this.addressRepository.save(customer.getAddress());
         this.customerRepository.save(customer);
+    }
+
+    public double getPremiumByCalculationObject(PremiumCalculationData calculationData) throws ChangeSetPersister.NotFoundException {
+        Optional<Customer> customerForPolicy = null;
+        customerForPolicy = this.customerRepository.findById(calculationData.getCustomerID());
+        if(!customerForPolicy.isPresent())
+        {
+            throw new ChangeSetPersister.NotFoundException();
+        }
+        Policy policy = new Policy(calculationData);
+        return this.getPremium(customerForPolicy.get(), policy);
     }
 
     /**
