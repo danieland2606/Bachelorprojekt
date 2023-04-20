@@ -2,7 +2,6 @@ package EDA.MeowMed.Application;
 
 import EDA.MeowMed.JSON.MapFilter;
 import EDA.MeowMed.Messaging.EventSenderService;
-import EDA.MeowMed.Persistence.AddressRepository;
 import EDA.MeowMed.Persistence.CustomerRepository;
 import EDA.MeowMed.Persistence.Entity.Customer;
 import org.springframework.beans.factory.annotation.Autowired;
