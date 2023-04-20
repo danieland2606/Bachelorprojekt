@@ -11,16 +11,7 @@ class PremiumFetcher extends Observable {
   }
 
   async update(data) {
-    const calcObject = {};
-    calcObject.postalCode = data.postalCode;
-    calcObject.coverage = data.policy.coverage;
-    calcObject.race = data.policy.objectOfInsurance.race;
-    calcObject.color = data.policy.objectOfInsurance.color;
-    calcObject.dateOfBirth = data.policy.objectOfInsurance.dateOfBirth;
-    calcObject.castrated = data.policy.objectOfInsurance.castrated;
-    calcObject.personality = data.policy.objectOfInsurance.personality;
-    calcObject.environment = data.policy.objectOfInsurance.environment;
-    calcObject.weight = data.policy.objectOfInsurance.weight;
+    const calcObject = {customerId: data.customerId, policy: data.policy};
     this.value = await getPremium(calcObject);
   }
 }
@@ -40,10 +31,9 @@ export class MyApp extends Application {
     return data;
   }
 
-  async fetchPolicyNew({id, postalCode}) {
+  async fetchPolicyNew({id}) {
     const data = {};
     data.customerId = id;
-    data.postalCode = postalCode;
     data.premium = new PremiumFetcher();
     return data;
   }
