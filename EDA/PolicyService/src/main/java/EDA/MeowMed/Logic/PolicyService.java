@@ -18,7 +18,6 @@ import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
-import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.stereotype.Service;
 
@@ -37,17 +36,11 @@ public class PolicyService {
 
     /**
      * Constructor for PolicyService class.
-     *
      * @param policyCreatedSender a sender object used to send notifications when a new policy is added
-     *
      * @param policyRepository a repository object used to access policies data
-     *
      * @param objectOfInsuranceRepository a repository object used to access object of insurance data
-     *
      * @param customerRepository a repository object used to access customer data
-     *
      * @param addressRepository a repository object used to access address data
-     *
      */
     @Autowired
     public PolicyService(PolicyCreatedSender policyCreatedSender,
@@ -64,17 +57,11 @@ public class PolicyService {
 
     /**
      * Finds a policy by its customer ID and policy ID, and returns a filtered MappingJacksonValue of the policy.
-     *
      * @param customerID the ID of the customer who owns the policy
-     *
      * @param policyID the ID of the policy to be retrieved
-     *
      * @return a MappingJacksonValue object containing the filtered policy retrieved
-     *
      * @throws ObjectNotFoundException if the customer or policy is not found
-     *
      * @throws DatabaseAccessException if there is an error accessing the database
-     *
      */
     public MappingJacksonValue findPolicyByCustomerIDAndPolicyID(long customerID, long policyID) throws ObjectNotFoundException, DatabaseAccessException {
         try {
@@ -106,29 +93,16 @@ public class PolicyService {
 
     /**
      * Adds a policy for the specified customer.
-     *
      * @param customerID The ID of the customer for whom the policy is being added.
-     *
      * @param policy The policy to be added.
-     *
      * @return A {@link MappingJacksonValue} object containing the policy that was added.
-     *
      * @throws ObjectNotFoundException if the customer with the given ID does not exist.
-     *
      * @throws DatabaseAccessException if there is an error accessing the database.
-     *
-     * @test This method has been successfully tested
      */
     public MappingJacksonValue addPolicy(long customerID, Policy policy) throws ObjectNotFoundException, DatabaseAccessException {
         try {
-            // Check if the customer exists
-            if (!doesCustomerExist(customerID)) {
-                throw new ObjectNotFoundException("Customer with ID " + customerID + " not found");
-            }
-
             // Set the customer and premium for the policy
-            Optional<Customer> customerForPolicy = this.customerRepository.findById(customerID);
-            policy.setCustomer(customerForPolicy.get());
+            policy.setCustomer(this.getCustomer(customerID));
             policy.setPremium(this.getPremium(policy.getCustomer(), policy));
 
             // Save the object of insurance and policy
@@ -152,19 +126,11 @@ public class PolicyService {
 
     /**
      * Retrieves a list of policies for a customer with specified ID, with the option to select specific fields to include
-     *
      * @param customerID the ID of the customer to retrieve policies for
-     *
      * @param fields comma-separated list of fields to include in the response
-     *
      * @return a {@link MappingJacksonValue} object containing the list of policies retrieved
-     *
      * @throws ObjectNotFoundException if the customer with the specified ID does not exist
-     *
      * @throws DatabaseAccessException if there is an error accessing the database
-     *
-     * @test This method has been successfully tested
-     *
      */
     public MappingJacksonValue getPolicyList(long customerID, String fields) throws ObjectNotFoundException, DatabaseAccessException {
         try {
@@ -185,7 +151,7 @@ public class PolicyService {
             MappingJacksonValue wrapper = new MappingJacksonValue(list);
 
             // parse the fields parameter to separate policy fields from objectOfInsurance fields
-            List<String> fieldList = Arrays.asList(fields.split(","));
+            String[] fieldList = fields.split(",");
             List<String> policyList = new ArrayList<>();
             List<String> ooIList = new ArrayList<>();
 
@@ -217,18 +183,11 @@ public class PolicyService {
         }
     }
 
-
-    //TODO Fehlerbehandlung, aber wo ?
     /**
      * Adds a new customer to the database based on the information provided in a CustomerCreatedEvent.
      * The address of the customer is also saved in the database.
-     *
      * @param customerCreatedEvent an event containing the information of the new customer
-     *
      * @throws DataAccessException if there's an error accessing the database
-     *
-     * @test This method has been successfully tested
-     *
      */
     public void addNewCustomer(CustomerCreatedEvent customerCreatedEvent) throws DataAccessException {
         Customer customer = new Customer(customerCreatedEvent);
@@ -238,26 +197,21 @@ public class PolicyService {
         this.customerRepository.save(customer);
     }
 
-
-    //TODO: für diese Beide Methoden habe ich nicht viel gemacht weil ich nicht verstanden habe, was man damit erreichen will
-    public double getPremiumByCalculationObject(PremiumCalculationData calculationData) throws ChangeSetPersister.NotFoundException {
-        Optional<Customer> customerForPolicy = null;
-        customerForPolicy = this.customerRepository.findById(calculationData.getCustomerID());
-        if(!customerForPolicy.isPresent())
-        {
-            throw new ObjectNotFoundException("Customer dose not");
-        }
-        Policy policy = new Policy(calculationData);
-        return this.getPremium(customerForPolicy.get(), policy);
-    }
     /**
-     Calculates the premium for a given customer and policy
+     * Wrapper for {@link EDA.MeowMed.Logic.PolicyService#getPremium(Customer customer, Policy policy) getPremium(Customer customer, Policy policy)}
+     * @param calculationData the calculationData Object
+     * @return the calculated Premium
+     * @throws ObjectNotFoundException if the customer does not exist
+     */
+    public double getPremium(PremiumCalculationData calculationData) throws ObjectNotFoundException {
+        return this.getPremium(this.getCustomer(calculationData.getCustomerId()), calculationData.getPolicy());
+    }
 
-     @param customer the customer for which the premium is being calculated
-
-     @param policy the policy for which the premium is being calculated
-
-     @return the calculated premium for the given customer and policy
+    /**
+     * Calculates the premium for a given customer and policy
+     * @param customer the customer for which the premium is being calculated
+     * @param policy the policy for which the premium is being calculated
+     * @return the calculated premium for the given customer and policy
      */
     public double getPremium(Customer customer, Policy policy) {
         double factor = 0.015;
@@ -293,24 +247,30 @@ public class PolicyService {
         /* Postal Code Racism */
         //TODO
 
-
-        return base + added; //TODO: als JSON in vernünftiger Form returnen
+        return base + added;
     }
-
-
 
     /**
      * Checks if a customer with the given ID exists in the database.
-     *
      * @param customerID The ID of the customer to check
-     *
      * @return true if the customer exists, false otherwise
-     *
      */
     private boolean doesCustomerExist(Long customerID) {
         Optional<Customer> customerForPolicy = this.customerRepository.findById(customerID);
         return customerForPolicy.isPresent();
     }
 
+    /**
+     * Get Customer by CustomerID
+     * @param customerID the id of the customer
+     * @return the customer object
+     * @throws ObjectNotFoundException when the Customer does not exist
+     */
+    private Customer getCustomer(Long customerID) throws ObjectNotFoundException {
+        Optional<Customer> customerForPolicy = this.customerRepository.findById(customerID);
+        if (customerForPolicy.isEmpty()) {
+            throw new ObjectNotFoundException("Customer with ID: " + customerID + " does not exist.");
+        }
+        return customerForPolicy.get();
+    }
 }
-

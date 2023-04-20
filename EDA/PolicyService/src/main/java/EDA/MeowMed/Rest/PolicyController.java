@@ -18,6 +18,7 @@ import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.web.bind.annotation.*;
 
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 @RestController
@@ -33,24 +34,11 @@ public class PolicyController {
 
     /**
      Retrieves the policy object with the given policy ID for the customer with the given customer ID.
-
      @param c_id - the ID of the customer whose policy is being retrieved
-
      @param p_id - the ID of the policy being retrieved
-
-     @return the policy object with the given policy ID for the customer with the given customer ID
-
+     @return the policy object with the given policy ID for the customer with the given customer ID.
      @throws ObjectNotFoundException if the policy with the given policy ID for the customer with the given customer ID is not found
-
      @throws DatabaseAccessException if there is an error accessing the database while retrieving the policy object
-
-     @HTTP 200 - OK status code when the policy object is successfully retrieved
-
-     @HTTP 404 - NOT FOUND status code when the policy with the given policy ID for the customer with the given customer ID is not found
-
-     @HTTP 500 - INTERNAL SERVER ERROR status code when there is an unexpected error while retrieving the policy object
-
-     @test This method has been successfully tested
      */
     @GetMapping("/customer/{c_id}/policy/{p_id}")
     public ResponseEntity<?> findPolicyByCustomerIDAndPolicyID(@PathVariable long c_id, @PathVariable long p_id) {
@@ -70,41 +58,14 @@ public class PolicyController {
 
     /**
      This method adds a new policy for a customer with the given customerID.
-
      It uses a POST request to create a new policy in the database for the given customer ID out of Customer.
-
      @param c_id - the ID of the customer for which the policy is being added
-
      @param policy - the policy object being added for the customer
-
      @return a ResponseEntity containing the newly added policy object
-
      @throws ObjectNotFoundException if the customer with the given customerID does not exist in the database
-
      @throws DatabaseAccessException if there was an error accessing the database
-
-     @throws Exception if there was an unexpected error while adding the policy
-
-     @test This method has been tested and passed all relevant test cases.
-
-     @PostMapping("/customer/{c_id}/policy") is the annotation for the HTTP POST request mapping to the URI "/customer/{c_id}/policy".
-
-     @PathVariable long c_id is used to bind the c_id parameter to the {c_id} placeholder in the URI.
-
-     @RequestBody Policy policy is used to bind the policy object in the request body to the policy parameter.
-
-     @return ResponseEntity<?> is used to return a ResponseEntity with a generic type that can be any Java object.
-
      @throws ObjectNotFoundException is thrown when the customer with the given customerID does not exist in the database.
-
      @throws DatabaseAccessException is thrown when there is an error accessing the database.
-
-     @throws Exception is thrown when an unexpected error occurs while adding the policy.
-
-     @return a ResponseEntity containing the newly added policy object.
-
-     @test This method has been successfully tested
-
      */
     @PostMapping("/customer/{c_id}/policy")
     public ResponseEntity<?> addPolicy(@PathVariable long c_id, @RequestBody Policy policy) {
@@ -125,24 +86,15 @@ public class PolicyController {
 
     /**
      Retrieves a list of policies for the given customer ID, filtered by the specified fields.
-
      Uses the policyService to retrieve the policy list for the provided customer ID and filters it based on
      the fields parameter using the getPolicyList() method. The resulting policies are returned as a MappingJacksonValue
      wrapped in a ResponseEntity.
-
      @param c_id - the ID of the customer whose policies are being retrieved
-
      @param fields - the comma-separated list of fields to be included in the response
-
      @return a ResponseEntity containing the MappingJacksonValue of the retrieved policies
-
      @throws ObjectNotFoundException - if the customer does not exist in the database
-
      @throws DatabaseAccessException - if there is an error accessing the database
-
      @see PolicyService#getPolicyList(long, String)
-
-     @test This method has been successfully tested
      */
     @GetMapping("/customer/{c_id}/policy")
     public ResponseEntity<?> getPolicyList(@PathVariable long c_id, @RequestParam(value = "fields") String fields) {
@@ -158,11 +110,11 @@ public class PolicyController {
         }
     }
 
-    //TODO: hier fehlt fehlerbehandelung auch weil ich die Methoden aus der PolicyServic nicht wirklich bearbeiten konnte.
+
     @GetMapping("/policyprice")
     public ResponseEntity<?> getPremium(@RequestParam("details") String details) {
         ObjectMapper mapper = new ObjectMapper();
-        String str = new String(Base64.getUrlDecoder().decode(details), Charset.forName("UTF-8"));
+        String str = new String(Base64.getUrlDecoder().decode(details), StandardCharsets.UTF_8);
         PremiumCalculationData body = null;
         try {
             mapper.registerModule(new JavaTimeModule());
@@ -171,8 +123,8 @@ public class PolicyController {
                 return new ResponseEntity<String>("Convert was not Possible", HttpStatusCode.valueOf(500));
             }
             try {
-                return new ResponseEntity<String>(mapper.writeValueAsString(Collections.singletonMap("premium", this.policyService.getPremiumByCalculationObject(body))), HttpStatusCode.valueOf(200));
-            } catch (ChangeSetPersister.NotFoundException e) {
+                return new ResponseEntity<String>(mapper.writeValueAsString(Collections.singletonMap("premium", this.policyService.getPremium(body))), HttpStatusCode.valueOf(200));
+            } catch (ObjectNotFoundException e) {
                 String errorMessage = "Error calculating premium because the customer does not exist\nMore infos: " + e.getMessage();
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorMessage);
             }
