@@ -1,0 +1,17 @@
+{
+    "startDate": "1990-01-01",
+    "endDate": "2030-12-31",
+    "coverage": 50000,
+    "premium": 75,
+    "objectOfInsurance": {
+      "name": "Tomato",
+      "race": "Bengal",
+      "color": "Braun",
+      "dateOfBirth": "2015-07-22",
+      "castrated": true,
+      "personality": "anhänglich",
+      "environment": "drinnen",
+      "weight": 4
+    }
+  }
+  

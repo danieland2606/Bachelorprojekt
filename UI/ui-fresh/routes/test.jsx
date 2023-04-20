@@ -11,7 +11,7 @@ export default function IframeTest({ data }) {
   if (data) {
     return (
       <>
-        <h1>{data}</h1>
+        <div style="user-select:none">{data}</div>
       </>
     );
   } else {
@@ -21,7 +21,10 @@ export default function IframeTest({ data }) {
           <input type="text" name="myval"></input>
           <input type="submit"></input>
         </form>
-        <iframe name="my_test">
+        <iframe
+          name="my_test"
+          style="border-style:none;width:6em;height:6em"
+        >
         </iframe>
       </>
     );

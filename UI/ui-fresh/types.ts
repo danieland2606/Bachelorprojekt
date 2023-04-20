@@ -1,4 +1,4 @@
-export class Customer {
+export interface Customer {
   id: number | undefined;
   firstName: string | undefined;
   lastName: string | undefined;
@@ -13,7 +13,7 @@ export class Customer {
   bankDetails: string | undefined;
 }
 
-export class Address {
+export interface Address {
   city: string | undefined;
   street: string | undefined;
   postalCode: number | undefined;
