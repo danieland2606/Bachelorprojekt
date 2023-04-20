@@ -111,9 +111,9 @@
     </section>
     <div class="box-table-buttons">
       <input type="text" placeholder="Suche.." hidden>
-      <button type="button"
-        onclick="app.navigate('policy-new', {id: app.data.customer.id, postalCode: app.data.customer.address.postalCode})">Neuer
-        Vertrag</button>
+      <button type="button" onclick="app.navigate('policy-new', {id: app.data.customer.id})">
+        Neuer Vertrag
+      </button>
     </div>
     <table>
       <thead>
@@ -354,7 +354,8 @@
     <div class="box-row buttons">
       <input type="button" data-bind="premium" onclick="app.data.premium.update(app.data)"></button>
       <button type="button" onclick="history.back()">Abbrechen</button>
-      <button type="button" onclick="app.createPolicy(app.data.customerId, app.data.policy)">Vertrag abschließen</button>
+      <button type="button" onclick="app.createPolicy(app.data.customerId, app.data.policy)">Vertrag
+        abschließen</button>
     </div>
   </template>
 
