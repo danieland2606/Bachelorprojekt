@@ -19,3 +19,4 @@ RUN sed -i s~\${customerService}~$customerService~ /usr/local/apache2/htdocs/fet
 RUN sed -i s~\${policyService}~$policyService~ /usr/local/apache2/htdocs/fetch.js
 
 FROM meowmed-ui-${mode} AS meowmed-ui
+EXPOSE 80
