@@ -161,15 +161,22 @@ Creates new policy resource for customer with id=={c_id}.
 #### Calculation object:
 ```json
 {
-  "postalCode": "30855",
-  "coverage": 50000,
-  "race": "Bengal",
-  "color": "Braun",
-  "dateOfBirth": "2015-07-22",
-  "castrated": true,
-  "personality": "anhänglich",
-  "environment": "drinnen",
-  "weight": 4
+  "customerId": 0,
+  "policy": {
+    "startDate": "1990-01-01",
+    "endDate": "2030-12-31",
+    "coverage": 50000,
+    "objectOfInsurance": {
+      "name": "Tomato",
+      "race": "Bengal",
+      "color": "Braun",
+      "dateOfBirth": "2015-07-22",
+      "castrated": true,
+      "personality": "anhänglich",
+      "environment": "drinnen",
+      "weight": 4
+    }
+  }
 }
 ```
 #### Response body:
