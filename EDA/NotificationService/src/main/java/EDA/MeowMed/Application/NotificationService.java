@@ -19,9 +19,9 @@ public class NotificationService {
     @Autowired
     private EmailSenderService emailSenderService;
     private final String sender = "noreply@meowmed.com";
-    private final String subjectCustomer = "Willkommen bei Meowmed!";
+    private final String subjectCustomer = "Willkommen bei MeowMed!";
     private final String templateCustomer = "customernotification";
-    private final String subjectPolicy = ""; //ToDo: add valid Subject for Policy.
+    private final String subjectPolicy = "Ihre MeowMed Vertragsinformationen";
     private final String templatePolicy = "policynotification";
 
     /**
