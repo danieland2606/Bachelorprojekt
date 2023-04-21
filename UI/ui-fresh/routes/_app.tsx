@@ -5,16 +5,19 @@ export default function App({ Component }: AppProps) {
   return (
     <html>
       <Head>
+        <title>Meowmed+</title>
         <meta
           name="description"
           content="MeowMed+ customer management application"
-        />
-        <meta name="author" content="Julian Opitz" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link rel="stylesheet" href={asset("meowmed.css")} />
+        >
+        </meta>
+        <meta name="author" content="Julian Opitz"></meta>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        </meta>
+        <link rel="stylesheet" href={asset("meowmed.css")}></link>
       </Head>
       <body>
-        <Component />
+        <Component></Component>
       </body>
     </html>
   );
