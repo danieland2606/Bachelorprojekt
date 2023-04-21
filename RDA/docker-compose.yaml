@@ -23,6 +23,8 @@ services:
       - "default"
     ports:
       - 81:8080
+    depends_on: 
+      - policydb
     environment:
       - spring.datasource.url=jdbc:mariadb://policydb:3306/Policy
       - spring.datasource.username=user

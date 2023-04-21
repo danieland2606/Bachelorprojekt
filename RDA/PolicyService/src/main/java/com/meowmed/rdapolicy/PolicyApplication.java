@@ -38,6 +38,7 @@ public class PolicyApplication {
 	 * Diese Methode ist für die Erstellung der JPA-Repository und speichern von Beispieldaten
 	 * @return Speichern der Beispieldaten
 	 */
+	/*
 	@Bean
 	CommandLineRunner commandLineRunner(PolicyRepository policyRepository, ObjectOfInsuranceRepository objectOfInsuranceRepository, CatRepository catRepository){
 		return args -> {
@@ -66,4 +67,6 @@ public class PolicyApplication {
 			catRepository.saveAll(entities);
 		};
 	}
+	*/
+
 }
