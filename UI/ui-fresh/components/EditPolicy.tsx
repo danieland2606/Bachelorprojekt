@@ -3,10 +3,13 @@ import { Form, FormProps } from "./Form.tsx";
 
 export function EditPolicy(props: FormProps) {
   return (
-    <Form class="box-column">
+    <Form {...props}>
       <Input type="date" name="startDate" labeltext="Begin"></Input>
       <Input type="date" name="endDate" labeltext="Ende"></Input>
       <Input type="number" name="coverage" labeltext="Deckung"></Input>
+      {props.readonly && (
+        <Input type="number" name="premium" labeltext="Rate"></Input>
+      )}
       <div class="box-column">
         <h2>Katze</h2>
         <Input
@@ -46,23 +49,15 @@ export function EditPolicy(props: FormProps) {
           labeltext="Geburtsdatum"
         >
         </Input>
-        <Input
-          type="checkbox"
-          name="objectOfInsurance.castrated"
-          labeltext="Kastriert"
-        >
-        </Input>
-        <Select
-          name="objectOfInsurance.personality"
-          labeltext="Persönlichkeit"
-        >
+        <Select name="objectOfInsurance.castrated" labeltext="Kastriert">
+          <option value="true">Kastriert</option>
+          <option value="false">Nicht Kastriert</option>
+        </Select>
+        <Select name="objectOfInsurance.personality" labeltext="Persönlichkeit">
           <option value="anhaenglich">Anhänglich</option>
           <option value="spielerisch">Spielerisch</option>
         </Select>
-        <Select
-          name="objectOfInsurance.environment"
-          labeltext="Umgebung"
-        >
+        <Select name="objectOfInsurance.environment" labeltext="Umgebung">
           <option value="draussen">Hauskatze</option>
           <option value="drinnen">Freigänger</option>
         </Select>
@@ -73,6 +68,7 @@ export function EditPolicy(props: FormProps) {
         >
         </Input>
       </div>
+      {props.children}
     </Form>
   );
 }

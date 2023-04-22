@@ -13,14 +13,6 @@ export const handler = {
     const datacust = JSON.parse(jsoncust);
     return ctx.render({ tableData: tableData, customer: datacust });
   },
-  async POST(req: Request, _: HandlerContext) {
-    const form = await req.formData();
-    for (const [key, val] of form.entries()) {
-      console.debug(`key: ${key}, val: ${val}`);
-    }
-    const base = new URL(req.url).origin;
-    return Response.redirect(new URL("/", base), 303);
-  },
 };
 
 export default function ShowCustomer({ data, params }: PageProps) {
