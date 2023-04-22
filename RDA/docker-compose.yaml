@@ -50,12 +50,31 @@ services:
       context: ./CustomerService
       dockerfile: Dockerfile
     container_name: customer-service
+    depends_on: 
+      - customerdb
     networks:
       - "default"
     ports:
       - 82:8080   
     environment:
+      - spring.datasource.url=jdbc:mariadb://customerdb:3306/Customer
+      - spring.datasource.username=user
+      - spring.datasource.password=123456789
       - docker_notificationurl=notification
+  customerdb:
+    image: mariadb:latest
+    container_name: customerdb
+    networks:
+      - "default"
+    environment:
+      MARIADB_ROOT_PASSWORD: test
+      MYSQL_DATABASE: Customer
+      MYSQL_USER: user
+      MYSQL_PASSWORD: 123456789
+    #ports:
+    #  - "3306:3306"
+    volumes:
+      - customerdb_data:/var/lib/mysql
   notification:
     build:
       context: ./NotificationService
@@ -75,3 +94,4 @@ services:
 
 volumes:
   policydb_data:
+  customerdb_data:

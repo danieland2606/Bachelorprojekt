@@ -264,22 +264,29 @@ TESTO INTENSE #ffffff
                                       th:text="${formOfAddress}">Anrede</span> <span
                                       th:text="${firstName}">Vorname</span> <span
                                       th:text="${lastName}">Nachname</span>,&nbsp;</p>
-                                  <p style="text-align: justify;">wir freuen uns Sie bei Uns Begrüßen zu dürfen. Im
-                                    folgenden finden Sie eine Auflistung ihrer Kundendetails.</p>
-                                  <div style="text-align: left;">Ihre Kunden-ID: <span th:text="${cid}">Kunden-ID</span>
+                                  <p style="text-align: justify;">wir freuen uns Ihnen
+                                    mitteilen zu können, dass ein neuer
+                                    Versicherungsvertrag für Ihre Katze
+                                    abgeschlossen wurde. Im folgenden finden Sie
+                                    eine Auflistung der Vertragsdetails.</p>
+                                  <div style="text-align: left;">Vertragsnummer: <span 
+                                      th:text="${pid}">VertragsID</span>
                                   </div>
-                                  <div style="text-align: left;">Familienstand: <span
-                                      th:text="${martialStatus}">Familienstand</span></div>
-                                  <div style="text-align: left;">Geburtsdatum: <span
-                                      th:text="${dateOfBirth}">Geburtsdatum</span></div>
-                                  <div style="text-align: left;">Beschäftigungsstatus: <span
-                                      th:text="${employmentStatus}">Beschäftigungsstatus</span></div>
-                                  <div style="text-align: left;">Telefonnummer: <span
-                                      th:text="${phoneNumber}">Telefonnummer</span></div>
-                                  <div style="text-align: left;">Kontodaten: <span
-                                      th:text="${bankDetails}">Kontodaten</span></div>
-                                  <div style="text-align: left;">Wohnort: <span th:text="${address}">Kontodaten</span>
-                                  </div>
+                                  <div style="text-align: left;">Startdatum: <span
+                                      th:text="${startDate}">Startdatum des Vertrags</span></div>
+                                  <div style="text-align: left;">Enddatum: <span
+                                      th:text="${endDate}">Enddatum des
+                                      Vertrags</span></div>
+                                  <div style="text-align: left;">Deckung: <span
+                                      th:text="${coverage}">Deckungshöhe</span></div>
+                                  <div style="text-align: left;">Kastriert: <span
+                                      th:text="${castrated}">Kastration</span></div>
+                                  <div style="text-align: left;">Persönlichkeitstyp: <span
+                                      th:text="${personality}">Persönlichkeitstyp</span></div>
+                                  <div style="text-align: left;">Umgebung: <span 
+                                      th:text="${environment}">Umgebung</span></div>
+                                  <div style="text-align: left;">Gewicht: <span 
+                                        th:text="${weight}">Gewicht</span> kg</div>
                                   <div style="text-align: left;">&nbsp;</div>
                                   <div style="text-align: left;">Falls Sie weitere Fragen haben oder Informationen
                                     benötigen, zögern Sie bitte nicht, uns zu kontaktieren, Wir stehen Ihnen gerne zur
