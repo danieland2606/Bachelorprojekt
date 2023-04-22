@@ -4,20 +4,20 @@
 
 import config from "./deno.json" assert { type: "json" };
 import * as $0 from "./routes/_app.tsx";
-import * as $1 from "./routes/customer/[customerId]/index.tsx";
-import * as $2 from "./routes/customer/[customerId]/policy/[policyId].tsx";
-import * as $3 from "./routes/customer/[customerId]/policy/index.tsx";
-import * as $4 from "./routes/customer/index.tsx";
+import * as $1 from "./routes/customer.tsx";
+import * as $2 from "./routes/customer/[customerId].tsx";
+import * as $3 from "./routes/customer/[customerId]/policy.tsx";
+import * as $4 from "./routes/customer/[customerId]/policy/[policyId].tsx";
 import * as $5 from "./routes/index.tsx";
 import * as $6 from "./routes/test.jsx";
 
 const manifest = {
   routes: {
     "./routes/_app.tsx": $0,
-    "./routes/customer/[customerId]/index.tsx": $1,
-    "./routes/customer/[customerId]/policy/[policyId].tsx": $2,
-    "./routes/customer/[customerId]/policy/index.tsx": $3,
-    "./routes/customer/index.tsx": $4,
+    "./routes/customer.tsx": $1,
+    "./routes/customer/[customerId].tsx": $2,
+    "./routes/customer/[customerId]/policy.tsx": $3,
+    "./routes/customer/[customerId]/policy/[policyId].tsx": $4,
     "./routes/index.tsx": $5,
     "./routes/test.jsx": $6,
   },

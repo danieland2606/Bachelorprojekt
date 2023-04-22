@@ -1,22 +1,20 @@
-{
-  "policyList": [
-    {
-      "id": 0,
-      "startDate": "1990-01-01",
-      "endDate": "2030-12-31",
-      "coverage": 50000,
-      "objectOfInsurance": {
-        "name": "Tomato"
-      }
-    },
-    {
-      "id": 1,
-      "startDate": "1992-11-01",
-      "endDate": "2024-11-01",
-      "coverage": 10000,
-      "objectOfInsurance": {
-        "name": "Perry"
-      }
+[
+  {
+    "id": 0,
+    "startDate": "1990-01-01",
+    "endDate": "2030-12-31",
+    "coverage": 50000,
+    "objectOfInsurance": {
+      "name": "Tomato"
     }
-  ]
-}
+  },
+  {
+    "id": 1,
+    "startDate": "1992-11-01",
+    "endDate": "2024-11-01",
+    "coverage": 10000,
+    "objectOfInsurance": {
+      "name": "Perry"
+    }
+  }
+]

@@ -3,7 +3,7 @@ import { AppProps } from "$fresh/src/server/types.ts";
 
 export default function App({ Component }: AppProps) {
   return (
-    <html>
+    <>
       <Head>
         <title>Meowmed+</title>
         <meta
@@ -14,11 +14,9 @@ export default function App({ Component }: AppProps) {
         <meta name="author" content="Julian Opitz"></meta>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         </meta>
-        <link rel="stylesheet" href={asset("meowmed.css")}></link>
+        <link rel="stylesheet" href={asset("/meowmed.css")}></link>
       </Head>
-      <body>
-        <Component></Component>
-      </body>
-    </html>
+      <Component></Component>
+    </>
   );
 }

@@ -1,20 +1,59 @@
 export interface Customer {
-  id: number | undefined;
-  firstName: string | undefined;
-  lastName: string | undefined;
-  formOfAdress: string | undefined;
-  title: string | undefined;
-  maritalStatus: string | undefined;
-  dateOfBirth: string | undefined;
-  employmentStatus: string | undefined;
-  address: Address | undefined;
-  phoneNumber: string | undefined;
-  email: string | undefined;
-  bankDetails: string | undefined;
+  id?: number;
+  firstName: string;
+  lastName: string;
+  formOfAdress: string;
+  title: string;
+  maritalStatus: string;
+  dateOfBirth: string;
+  employmentStatus: string;
+  address: Address;
+  phoneNumber: string;
+  email: string;
+  bankDetails: string;
+}
+
+export interface TableCustomer {
+  id: number;
+  firstName: string;
+  lastName: string;
+  address: Address;
 }
 
 export interface Address {
-  city: string | undefined;
-  street: string | undefined;
-  postalCode: number | undefined;
+  city: string;
+  street: string;
+  postalCode: number;
+}
+
+export interface Policy {
+  id?: number;
+  startDate: string;
+  endDate: string;
+  coverage: number;
+  premium: number;
+  objectOfInsurance: ObjectOfInsurance;
+}
+
+export interface ObjectOfInsurance {
+  name: string;
+  race: string;
+  color: string;
+  dateOfBirth: string;
+  castrated: string;
+  personality: string;
+  environment: string;
+  weight: number;
+}
+
+export interface TablePolicy {
+  id: number;
+  startDate: string;
+  endDate: string;
+  coverage: number;
+  objectOfInsurance: Cat;
+}
+
+export interface Cat {
+  name: string;
 }

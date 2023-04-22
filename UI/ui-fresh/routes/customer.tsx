@@ -1,5 +1,5 @@
 import { HandlerContext } from "$fresh/server.ts";
-import { EditCustomer } from "../../components/EditCustomer.tsx";
+import { EditCustomer } from "../components/EditCustomer.tsx";
 
 export const handler = {
   async GET(_: Request, ctx: HandlerContext) {
@@ -19,18 +19,23 @@ export default function CreateCustomer() {
   return (
     <>
       <h1>Neuen Kunden anlegen</h1>
-      <EditCustomer id="new-customer" allrequired>
-        <div class="box-row buttons">
-          <a class="button" href="/">Abbrechen</a>
-          <input
-            form="new-customer"
-            type="submit"
-            class="button"
-            value="Anlegen"
-          >
-          </input>
-        </div>
+      <EditCustomer
+        id="new-customer"
+        action="/customer"
+        method="post"
+        allrequired
+      >
       </EditCustomer>
+      <div class="box-row buttons">
+        <a class="button" href="/">Abbrechen</a>
+        <input
+          form="new-customer"
+          type="submit"
+          class="button"
+          value="Anlegen"
+        >
+        </input>
+      </div>
     </>
   );
 }
