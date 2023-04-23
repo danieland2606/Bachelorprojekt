@@ -38,6 +38,10 @@ export class Application {
     return this.#data;
   }
 
+  get page() {
+    return this.#node;
+  }
+
   #gotoHash(hash) {
     if (hash) {
       const { page, args } = decodeHash(hash);

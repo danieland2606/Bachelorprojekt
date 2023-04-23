@@ -38,13 +38,15 @@ export class MyApp extends Application {
     return data;
   }
 
-  createPolicy(customerId, policy) {
-    postPolicy(customerId, policy);
+  async createPolicy(customerId, policy) {
+    this.page.querySelector('#create-policy').setAttribute('disabled','');
+    await postPolicy(customerId, policy);
     this.navigate('customer-details', { id: customerId });
   }
 
-  createCustomer(customer) {
-    postCustomer(customer);
+  async createCustomer(customer) {
+    this.page.querySelector('#create-customer').setAttribute('disabled','');
+    await postCustomer(customer);
     this.navigate('dashboard');
   }
 }

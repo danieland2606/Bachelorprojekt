@@ -242,7 +242,7 @@
     </form>
     <div class="box-row buttons">
       <button type="button" onclick="history.back()">Abbrechen</button>
-      <button type="button" onclick="app.createCustomer(app.data)">Anlegen</button>
+      <button id="create-customer" type="button" onclick="app.createCustomer(app.data)">Anlegen</button>
     </div>
   </template>
 
@@ -354,7 +354,7 @@
     <div class="box-row buttons">
       <input type="button" data-bind="premium" onclick="app.data.premium.update(app.data)"></button>
       <button type="button" onclick="history.back()">Abbrechen</button>
-      <button type="button" onclick="app.createPolicy(app.data.customerId, app.data.policy)">Vertrag
+      <button id="create-policy" type="button" onclick="app.createPolicy(app.data.customerId, app.data.policy)">Vertrag
         abschließen</button>
     </div>
   </template>
