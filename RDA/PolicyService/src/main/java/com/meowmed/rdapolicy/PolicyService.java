@@ -181,8 +181,16 @@ public class PolicyService {
 	 * @return Zurück kommt ein Wert als double für die monatlichen Kosten
 	 */
     public double getPolicyPrice(PriceCalculationEntity body){
-		System.out.println(body);
+		//System.out.println(body);
+
+		String customerURL = "http://" + customerUrl + ":8080/customer/{c_id}";
+		//System.out.println(customerURL);
+		WebClient customerClient = WebClient.create();
+		WebClient.ResponseSpec responseSpec = customerClient.get().uri(customerURL,body.getCustomerId()).retrieve();
+		CustomerRequest customer = responseSpec.bodyToMono(CustomerRequest.class).block();
+		//System.out.println(customer);
 		
+		if (body.getPolicy().getObjectOfInsurance().getPersonality().contains("sehr verspielt") || ChronoUnit.YEARS.between(customer.getDateOfBirth(), LocalDate.now())<=18) return 0;
 		//PriceCalculationEntity body
 		CatEntity cat = cRepository.findByRace(body.getPolicy().getObjectOfInsurance().getRace());
 		if (cat==null) return 0;
@@ -193,45 +201,40 @@ public class PolicyService {
 		// Ist die Katze Schwarz, ist die Versicherung Teurer
 		switch(body.getPolicy().getObjectOfInsurance().getColor()){
 			case "schwarz":
-				grundpreis = 0.02*body.getPolicy().getCoverage();
+				grundpreis = 0.002*body.getPolicy().getCoverage();
 				break;
 			default:
-				grundpreis = 0.015*body.getPolicy().getCoverage();
+				grundpreis = 0.0015*body.getPolicy().getCoverage();
 		}
-
 		//System.out.println("Grundpreis: " + grundpreis + " Endbetrag: " + endbetrag);
 		//  Der aktuelle Preis startet als Grundpreis. Später wird der Preis um Prozentteile des Grundpreises erhöht
 		endbetrag = grundpreis;
 		// Erhöhe die Kosten um 5€ für jedes Kilo abweichung vom Durchschnittsgewichtes der Rasse
-		endbetrag += Math.abs((cat.getUpperAverageWeight()-body.getPolicy().getObjectOfInsurance().getWeight())*5);
+		if(body.getPolicy().getObjectOfInsurance().getWeight() < cat.getLowerAverageWeight()){
+			endbetrag += Math.abs((cat.getLowerAverageWeight()-body.getPolicy().getObjectOfInsurance().getWeight())*5);
+		} else if (body.getPolicy().getObjectOfInsurance().getWeight() > cat.getUpperAverageAge()){
+			endbetrag += Math.abs((cat.getUpperAverageWeight()-body.getPolicy().getObjectOfInsurance().getWeight())*5);
+		}
 		// Erhöhe die Kosten um 1% des Grundpreises für jeden Punkt in der Krankheitsanfälligkeitsskala
-		endbetrag += grundpreis*(cat.getIllnessFactor()*0.01);
+		endbetrag += cat.getIllnessFactor();
 
 		//System.out.println("Grundpreis: " + grundpreis + " Endbetrag: " + endbetrag);
 
 		// Ist es eine Draußenkatze, steigere den Preis um 1% des Grundwertes
-		if(body.getPolicy().getObjectOfInsurance().getEnvironment() == "draussen") endbetrag += 0.01*grundpreis;
+		if(body.getPolicy().getObjectOfInsurance().getEnvironment() == "draussen") endbetrag += 0.1*grundpreis;
 		// Falls die Katze im oberen Quantil des Durchschnittsalters oder älter ist, erhöhe den Preis um 20% des Grundpreises
 		// Ist die Katze Jung, erhöhe den Preis um 5€
 		if(ChronoUnit.YEARS.between(body.getPolicy().getObjectOfInsurance().getDateOfBirth(), LocalDate.now())>(cat.getUpperAverageAge()*0.75)){
 			endbetrag += 0.2*grundpreis;
 		} else if (ChronoUnit.YEARS.between(body.getPolicy().getObjectOfInsurance().getDateOfBirth(), LocalDate.now())<=2){
-			endbetrag+=5;
+			endbetrag-=(grundpreis*0.1);
 		};
 
 		//System.out.println("Grundpreis: " + grundpreis + " Endbetrag: " + endbetrag);
 
 		// Ist die Katze kastriert, erhöhe den Preis um 5€
-		if(body.getPolicy().getObjectOfInsurance().isCastrated()) endbetrag+=5;
+		if(!body.getPolicy().getObjectOfInsurance().isCastrated()) endbetrag+=5;
 		// Hat der Besitzer eine PLZ die mit 0 oder 1 startet, erhöhe den Preis um 5% des Grundpreises
-
-		String customerURL = "http://" + customerUrl + ":8080/customer/{c_id}";
-		System.out.println(customerURL);
-		WebClient customerClient = WebClient.create();
-		WebClient.ResponseSpec responseSpec = customerClient.get().uri(customerURL,body.getCustomerId()).retrieve();
-		CustomerRequest customer = responseSpec.bodyToMono(CustomerRequest.class).block();
-		System.out.println(customer);
-
 		if(customer.getAddress().getPostalCode()<20000) endbetrag+= 0.05*grundpreis;
 
 		// Auf 2 Nachkommastellen runden
@@ -248,9 +251,9 @@ public class PolicyService {
 	*/
 	public ResponseEntity<String> getPolicyPriceRequest(String details){
 		ObjectMapper mapper = new ObjectMapper();
-		System.out.println(details);
+		//System.out.println("Encoded: " + details);
 		String str = new String(Base64.getUrlDecoder().decode(details), Charset.forName("UTF-8"));
-		System.out.println(str);
+		//System.out.println("Decoded: " + str);
 		PriceCalculationEntity body = null;
 		try {
 			mapper.registerModule(new JavaTimeModule());
@@ -258,7 +261,8 @@ public class PolicyService {
 			if (body==null){ 
 				return new ResponseEntity<String>("Convert was not Possible",HttpStatusCode.valueOf(500));	
 			}
-			System.out.println(body.toString());
+			//System.out.println(body.toString());
+			//System.out.println(getPolicyPrice(body));
 			return new ResponseEntity<String>(mapper.writeValueAsString(Collections.singletonMap("premium", getPolicyPrice(body))),HttpStatusCode.valueOf(200));
 		} catch (JsonMappingException e) {
 			System.out.println(e);
