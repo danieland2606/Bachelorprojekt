@@ -1,20 +1,21 @@
 package EDA.MeowMed.Persistence.Entity;
 
-import EDA.MeowMed.JSON.MappableObject;
+import com.fasterxml.jackson.annotation.JsonFilter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 @Entity
 @Table(name = "Address")
-public class Address implements Serializable, MappableObject {
+@JsonFilter("addressFilter")
+public class Address implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "a_id", unique = true, nullable = false)
+    @JsonIgnore
     private Long id;
 
     @Column(name = "city", nullable = false)
@@ -66,19 +67,5 @@ public class Address implements Serializable, MappableObject {
 
     public Long getId() {
         return id;
-    }
-
-    /**
-     * Todo: needs comment
-     * No id cus id is internal
-     *
-     * @return
-     */
-    public Map<String, Object> toMap() {
-        Map<String, Object> address = new LinkedHashMap<>();
-        address.put("city", city);
-        address.put("street", street);
-        address.put("postalCode", postalCode);
-        return address;
     }
 }
