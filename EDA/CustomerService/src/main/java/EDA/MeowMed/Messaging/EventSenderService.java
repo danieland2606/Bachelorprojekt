@@ -24,14 +24,10 @@ public class EventSenderService {
 
     private final String routingKey = "customer.created";
 
-    private void sendEvent(String message) {
-        template.convertAndSend(topicExchange.getName(), routingKey, message);
-        System.out.println(" [x] Sent '" + message + "'");
-    }
-
     /**
      * Sends an event to a topic exchange when new customer is created
      * Topic name is defined in 'MessagingConfig' class
+     *
      * @param customer Data of newly crated customer
      * @return Status code for sending success
      */
