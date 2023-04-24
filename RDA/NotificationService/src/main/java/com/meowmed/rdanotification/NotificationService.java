@@ -23,7 +23,7 @@ import java.util.Map;
  * Diese Klasse ist die Service-Klasse des REST-Controllers 
  * Dependency-Injektion durch @RequiredArgsConstructor
  * @apiNote Die Schnittstelle ist in der Postman-Collection verzeichnet und steht in den Aufrufen
- * @author Alexander Hampel, Mozamil Ahmadzaei
+ * @author Alexander Hampel, Mozamil Ahmadzaei, Daniel Arnold
  * 
  */
 
