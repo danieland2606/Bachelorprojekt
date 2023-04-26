@@ -1,0 +1,13 @@
+{
+  "tasks": {
+    "start-windows": "deno task tailwind-win & deno run -A --watch=static/,routes/ dev.ts",
+    "start-linux": "deno task tailwind-lin & deno run -A --watch=static/,routes/ dev.ts",
+    "tailwind-win": "deno cache --node-modules-dir npm:daisyui && ./tailwindcss-windows-x64.exe -i ./input.css -o ./static/meowmed.css --watch",
+    "tailwind-lin": "deno cache --node-modules-dir npm:daisyui && ./tailwindcss-linux-x64.exe -i ./input.css -o ./static/meowmed.css --watch"
+  },
+  "importMap": "./import_map.json",
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "jsxImportSource": "preact"
+  }
+}
