@@ -1,0 +1,479 @@
+openapi: 3.0.3
+info:
+  title: Meowmed+
+  version: 0.0.1
+paths:
+  /customer:
+    get:
+      operationId: getCustomerList
+      summary: get a list of customers
+      tags:
+        - customer
+      parameters:
+        - in: query
+          name: fields
+          schema:
+            $ref: '#/components/schemas/CustomerFields'
+          style: form
+          explode: false
+          description: >-
+            A filter for which properties of Customer should be transmitted. If
+            no fields are specified, only id is transmitted.
+      responses:
+        200:
+          description: success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  allOf:
+                    - $ref: '#/components/schemas/Customer'
+                    - required:
+                        - id
+          links:
+            customer:
+              operationId: getCustomer
+              parameters:
+                customerId: '$response.body#/id'
+        400:
+          $ref: '#/components/responses/ClientError'
+        500:
+          description: unexpected error
+    post:
+      operationId: createCustomer
+      summary: create new customer
+      tags:
+        - customer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomerAllRequired'
+      responses:
+        201:
+          description: customer created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                required:
+                  - id
+          links:
+            newCustomer:
+              operationId: getCustomer
+              parameters:
+                customerId: '$response.body#/id'
+        400:
+          $ref: '#/components/responses/ClientError'
+        500:
+          description: unexpected error
+  /customer/{customerId}:
+    parameters:
+      - $ref: '#/components/parameters/CustomerId'
+    get:
+      operationId: getCustomer
+      summary: get a single customer
+      tags:
+        - customer
+      responses:
+        200:
+          description: customer found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerAllRequired'
+        404:
+          description: not found
+        500:
+          description: unexpected error
+  /customer/{customerId}/policy:
+    parameters:
+      - $ref: '#/components/parameters/CustomerId'
+    get:
+      operationId: getPolicyList
+      summary: get a list of policies
+      tags:
+        - policy
+      parameters:
+        - in: query
+          name: fields
+          schema:
+            $ref: '#/components/schemas/PolicyFields'
+          style: form
+          explode: false
+          description: >-
+            A filter for which properties of Policy should be transmitted. If no
+            fields are specified, only id is transmitted.
+      responses:
+        200:
+          description: success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  allOf:
+                    - $ref: '#/components/schemas/Policy'
+                    - required:
+                        - id
+          links:
+            policy:
+              operationId: getPolicy
+              parameters:
+                policyId: '$response.body#/id'
+        400:
+          $ref: '#/components/responses/ClientError'
+        500:
+          description: unexpected error
+    post:
+      operationId: createPolicy
+      summary: create new policy
+      tags:
+        - policy
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PolicyAllRequired'
+      responses:
+        201:
+          description: policy created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                required:
+                  - id
+          links:
+            newPolicy:
+              operationId: getPolicy
+              parameters:
+                policyId: '$response.body#/id'
+        400:
+          $ref: '#/components/responses/ClientError'
+        500:
+          description: unexpected error
+  /customer/{customerId}/policy/{policyId}:
+    parameters:
+      - $ref: '#/components/parameters/CustomerId'
+      - name: policyId
+        in: path
+        required: true
+        schema:
+          type: integer
+    get:
+      operationId: getPolicy
+      summary: get a single policy
+      tags:
+        - policy
+      responses:
+        200:
+          description: policy found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PolicyAllRequired'
+        404:
+          description: not found
+        500:
+          description: unexpected error
+  /policyprice:
+    post:
+      operationId: calcPolicyPrice
+      summary: calculate policy price
+      tags:
+        - policy
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                customerId:
+                  type: integer
+                policy:
+                  $ref: '#/components/schemas/PolicyAllRequired'
+              required:
+                - customerId
+                - policy
+      responses:
+        200:
+          description: price calculated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  premium:
+                    type: number
+                required:
+                  - premium
+        400:
+          $ref: '#/components/responses/ClientError'
+        500:
+          description: unexpected error
+components:
+  parameters:
+    CustomerId:
+      name: customerId
+      in: path
+      required: true
+      schema:
+        type: integer
+  responses:
+    ClientError:
+      description: incorrect request
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+            required:
+              - error
+  schemas:
+    Customer:
+      type: object
+      properties:
+        id:
+          type: integer 
+          readOnly: true
+        firstName:
+          type: string
+        lastName:
+          type: string
+        formOfAddress:
+          $ref: '#/components/schemas/FormOfAddress'
+        title:
+          $ref: '#/components/schemas/Title'
+        maritalStatus:
+          $ref: '#/components/schemas/MaritalStatus'
+        dateOfBirth:
+          type: string
+          format: date
+        employmentStatus:
+          $ref: '#/components/schemas/EmploymentStatus'
+        address:
+          $ref: '#/components/schemas/Address'
+        phoneNumber:
+          type: string
+          format: phone
+        email:
+          type: string
+          format: email
+        bankDetails:
+          type: string
+          pattern: ^[a-zA-Z]{2}\d{13,32}$
+    Address:
+      type: object
+      properties:
+        city:
+          type: string
+        street:
+          type: string
+        postalCode:
+          type: string
+          pattern: ^\d{5}$
+    CustomerAllRequired:
+      allOf:
+        - $ref: '#/components/schemas/Customer'
+        - required:
+            - firstName
+            - lastName
+            - formOfAddress
+            - title
+            - maritalStatus
+            - dateOfBirth
+            - employmentStatus
+            - phoneNumber
+            - email
+            - bankDetails
+            - address
+        - properties:
+            address:
+              required:
+                - city
+                - street
+                - postalCode
+    Policy:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        startDate:
+          type: string
+          format: date
+        endDate:
+          type: string
+          format: date
+        coverage:
+          type: number
+        premium:
+          type: number
+          readOnly: true
+        objectOfInsurance:
+          $ref: '#/components/schemas/ObjectOfInsurance'
+    ObjectOfInsurance:
+      type: object
+      properties:
+        name:
+          type: string
+        race:
+          $ref: '#/components/schemas/CatRace'
+        color:
+          $ref: '#/components/schemas/FurColor'
+        dateOfBirth:
+          type: string
+          format: date
+        castrated:
+          type: boolean
+        personality:
+          $ref: '#/components/schemas/Personality'
+        environment:
+          $ref: '#/components/schemas/Environment'
+        weight:
+          type: number
+    PolicyAllRequired:
+      allOf:
+        - $ref: '#/components/schemas/Policy'
+        - required:
+            - startDate
+            - endDate
+            - coverage
+            - premium
+            - objectOfInsurance
+        - properties:
+            objectOfInsurance:
+              required:
+                - name
+                - race
+                - color
+                - dateOfBirth
+                - castrated
+                - personality
+                - environment
+                - weight
+    CustomerFields:
+      type: array
+      uniqueItems: true
+      items:
+        $ref: '#/components/schemas/CustomerPropertyNames'
+      description: >-
+        List of property names of the Customer Object. Using address and one or
+        more of its sub properties in the same array is a semantic error.
+    PolicyFields:
+      type: array
+      uniqueItems: true
+      items:
+        $ref: '#/components/schemas/PolicyPropertyNames'
+      description: >-
+        List of property names of the Policy Object. Using objectOfInsurance and
+        one or more of its sub properties in the same array is a semantic
+        error.
+    FormOfAddress:
+      type: string
+      enum:
+        - herr
+        - frau
+    Title:
+      type: string
+      enum:
+        - ''
+        - doctor
+        - professor
+    MaritalStatus:
+      type: string
+      enum:
+        - ledig
+        - verheiratet
+        - verwitwet
+    EmploymentStatus:
+      type: string
+      enum:
+        - selbststaendig
+        - angestellt
+        - arbeitslos
+        - arbeitssuchend
+        - ausbildung
+    Personality:
+      type: string
+      enum:
+        - anhaenglich
+        - spielerisch
+    Environment:
+      type: string
+      enum:
+        - draussen
+        - drinnen
+    CatRace:
+      type: string
+      enum:
+        - siamese
+        - perser
+        - bengal
+        - maine-coon
+        - sphynx
+        - scottish-fold
+        - british-shorthair
+        - abyssinian
+        - ragdoll
+    FurColor:
+      type: string
+      enum:
+        - seal
+        - blau
+        - lilac
+        - creme
+        - weiss
+        - schildpatt
+        - schwarz
+        - braun
+        - marmor
+        - grau
+        - rot
+        - zimt
+    CustomerPropertyNames:
+      type: string
+      enum:
+        - firstName
+        - lastName
+        - formOfAddress
+        - title
+        - maritalStatus
+        - dateOfBirth
+        - employmentStatus
+        - phoneNumber
+        - email
+        - bankDetails
+        - address
+        - address.city
+        - address.street
+        - address.postalCode
+    PolicyPropertyNames:
+      type: string
+      enum:
+        - startDate
+        - endDate
+        - coverage
+        - premium
+        - objectOfInsurance
+        - objectOfInsurance.name
+        - objectOfInsurance.race
+        - objectOfInsurance.color
+        - objectOfInsurance.dateOfBirth
+        - objectOfInsurance.castrated
+        - objectOfInsurance.personality
+        - objectOfInsurance.environment
+        - objectOfInsurance.weight
