@@ -1,5 +1,6 @@
 package com.meowmed.rdapolicy;
 
+import java.net.URI;
 import java.nio.charset.Charset;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
@@ -72,7 +73,7 @@ public class PolicyService {
 	 * @param fields Eine Liste an Komma-separierten an benötigten Feldern (z.B. startDate,endDate,coverage,objectOfInsurance.name)
 	 * @return Zurück kommt eine gefilterte Liste an PolicyEntitys, die ähnlich dem Beispiel aussieht:
 	 */
-    public MappingJacksonValue getPolicyList(Long c_id, String fields) {
+    public ResponseEntity<String> getPolicyList(Long c_id, String fields) throws JsonProcessingException {
 		MappingJacksonValue wrapper = new MappingJacksonValue(pRepository.findByCid(c_id));
 		
 		List<String> policyList = new ArrayList<String>();
@@ -101,7 +102,13 @@ public class PolicyService {
 		.addFilter("policyFilter", SimpleBeanPropertyFilter.filterOutAllExcept(Set.copyOf(policyList)))
 		.addFilter("objectOfInsuranceFilter", SimpleBeanPropertyFilter.filterOutAllExcept(Set.copyOf(ooIList)))
 		.setFailOnUnknownId(false));
-		return wrapper;
+		ObjectMapper mapper = new ObjectMapper();
+		try {
+			return new ResponseEntity<String>(mapper.writeValueAsString(wrapper),HttpStatusCode.valueOf(201));
+		} catch (JsonProcessingException e) {
+			return new ResponseEntity<String>(mapper.writeValueAsString(Collections.singletonMap("error", e.getMessage())),HttpStatusCode.valueOf(400));
+		}
+		//return wrapper;
 	}
 
 	/**
@@ -110,14 +117,19 @@ public class PolicyService {
 	 * @param p_id ID der Policy des Kunden.
 	 * @return Zurückkommt ein PolicyEntity, bei der die Policy- und Customer-ID herausgefiltert wird
 	 */
-    public MappingJacksonValue getPolicy(Long c_id, Long p_id){
+    public ResponseEntity<String> getPolicy(Long c_id, Long p_id) throws JsonProcessingException{
 		MappingJacksonValue wrapper = new MappingJacksonValue(pRepository.findById(p_id));
 		wrapper.setFilters(new SimpleFilterProvider()
 		.addFilter("policyFilter", SimpleBeanPropertyFilter.serializeAllExcept("id", "c_id"))
 		.addFilter("objectOfInsuranceFilter", SimpleBeanPropertyFilter.serializeAll())
 		.setFailOnUnknownId(false));
-		
-		return wrapper;
+		ObjectMapper mapper = new ObjectMapper();
+		try {
+			return new ResponseEntity<String>(mapper.writeValueAsString(wrapper),HttpStatusCode.valueOf(201));
+		} catch (JsonProcessingException e) {
+			return new ResponseEntity<String>(mapper.writeValueAsString(Collections.singletonMap("error", e.getMessage())),HttpStatusCode.valueOf(400));
+		}
+		//return wrapper;
 	}
 
 	/**
@@ -127,7 +139,7 @@ public class PolicyService {
 	 * @return Die ID der gerade erstellten Objekts
 	 * 
 	 */
-    public MappingJacksonValue postPolicy(Long c_id, PolicyRequest pRequest){
+    public ResponseEntity<String> postPolicy(Long c_id, PolicyRequest pRequest) throws JsonProcessingException{
 		oRepository.save(pRequest.getObjectOfInsurance());
 		String customerURL = "http://" + customerUrl + ":8080/customer/{c_id}";
 		System.out.println(customerURL);
@@ -171,8 +183,14 @@ public class PolicyService {
 		wrapper.setFilters(new SimpleFilterProvider()
 		.addFilter("policyFilter", SimpleBeanPropertyFilter.filterOutAllExcept("id"))
 		.setFailOnUnknownId(false));
-
-		return wrapper;
+		ObjectMapper mapper = new ObjectMapper();
+		try {
+			return new ResponseEntity<String>(mapper.writeValueAsString(wrapper),HttpStatusCode.valueOf(201));
+		} catch (JsonProcessingException e) {
+			return new ResponseEntity<String>(mapper.writeValueAsString(Collections.singletonMap("error", e.getMessage())),HttpStatusCode.valueOf(400));
+		}
+		//return new ResponseEntity<String>("Internal Server Error",HttpStatusCode.valueOf(500));
+		//return wrapper;
 	}
 
 	/**
@@ -249,27 +267,18 @@ public class PolicyService {
 	 * @param body Übergeben werden die Parameter als PriceCalculationEntity
 	 * @return Ein zu JSON umwandelbarer Wert
 	*/
-	public ResponseEntity<String> getPolicyPriceRequest(String details){
+	public ResponseEntity<String> getPolicyPriceRequest(PriceCalculationEntity details)throws JsonProcessingException{
 		ObjectMapper mapper = new ObjectMapper();
-		//System.out.println("Encoded: " + details);
-		String str = new String(Base64.getUrlDecoder().decode(details), Charset.forName("UTF-8"));
-		//System.out.println("Decoded: " + str);
-		PriceCalculationEntity body = null;
-		try {
-			mapper.registerModule(new JavaTimeModule());
-			body = mapper.readValue(str,PriceCalculationEntity.class);
-			if (body==null){ 
-				return new ResponseEntity<String>("Convert was not Possible",HttpStatusCode.valueOf(500));	
-			}
-			//System.out.println(body.toString());
-			//System.out.println(getPolicyPrice(body));
-			return new ResponseEntity<String>(mapper.writeValueAsString(Collections.singletonMap("premium", getPolicyPrice(body))),HttpStatusCode.valueOf(200));
-		} catch (JsonMappingException e) {
-			System.out.println(e);
-		} catch (JsonProcessingException e){
-			System.out.println(e);
+		try{
+		mapper.registerModule(new JavaTimeModule());
+		if (details!=null){
+			return new ResponseEntity<String>(mapper.writeValueAsString(Collections.singletonMap("premium", getPolicyPrice(details))),HttpStatusCode.valueOf(200));
 		}
-		return new ResponseEntity<String>("Convert was not Possible",HttpStatusCode.valueOf(500));
+		}
+		catch(JsonProcessingException e){
+			return new ResponseEntity<String>(mapper.writeValueAsString(Collections.singletonMap("error", e.getMessage())),HttpStatusCode.valueOf(400));
+		}
+		return new ResponseEntity<String>("Internal Server Error",HttpStatusCode.valueOf(500));
 	}
 
 	void setUp(){
