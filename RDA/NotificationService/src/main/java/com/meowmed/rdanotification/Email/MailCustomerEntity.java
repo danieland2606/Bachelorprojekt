@@ -1,6 +1,7 @@
 package com.meowmed.rdanotification.Email;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 public class MailCustomerEntity {
 
@@ -17,13 +18,14 @@ public class MailCustomerEntity {
     private String phoneNumber;
     private String email;
     private String bankDetails;
+    private boolean hasDog;
     public MailCustomerEntity() {
     }
 
 
     public MailCustomerEntity(String firstName, String lastName, String title, String formOfAdress,
-            String maritalStatus, LocalDate dateOfBirth, String employmentStatus, String city, String street,
-            int postalCode, String phoneNumber, String email, String bankDetails) {
+                              String maritalStatus, LocalDate dateOfBirth, String employmentStatus, String city, String street,
+                              int postalCode, String phoneNumber, String email, String bankDetails, boolean hasDog) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.title = title;
@@ -37,7 +39,9 @@ public class MailCustomerEntity {
         this.phoneNumber = phoneNumber;
         this.email = email;
         this.bankDetails = bankDetails;
+        this.hasDog = hasDog;
     }
+
     public String getFirstName() {
         return firstName;
     }
@@ -116,106 +120,39 @@ public class MailCustomerEntity {
     public void setBankDetails(String bankDetails) {
         this.bankDetails = bankDetails;
     }
+    public boolean isHasDog() { return hasDog; }
+    public void setHasDog(boolean hasDog) { this.hasDog = hasDog; }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof MailCustomerEntity that)) return false;
+        return postalCode == that.postalCode && hasDog == that.hasDog && firstName.equals(that.firstName) && lastName.equals(that.lastName) && title.equals(that.title) && formOfAdress.equals(that.formOfAdress) && maritalStatus.equals(that.maritalStatus) && dateOfBirth.equals(that.dateOfBirth) && employmentStatus.equals(that.employmentStatus) && city.equals(that.city) && street.equals(that.street) && phoneNumber.equals(that.phoneNumber) && email.equals(that.email) && bankDetails.equals(that.bankDetails);
+    }
+
     @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
-        result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
-        result = prime * result + ((title == null) ? 0 : title.hashCode());
-        result = prime * result + ((formOfAdress == null) ? 0 : formOfAdress.hashCode());
-        result = prime * result + ((maritalStatus == null) ? 0 : maritalStatus.hashCode());
-        result = prime * result + ((dateOfBirth == null) ? 0 : dateOfBirth.hashCode());
-        result = prime * result + ((employmentStatus == null) ? 0 : employmentStatus.hashCode());
-        result = prime * result + ((city == null) ? 0 : city.hashCode());
-        result = prime * result + ((street == null) ? 0 : street.hashCode());
-        result = prime * result + postalCode;
-        result = prime * result + ((phoneNumber == null) ? 0 : phoneNumber.hashCode());
-        result = prime * result + ((email == null) ? 0 : email.hashCode());
-        result = prime * result + ((bankDetails == null) ? 0 : bankDetails.hashCode());
-        return result;
+        return Objects.hash(firstName, lastName, title, formOfAdress, maritalStatus, dateOfBirth, employmentStatus, city, street, postalCode, phoneNumber, email, bankDetails, hasDog);
     }
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        MailCustomerEntity other = (MailCustomerEntity) obj;
-        if (firstName == null) {
-            if (other.firstName != null)
-                return false;
-        } else if (!firstName.equals(other.firstName))
-            return false;
-        if (lastName == null) {
-            if (other.lastName != null)
-                return false;
-        } else if (!lastName.equals(other.lastName))
-            return false;
-        if (title == null) {
-            if (other.title != null)
-                return false;
-        } else if (!title.equals(other.title))
-            return false;
-        if (formOfAdress == null) {
-            if (other.formOfAdress != null)
-                return false;
-        } else if (!formOfAdress.equals(other.formOfAdress))
-            return false;
-        if (maritalStatus == null) {
-            if (other.maritalStatus != null)
-                return false;
-        } else if (!maritalStatus.equals(other.maritalStatus))
-            return false;
-        if (dateOfBirth == null) {
-            if (other.dateOfBirth != null)
-                return false;
-        } else if (!dateOfBirth.equals(other.dateOfBirth))
-            return false;
-        if (employmentStatus == null) {
-            if (other.employmentStatus != null)
-                return false;
-        } else if (!employmentStatus.equals(other.employmentStatus))
-            return false;
-        if (city == null) {
-            if (other.city != null)
-                return false;
-        } else if (!city.equals(other.city))
-            return false;
-        if (street == null) {
-            if (other.street != null)
-                return false;
-        } else if (!street.equals(other.street))
-            return false;
-        if (postalCode != other.postalCode)
-            return false;
-        if (phoneNumber == null) {
-            if (other.phoneNumber != null)
-                return false;
-        } else if (!phoneNumber.equals(other.phoneNumber))
-            return false;
-        if (email == null) {
-            if (other.email != null)
-                return false;
-        } else if (!email.equals(other.email))
-            return false;
-        if (bankDetails == null) {
-            if (other.bankDetails != null)
-                return false;
-        } else if (!bankDetails.equals(other.bankDetails))
-            return false;
-        return true;
-    }
+
     @Override
     public String toString() {
-        return "MailCustomerEntity [firstName=" + firstName + ", lastName=" + lastName + ", title=" + title
-                + ", formOfAdress=" + formOfAdress + ", martialStatus=" + maritalStatus + ", dateOfBirth=" + dateOfBirth
-                + ", employmentStatus=" + employmentStatus + ", city=" + city + ", street=" + street + ", postalCode="
-                + postalCode + ", phoneNumber=" + phoneNumber + ", email=" + email + ", bankDetails=" + bankDetails
-                + "]";
+        return "MailCustomerEntity{" +
+                "firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", title='" + title + '\'' +
+                ", formOfAdress='" + formOfAdress + '\'' +
+                ", maritalStatus='" + maritalStatus + '\'' +
+                ", dateOfBirth=" + dateOfBirth +
+                ", employmentStatus='" + employmentStatus + '\'' +
+                ", city='" + city + '\'' +
+                ", street='" + street + '\'' +
+                ", postalCode=" + postalCode +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", email='" + email + '\'' +
+                ", bankDetails='" + bankDetails + '\'' +
+                ", hasDog=" + hasDog +
+                '}';
     }
-
-
 }
+

@@ -96,4 +96,10 @@ public class NotificationController {
         //System.out.println(details);
         return nService.policyNotification(details);
     }
+
+    @PostMapping("/policychangenotification")
+    public ResponseEntity<String> putNotificationChangePolicy(@RequestBody MailPolicyEntity details) {
+        return  nService.changePolicyNotification(details);
+    }
+
 }
