@@ -3,20 +3,31 @@
 # Dieser Teil wird benötigt, um das Projekt zu kompilieren und Abhängigkeiten zu Verfügung zu stellen
 FROM eclipse-temurin:19-jdk-alpine as build
 WORKDIR /workspace/app
+ARG service
 
-COPY mvnw .
-COPY .mvn .mvn
+#COPY mvnw .
+#COPY .mvn .mvn
+#COPY pom.xml .
+#COPY src src
+
+COPY /${service}/mvnw .
+COPY /${service}/.mvn .mvn
+COPY /${service}/src ./$service/src
+COPY /${service}/pom.xml ./$service/
+
 COPY pom.xml .
-COPY src src
 
+COPY /Events/pom.xml ./Events/
+COPY /Events/src ./Events/src
 
-RUN ./mvnw install -DskipTests
-RUN mkdir -p target/dependency && (cd target/dependency; jar -xf ../*.jar)
+RUN ./mvnw install -P ${service} -DskipTests
+RUN mkdir -p ${service}/target/dependency && (cd ${service}/target/dependency; jar -xf ../*.jar)
 
 # Dieser Teil nimmt das vorher erzeugte Projekt, und baut ein nutzbares Image
 FROM eclipse-temurin:19-jre-alpine
 VOLUME /tmp
-ARG DEPENDENCY=/workspace/app/target/dependency
+ARG service
+ARG DEPENDENCY=/workspace/app/${service}/target/dependency
 COPY --from=build ${DEPENDENCY}/BOOT-INF/lib /app/lib
 COPY --from=build ${DEPENDENCY}/META-INF /app/META-INF
 COPY --from=build ${DEPENDENCY}/BOOT-INF/classes /app

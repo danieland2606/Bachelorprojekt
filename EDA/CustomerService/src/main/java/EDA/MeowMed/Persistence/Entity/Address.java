@@ -69,6 +69,11 @@ public class Address implements Serializable {
         return id;
     }
 
+    /**
+     * TODO: Add comment
+     *
+     * @return
+     */
     public events.customer.subclasses.Address toCustomerAddress() {
         return new events.customer.subclasses.Address(
                 city,

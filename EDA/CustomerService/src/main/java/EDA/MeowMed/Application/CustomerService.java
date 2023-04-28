@@ -22,6 +22,8 @@ public class CustomerService {
     private CustomerRepository customerRepository;
     @Autowired
     private EventSenderService eventSenderService;
+    @Autowired
+    private CustomerValidatorService customerValidatorService;
 
     /**
      * TODO: Add comment
@@ -81,11 +83,15 @@ public class CustomerService {
     /**
      * TODO: Add comment
      *
-     * @param customer
+     * @param jsonCustomer
      * @return
      * @throws JsonProcessingException
      */
-    public String addCustomer(Customer customer) throws JsonProcessingException {
+    public String addCustomer(String jsonCustomer) throws JsonProcessingException {
+        Customer customer = new ObjectMapper().readValue(jsonCustomer,Customer.class);
+
+        customerValidatorService.validateCustomer(customer);
+
         this.customerRepository.save(customer);
         eventSenderService.sendCustomerCreatedEvent(customer);
         FilterProvider filters = new SimpleFilterProvider()

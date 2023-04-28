@@ -166,6 +166,11 @@ public class Customer implements Serializable {
         this.bankDetails = bankDetails;
     }
 
+    /**
+     * TODO: Add comment
+     *
+     * @return
+     */
     public CustomerCreatedEvent createCustomerCreatedEvent() {
         return new CustomerCreatedEvent(
                 id,

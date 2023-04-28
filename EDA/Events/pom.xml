@@ -7,6 +7,7 @@
     <groupId>EDA</groupId>
     <artifactId>Events</artifactId>
     <version>0.1</version>
+    <name>${project.groupId}.${project.artifactId}</name>
 
     <properties>
         <maven.compiler.source>19</maven.compiler.source>
