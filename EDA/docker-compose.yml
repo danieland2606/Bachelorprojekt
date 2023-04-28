@@ -13,10 +13,15 @@ services:
       - "default"
     ports:
       - "80:80"
+
+
+
   customer:
     build:
-      context: ./CustomerService
-      dockerfile: Dockerfile
+      context: ./
+      dockerfile: ./CustomerService/Dockerfile
+      args:
+        service: CustomerService
     container_name: customer-service
     networks:
       - "default"
@@ -33,6 +38,7 @@ services:
     depends_on:
       - customerdb
       - rabbitmq
+
   customerdb:
     image: mariadb:latest
     container_name: customerdb
@@ -44,10 +50,15 @@ services:
       MYSQL_DATABASE: Customer
       MYSQL_USER: user
       MYSQL_PASSWORD: test12345
+
+
+
   notification:
     build:
-      context: ./NotificationService
-      dockerfile: Dockerfile
+      context: ./
+      dockerfile: ./NotificationService/Dockerfile
+      args:
+        service: NotificationService
     container_name: notification-service
     networks:
       - "default"
@@ -55,10 +66,15 @@ services:
       - spring.rabbitmq.host=rabbitmq
     depends_on:
       - rabbitmq
+
+
+
   policy:
     build:
-      context: ./PolicyService
-      dockerfile: Dockerfile
+      context: ./
+      dockerfile: ./PolicyService/Dockerfile
+      args:
+        service: PolicyService
     container_name: policy-service
     depends_on: 
       - policydb
@@ -72,6 +88,7 @@ services:
       - spring.datasource.url=jdbc:mariadb://policydb:3306/Policy
       - spring.datasource.username=user
       - spring.datasource.password=123456789
+
   policydb:
     image: mariadb:latest
     container_name: policydb
@@ -86,6 +103,9 @@ services:
     #  - "3306:3306"
     volumes:
       - policydb_data:/var/lib/mysql
+
+
+
   rabbitmq:
     image: rabbitmq:management-alpine
     container_name: rabbitmq

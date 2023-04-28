@@ -5,12 +5,46 @@
     <groupId>EDA</groupId>
     <artifactId>Parent</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>${groupId}.${artifactId}</name>
+    <name>${project.groupId}.${project.artifactId}</name>
     <packaging>pom</packaging>
-    <modules>
-        <module>CustomerService</module>
-        <module>PolicyService</module>
-        <module>NotificationService</module>
-        <module>Events</module>
-    </modules>
+    <profiles>
+
+        <profile>
+            <id>default</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <modules>
+                <module>CustomerService</module>
+                <module>PolicyService</module>
+                <module>NotificationService</module>
+                <module>Events</module>
+            </modules>
+        </profile>
+
+        <profile>
+            <id>CustomerService</id>
+            <modules>
+                <module>Events</module>
+                <module>CustomerService</module>
+            </modules>
+        </profile>
+
+        <profile>
+            <id>PolicyService</id>
+            <modules>
+                <module>Events</module>
+                <module>PolicyService</module>
+            </modules>
+        </profile>
+
+        <profile>
+            <id>NotificationService</id>
+            <modules>
+                <module>NotificationService</module>
+                <module>Events</module>
+            </modules>
+        </profile>
+    </profiles>
+
 </project>

@@ -3,39 +3,38 @@ package EDA.MeowMed.REST;
 import EDA.MeowMed.Application.CustomerService;
 import EDA.MeowMed.Persistence.Entity.Customer;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.Map;
 
 
 @RestController
 @RequestMapping("/api")
 public class CustomerController {
-    private final CustomerService customerService;
-
-    CustomerController(CustomerService customerService) {
-        this.customerService = customerService;
-    }
-
+    @Autowired
+    private CustomerService customerService;
     /**
-     * TODO: Add comment & ResponseEntity
+     * TODO: Add comment
      *
      * @param fields
      * @return
      */
     @GetMapping(value = "/customer", produces = MediaType.APPLICATION_JSON_VALUE)
-    public String getCustomerList(@RequestParam(value = "fields", required = false) String fields) {
+    public ResponseEntity<String> getCustomerList(@RequestParam(value = "fields", required = false) String fields) {
         if (fields == null) {
             fields = "";
         }
         try {
-            return customerService.getCustomerList(fields);
+            String responseBody = customerService.getCustomerList(fields);
+            if (responseBody == null) {
+                return ResponseEntity.noContent().build();
+            }
+            return ResponseEntity.ok(responseBody);
+
         } catch (JsonProcessingException e) {
-            e.printStackTrace();
+            return ResponseEntity.internalServerError().body("Somethings wrong. I can feel it!");
         }
-        return null;
     }
 
     /**
@@ -45,13 +44,17 @@ public class CustomerController {
      * @return
      */
     @GetMapping(value = "/customer/{c_id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public String getCustomer(@PathVariable Long c_id) {
+    public ResponseEntity<String> getCustomer(@PathVariable Long c_id) {
         try {
-            return customerService.getCustomer(c_id);
+            String responseBody = customerService.getCustomer(c_id);
+            if (responseBody == null) {
+                return ResponseEntity.notFound().build();
+            }
+            return ResponseEntity.ok(responseBody);
+
         } catch (JsonProcessingException e) {
-            e.printStackTrace();
+            return ResponseEntity.internalServerError().body("Problem processing JSON. Please contact support");
         }
-        return null;
     }
 
     /**
@@ -60,14 +63,15 @@ public class CustomerController {
      * @param customer
      * @return
      */
-    @PostMapping(value = "/customer", produces = MediaType.APPLICATION_JSON_VALUE)
-    public String postCustomer(@RequestBody Customer customer) {
+    @PostMapping(value = "/customer",consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> postCustomer(@RequestBody String customer) {
         try {
-            return customerService.addCustomer(customer);
-        } catch
-        (JsonProcessingException e) {
-            e.printStackTrace();
+            String responseBody = customerService.addCustomer(customer);
+            return ResponseEntity.ok(responseBody);
+        } catch (JsonProcessingException e) {
+            return ResponseEntity.internalServerError().body("Problem processing JSON. Please contact support");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.internalServerError().body("Somethings wrong. I can feel it!");
         }
-        return null;
     }
 }

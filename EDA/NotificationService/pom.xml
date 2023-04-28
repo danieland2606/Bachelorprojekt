@@ -11,7 +11,7 @@
 	<groupId>EDA</groupId>
 	<artifactId>NotificatonService</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>${groupId}.${artifactId}</name>
+	<name>${project.groupId}.${project.artifactId}</name>
 	<description>Demo project for MeowMed</description>
 	<properties>
 		<java.version>19</java.version>
