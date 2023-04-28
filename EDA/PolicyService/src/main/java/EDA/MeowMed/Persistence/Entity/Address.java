@@ -70,10 +70,6 @@ public class Address implements Serializable {
     }
 
     public events.policy.subclasses.Address toCustomerAddress() {
-        return new events.policy.subclasses.Address(
-                city,
-                street,
-                postalCode
-        );
+        return new events.policy.subclasses.Address(postalCode);
     }
 }
