@@ -1,14 +1,13 @@
 package com.meowmed.rdapolicy;
 
-import java.net.URI;
-import java.nio.charset.Charset;
+
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Base64;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,12 +20,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.meowmed.rdapolicy.database.CatRepository;
 import com.meowmed.rdapolicy.database.ObjectOfInsuranceRepository;
 import com.meowmed.rdapolicy.database.PolicyRepository;
@@ -73,18 +68,21 @@ public class PolicyService {
 	 * @param fields Eine Liste an Komma-separierten an benötigten Feldern (z.B. startDate,endDate,coverage,objectOfInsurance.name)
 	 * @return Zurück kommt eine gefilterte Liste an PolicyEntitys, die ähnlich dem Beispiel aussieht:
 	 */
-    public ResponseEntity<String> getPolicyList(Long c_id, String fields) throws JsonProcessingException {
-		MappingJacksonValue wrapper = new MappingJacksonValue(pRepository.findByCid(c_id));
-		
-		List<String> policyList = new ArrayList<String>();
-		policyList.addAll(Arrays.asList(fields.split(",")));
-		List<String> ooIList = new ArrayList<String>();
+    public ResponseEntity<MappingJacksonValue> getPolicyList(Long c_id, String fields){
+		List<PolicyEntity> policyList = pRepository.findByCid(c_id);
+		if(policyList.isEmpty()){
+			MappingJacksonValue errWrapper = new MappingJacksonValue(Collections.singletonMap("error", "Customer hat keinen Vertrag"));
+			return new ResponseEntity<MappingJacksonValue>(errWrapper,HttpStatusCode.valueOf(400));
+		}
+		MappingJacksonValue wrapper = new MappingJacksonValue(policyList);
+		List<String> policyArgList = new ArrayList<String>();
+		policyArgList.addAll(Arrays.asList(fields.split(",")));
+		List<String> ooIArgList = new ArrayList<String>();
 		List<String> removeList = new ArrayList<String>();
-
 		boolean containsOoI = false;
-		for (String result : policyList) {
+		for (String result : policyArgList) {
 			if(result.contains("objectOfInsurance.")){
-				ooIList.add(result.substring(18));
+				ooIArgList.add(result.substring(18));
 				removeList.add(result);
 				//policyList.remove(result);
 				containsOoI = true;
@@ -95,20 +93,14 @@ public class PolicyService {
 		}
 		policyList.removeAll(removeList);
 
-		if(containsOoI) policyList.add("objectOfInsurance");
-		policyList.add("id");
+		if(containsOoI) policyArgList.add("objectOfInsurance");
+		policyArgList.add("id");
 		
 		wrapper.setFilters(new SimpleFilterProvider()
-		.addFilter("policyFilter", SimpleBeanPropertyFilter.filterOutAllExcept(Set.copyOf(policyList)))
-		.addFilter("objectOfInsuranceFilter", SimpleBeanPropertyFilter.filterOutAllExcept(Set.copyOf(ooIList)))
+		.addFilter("policyFilter", SimpleBeanPropertyFilter.filterOutAllExcept(Set.copyOf(policyArgList)))
+		.addFilter("objectOfInsuranceFilter", SimpleBeanPropertyFilter.filterOutAllExcept(Set.copyOf(ooIArgList)))
 		.setFailOnUnknownId(false));
-		ObjectMapper mapper = new ObjectMapper();
-		try {
-			return new ResponseEntity<String>(mapper.writeValueAsString(wrapper),HttpStatusCode.valueOf(201));
-		} catch (JsonProcessingException e) {
-			return new ResponseEntity<String>(mapper.writeValueAsString(Collections.singletonMap("error", e.getMessage())),HttpStatusCode.valueOf(400));
-		}
-		//return wrapper;
+		return new ResponseEntity<MappingJacksonValue>(wrapper,HttpStatusCode.valueOf(200));
 	}
 
 	/**
@@ -117,19 +109,24 @@ public class PolicyService {
 	 * @param p_id ID der Policy des Kunden.
 	 * @return Zurückkommt ein PolicyEntity, bei der die Policy- und Customer-ID herausgefiltert wird
 	 */
-    public ResponseEntity<String> getPolicy(Long c_id, Long p_id) throws JsonProcessingException{
-		MappingJacksonValue wrapper = new MappingJacksonValue(pRepository.findById(p_id));
+    public ResponseEntity<MappingJacksonValue> getPolicy(Long c_id, Long p_id) {
+		if(c_id == null || p_id == null){
+			MappingJacksonValue errWrapper = new MappingJacksonValue(Collections.singletonMap("error", "Einer der Übergabewerte ist null"));
+			return ResponseEntity.status(400).body(errWrapper);
+		}
+		Optional<PolicyEntity> policy = pRepository.findById(p_id);
+		if(policy.isEmpty()){
+			MappingJacksonValue errWrapper = new MappingJacksonValue(Collections.singletonMap("error", "Policy/Customer not found"));
+			return ResponseEntity.status(404).body(errWrapper);
+		}
+		
+		MappingJacksonValue wrapper = new MappingJacksonValue(policy);
+		System.out.println(wrapper.getValue().getClass());
 		wrapper.setFilters(new SimpleFilterProvider()
 		.addFilter("policyFilter", SimpleBeanPropertyFilter.serializeAllExcept("id", "c_id"))
-		.addFilter("objectOfInsuranceFilter", SimpleBeanPropertyFilter.serializeAll())
+		.addFilter("objectOfInsuranceFilter", SimpleBeanPropertyFilter.serializeAllExcept("id"))
 		.setFailOnUnknownId(false));
-		ObjectMapper mapper = new ObjectMapper();
-		try {
-			return new ResponseEntity<String>(mapper.writeValueAsString(wrapper),HttpStatusCode.valueOf(201));
-		} catch (JsonProcessingException e) {
-			return new ResponseEntity<String>(mapper.writeValueAsString(Collections.singletonMap("error", e.getMessage())),HttpStatusCode.valueOf(400));
-		}
-		//return wrapper;
+		return ResponseEntity.ok().body(wrapper);
 	}
 
 	/**
@@ -139,58 +136,70 @@ public class PolicyService {
 	 * @return Die ID der gerade erstellten Objekts
 	 * 
 	 */
-    public ResponseEntity<String> postPolicy(Long c_id, PolicyRequest pRequest) throws JsonProcessingException{
-		oRepository.save(pRequest.getObjectOfInsurance());
-		String customerURL = "http://" + customerUrl + ":8080/customer/{c_id}";
-		System.out.println(customerURL);
-		WebClient customerClient = WebClient.create();
-		WebClient.ResponseSpec responseSpec = customerClient.get().uri(customerURL,c_id).retrieve();
-		CustomerRequest customer = responseSpec.bodyToMono(CustomerRequest.class).block();
-		System.out.println(customer);
+    public ResponseEntity<MappingJacksonValue> postPolicy(Long c_id, PolicyRequest pRequest) {
+		CustomerRequest customer = getCustomerRequest(c_id);
+		if(customer == null){
+			MappingJacksonValue errWrapper = new MappingJacksonValue(Collections.singletonMap("error", "Es existiert kein Customer mit der ID"));
+			return new ResponseEntity<MappingJacksonValue>(errWrapper,HttpStatusCode.valueOf(400));
+		}
 
 		PriceCalculationEntity tempCalc = new PriceCalculationEntity(c_id, pRequest);
-		/*
-		PriceCalculationEntity tempCalc = new PriceCalculationEntity(customer.getAddress().getPostalCode(), pRequest.getCoverage(), pRequest.getObjectOfInsurance().getRace(), 
-				pRequest.getObjectOfInsurance().getColor(), pRequest.getObjectOfInsurance().getDateOfBirth(), pRequest.getObjectOfInsurance().isCastrated(), 
-				pRequest.getObjectOfInsurance().getPersonality(), pRequest.getObjectOfInsurance().getEnvironment(), pRequest.getObjectOfInsurance().getWeight());
-		*/
 		PolicyEntity policy = new PolicyEntity(c_id, pRequest.getStartDate(), pRequest.getEndDate(), pRequest.getCoverage(), getPolicyPrice(tempCalc), pRequest.getObjectOfInsurance());
+		oRepository.save(pRequest.getObjectOfInsurance());
 		policy = pRepository.save(policy);
 
+
 		MailPolicyEntity mail = new MailPolicyEntity(policy, customer);
-		System.out.println(mail);
-		//WebClient notificationClient = WebClient.create("http://" + notificationUrl + ":8080");
-		String url = "http://" + notificationUrl + ":8080/policynotification";
-		RestTemplate restTemplate = new RestTemplate();
-		ResponseEntity<String> response = restTemplate.postForEntity(url, mail, String.class);
-		if (response.getStatusCode() == HttpStatus.OK) {
-			System.out.println("Request Successful");
-		} else {
-			System.out.println("Request Failed");
-		}
-		
-		/*
-		Mono<ResponseEntity<String>> result = WebClient.create().post().uri("http://notification:8080/policynotification")
-											//.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-											.contentType(MediaType.APPLICATION_JSON)
-											.bodyValue(mail)
-											.retrieve()
-											.toEntity(String.class);
-		System.out.println(result.cast(ResponseEntity.class).toString());
-		System.out.println(mail);
-		*/
+		ResponseEntity<String> response = sendMail("policynotification", mail);
+		if (response.getStatusCode() != HttpStatus.OK) {
+			MappingJacksonValue errWrapper = new MappingJacksonValue(Collections.singletonMap("error", "Es gab Probleme, die Mail zu versenden, Daten wurden aber gespeichert"));
+			return new ResponseEntity<MappingJacksonValue>(errWrapper,HttpStatusCode.valueOf(400));
+		} 
+
 		MappingJacksonValue wrapper = new MappingJacksonValue(policy);
 		wrapper.setFilters(new SimpleFilterProvider()
 		.addFilter("policyFilter", SimpleBeanPropertyFilter.filterOutAllExcept("id"))
 		.setFailOnUnknownId(false));
-		ObjectMapper mapper = new ObjectMapper();
-		try {
-			return new ResponseEntity<String>(mapper.writeValueAsString(wrapper),HttpStatusCode.valueOf(201));
-		} catch (JsonProcessingException e) {
-			return new ResponseEntity<String>(mapper.writeValueAsString(Collections.singletonMap("error", e.getMessage())),HttpStatusCode.valueOf(400));
+		return new ResponseEntity<MappingJacksonValue>(wrapper,HttpStatusCode.valueOf(201));
+	}
+	/**
+	 * Diese Methode speichert ein PolicyEntity. PostalCode vom Customer wird beim CustomerService angefragt.
+	 * @param c_id ID des Customers bei dem die Policys gespeichert wird.
+	 * @param pRequest Das zu speichernde Objekt
+	 * @return Die ID der gerade erstellten Objekts
+	 * 
+	 */
+    public ResponseEntity<MappingJacksonValue> updatePolicy(Long c_id, Long p_id, PolicyRequest pRequest) {
+		CustomerRequest customer = getCustomerRequest(c_id);
+		if(customer == null){
+			MappingJacksonValue errWrapper = new MappingJacksonValue(Collections.singletonMap("error", "Es existiert kein Customer mit der ID"));
+			return new ResponseEntity<MappingJacksonValue>(errWrapper,HttpStatusCode.valueOf(404));
 		}
-		//return new ResponseEntity<String>("Internal Server Error",HttpStatusCode.valueOf(500));
-		//return wrapper;
+		Optional<PolicyEntity> currentPolicy = pRepository.findById(p_id);
+		if(currentPolicy.isEmpty()){
+			MappingJacksonValue errWrapper = new MappingJacksonValue(Collections.singletonMap("error", "Es existiert keine Policy mit der ID, somit ist kein Update möglich"));
+			return new ResponseEntity<MappingJacksonValue>(errWrapper,HttpStatusCode.valueOf(404));
+		}
+		pRequest.getObjectOfInsurance().setId(currentPolicy.get().getObjectOfInsurance().getId());
+
+		PriceCalculationEntity tempCalc = new PriceCalculationEntity(c_id, pRequest);
+		PolicyEntity policy = new PolicyEntity(c_id, pRequest.getStartDate(), pRequest.getEndDate(), pRequest.getCoverage(), getPolicyPrice(tempCalc), pRequest.getObjectOfInsurance());
+
+		oRepository.save(pRequest.getObjectOfInsurance());
+		policy.setId(p_id);
+		policy = pRepository.save(policy);
+
+		MailPolicyEntity mail = new MailPolicyEntity(policy, customer);
+		ResponseEntity<String> response = sendMail("policychangenotification", mail);
+		if (response.getStatusCode() != HttpStatus.OK) {
+			MappingJacksonValue errWrapper = new MappingJacksonValue(Collections.singletonMap("error", "Es gab Probleme, die Mail zu versenden, Daten wurden aber gespeichert"));
+			return new ResponseEntity<MappingJacksonValue>(errWrapper,HttpStatusCode.valueOf(400));
+		} 
+		MappingJacksonValue wrapper = new MappingJacksonValue(policy);
+		wrapper.setFilters(new SimpleFilterProvider()
+		.addFilter("policyFilter", SimpleBeanPropertyFilter.filterOutAllExcept("id"))
+		.setFailOnUnknownId(false));
+		return new ResponseEntity<MappingJacksonValue>(wrapper,HttpStatusCode.valueOf(201));
 	}
 
 	/**
@@ -198,15 +207,9 @@ public class PolicyService {
 	 * @param body Übergeben werden die Parameter als PriceCalculationEntity
 	 * @return Zurück kommt ein Wert als double für die monatlichen Kosten
 	 */
-    public double getPolicyPrice(PriceCalculationEntity body){
-		//System.out.println(body);
+    public double getPolicyPrice(PriceCalculationEntity body) throws ArithmeticException{
+		CustomerRequest customer = getCustomerRequest(body.getCustomerId());
 
-		String customerURL = "http://" + customerUrl + ":8080/customer/{c_id}";
-		//System.out.println(customerURL);
-		WebClient customerClient = WebClient.create();
-		WebClient.ResponseSpec responseSpec = customerClient.get().uri(customerURL,body.getCustomerId()).retrieve();
-		CustomerRequest customer = responseSpec.bodyToMono(CustomerRequest.class).block();
-		//System.out.println(customer);
 		
 		if (body.getPolicy().getObjectOfInsurance().getPersonality().contains("sehr verspielt") || ChronoUnit.YEARS.between(customer.getDateOfBirth(), LocalDate.now())<=18) return 0;
 		//PriceCalculationEntity body
@@ -248,6 +251,9 @@ public class PolicyService {
 			endbetrag-=(grundpreis*0.1);
 		};
 
+		// Hat der Besitzer noch einen Hund, muss 30% des Grundpreises noch auf den Betrag drauf gerechnet werden
+		if(customer.isHasDog()) endbetrag += 0.3*grundpreis;
+
 		//System.out.println("Grundpreis: " + grundpreis + " Endbetrag: " + endbetrag);
 
 		// Ist die Katze kastriert, erhöhe den Preis um 5€
@@ -267,18 +273,14 @@ public class PolicyService {
 	 * @param body Übergeben werden die Parameter als PriceCalculationEntity
 	 * @return Ein zu JSON umwandelbarer Wert
 	*/
-	public ResponseEntity<String> getPolicyPriceRequest(PriceCalculationEntity details)throws JsonProcessingException{
-		ObjectMapper mapper = new ObjectMapper();
+	public ResponseEntity<MappingJacksonValue> getPolicyPriceRequest(PriceCalculationEntity details){
 		try{
-		mapper.registerModule(new JavaTimeModule());
-		if (details!=null){
-			return new ResponseEntity<String>(mapper.writeValueAsString(Collections.singletonMap("premium", getPolicyPrice(details))),HttpStatusCode.valueOf(200));
+			MappingJacksonValue wrapper = new MappingJacksonValue(Collections.singletonMap("premium", getPolicyPrice(details)));
+			return new ResponseEntity<MappingJacksonValue>(wrapper,HttpStatusCode.valueOf(200));
+		} catch (ArithmeticException e){
+			MappingJacksonValue errWrapper = new MappingJacksonValue(Collections.singletonMap("error", e.getMessage()));
+			return new ResponseEntity<MappingJacksonValue>(errWrapper,HttpStatusCode.valueOf(400));
 		}
-		}
-		catch(JsonProcessingException e){
-			return new ResponseEntity<String>(mapper.writeValueAsString(Collections.singletonMap("error", e.getMessage())),HttpStatusCode.valueOf(400));
-		}
-		return new ResponseEntity<String>("Internal Server Error",HttpStatusCode.valueOf(500));
 	}
 
 	void setUp(){
@@ -305,5 +307,43 @@ public class PolicyService {
 			entities.add(new CatEntity("abyssinian", 12, 15, 3, 5, 4, new String[]{"rot", "schildpatt", "zimt"}));
 			entities.add(new CatEntity("ragdoll", 12, 15, 4, 7, 3, new String[]{"blau", "seal", "lilac", "schildpatt"}));
 			cRepository.saveAll(entities);
+	}
+
+	CustomerRequest getCustomerRequest(long c_id){
+		//System.out.println(body);
+
+		String customerURL = "http://" + customerUrl + ":8080/customer/{c_id}";
+		//System.out.println(customerURL);
+		WebClient customerClient = WebClient.create();
+		WebClient.ResponseSpec responseSpec = customerClient.get().uri(customerURL,c_id).retrieve();
+		CustomerRequest customer = responseSpec.bodyToMono(CustomerRequest.class).block();
+		//System.out.println(customer);
+		return customer;
+	}
+
+	ResponseEntity<String> sendMail(String mailUrl, MailPolicyEntity mail){
+		System.out.println(mail);
+		//WebClient notificationClient = WebClient.create("http://" + notificationUrl + ":8080");
+		String url = "http://" + notificationUrl + ":8080/"+ mailUrl;
+		RestTemplate restTemplate = new RestTemplate();
+		ResponseEntity<String> response = restTemplate.postForEntity(url, mail, String.class);
+		/*
+		if (response.getStatusCode() == HttpStatus.OK) {
+			System.out.println("Request Successful");
+		} else {
+			System.out.println("Request Failed");
+		}
+		*/
+		return response;
+		/*
+		Mono<ResponseEntity<String>> result = WebClient.create().post().uri("http://notification:8080/policynotification")
+											//.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+											.contentType(MediaType.APPLICATION_JSON)
+											.bodyValue(mail)
+											.retrieve()
+											.toEntity(String.class);
+		System.out.println(result.cast(ResponseEntity.class).toString());
+		System.out.println(mail);
+		*/
 	}
 }

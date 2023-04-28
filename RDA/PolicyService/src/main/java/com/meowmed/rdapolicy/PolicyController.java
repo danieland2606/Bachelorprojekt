@@ -8,6 +8,7 @@ import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -65,7 +66,7 @@ public class PolicyController {
 		]
 	 */
 	@GetMapping("/customer/{c_id}/policy")
-	public ResponseEntity<String> getPolicyList(@PathVariable Long c_id, @RequestParam(value = "fields") String fields) throws JsonProcessingException {
+	public ResponseEntity<MappingJacksonValue> getPolicyList(@PathVariable Long c_id, @RequestParam(value = "fields") String fields) throws JsonProcessingException {
 		return pService.getPolicyList(c_id,fields);
 	}
 
@@ -93,7 +94,7 @@ public class PolicyController {
 			}
 	 */
 	@GetMapping("/customer/{c_id}/policy/{p_id}")
-	public ResponseEntity<String> getPolicy(@PathVariable Long c_id, @PathVariable Long p_id) throws JsonProcessingException{
+	public ResponseEntity<MappingJacksonValue> getPolicy(@PathVariable Long c_id, @PathVariable Long p_id) throws JsonProcessingException{
 		return pService.getPolicy(c_id, p_id);
 	}
 
@@ -124,8 +125,39 @@ public class PolicyController {
 	 * 
 	 */
 	@PostMapping("/customer/{c_id}/policy")
-	public ResponseEntity<String> postPolicy(@PathVariable Long c_id, @RequestBody PolicyRequest pRequest) throws JsonProcessingException{
+	public ResponseEntity<MappingJacksonValue> postPolicy(@PathVariable Long c_id, @RequestBody PolicyRequest pRequest) throws JsonProcessingException{
 		return pService.postPolicy(c_id, pRequest);
+	}
+
+		/**
+	 * Diese Methode speichert ein PolicyEntity.
+	 * @url "http://domain:port/customer/"Kunden-ID"/policy"
+	 * @param c_id ID des Customers bei dem die Policys gespeichert wird.
+	 * @param pRequest Das zu speichernde Objekt
+	 * 			{
+					"startDate": "1990-01-01",
+					"endDate": "2030-12-31",
+					"coverage": 50000,
+					"objectOfInsurance": {
+						"name": "Tomato",
+						"race": "Bengal",
+						"color": "Braun",
+						"dateOfBirth": "2015-07-22",
+						"castrated": true,
+						"personality": "anhänglich",
+						"environment": "drinnen",
+						"weight": 4
+					}
+				}
+	 * @return Die ID der gerade erstellten Objekts
+	 * 		{
+			"id": 0
+			}
+	 * 
+	 */
+	@PutMapping("/customer/{c_id}/policy/{p_id}")
+	public ResponseEntity<MappingJacksonValue> postPolicy(@PathVariable("c_id") Long c_id, @PathVariable("p_id") Long p_id, @RequestBody PolicyRequest pRequest) throws JsonProcessingException{
+		return pService.updatePolicy(c_id, p_id, pRequest);
 	}
 
 	/**
@@ -148,7 +180,7 @@ public class PolicyController {
 		}
 	 */
 	@GetMapping("/policyprice")
-	public ResponseEntity<String> getPolicyPrice(@RequestBody PriceCalculationEntity details) throws JsonProcessingException{
+	public ResponseEntity<MappingJacksonValue> getPolicyPrice(@RequestBody PriceCalculationEntity details) throws JsonProcessingException{
 		return pService.getPolicyPriceRequest(details);
 	}
 }

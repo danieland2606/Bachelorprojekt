@@ -137,9 +137,9 @@ public class NotificationService {
             emailSender.send(mimeMessage);
             return new ResponseEntity<String>("Mail wurde erfolgreich versendet",HttpStatusCode.valueOf(200));
         }catch(MessagingException e){
-            System.out.println(e);
+            return new ResponseEntity<String>("Fehler beim Versand",HttpStatusCode.valueOf(500));
         }        
-        return new ResponseEntity<String>("Fehler beim Versand",HttpStatusCode.valueOf(500));
+        //return new ResponseEntity<String>("Fehler beim Versand",HttpStatusCode.valueOf(500));
        
     }
     public ResponseEntity<String> changePolicyNotification(MailPolicyEntity details){
