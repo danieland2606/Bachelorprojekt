@@ -38,7 +38,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:81/customer/1/policy/4",
+					"raw": "localhost:81/customer/1/policy/2",
 					"host": [
 						"localhost"
 					],
@@ -47,7 +47,7 @@
 						"customer",
 						"1",
 						"policy",
-						"4"
+						"2"
 					]
 				}
 			},
@@ -84,12 +84,12 @@
 			"response": []
 		},
 		{
-			"name": "postPolicyPrice",
+			"name": "getPolicyPrice",
 			"request": {
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:81/policyprice?details=eyJwb3N0YWxDb2RlIjozMTEzNywiY292ZXJhZ2UiOiIxMDAwMCIsInJhY2UiOiJhYnlzc2luaWFuIiwiY29sb3IiOiJyb3QiLCJkYXRlT2ZCaXJ0aCI6IjIwMjMtMDQtMDUiLCJjYXN0cmF0ZWQiOiIiLCJwZXJzb25hbGl0eSI6ImFuaGFlbmdsaWNoIiwiZW52aXJvbm1lbnQiOiJoYXVza2F0emUiLCJ3ZWlnaHQiOiI5In0",
+					"raw": "localhost:81/policyprice?details=ewogICJjdXN0b21lcklkIjogMSwKICAicG9saWN5IjogewogICAgInN0YXJ0RGF0ZSI6ICIxOTkwLTAxLTAxIiwKICAgICJlbmREYXRlIjogIjIwMzAtMTItMzEiLAogICAgImNvdmVyYWdlIjogNTAwMDAsCiAgICAib2JqZWN0T2ZJbnN1cmFuY2UiOiB7CiAgICAgICJuYW1lIjogIlRvbWF0byIsCiAgICAgICJyYWNlIjogIkJlbmdhbCIsCiAgICAgICJjb2xvciI6ICJCcmF1biIsCiAgICAgICJkYXRlT2ZCaXJ0aCI6ICIyMDE1LTA3LTIyIiwKICAgICAgImNhc3RyYXRlZCI6IHRydWUsCiAgICAgICJwZXJzb25hbGl0eSI6ICJhbmjkbmdsaWNoIiwKICAgICAgImVudmlyb25tZW50IjogImRyaW5uZW4iLAogICAgICAid2VpZ2h0IjogNAogICAgfQogIH0KfQ",
 					"host": [
 						"localhost"
 					],
@@ -100,7 +100,7 @@
 					"query": [
 						{
 							"key": "details",
-							"value": "eyJwb3N0YWxDb2RlIjozMTEzNywiY292ZXJhZ2UiOiIxMDAwMCIsInJhY2UiOiJhYnlzc2luaWFuIiwiY29sb3IiOiJyb3QiLCJkYXRlT2ZCaXJ0aCI6IjIwMjMtMDQtMDUiLCJjYXN0cmF0ZWQiOiIiLCJwZXJzb25hbGl0eSI6ImFuaGFlbmdsaWNoIiwiZW52aXJvbm1lbnQiOiJoYXVza2F0emUiLCJ3ZWlnaHQiOiI5In0"
+							"value": "ewogICJjdXN0b21lcklkIjogMSwKICAicG9saWN5IjogewogICAgInN0YXJ0RGF0ZSI6ICIxOTkwLTAxLTAxIiwKICAgICJlbmREYXRlIjogIjIwMzAtMTItMzEiLAogICAgImNvdmVyYWdlIjogNTAwMDAsCiAgICAib2JqZWN0T2ZJbnN1cmFuY2UiOiB7CiAgICAgICJuYW1lIjogIlRvbWF0byIsCiAgICAgICJyYWNlIjogIkJlbmdhbCIsCiAgICAgICJjb2xvciI6ICJCcmF1biIsCiAgICAgICJkYXRlT2ZCaXJ0aCI6ICIyMDE1LTA3LTIyIiwKICAgICAgImNhc3RyYXRlZCI6IHRydWUsCiAgICAgICJwZXJzb25hbGl0eSI6ICJhbmjkbmdsaWNoIiwKICAgICAgImVudmlyb25tZW50IjogImRyaW5uZW4iLAogICAgICAid2VpZ2h0IjogNAogICAgfQogIH0KfQ"
 						}
 					]
 				}

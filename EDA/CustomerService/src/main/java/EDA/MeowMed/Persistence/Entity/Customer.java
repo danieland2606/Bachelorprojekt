@@ -1,16 +1,16 @@
 package EDA.MeowMed.Persistence.Entity;
 
-import EDA.MeowMed.JSON.MappableObject;
+import com.fasterxml.jackson.annotation.JsonFilter;
+import events.customer.CustomerCreatedEvent;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 @Entity
 @Table(name = "Customer")
-public class Customer implements Serializable, MappableObject {
+@JsonFilter("customerFilter")
+public class Customer implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -166,26 +166,20 @@ public class Customer implements Serializable, MappableObject {
         this.bankDetails = bankDetails;
     }
 
-    /**
-     * ToDo: need Comment
-     *
-     * @return
-     */
-    public Map<String, Object> toMap() {
-        Map<String, Object> customer = new LinkedHashMap<>();
-        customer.put("id", id);
-        customer.put("firstName", firstName);
-        customer.put("lastName", lastName);
-        customer.put("formOfAddress", formOfAddress);
-        customer.put("title", title);
-        customer.put("maritalStatus", maritalStatus);
-        customer.put("dateOfBirth", dateOfBirth);
-        customer.put("employmentStatus", employmentStatus);
-        customer.put("address", address.toMap());
-        customer.put("phoneNumber", phoneNumber);
-        customer.put("email", email);
-        customer.put("bankDetails", bankDetails);
-        return customer;
+    public CustomerCreatedEvent createCustomerCreatedEvent() {
+        return new CustomerCreatedEvent(
+                id,
+                firstName,
+                lastName,
+                formOfAddress,
+                title,
+                maritalStatus,
+                dateOfBirth,
+                employmentStatus,
+                address.toCustomerAddress(),
+                phoneNumber,
+                email,
+                bankDetails
+        );
     }
-
 }

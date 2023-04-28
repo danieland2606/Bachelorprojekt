@@ -1,29 +1,29 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <diagram program="umlet" version="15.0.0">
-  <zoom_level>8</zoom_level>
+  <zoom_level>12</zoom_level>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>624</x>
-      <y>416</y>
-      <w>296</w>
-      <h>72</h>
+      <x>252</x>
+      <y>468</y>
+      <w>360</w>
+      <h>108</h>
     </coordinates>
     <panel_attributes>CustomerService
 --
 --
-+ getCustomer(id: Long): Map&lt;String, Object&gt;
-+ getCustomerList(id: Long): List&lt;Map&lt;String, Object&gt;
-+ addCustomer(customer: Customer): Map&lt;String, Object&gt;</panel_attributes>
++ getCustomer(id: Long): String
++ getCustomerList(id: Long): String
++ addCustomer(customer: Customer): String</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1080</x>
-      <y>416</y>
-      <w>320</w>
-      <h>80</h>
+      <x>852</x>
+      <y>468</y>
+      <w>480</w>
+      <h>120</h>
     </coordinates>
     <panel_attributes>EventSenderService
 --
@@ -37,10 +37,10 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1168</x>
-      <y>320</y>
-      <w>136</w>
-      <h>56</h>
+      <x>984</x>
+      <y>324</y>
+      <w>204</w>
+      <h>84</h>
     </coordinates>
     <panel_attributes>MessagingConfig
 --
@@ -52,10 +52,10 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>720</x>
-      <y>320</y>
-      <w>112</w>
-      <h>24</h>
+      <x>348</x>
+      <y>324</y>
+      <w>168</w>
+      <h>36</h>
     </coordinates>
     <panel_attributes>CustomerController
 fg=gray</panel_attributes>
@@ -64,10 +64,10 @@ fg=gray</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>912</x>
-      <y>432</y>
-      <w>184</w>
-      <h>40</h>
+      <x>600</x>
+      <y>492</y>
+      <w>276</w>
+      <h>60</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 r2=1
@@ -77,10 +77,10 @@ m2=eventSenderService</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1232</x>
-      <y>368</y>
-      <w>24</w>
-      <h>64</h>
+      <x>1080</x>
+      <y>396</y>
+      <w>36</w>
+      <h>96</h>
     </coordinates>
     <panel_attributes>lt=&lt;.</panel_attributes>
     <additional_attributes>10.0;60.0;10.0;10.0</additional_attributes>
@@ -88,10 +88,10 @@ m2=eventSenderService</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>768</x>
-      <y>336</y>
-      <w>24</w>
-      <h>96</h>
+      <x>420</x>
+      <y>348</y>
+      <w>36</w>
+      <h>144</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 fg=gray</panel_attributes>
@@ -100,10 +100,10 @@ fg=gray</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>720</x>
-      <y>584</y>
-      <w>112</w>
-      <h>32</h>
+      <x>348</x>
+      <y>720</y>
+      <w>168</w>
+      <h>48</h>
     </coordinates>
     <panel_attributes>&lt;&lt;interface&gt;&gt;
 CustomerRepository
@@ -113,41 +113,14 @@ fg=gray</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>768</x>
-      <y>480</y>
-      <w>120</w>
-      <h>120</h>
+      <x>420</x>
+      <y>564</y>
+      <w>180</w>
+      <h>180</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 r2=1
 m2=customerRepository</panel_attributes>
     <additional_attributes>10.0;10.0;10.0;130.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>512</x>
-      <y>432</y>
-      <w>128</w>
-      <h>40</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;-
-r1=1
-m1=mapFilter</panel_attributes>
-    <additional_attributes>10.0;20.0;140.0;20.0</additional_attributes>
-  </element>
-  <element>
-    <id>UMLClass</id>
-    <coordinates>
-      <x>96</x>
-      <y>416</y>
-      <w>424</w>
-      <h>48</h>
-    </coordinates>
-    <panel_attributes>MapFilter
---
---
-+ filterMap(mapOfObject: Map&lt;String, Object&gt;, filters: String): Map&lt;String, Object&gt;</panel_attributes>
-    <additional_attributes/>
   </element>
 </diagram>

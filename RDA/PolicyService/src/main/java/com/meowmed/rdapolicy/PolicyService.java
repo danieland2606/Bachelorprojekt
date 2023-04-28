@@ -1,5 +1,6 @@
 package com.meowmed.rdapolicy;
 
+import java.net.URI;
 import java.nio.charset.Charset;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
@@ -32,6 +33,7 @@ import com.meowmed.rdapolicy.database.PolicyRepository;
 import com.meowmed.rdapolicy.entity.CatEntity;
 import com.meowmed.rdapolicy.entity.CustomerRequest;
 import com.meowmed.rdapolicy.entity.MailPolicyEntity;
+import com.meowmed.rdapolicy.entity.ObjectOfInsuranceEntity;
 import com.meowmed.rdapolicy.entity.PolicyEntity;
 import com.meowmed.rdapolicy.entity.PolicyRequest;
 import com.meowmed.rdapolicy.entity.PriceCalculationEntity;
@@ -62,6 +64,7 @@ public class PolicyService {
 		this.pRepository = policyRepository;
 		this.oRepository = objectOfInsuranceRepository;
 		this.cRepository = catRepository;
+		setUp();
 	}
 
     /**
@@ -70,7 +73,7 @@ public class PolicyService {
 	 * @param fields Eine Liste an Komma-separierten an benötigten Feldern (z.B. startDate,endDate,coverage,objectOfInsurance.name)
 	 * @return Zurück kommt eine gefilterte Liste an PolicyEntitys, die ähnlich dem Beispiel aussieht:
 	 */
-    public MappingJacksonValue getPolicyList(Long c_id, String fields) {
+    public ResponseEntity<String> getPolicyList(Long c_id, String fields) throws JsonProcessingException {
 		MappingJacksonValue wrapper = new MappingJacksonValue(pRepository.findByCid(c_id));
 		
 		List<String> policyList = new ArrayList<String>();
@@ -99,7 +102,13 @@ public class PolicyService {
 		.addFilter("policyFilter", SimpleBeanPropertyFilter.filterOutAllExcept(Set.copyOf(policyList)))
 		.addFilter("objectOfInsuranceFilter", SimpleBeanPropertyFilter.filterOutAllExcept(Set.copyOf(ooIList)))
 		.setFailOnUnknownId(false));
-		return wrapper;
+		ObjectMapper mapper = new ObjectMapper();
+		try {
+			return new ResponseEntity<String>(mapper.writeValueAsString(wrapper),HttpStatusCode.valueOf(201));
+		} catch (JsonProcessingException e) {
+			return new ResponseEntity<String>(mapper.writeValueAsString(Collections.singletonMap("error", e.getMessage())),HttpStatusCode.valueOf(400));
+		}
+		//return wrapper;
 	}
 
 	/**
@@ -108,14 +117,19 @@ public class PolicyService {
 	 * @param p_id ID der Policy des Kunden.
 	 * @return Zurückkommt ein PolicyEntity, bei der die Policy- und Customer-ID herausgefiltert wird
 	 */
-    public MappingJacksonValue getPolicy(Long c_id, Long p_id){
+    public ResponseEntity<String> getPolicy(Long c_id, Long p_id) throws JsonProcessingException{
 		MappingJacksonValue wrapper = new MappingJacksonValue(pRepository.findById(p_id));
 		wrapper.setFilters(new SimpleFilterProvider()
 		.addFilter("policyFilter", SimpleBeanPropertyFilter.serializeAllExcept("id", "c_id"))
 		.addFilter("objectOfInsuranceFilter", SimpleBeanPropertyFilter.serializeAll())
 		.setFailOnUnknownId(false));
-		
-		return wrapper;
+		ObjectMapper mapper = new ObjectMapper();
+		try {
+			return new ResponseEntity<String>(mapper.writeValueAsString(wrapper),HttpStatusCode.valueOf(201));
+		} catch (JsonProcessingException e) {
+			return new ResponseEntity<String>(mapper.writeValueAsString(Collections.singletonMap("error", e.getMessage())),HttpStatusCode.valueOf(400));
+		}
+		//return wrapper;
 	}
 
 	/**
@@ -125,7 +139,7 @@ public class PolicyService {
 	 * @return Die ID der gerade erstellten Objekts
 	 * 
 	 */
-    public MappingJacksonValue postPolicy(Long c_id, PolicyRequest pRequest){
+    public ResponseEntity<String> postPolicy(Long c_id, PolicyRequest pRequest) throws JsonProcessingException{
 		oRepository.save(pRequest.getObjectOfInsurance());
 		String customerURL = "http://" + customerUrl + ":8080/customer/{c_id}";
 		System.out.println(customerURL);
@@ -134,10 +148,12 @@ public class PolicyService {
 		CustomerRequest customer = responseSpec.bodyToMono(CustomerRequest.class).block();
 		System.out.println(customer);
 
+		PriceCalculationEntity tempCalc = new PriceCalculationEntity(c_id, pRequest);
+		/*
 		PriceCalculationEntity tempCalc = new PriceCalculationEntity(customer.getAddress().getPostalCode(), pRequest.getCoverage(), pRequest.getObjectOfInsurance().getRace(), 
 				pRequest.getObjectOfInsurance().getColor(), pRequest.getObjectOfInsurance().getDateOfBirth(), pRequest.getObjectOfInsurance().isCastrated(), 
 				pRequest.getObjectOfInsurance().getPersonality(), pRequest.getObjectOfInsurance().getEnvironment(), pRequest.getObjectOfInsurance().getWeight());
-
+		*/
 		PolicyEntity policy = new PolicyEntity(c_id, pRequest.getStartDate(), pRequest.getEndDate(), pRequest.getCoverage(), getPolicyPrice(tempCalc), pRequest.getObjectOfInsurance());
 		policy = pRepository.save(policy);
 
@@ -167,8 +183,14 @@ public class PolicyService {
 		wrapper.setFilters(new SimpleFilterProvider()
 		.addFilter("policyFilter", SimpleBeanPropertyFilter.filterOutAllExcept("id"))
 		.setFailOnUnknownId(false));
-
-		return wrapper;
+		ObjectMapper mapper = new ObjectMapper();
+		try {
+			return new ResponseEntity<String>(mapper.writeValueAsString(wrapper),HttpStatusCode.valueOf(201));
+		} catch (JsonProcessingException e) {
+			return new ResponseEntity<String>(mapper.writeValueAsString(Collections.singletonMap("error", e.getMessage())),HttpStatusCode.valueOf(400));
+		}
+		//return new ResponseEntity<String>("Internal Server Error",HttpStatusCode.valueOf(500));
+		//return wrapper;
 	}
 
 	/**
@@ -177,50 +199,61 @@ public class PolicyService {
 	 * @return Zurück kommt ein Wert als double für die monatlichen Kosten
 	 */
     public double getPolicyPrice(PriceCalculationEntity body){
-		System.out.println(body);
+		//System.out.println(body);
+
+		String customerURL = "http://" + customerUrl + ":8080/customer/{c_id}";
+		//System.out.println(customerURL);
+		WebClient customerClient = WebClient.create();
+		WebClient.ResponseSpec responseSpec = customerClient.get().uri(customerURL,body.getCustomerId()).retrieve();
+		CustomerRequest customer = responseSpec.bodyToMono(CustomerRequest.class).block();
+		//System.out.println(customer);
 		
+		if (body.getPolicy().getObjectOfInsurance().getPersonality().contains("sehr verspielt") || ChronoUnit.YEARS.between(customer.getDateOfBirth(), LocalDate.now())<=18) return 0;
 		//PriceCalculationEntity body
-		CatEntity cat = cRepository.findByRace(body.getRace());
+		CatEntity cat = cRepository.findByRace(body.getPolicy().getObjectOfInsurance().getRace());
 		if (cat==null) return 0;
 		double grundpreis = 0;
 		double endbetrag = 0;
 		// Die Jahresdeckung dient als Startwert
 
 		// Ist die Katze Schwarz, ist die Versicherung Teurer
-		switch(body.getColor()){
+		switch(body.getPolicy().getObjectOfInsurance().getColor()){
 			case "schwarz":
-				grundpreis = 0.02*body.getCoverage();
+				grundpreis = 0.002*body.getPolicy().getCoverage();
 				break;
 			default:
-				grundpreis = 0.015*body.getCoverage();
+				grundpreis = 0.0015*body.getPolicy().getCoverage();
 		}
-
 		//System.out.println("Grundpreis: " + grundpreis + " Endbetrag: " + endbetrag);
 		//  Der aktuelle Preis startet als Grundpreis. Später wird der Preis um Prozentteile des Grundpreises erhöht
 		endbetrag = grundpreis;
 		// Erhöhe die Kosten um 5€ für jedes Kilo abweichung vom Durchschnittsgewichtes der Rasse
-		endbetrag += Math.abs((cat.getUpperAverageWeight()-body.getWeight())*5);
+		if(body.getPolicy().getObjectOfInsurance().getWeight() < cat.getLowerAverageWeight()){
+			endbetrag += Math.abs((cat.getLowerAverageWeight()-body.getPolicy().getObjectOfInsurance().getWeight())*5);
+		} else if (body.getPolicy().getObjectOfInsurance().getWeight() > cat.getUpperAverageAge()){
+			endbetrag += Math.abs((cat.getUpperAverageWeight()-body.getPolicy().getObjectOfInsurance().getWeight())*5);
+		}
 		// Erhöhe die Kosten um 1% des Grundpreises für jeden Punkt in der Krankheitsanfälligkeitsskala
-		endbetrag += grundpreis*(cat.getIllnessFactor()*0.01);
+		endbetrag += cat.getIllnessFactor();
 
 		//System.out.println("Grundpreis: " + grundpreis + " Endbetrag: " + endbetrag);
 
 		// Ist es eine Draußenkatze, steigere den Preis um 1% des Grundwertes
-		if(body.getEnvironment() == "draussen") endbetrag += 0.01*grundpreis;
+		if(body.getPolicy().getObjectOfInsurance().getEnvironment() == "draussen") endbetrag += 0.1*grundpreis;
 		// Falls die Katze im oberen Quantil des Durchschnittsalters oder älter ist, erhöhe den Preis um 20% des Grundpreises
 		// Ist die Katze Jung, erhöhe den Preis um 5€
-		if(ChronoUnit.YEARS.between(body.getDateOfBirth(), LocalDate.now())>(cat.getUpperAverageAge()*0.75)){
+		if(ChronoUnit.YEARS.between(body.getPolicy().getObjectOfInsurance().getDateOfBirth(), LocalDate.now())>(cat.getUpperAverageAge()*0.75)){
 			endbetrag += 0.2*grundpreis;
-		} else if (ChronoUnit.YEARS.between(body.getDateOfBirth(), LocalDate.now())<=2){
-			endbetrag+=5;
+		} else if (ChronoUnit.YEARS.between(body.getPolicy().getObjectOfInsurance().getDateOfBirth(), LocalDate.now())<=2){
+			endbetrag-=(grundpreis*0.1);
 		};
 
 		//System.out.println("Grundpreis: " + grundpreis + " Endbetrag: " + endbetrag);
 
 		// Ist die Katze kastriert, erhöhe den Preis um 5€
-		if(body.isCastrated()) endbetrag+=5;
+		if(!body.getPolicy().getObjectOfInsurance().isCastrated()) endbetrag+=5;
 		// Hat der Besitzer eine PLZ die mit 0 oder 1 startet, erhöhe den Preis um 5% des Grundpreises
-		if(body.getPostalCode()<20000) endbetrag+= 0.05*grundpreis;
+		if(customer.getAddress().getPostalCode()<20000) endbetrag+= 0.05*grundpreis;
 
 		// Auf 2 Nachkommastellen runden
 		endbetrag = ((int)(endbetrag*100))/100;
@@ -234,22 +267,43 @@ public class PolicyService {
 	 * @param body Übergeben werden die Parameter als PriceCalculationEntity
 	 * @return Ein zu JSON umwandelbarer Wert
 	*/
-	public ResponseEntity<String> getPolicyPriceRequest(String details){
+	public ResponseEntity<String> getPolicyPriceRequest(PriceCalculationEntity details)throws JsonProcessingException{
 		ObjectMapper mapper = new ObjectMapper();
-		String str = new String(Base64.getUrlDecoder().decode(details), Charset.forName("UTF-8"));
-		PriceCalculationEntity body = null;
-		try {
-			mapper.registerModule(new JavaTimeModule());
-			body = mapper.readValue(str,PriceCalculationEntity.class);
-			if (body==null){ 
-				return new ResponseEntity<String>("Convert was not Possible",HttpStatusCode.valueOf(500));	
-			}
-			return new ResponseEntity<String>(mapper.writeValueAsString(Collections.singletonMap("premium", getPolicyPrice(body))),HttpStatusCode.valueOf(200));
-		} catch (JsonMappingException e) {
-			System.out.println(e);
-		} catch (JsonProcessingException e){
-			System.out.println(e);
+		try{
+		mapper.registerModule(new JavaTimeModule());
+		if (details!=null){
+			return new ResponseEntity<String>(mapper.writeValueAsString(Collections.singletonMap("premium", getPolicyPrice(details))),HttpStatusCode.valueOf(200));
 		}
-		return new ResponseEntity<String>("Convert was not Possible",HttpStatusCode.valueOf(500));
+		}
+		catch(JsonProcessingException e){
+			return new ResponseEntity<String>(mapper.writeValueAsString(Collections.singletonMap("error", e.getMessage())),HttpStatusCode.valueOf(400));
+		}
+		return new ResponseEntity<String>("Internal Server Error",HttpStatusCode.valueOf(500));
+	}
+
+	void setUp(){
+			LocalDate startDate = LocalDate.of(2017, 1, 15);
+			LocalDate endDate1 = LocalDate.of(2099, 1, 1);
+			LocalDate birthDate1 = LocalDate.of(2015, 1, 1);
+			LocalDate birthDate2 = LocalDate.of(2015, 1, 2);
+			ObjectOfInsuranceEntity cat1 = new ObjectOfInsuranceEntity("Belly", "Bengal", "Braun", birthDate1, false, "anhänglich", "drinnen", 4);
+			ObjectOfInsuranceEntity cat2 = new ObjectOfInsuranceEntity("Rough", "Bengal", "Schwarz", birthDate2, false, "draufgängerisch", "drinnen", 4);
+			PolicyEntity policy1 = new PolicyEntity(1 , startDate, endDate1, 50000, 765,cat1);
+			PolicyEntity policy2 = new PolicyEntity(1 ,startDate, endDate1, 50000, 765 ,cat2);
+			oRepository.save(cat1);
+			oRepository.save(cat2);
+			pRepository.save(policy1);
+			pRepository.save(policy2);
+			ArrayList<CatEntity> entities = new ArrayList<>();
+			entities.add(new CatEntity("siamese", 12, 15, 4, 7, 2, new String[]{"seal","blau","lilac","creme"})) ;
+			entities.add(new CatEntity("perser", 12, 16, 4, 7, 3, new String[]{"weiß", "schildpatt","schwarz"}));
+			entities.add(new CatEntity("bengal", 12, 16, 4, 6, 4, new String[]{"braun", "schildpatt","marmor"}));
+			entities.add(new CatEntity("maine-cone", 12, 15, 5, 10, 2, new String[]{"grau","braun","weiß"}));
+			entities.add(new CatEntity("sphynx", 12, 15, 4, 6, 5, new String[]{}));
+			entities.add(new CatEntity("scottish Fold", 12, 15, 4, 6, 6, new String[]{}));
+			entities.add(new CatEntity("british-shorthair", 12, 15, 4, 6, 0, new String[]{}));
+			entities.add(new CatEntity("abyssinian", 12, 15, 3, 5, 4, new String[]{"rot", "schildpatt", "zimt"}));
+			entities.add(new CatEntity("ragdoll", 12, 15, 4, 7, 3, new String[]{"blau", "seal", "lilac", "schildpatt"}));
+			cRepository.saveAll(entities);
 	}
 }

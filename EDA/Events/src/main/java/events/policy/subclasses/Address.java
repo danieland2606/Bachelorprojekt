@@ -1,19 +1,19 @@
-package EDA.MeowMed.Messaging.EventObjects;
+package events.policy.subclasses;
 
 import java.io.Serial;
 import java.io.Serializable;
 
-public class NoId_Address implements Serializable {
+public class Address implements Serializable {
     @Serial
     private static final long serialVersionUID = 2L;
     private String city;
     private String street;
     private String postalCode;
-    public NoId_Address() {
+    public Address() {
 
     }
 
-    public NoId_Address(String city, String street, String postalCode) {
+    public Address(String city, String street, String postalCode) {
         this.city = city;
         this.street = street;
         this.postalCode = postalCode;

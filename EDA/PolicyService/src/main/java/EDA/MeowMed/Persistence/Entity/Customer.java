@@ -1,7 +1,8 @@
 package EDA.MeowMed.Persistence.Entity;
 
 
-import EDA.MeowMed.Messaging.EventObjects.CustomerCreatedEvent;
+import events.customer.CustomerCreatedEvent;
+import events.policy.subclasses.CustomerPojo;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
@@ -168,4 +169,20 @@ public class Customer implements Serializable {
         this.bankDetails = bankDetails;
     }
 
+    public CustomerPojo toPojo() {
+        return new CustomerPojo(
+                id,
+                firstName,
+                lastName,
+                formOfAddress,
+                title,
+                maritalStatus,
+                dateOfBirth,
+                employmentStatus,
+                address.toCustomerAddress(),
+                phoneNumber,
+                email,
+                bankDetails
+        );
+    }
 }

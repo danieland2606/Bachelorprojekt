@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import org.springframework.stereotype.Repository;
 
 import com.fasterxml.jackson.annotation.JsonFilter;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.persistence.Entity;
@@ -27,6 +28,7 @@ public class ObjectOfInsuranceEntity {
 
     private String color;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate dateOfBirth;
 
     private boolean castrated;

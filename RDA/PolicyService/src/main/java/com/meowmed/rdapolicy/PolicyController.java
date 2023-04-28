@@ -10,7 +10,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.meowmed.rdapolicy.entity.PolicyRequest;
+import com.meowmed.rdapolicy.entity.PriceCalculationEntity;
 
 /**
  * Diese Klasse ist der REST-Controller
@@ -62,7 +65,7 @@ public class PolicyController {
 		]
 	 */
 	@GetMapping("/customer/{c_id}/policy")
-	public MappingJacksonValue getPolicyList(@PathVariable Long c_id, @RequestParam(value = "fields") String fields) {
+	public ResponseEntity<String> getPolicyList(@PathVariable Long c_id, @RequestParam(value = "fields") String fields) throws JsonProcessingException {
 		return pService.getPolicyList(c_id,fields);
 	}
 
@@ -90,7 +93,7 @@ public class PolicyController {
 			}
 	 */
 	@GetMapping("/customer/{c_id}/policy/{p_id}")
-	public MappingJacksonValue getPolicy(@PathVariable Long c_id, @PathVariable Long p_id){
+	public ResponseEntity<String> getPolicy(@PathVariable Long c_id, @PathVariable Long p_id) throws JsonProcessingException{
 		return pService.getPolicy(c_id, p_id);
 	}
 
@@ -121,7 +124,7 @@ public class PolicyController {
 	 * 
 	 */
 	@PostMapping("/customer/{c_id}/policy")
-	public MappingJacksonValue postPolicy(@PathVariable Long c_id, @RequestBody PolicyRequest pRequest){
+	public ResponseEntity<String> postPolicy(@PathVariable Long c_id, @RequestBody PolicyRequest pRequest) throws JsonProcessingException{
 		return pService.postPolicy(c_id, pRequest);
 	}
 
@@ -145,11 +148,7 @@ public class PolicyController {
 		}
 	 */
 	@GetMapping("/policyprice")
-	public ResponseEntity<String> getPolicyPrice(@RequestParam(value = "details") String details){
+	public ResponseEntity<String> getPolicyPrice(@RequestBody PriceCalculationEntity details) throws JsonProcessingException{
 		return pService.getPolicyPriceRequest(details);
 	}
-
-
-
-
 }

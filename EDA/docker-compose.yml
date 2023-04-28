@@ -1,5 +1,18 @@
 version: '3.7'
 services:
+  ui:
+    build:
+      args:
+        mode: "prod"
+        customerService: "http://localhost:81"
+        policyService: "http://localhost:82"
+      context: ../UI
+      dockerfile: Dockerfile
+    container_name: ui-service
+    networks:
+      - "default"
+    ports:
+      - "80:80"
   customer:
     build:
       context: ./CustomerService
@@ -10,24 +23,27 @@ services:
     environment:
       - spring.rabbitmq.host=rabbitmq
       - spring.datasource.url=jdbc:mariadb://customerdb:3306/Customer
-      - spring.datasource.username=user
-      - spring.datasource.password=test12345
+      - spring.datasource.username=root
+      - spring.datasource.password=test
       - spring.datasource.driver-class-name=org.mariadb.jdbc.Driver
-      - spring.jpa.database-platform=org.hibernate.dialect.MariaDBDialect
+  #    - spring.jpa.database-platform=org.hibernate.dialect.MariaDBDialect
+      - spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MariaDBDialect
     ports:
       - "81:8081"
     depends_on:
       - customerdb
+      - rabbitmq
   customerdb:
     image: mariadb:latest
     container_name: customerdb
+    command: --general-log=1
     networks:
       - "default"
     environment:
-      - MARIADB_ROOT_PASSWORD=test
-      - MYSQL_DATABASE=Customer
-      - MYSQL_USER=user
-      - MYSQL_PASSWORD=test12345
+      MARIADB_ROOT_PASSWORD: test
+      MYSQL_DATABASE: Customer
+      MYSQL_USER: user
+      MYSQL_PASSWORD: test12345
   notification:
     build:
       context: ./NotificationService
@@ -37,6 +53,8 @@ services:
       - "default"
     environment:
       - spring.rabbitmq.host=rabbitmq
+    depends_on:
+      - rabbitmq
   policy:
     build:
       context: ./PolicyService
@@ -44,6 +62,7 @@ services:
     container_name: policy-service
     depends_on: 
       - policydb
+      - rabbitmq
     networks:
       - "default"
     ports:

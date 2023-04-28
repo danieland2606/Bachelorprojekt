@@ -2,6 +2,8 @@ package EDA.MeowMed.REST;
 
 import EDA.MeowMed.Application.CustomerService;
 import EDA.MeowMed.Persistence.Entity.Customer;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,21 +19,55 @@ public class CustomerController {
         this.customerService = customerService;
     }
 
-    @GetMapping("/customer")
-    public List<Map<String, Object>> getCustomerList(@RequestParam(value = "fields", required = false) String fields) {
+    /**
+     * TODO: Add comment & ResponseEntity
+     *
+     * @param fields
+     * @return
+     */
+    @GetMapping(value = "/customer", produces = MediaType.APPLICATION_JSON_VALUE)
+    public String getCustomerList(@RequestParam(value = "fields", required = false) String fields) {
         if (fields == null) {
             fields = "";
         }
-        return customerService.getCustomerList(fields);
+        try {
+            return customerService.getCustomerList(fields);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
-    @GetMapping("/customer/{c_id}")
-    public Map<String, Object> getCustomer(@PathVariable Long c_id) {
-        return customerService.getCustomer(c_id);
+    /**
+     * TODO: Add comment & ResponseEntity
+     *
+     * @param c_id
+     * @return
+     */
+    @GetMapping(value = "/customer/{c_id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public String getCustomer(@PathVariable Long c_id) {
+        try {
+            return customerService.getCustomer(c_id);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
-    @PostMapping("/customer")
-    public Map<String, Object> postCustomer(@RequestBody Customer customer) {
-        return customerService.addCustomer(customer);
+    /**
+     * TODO: Add comment & ResponseEntity
+     *
+     * @param customer
+     * @return
+     */
+    @PostMapping(value = "/customer", produces = MediaType.APPLICATION_JSON_VALUE)
+    public String postCustomer(@RequestBody Customer customer) {
+        try {
+            return customerService.addCustomer(customer);
+        } catch
+        (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

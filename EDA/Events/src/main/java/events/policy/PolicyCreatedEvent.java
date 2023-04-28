@@ -1,6 +1,8 @@
-package EDA.MeowMed.Messaging.EventObjects;
+package events.policy;
 
-import EDA.MeowMed.Persistence.Entity.Policy;
+import events.policy.subclasses.CustomerPojo;
+import events.policy.subclasses.ObjectOfInsurancePojo;
+
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -23,7 +25,7 @@ public class PolicyCreatedEvent implements Serializable {
 
     private CustomerPojo customer;
 
-    public PolicyCreatedEvent(long id, LocalDate startDate, LocalDate endDate, int coverage, int premium, ObjectOfInsurancePojo objectOfInsurancePojo, CustomerPojo customer) {
+    public PolicyCreatedEvent(long id, LocalDate startDate, LocalDate endDate, int coverage, double premium, ObjectOfInsurancePojo objectOfInsurancePojo, CustomerPojo customer) {
         this.id = id;
         this.startDate = startDate;
         this.endDate = endDate;
@@ -31,16 +33,6 @@ public class PolicyCreatedEvent implements Serializable {
         this.premium = premium;
         this.objectOfInsurancePojo = objectOfInsurancePojo;
         this.customer = customer;
-    }
-
-    public PolicyCreatedEvent(Policy p) {
-        this.id = p.getId();
-        this.startDate = p.getStartDate();
-        this.endDate = p.getEndDate();
-        this.coverage = p.getCoverage();
-        this.premium = p.getPremium();
-        this.objectOfInsurancePojo = new ObjectOfInsurancePojo(p.getObjectOfInsurance());
-        this.customer = new CustomerPojo(p.getCustomer());
     }
 
     public PolicyCreatedEvent() {

@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
  * Diese Klasse ist der REST-Controller
  * 
  * @apiNote Die Schnittstelle ist in der Postman-Collection verzeichnet und steht in den Aufrufen
- * @author Alexander Hampel, Mozamil Ahmadzaei
+ * @author Alexander Hampel, Mozamil Ahmadzaei, Daniel Arnold
  * 
  */
 
@@ -96,4 +96,10 @@ public class NotificationController {
         //System.out.println(details);
         return nService.policyNotification(details);
     }
+
+    @PostMapping("/policychangenotification")
+    public ResponseEntity<String> putNotificationChangePolicy(@RequestBody MailPolicyEntity details) {
+        return  nService.changePolicyNotification(details);
+    }
+
 }
