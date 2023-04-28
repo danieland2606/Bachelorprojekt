@@ -32,8 +32,12 @@ paths:
                     - required:
                         - id
           links:
-            customer:
+            get:
               operationId: getCustomer
+              parameters:
+                customerId: '$response.body#/id'
+            put:
+              operationId: updateCustomer
               parameters:
                 customerId: '$response.body#/id'
         400:
@@ -42,7 +46,7 @@ paths:
           description: unexpected error
     post:
       operationId: createCustomer
-      summary: create new customer
+      summary: create a new customer
       tags:
         - customer
       requestBody:
@@ -64,8 +68,12 @@ paths:
                 required:
                   - id
           links:
-            newCustomer:
+            get:
               operationId: getCustomer
+              parameters:
+                customerId: '$response.body#/id'
+            put:
+              operationId: updateCustomer
               parameters:
                 customerId: '$response.body#/id'
         400:
@@ -88,7 +96,27 @@ paths:
               schema:
                 $ref: '#/components/schemas/CustomerAllRequired'
         404:
-          description: not found
+          description: no customer at this location
+        500:
+          description: unexpected error
+    put:
+      operationId: updateCustomer
+      summary: replace a customer
+      tags:
+        - customer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomerAllRequired'
+      responses:
+        200:
+          description: customer updated
+        404:
+          description: no customer at this location
+        400:
+          $ref: '#/components/responses/ClientError'
         500:
           description: unexpected error
   /customer/{customerId}/policy:
@@ -122,8 +150,12 @@ paths:
                     - required:
                         - id
           links:
-            policy:
+            get:
               operationId: getPolicy
+              parameters:
+                policyId: '$response.body#/id'
+            put:
+              operationId: updatePolicy
               parameters:
                 policyId: '$response.body#/id'
         400:
@@ -154,8 +186,12 @@ paths:
                 required:
                   - id
           links:
-            newPolicy:
+            get:
               operationId: getPolicy
+              parameters:
+                policyId: '$response.body#/id'
+            put:
+              operationId: updatePolicy
               parameters:
                 policyId: '$response.body#/id'
         400:
@@ -183,7 +219,27 @@ paths:
               schema:
                 $ref: '#/components/schemas/PolicyAllRequired'
         404:
-          description: not found
+          description: no policy at this location
+        500:
+          description: unexpected error
+    put:
+      operationId: updatePolicy
+      summary: replace a policy
+      tags:
+        - policy
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PolicyAllRequired'
+      responses:
+        200:
+          description: policy updated
+        404:
+          description: no policy at this location
+        400:
+          $ref: '#/components/responses/ClientError'
         500:
           description: unexpected error
   /policyprice:
@@ -197,15 +253,7 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                customerId:
-                  type: integer
-                policy:
-                  $ref: '#/components/schemas/PolicyAllRequired'
-              required:
-                - customerId
-                - policy
+              $ref: '#/components/schemas/PolicyCalc'      
       responses:
         200:
           description: price calculated
@@ -240,6 +288,7 @@ components:
             properties:
               error:
                 type: string
+                description: 'short description of error condition'
             required:
               - error
   schemas:
@@ -264,6 +313,8 @@ components:
           format: date
         employmentStatus:
           $ref: '#/components/schemas/EmploymentStatus'
+        dogOwner:
+          type: boolean
         address:
           $ref: '#/components/schemas/Address'
         phoneNumber:
@@ -296,6 +347,7 @@ components:
             - maritalStatus
             - dateOfBirth
             - employmentStatus
+            - dogOwner
             - phoneNumber
             - email
             - bankDetails
@@ -365,6 +417,16 @@ components:
                 - personality
                 - environment
                 - weight
+    PolicyCalc:
+      type: object
+      properties:
+        customerId:
+          type: integer
+        policy:
+          $ref: '#/components/schemas/PolicyAllRequired'
+      required:
+        - customerId
+        - policy
     CustomerFields:
       type: array
       uniqueItems: true
@@ -454,6 +516,7 @@ components:
         - maritalStatus
         - dateOfBirth
         - employmentStatus
+        - dogOwner
         - phoneNumber
         - email
         - bankDetails
