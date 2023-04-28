@@ -1,5 +1,18 @@
 version: '3.7'
 services:
+  ui:
+    build:
+      args:
+        mode: "prod"
+        customerService: "http://localhost:81"
+        policyService: "http://localhost:82"
+      context: ../UI
+      dockerfile: Dockerfile
+    container_name: ui-service
+    networks:
+      - "default"
+    ports:
+      - "80:80"
   customer:
     build:
       context: ./CustomerService

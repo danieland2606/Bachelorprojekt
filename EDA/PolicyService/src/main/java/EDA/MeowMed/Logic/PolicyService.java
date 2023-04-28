@@ -4,8 +4,8 @@ import java.util.*;
 
 import EDA.MeowMed.Exceptions.DatabaseAccessException;
 import EDA.MeowMed.Exceptions.ObjectNotFoundException;
-import EDA.MeowMed.Messaging.EventObjects.CustomerCreatedEvent;
-import EDA.MeowMed.Messaging.EventObjects.PolicyCreatedEvent;
+import events.customer.CustomerCreatedEvent;
+import events.policy.PolicyCreatedEvent;
 import EDA.MeowMed.Messaging.PolicyCreatedSender;
 import EDA.MeowMed.Persistence.CustomerRepository;
 import EDA.MeowMed.Persistence.Entity.Customer;
@@ -116,7 +116,7 @@ public class PolicyService {
                     .setFailOnUnknownId(false));
 
             // Send a message to notify that the policy was created
-            this.policyCreatedSender.send(new PolicyCreatedEvent(policy));
+            this.policyCreatedSender.send(policy.createPolicyCreatedEvent());
 
             return wrapper;
         } catch (DataAccessException ex) {

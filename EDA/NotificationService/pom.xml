@@ -11,7 +11,7 @@
 	<groupId>EDA</groupId>
 	<artifactId>NotificatonService</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>EDANotificationService</name>
+	<name>${groupId}.${artifactId}</name>
 	<description>Demo project for MeowMed</description>
 	<properties>
 		<java.version>19</java.version>
@@ -60,6 +60,11 @@
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>EDA</groupId>
+			<artifactId>Events</artifactId>
+			<version>0.1</version>
 		</dependency>
 	</dependencies>
 

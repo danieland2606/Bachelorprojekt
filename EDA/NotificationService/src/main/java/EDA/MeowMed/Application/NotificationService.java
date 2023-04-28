@@ -1,8 +1,7 @@
 package EDA.MeowMed.Application;
 
-import EDA.MeowMed.Messaging.EventObjects.CustomerCreatedEvent;
-
-import EDA.MeowMed.Messaging.EventObjects.PolicyCreatedEvent;
+import events.customer.CustomerCreatedEvent;
+import events.policy.PolicyCreatedEvent;
 import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

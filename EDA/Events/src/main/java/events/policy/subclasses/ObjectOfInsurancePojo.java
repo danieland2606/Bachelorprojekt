@@ -1,6 +1,5 @@
-package EDA.MeowMed.Messaging.EventObjects;
+package events.policy.subclasses;
 
-import EDA.MeowMed.Persistence.Entity.ObjectOfInsurance;
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -35,17 +34,6 @@ public class ObjectOfInsurancePojo implements Serializable {
         this.personality = personality;
         this.environment = environment;
         this.weight = weight;
-    }
-
-    public ObjectOfInsurancePojo(ObjectOfInsurance o) {
-        this.name = o.getName();
-        this.race = o.getRace();
-        this.color = o.getColor();
-        this.dateOfBirth = o.getDateOfBirth();
-        this.castrated = o.isCastrated();
-        this.personality = o.getPersonality();
-        this.environment = o.getEnvironment();
-        this.weight = o.getWeight();
     }
 
     public ObjectOfInsurancePojo() {

@@ -1,6 +1,5 @@
-package EDA.MeowMed.Messaging.EventObjects;
+package events.policy.subclasses;
 
-import EDA.MeowMed.Persistence.Entity.Customer;
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -9,9 +8,9 @@ import java.time.LocalDate;
  * Object with select customer information
  * Can be serialized and sent as event payload
  */
-public class CustomerCreatedEvent implements Serializable {
+public class CustomerPojo implements Serializable {
     @Serial
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 5L;
 
     private Long id;
     private String firstName;
@@ -21,30 +20,15 @@ public class CustomerCreatedEvent implements Serializable {
     private String maritalStatus;
     private LocalDate dateOfBirth;
     private String employmentStatus;
-    private NoId_Address address;
+    private Address address;
     private String phoneNumber;
     private String email;
     private String bankDetails;
 
-    public CustomerCreatedEvent() {
+    public CustomerPojo() {
     }
 
-    public CustomerCreatedEvent(Customer customer) {
-        this.id = customer.getId();
-        this.firstName = customer.getFirstName();
-        this.lastName = customer.getLastName();
-        this.formOfAddress = customer.getFormOfAddress();
-        this.title = customer.getTitle();
-        this.maritalStatus = customer.getMaritalStatus();
-        this.dateOfBirth = customer.getDateOfBirth();
-        this.employmentStatus = customer.getEmploymentStatus();
-        this.address = new NoId_Address(customer.getAddress());
-        this.phoneNumber = customer.getPhoneNumber();
-        this.email = customer.getEmail();
-        this.bankDetails = customer.getBankDetails();
-    }
-
-    public CustomerCreatedEvent(Long id, String firstName, String lastName, String formOfAddress, String title, String maritalStatus, LocalDate dateOfBirth, String employmentStatus, NoId_Address address, String phoneNumber, String email, String bankDetails) {
+    public CustomerPojo(Long id, String firstName, String lastName, String formOfAddress, String title, String maritalStatus, LocalDate dateOfBirth, String employmentStatus, Address address, String phoneNumber, String email, String bankDetails) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -115,11 +99,11 @@ public class CustomerCreatedEvent implements Serializable {
         this.employmentStatus = employmentStatus;
     }
 
-    public NoId_Address getAddress() {
+    public Address getAddress() {
         return address;
     }
 
-    public void setAddress(NoId_Address address) {
+    public void setAddress(Address address) {
         this.address = address;
     }
 

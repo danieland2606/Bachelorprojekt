@@ -68,4 +68,12 @@ public class Address implements Serializable {
     public Long getId() {
         return id;
     }
+
+    public events.customer.subclasses.Address toCustomerAddress() {
+        return new events.customer.subclasses.Address(
+                city,
+                street,
+                postalCode
+        );
+    }
 }

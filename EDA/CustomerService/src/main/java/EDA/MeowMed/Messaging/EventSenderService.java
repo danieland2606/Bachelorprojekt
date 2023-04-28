@@ -1,7 +1,7 @@
 package EDA.MeowMed.Messaging;
 
 
-import EDA.MeowMed.Messaging.EventObjects.CustomerCreatedEvent;
+import events.customer.CustomerCreatedEvent;
 import EDA.MeowMed.Persistence.Entity.Customer;
 import org.springframework.amqp.core.TopicExchange;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -33,7 +33,7 @@ public class EventSenderService {
      */
     public boolean sendCustomerCreatedEvent(Customer customer) {
         try {
-            template.convertAndSend(topicExchange.getName(), routingKey, new CustomerCreatedEvent(customer));
+            template.convertAndSend(topicExchange.getName(), routingKey, customer.createCustomerCreatedEvent());
             System.out.println(" [x] Sent");
         } catch (Exception e) {
             System.out.println("Fehler beim Senden");

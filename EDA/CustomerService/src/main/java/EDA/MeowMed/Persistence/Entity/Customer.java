@@ -1,6 +1,7 @@
 package EDA.MeowMed.Persistence.Entity;
 
 import com.fasterxml.jackson.annotation.JsonFilter;
+import events.customer.CustomerCreatedEvent;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
@@ -163,5 +164,22 @@ public class Customer implements Serializable {
 
     public void setBankDetails(String bankDetails) {
         this.bankDetails = bankDetails;
+    }
+
+    public CustomerCreatedEvent createCustomerCreatedEvent() {
+        return new CustomerCreatedEvent(
+                id,
+                firstName,
+                lastName,
+                formOfAddress,
+                title,
+                maritalStatus,
+                dateOfBirth,
+                employmentStatus,
+                address.toCustomerAddress(),
+                phoneNumber,
+                email,
+                bankDetails
+        );
     }
 }
