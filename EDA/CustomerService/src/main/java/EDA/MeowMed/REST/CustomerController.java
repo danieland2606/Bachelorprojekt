@@ -64,12 +64,13 @@ public class CustomerController {
      * @return
      */
     @PostMapping(value = "/customer",consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> postCustomer(@RequestBody String customer) {
+    public ResponseEntity<String> postCustomer(@RequestBody String customer) throws JsonProcessingException {
         try {
             String responseBody = customerService.addCustomer(customer);
             return ResponseEntity.ok(responseBody);
         } catch (JsonProcessingException e) {
-            return ResponseEntity.internalServerError().body("Problem processing JSON. Please contact support");
+            throw e;
+            //return ResponseEntity.internalServerError().body(e.toString());
         } catch (IllegalArgumentException e) {
             return ResponseEntity.internalServerError().body("Somethings wrong. I can feel it!");
         }

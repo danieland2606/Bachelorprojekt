@@ -1,6 +1,7 @@
 package EDA.MeowMed.Application;
 
 import EDA.MeowMed.Persistence.Entity.Customer;
+import EDA.MeowMed.Persistence.Entity.Address;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -58,6 +59,19 @@ public class CustomerValidatorService {
         if (!this.checkEmploymentStatus(customer.getEmploymentStatus())){
             throw new IllegalArgumentException("Kein valider Wert für: " + customer.getEmploymentStatus());
         }
+        if (!this.checkAddress(customer.getAddress())){
+            throw new IllegalArgumentException("Kein valider Wert für: " + customer.getEmploymentStatus());
+        }
+        if (!this.checkPhoneNumber(customer.getPhoneNumber())){
+            throw new IllegalArgumentException("Kein valider Wert für: " + customer.getEmploymentStatus());
+        }
+        if (!this.checkEmail(customer.getEmail())){
+            throw new IllegalArgumentException("Kein valider Wert für: " + customer.getEmploymentStatus());
+        }
+        if (!this.checkBankDetails(customer.getBankDetails())){
+            throw new IllegalArgumentException("Kein valider Wert für: " + customer.getEmploymentStatus());
+        }
+
     }
 
     private boolean checkFormOfAddress(String formOfAddress){
@@ -74,5 +88,17 @@ public class CustomerValidatorService {
     }
     private boolean checkEmploymentStatus(String employmentStatus){
         return this.employmentStatus.contains(employmentStatus);
+    }
+    private boolean checkAddress(Address address){
+        return true;
+    }
+    private boolean checkPhoneNumber(String phoneNumber){
+        return true;
+    }
+    private boolean checkEmail(String email){
+        return true;
+    }
+    private boolean checkBankDetails(String bankDetails){
+        return true;
     }
 }
