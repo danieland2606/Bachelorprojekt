@@ -2,7 +2,7 @@
 <html lang="it">
 
 <head>
-  <title> Kunde angelegt </title>
+  <title> Vertrag hinzugefuegt </title>
   <!--
 
 
@@ -18,7 +18,7 @@ TESTO INTENSE #ffffff
   <meta name="viewport" content="width=device-width">
 
   <style type="text/css">
- 
+
     #ko_onecolumnBlock_2 .textintenseStyle a,
     #ko_onecolumnBlock_2 .textintenseStyle a:link,
     #ko_onecolumnBlock_2 .textintenseStyle a:visited,
@@ -209,7 +209,7 @@ TESTO INTENSE #ffffff
 </head>
 
 <body style="margin: 0; padding: 0" bgcolor="#63493E" align="center">
- 
+
   <!-- PREHEADER -->
 
   <table border="0" cellpadding="0" cellspacing="0" width="100%" id="ko_titleBlock_1">
@@ -264,25 +264,25 @@ TESTO INTENSE #ffffff
                                       th:text="${formOfAddress}">Anrede</span> <span
                                       th:text="${firstName}">Vorname</span> <span
                                       th:text="${lastName}">Nachname</span>,&nbsp;</p>
-                                  <p style="text-align: justify;">wir freuen uns Sie bei Uns Begrüßen zu dürfen. Im
-                                    folgenden finden Sie eine Auflistung ihrer Kundendetails.</p>
-                                  <div style="text-align: left;">Ihre Kunden-ID: <span th:text="${cid}">Kunden-ID</span>
+                                  <p style="text-align: justify;">Hier werdem nochmal alle ihre Vertragedetails aufgelistet.</p>
+                                  <div style="text-align: left;">Vertragsnummer: <span 
+                                      th:text="${pid}">VertragsID</span>
                                   </div>
-                                  <div style="text-align: left;">Wohnort: <span
-                                          th:text="${address}">Addresse</span>
-                                  <div style="text-align: left;">Familienstand: <span
-                                      th:text="${martialStatus}">Familienstand</span></div>
-                                  <div style="text-align: left;">Geburtsdatum: <span
-                                      th:text="${dateOfBirth}">Geburtsdatum</span></div>
-                                  <div style="text-align: left;">Beschäftigungsstatus: <span
-                                      th:text="${employmentStatus}">Beschäftigungsstatus</span></div>
-                                    <div style="text-align: left;">Hundebesitzer: <span
-                                            th:text="${hasDog}">Hundebesitzer</span></div>
-                                  <div style="text-align: left;">Telefonnummer: <span
-                                      th:text="${phoneNumber}">Telefonnummer</span></div>
-                                  <div style="text-align: left;">Kontodaten: <span
-                                      th:text="${bankDetails}">Kontodaten</span></div>
-                                  </div>
+                                  <div style="text-align: left;">Startdatum: <span
+                                      th:text="${startDate}">Startdatum des Vertrags</span></div>
+                                  <div style="text-align: left;">Enddatum: <span
+                                      th:text="${endDate}">Enddatum des
+                                      Vertrags</span></div>
+                                  <div style="text-align: left;">Deckung: <span
+                                      th:text="${coverage}">Deckungshöhe</span></div>
+                                  <div style="text-align: left;">Kastriert: <span
+                                      th:text="${castrated}">Kastration</span></div>
+                                  <div style="text-align: left;">Persönlichkeitstyp: <span
+                                      th:text="${personality}">Persönlichkeitstyp</span></div>
+                                  <div style="text-align: left;">Umgebung: <span 
+                                      th:text="${environment}">Umgebung</span></div>
+                                  <div style="text-align: left;">Gewicht: <span 
+                                        th:text="${weight}">Gewicht</span> kg</div>
                                   <div style="text-align: left;">&nbsp;</div>
                                   <div style="text-align: left;">Falls Sie weitere Fragen haben oder Informationen
                                     benötigen, zögern Sie bitte nicht, uns zu kontaktieren, Wir stehen Ihnen gerne zur

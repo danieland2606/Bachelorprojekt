@@ -63,7 +63,11 @@ public class NotificationService {
             properties.put("phoneNumber", details.getPhoneNumber());
             properties.put("bankDetails", details.getBankDetails());
             properties.put("address", details.getStreet() + ", " + details.getPostalCode() + " " + details.getCity());
-            properties.put("hasDog", details.isHasDog());
+            if(details.isHasDog()){
+                properties.put("hasDog", "Ja");
+            }else{
+                properties.put("hasDog", "Nein");
+            }
             Context context = new Context();
             context.setVariables(properties);
             String html = templateEngine.process("customernotification.html", context);
@@ -145,7 +149,7 @@ public class NotificationService {
             MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED, StandardCharsets.UTF_8.name());
             mimeMessageHelper.setFrom(sender);
             mimeMessageHelper.setTo(details.getEmail());
-            mimeMessageHelper.setSubject("Vielen Dank für ihr Vertrauen in MeowMed+");
+            mimeMessageHelper.setSubject("Änderung ihres Vertrages bei MeowMed+");
             Map<String,Object> properties = new HashMap<>();
             properties.put("formOfAddress", details.getFormOfAdress());
             properties.put("firstName", details.getFirstName());
@@ -164,7 +168,7 @@ public class NotificationService {
             properties.put("weight", details.getWeight());
             Context context = new Context();
             context.setVariables(properties);
-            String html = templateEngine.process("policynotification.html", context);
+            String html = templateEngine.process("policychangenotification.html", context);
             mimeMessageHelper.setText(html, true);  //Der schreibt das in mimeMessage?????
             /*
             FileSystemResource file
