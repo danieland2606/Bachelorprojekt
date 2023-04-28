@@ -18,7 +18,7 @@ public class Customer implements Serializable {
     @Column(name = "customer_id", unique = true, nullable = false)
     private Long id;
 
-    @Column(name = "form_Of_Address")
+    @Column(name = "form_Of_Address", nullable = false)
     private String formOfAddress;
 
     @Column(name = "title")
@@ -36,7 +36,7 @@ public class Customer implements Serializable {
     @Column(name = "date_of_birth", nullable = false)
     private LocalDate dateOfBirth;
 
-    @Column(name = "employment_status")
+    @Column(name = "employment_status", nullable = false)
     private String employmentStatus;
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)

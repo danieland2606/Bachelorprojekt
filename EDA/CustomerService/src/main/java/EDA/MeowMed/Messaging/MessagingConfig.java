@@ -13,6 +13,7 @@ public class MessagingConfig {
 
     private final String exchangeName = "customer";
 
+
     /**
      * Creates a new RabbitMQ exchange named after the 'exchangeName' variable
      * @return a new TopicExchange object with name of 'exchangeName' variable

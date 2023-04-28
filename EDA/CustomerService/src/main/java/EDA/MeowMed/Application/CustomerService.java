@@ -88,7 +88,13 @@ public class CustomerService {
      * @throws JsonProcessingException
      */
     public String addCustomer(String jsonCustomer) throws JsonProcessingException {
-        Customer customer = new ObjectMapper().readValue(jsonCustomer,Customer.class);
+        if (jsonCustomer.contains("\"id\":")) {
+            throw new IllegalArgumentException("Wrong Json Format");
+        }
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+        mapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm a z"));
+        Customer customer = mapper.readValue(jsonCustomer,Customer.class);
 
         customerValidatorService.validateCustomer(customer);
 
@@ -97,7 +103,6 @@ public class CustomerService {
         FilterProvider filters = new SimpleFilterProvider()
                 .addFilter("customerFilter", SimpleBeanPropertyFilter.filterOutAllExcept("id"));
 
-        ObjectMapper mapper = new ObjectMapper();
         return mapper.writer(filters).writeValueAsString(customer);
     }
 }
