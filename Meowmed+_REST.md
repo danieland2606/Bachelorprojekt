@@ -18,7 +18,7 @@ headingLevel: 2
 
 <h1 id="meowmed-">Meowmed+ v0.0.1</h1>
 
-> Scroll down for code samples, example requests and responses. Select a language for code samples from the tabs above or the mobile navigation menu.
+> Scroll down for code samples, example requests and responses.
 
 <h1 id="meowmed--customer">customer</h1>
 
