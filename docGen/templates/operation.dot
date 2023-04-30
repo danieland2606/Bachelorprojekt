@@ -35,8 +35,9 @@ codeSegments.push(code.substring(lastIndex, code.length));
 {{ var language = ''; }}
 {{ { language = code.match(/^```(\S+)\b/)[1]; } }}
 <details>
-    <summary>{{= language }}</summary>
-    {{= code }}
+<summary>{{= language }}</summary>
+
+{{= code }}
 </details>
 {{~}}
 {{?}}
