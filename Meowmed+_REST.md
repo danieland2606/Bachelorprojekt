@@ -28,21 +28,31 @@ headingLevel: 2
 
 > Code samples
 
-```http
+<details>
+    <summary>http</summary>
+    ```http
 GET /customer HTTP/1.1
 
 Accept: application/json
 
 ```
 
-```shell
+</details>
+
+<details>
+    <summary>shell</summary>
+    ```shell
 # You can also use wget
 curl -X GET /customer \
   -H 'Accept: application/json'
 
 ```
 
-```javascript
+</details>
+
+<details>
+    <summary>javascript</summary>
+    ```javascript
 
 const headers = {
   'Accept':'application/json'
@@ -61,6 +71,8 @@ fetch('/customer',
 });
 
 ```
+
+</details>
 
 `GET /customer`
 
@@ -178,7 +190,9 @@ This operation does not require authentication
 
 > Code samples
 
-```http
+<details>
+    <summary>http</summary>
+    ```http
 POST /customer HTTP/1.1
 
 Content-Type: application/json
@@ -186,7 +200,11 @@ Accept: application/json
 
 ```
 
-```shell
+</details>
+
+<details>
+    <summary>shell</summary>
+    ```shell
 # You can also use wget
 curl -X POST /customer \
   -H 'Content-Type: application/json' \
@@ -194,7 +212,11 @@ curl -X POST /customer \
 
 ```
 
-```javascript
+</details>
+
+<details>
+    <summary>javascript</summary>
+    ```javascript
 const inputBody = '{
   "firstName": "string",
   "lastName": "string",
@@ -231,6 +253,8 @@ fetch('/customer',
 });
 
 ```
+
+</details>
 
 `POST /customer`
 
@@ -321,21 +345,31 @@ This operation does not require authentication
 
 > Code samples
 
-```http
+<details>
+    <summary>http</summary>
+    ```http
 GET /customer/{customerId} HTTP/1.1
 
 Accept: application/json
 
 ```
 
-```shell
+</details>
+
+<details>
+    <summary>shell</summary>
+    ```shell
 # You can also use wget
 curl -X GET /customer/{customerId} \
   -H 'Accept: application/json'
 
 ```
 
-```javascript
+</details>
+
+<details>
+    <summary>javascript</summary>
+    ```javascript
 
 const headers = {
   'Accept':'application/json'
@@ -354,6 +388,8 @@ fetch('/customer/{customerId}',
 });
 
 ```
+
+</details>
 
 `GET /customer/{customerId}`
 
@@ -409,7 +445,9 @@ This operation does not require authentication
 
 > Code samples
 
-```http
+<details>
+    <summary>http</summary>
+    ```http
 PUT /customer/{customerId} HTTP/1.1
 
 Content-Type: application/json
@@ -417,7 +455,11 @@ Accept: application/json
 
 ```
 
-```shell
+</details>
+
+<details>
+    <summary>shell</summary>
+    ```shell
 # You can also use wget
 curl -X PUT /customer/{customerId} \
   -H 'Content-Type: application/json' \
@@ -425,7 +467,11 @@ curl -X PUT /customer/{customerId} \
 
 ```
 
-```javascript
+</details>
+
+<details>
+    <summary>javascript</summary>
+    ```javascript
 const inputBody = '{
   "firstName": "string",
   "lastName": "string",
@@ -462,6 +508,8 @@ fetch('/customer/{customerId}',
 });
 
 ```
+
+</details>
 
 `PUT /customer/{customerId}`
 
@@ -536,21 +584,31 @@ This operation does not require authentication
 
 > Code samples
 
-```http
+<details>
+    <summary>http</summary>
+    ```http
 GET /customer/{customerId}/policy HTTP/1.1
 
 Accept: application/json
 
 ```
 
-```shell
+</details>
+
+<details>
+    <summary>shell</summary>
+    ```shell
 # You can also use wget
 curl -X GET /customer/{customerId}/policy \
   -H 'Accept: application/json'
 
 ```
 
-```javascript
+</details>
+
+<details>
+    <summary>javascript</summary>
+    ```javascript
 
 const headers = {
   'Accept':'application/json'
@@ -569,6 +627,8 @@ fetch('/customer/{customerId}/policy',
 });
 
 ```
+
+</details>
 
 `GET /customer/{customerId}/policy`
 
@@ -695,7 +755,9 @@ This operation does not require authentication
 
 > Code samples
 
-```http
+<details>
+    <summary>http</summary>
+    ```http
 POST /customer/{customerId}/policy HTTP/1.1
 
 Content-Type: application/json
@@ -703,7 +765,11 @@ Accept: application/json
 
 ```
 
-```shell
+</details>
+
+<details>
+    <summary>shell</summary>
+    ```shell
 # You can also use wget
 curl -X POST /customer/{customerId}/policy \
   -H 'Content-Type: application/json' \
@@ -711,7 +777,11 @@ curl -X POST /customer/{customerId}/policy \
 
 ```
 
-```javascript
+</details>
+
+<details>
+    <summary>javascript</summary>
+    ```javascript
 const inputBody = '{
   "startDate": "2019-08-24",
   "endDate": "2019-08-24",
@@ -745,6 +815,8 @@ fetch('/customer/{customerId}/policy',
 });
 
 ```
+
+</details>
 
 `POST /customer/{customerId}/policy`
 
@@ -833,21 +905,31 @@ This operation does not require authentication
 
 > Code samples
 
-```http
+<details>
+    <summary>http</summary>
+    ```http
 GET /customer/{customerId}/policy/{policyId} HTTP/1.1
 
 Accept: application/json
 
 ```
 
-```shell
+</details>
+
+<details>
+    <summary>shell</summary>
+    ```shell
 # You can also use wget
 curl -X GET /customer/{customerId}/policy/{policyId} \
   -H 'Accept: application/json'
 
 ```
 
-```javascript
+</details>
+
+<details>
+    <summary>javascript</summary>
+    ```javascript
 
 const headers = {
   'Accept':'application/json'
@@ -866,6 +948,8 @@ fetch('/customer/{customerId}/policy/{policyId}',
 });
 
 ```
+
+</details>
 
 `GET /customer/{customerId}/policy/{policyId}`
 
@@ -920,7 +1004,9 @@ This operation does not require authentication
 
 > Code samples
 
-```http
+<details>
+    <summary>http</summary>
+    ```http
 PUT /customer/{customerId}/policy/{policyId} HTTP/1.1
 
 Content-Type: application/json
@@ -928,7 +1014,11 @@ Accept: application/json
 
 ```
 
-```shell
+</details>
+
+<details>
+    <summary>shell</summary>
+    ```shell
 # You can also use wget
 curl -X PUT /customer/{customerId}/policy/{policyId} \
   -H 'Content-Type: application/json' \
@@ -936,7 +1026,11 @@ curl -X PUT /customer/{customerId}/policy/{policyId} \
 
 ```
 
-```javascript
+</details>
+
+<details>
+    <summary>javascript</summary>
+    ```javascript
 const inputBody = '{
   "startDate": "2019-08-24",
   "endDate": "2019-08-24",
@@ -970,6 +1064,8 @@ fetch('/customer/{customerId}/policy/{policyId}',
 });
 
 ```
+
+</details>
 
 `PUT /customer/{customerId}/policy/{policyId}`
 
@@ -1040,7 +1136,9 @@ This operation does not require authentication
 
 > Code samples
 
-```http
+<details>
+    <summary>http</summary>
+    ```http
 POST /policyprice HTTP/1.1
 
 Content-Type: application/json
@@ -1048,7 +1146,11 @@ Accept: application/json
 
 ```
 
-```shell
+</details>
+
+<details>
+    <summary>shell</summary>
+    ```shell
 # You can also use wget
 curl -X POST /policyprice \
   -H 'Content-Type: application/json' \
@@ -1056,7 +1158,11 @@ curl -X POST /policyprice \
 
 ```
 
-```javascript
+</details>
+
+<details>
+    <summary>javascript</summary>
+    ```javascript
 const inputBody = '{
   "customerId": 0,
   "policy": {
@@ -1093,6 +1199,8 @@ fetch('/policyprice',
 });
 
 ```
+
+</details>
 
 `POST /policyprice`
 
@@ -1774,6 +1882,4 @@ List of property names of the Policy Object. Using objectOfInsurance and one or 
 |*anonymous*|objectOfInsurance.personality|
 |*anonymous*|objectOfInsurance.environment|
 |*anonymous*|objectOfInsurance.weight|
-
-undefined
 
