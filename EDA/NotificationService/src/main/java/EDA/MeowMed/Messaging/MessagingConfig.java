@@ -12,14 +12,9 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class MessagingConfig {
 
-    @Bean(name = "CustomerTopic")
-    public TopicExchange customerTopic() {
-        return new TopicExchange("customer");
-    }
-
-    @Bean(name = "PolicyTopic")
-    public TopicExchange policyTopic() {
-        return new TopicExchange("policy");
+    @Bean
+    public TopicExchange topic() {
+        return new TopicExchange("MeowMedTopicExchange");
     }
 
     private static class ReceiverConfig {
@@ -48,18 +43,18 @@ public class MessagingConfig {
          * @return Topic Exchange object
          */
         @Bean
-        public Binding customerBinding(@Qualifier("CustomerTopic") TopicExchange topic, Queue customerQueue) {
+        public Binding customerBinding(TopicExchange topic, Queue customerQueue) {
             return BindingBuilder.bind(customerQueue).to(topic).with("customer.created");
 
         }
 
         @Bean
-        public Binding policyCreatedBinding(@Qualifier("PolicyTopic") TopicExchange topic, Queue policyCreatedQueue) {
+        public Binding policyCreatedBinding(TopicExchange topic, Queue policyCreatedQueue) {
             return BindingBuilder.bind(policyCreatedQueue).to(topic).with("policy.created");
         }
 
         @Bean
-        public Binding policyChangedBinding(@Qualifier("PolicyTopic") TopicExchange topic, Queue policyChangedQueue) {
+        public Binding policyChangedBinding(TopicExchange topic, Queue policyChangedQueue) {
             return BindingBuilder.bind(policyChangedQueue).to(topic).with("policy.changed");
         }
 

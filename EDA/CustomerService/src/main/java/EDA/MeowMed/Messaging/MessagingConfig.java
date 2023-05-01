@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class MessagingConfig {
 
-    private final String exchangeName = "customer";
+    private final String exchangeName = "MeowMedTopicExchange";
 
 
     /**

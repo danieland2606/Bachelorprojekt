@@ -12,7 +12,6 @@ public class PolicySender {
     private RabbitTemplate template;
 
     @Autowired
-    @Qualifier("PolicyTopic")
     private TopicExchange topic;
 
     public void sendPolicyCreated(PolicyCreatedEvent policyCreatedEvent) {
