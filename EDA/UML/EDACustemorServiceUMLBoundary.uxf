@@ -4,17 +4,17 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>450</x>
+      <x>540</x>
       <y>410</y>
-      <w>380</w>
+      <w>290</w>
       <h>90</h>
     </coordinates>
     <panel_attributes>CustomerController
 --
 --
-+ getCustomerList(): Map&lt;String, Object&gt;
-+ getCustomer(c_id: Long): List&lt;Map&lt;String, Object&gt;&gt; 
-+ postCustomer(customer: Customer): Map&lt;String, Object&gt; </panel_attributes>
++ getCustomerList(): String
++ getCustomer(c_id: Long): String
++ postCustomer(customer: Customer): String</panel_attributes>
     <additional_attributes/>
   </element>
   <element>

@@ -1,6 +1,6 @@
 package EDA.MeowMed.Messaging;
 
-import EDA.MeowMed.Messaging.EventObjects.PolicyCreatedEvent;
+import events.policy.PolicyCreatedEvent;
 import org.springframework.amqp.core.TopicExchange;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;

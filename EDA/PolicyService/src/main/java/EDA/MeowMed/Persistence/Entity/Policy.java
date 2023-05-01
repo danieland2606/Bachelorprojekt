@@ -1,7 +1,7 @@
 package EDA.MeowMed.Persistence.Entity;
 
-import EDA.MeowMed.Rest.PremiumCalculationData;
 import com.fasterxml.jackson.annotation.JsonFilter;
+import events.policy.PolicyCreatedEvent;
 import jakarta.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -48,11 +48,6 @@ public class Policy implements Serializable {
         this.coverage = coverage;
         this.premium = premium;
         this.objectOfInsurance = objectOfInsurance;
-    }
-
-    public Policy(PremiumCalculationData calculationData) {
-        this.coverage = calculationData.getCoverage();
-        this.objectOfInsurance = new ObjectOfInsurance(calculationData);
     }
 
     public Policy() {
@@ -113,5 +108,17 @@ public class Policy implements Serializable {
 
     public void setCustomer(Customer customer) {
         this.customer = customer;
+    }
+
+    public PolicyCreatedEvent createPolicyCreatedEvent() {
+        return new PolicyCreatedEvent(
+                id,
+                startDate,
+                endDate,
+                coverage,
+                premium,
+                objectOfInsurance.toPojo(),
+                customer.toPojo()
+        );
     }
 }

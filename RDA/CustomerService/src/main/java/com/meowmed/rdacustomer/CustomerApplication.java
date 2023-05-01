@@ -33,6 +33,7 @@ public class CustomerApplication {
      * Diese Methode erstellt Das JPA-Repository und speichert Beispieldaten
      * @return Speichern der Beispieldaten
      */
+    /*
     @Bean
     CommandLineRunner commandLineRunner(CustomerRepository customerRepository, AddressRepository addressRepository) {
         return args -> {
@@ -60,7 +61,7 @@ public class CustomerApplication {
 
 
     }
-
+     */
 
 
     //LocalDate birthdayOfJan= LocalDate.of(1999,11,03);

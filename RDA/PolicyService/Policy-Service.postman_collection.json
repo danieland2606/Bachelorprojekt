@@ -38,7 +38,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:81/customer/1/policy/4",
+					"raw": "localhost:81/customer/1/policy/2",
 					"host": [
 						"localhost"
 					],
@@ -47,7 +47,7 @@
 						"customer",
 						"1",
 						"policy",
-						"4"
+						"2"
 					]
 				}
 			},
@@ -84,24 +84,61 @@
 			"response": []
 		},
 		{
-			"name": "postPolicyPrice",
+			"name": "updatePolicy",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"startDate\": \"1990-01-01\",\r\n  \"endDate\": \"2030-12-31\",\r\n  \"coverage\": 90000,\r\n  \"objectOfInsurance\": {\r\n    \"name\": \"Tomato\",\r\n    \"race\": \"Bengal\",\r\n    \"color\": \"Braun\",\r\n    \"dateOfBirth\": \"2015-07-22\",\r\n    \"castrated\": true,\r\n    \"personality\": \"anhänglich\",\r\n    \"environment\": \"drinnen\",\r\n    \"weight\": 4\r\n  }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:81/customer/3/policy/3",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "81",
+					"path": [
+						"customer",
+						"3",
+						"policy",
+						"3"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getPolicyPrice",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
 			"request": {
 				"method": "GET",
 				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"customerId\": 3,\r\n    \"policy\":{\r\n        \"startDate\": \"1990-01-01\",\r\n        \"endDate\": \"2030-12-31\",\r\n        \"coverage\": 50000,\r\n        \"objectOfInsurance\": {\r\n        \"name\": \"Tomato\",\r\n        \"race\": \"Bengal\",\r\n        \"color\": \"Braun\",\r\n        \"dateOfBirth\": \"2015-07-22\",\r\n        \"castrated\": true,\r\n        \"personality\": \"anhänglich\",\r\n        \"environment\": \"drinnen\",\r\n        \"weight\": 4\r\n        }\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
 				"url": {
-					"raw": "localhost:81/policyprice?details=eyJwb3N0YWxDb2RlIjozMTEzNywiY292ZXJhZ2UiOiIxMDAwMCIsInJhY2UiOiJhYnlzc2luaWFuIiwiY29sb3IiOiJyb3QiLCJkYXRlT2ZCaXJ0aCI6IjIwMjMtMDQtMDUiLCJjYXN0cmF0ZWQiOiIiLCJwZXJzb25hbGl0eSI6ImFuaGFlbmdsaWNoIiwiZW52aXJvbm1lbnQiOiJoYXVza2F0emUiLCJ3ZWlnaHQiOiI5In0",
+					"raw": "localhost:81/policyprice",
 					"host": [
 						"localhost"
 					],
 					"port": "81",
 					"path": [
 						"policyprice"
-					],
-					"query": [
-						{
-							"key": "details",
-							"value": "eyJwb3N0YWxDb2RlIjozMTEzNywiY292ZXJhZ2UiOiIxMDAwMCIsInJhY2UiOiJhYnlzc2luaWFuIiwiY29sb3IiOiJyb3QiLCJkYXRlT2ZCaXJ0aCI6IjIwMjMtMDQtMDUiLCJjYXN0cmF0ZWQiOiIiLCJwZXJzb25hbGl0eSI6ImFuaGFlbmdsaWNoIiwiZW52aXJvbm1lbnQiOiJoYXVza2F0emUiLCJ3ZWlnaHQiOiI5In0"
-						}
 					]
 				}
 			},

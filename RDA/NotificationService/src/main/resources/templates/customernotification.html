@@ -227,7 +227,7 @@ TESTO INTENSE #ffffff
               <tr>
                 <td align="center" class="padding-copy" colspan="2"
                   style="padding: 0 0 10px 0px; font-size: 25px; font-family: Helvetica, Arial, sans-serif; font-weight: normal; color: #63493E">
-                  Wilkommen bei der MeowMed<sup>+</sup> Versicherung&nbsp;</td>
+                  Willkommen bei der MeowMed<sup>+</sup> Versicherung&nbsp;</td>
               </tr>
             </tbody>
           </table>
@@ -268,17 +268,20 @@ TESTO INTENSE #ffffff
                                     folgenden finden Sie eine Auflistung ihrer Kundendetails.</p>
                                   <div style="text-align: left;">Ihre Kunden-ID: <span th:text="${cid}">Kunden-ID</span>
                                   </div>
+                                  <div style="text-align: left;">Wohnort: <span
+                                          th:text="${address}">Addresse</span>
                                   <div style="text-align: left;">Familienstand: <span
                                       th:text="${martialStatus}">Familienstand</span></div>
                                   <div style="text-align: left;">Geburtsdatum: <span
                                       th:text="${dateOfBirth}">Geburtsdatum</span></div>
                                   <div style="text-align: left;">Beschäftigungsstatus: <span
                                       th:text="${employmentStatus}">Beschäftigungsstatus</span></div>
+                                    <div style="text-align: left;">Hundebesitzer: <span
+                                            th:text="${hasDog}">Hundebesitzer</span></div>
                                   <div style="text-align: left;">Telefonnummer: <span
                                       th:text="${phoneNumber}">Telefonnummer</span></div>
                                   <div style="text-align: left;">Kontodaten: <span
                                       th:text="${bankDetails}">Kontodaten</span></div>
-                                  <div style="text-align: left;">Wohnort: <span th:text="${address}">Kontodaten</span>
                                   </div>
                                   <div style="text-align: left;">&nbsp;</div>
                                   <div style="text-align: left;">Falls Sie weitere Fragen haben oder Informationen
@@ -286,6 +289,9 @@ TESTO INTENSE #ffffff
                                     Verfügung.</div>
                                   <p style="text-align: justify;">Mit freundlichen Grüßen&nbsp;</p>
                                   <p style="text-align: justify;">Ihr MeowMed<sup>+</sup> Versicherungsteam</p>
+                                  <img id="logo1_img"
+                                       src="https://cdn.discordapp.com/attachments/894495901517762601/1100018878807027822/Color_logo_-_no_background.png" width="540"
+                                       height="540" alt="Logo">
                                   <p style="text-align: justify;">&nbsp;</p>
                                   <p style="text-align: justify;">Diese E-Mail wurde automatisch generiert. Bitte
                                     antworten Sie nicht auf diese E-Mail.</p>
@@ -342,8 +348,9 @@ TESTO INTENSE #ffffff
             </tbody></table>
         </td>
     </tr>
+    -->
 </tbody></table>
--->
+
 </body>
 
 </html>

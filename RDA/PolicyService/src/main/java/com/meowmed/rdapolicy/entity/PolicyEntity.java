@@ -157,6 +157,12 @@ public class PolicyEntity {
             return false;
         return true;
     }
+
+    @Override
+    public String toString() {
+        return "PolicyEntity [id=" + id + ", cid=" + cid + ", startDate=" + startDate + ", endDate=" + endDate
+                + ", coverage=" + coverage + ", premium=" + premium + ", objectOfInsurance=" + objectOfInsurance + "]";
+    }
     
     
     

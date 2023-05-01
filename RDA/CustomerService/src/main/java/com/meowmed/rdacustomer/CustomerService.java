@@ -3,6 +3,7 @@ import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import com.meowmed.rdacustomer.database.AddressRepository;
 import com.meowmed.rdacustomer.database.CustomerRepository;
+import com.meowmed.rdacustomer.entity.AddressEntity;
 import com.meowmed.rdacustomer.entity.CustomerEntity;
 import com.meowmed.rdacustomer.entity.CustomerRequest;
 import com.meowmed.rdacustomer.entity.MailCustomerEntity;
@@ -19,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Arrays;
 import java.util.Set;
+import java.time.LocalDate;
 
 /**
  * Diese Klasse ist die Service-Klasse des REST-Controllers
@@ -40,6 +42,7 @@ public class CustomerService {
     public CustomerService(CustomerRepository customerRepository, AddressRepository adressRepository) {
         this.cRepository = customerRepository;
         this.aRepository = adressRepository;
+        setUp();
     }
 
     /** TODO
@@ -98,7 +101,7 @@ public class CustomerService {
      */
     public MappingJacksonValue postCustomer(CustomerRequest cRequest) {
         aRepository.save(cRequest.getAddress());
-        CustomerEntity customer= new CustomerEntity(cRequest.getFirstName(), cRequest.getLastName(), cRequest.getTitle(), cRequest.getFormOfAdress(), cRequest.getMaritalStatus(), cRequest.getDateOfBirth(), cRequest.getEmploymentStatus(), cRequest.getAddress(), cRequest.getPhoneNumber(),cRequest.getEmail(),cRequest.getBankDetails());
+        CustomerEntity customer= new CustomerEntity(cRequest.getFirstName(), cRequest.getLastName(), cRequest.getTitle(), cRequest.getFormOfAdress(), cRequest.getMaritalStatus(), cRequest.getDateOfBirth(), cRequest.getEmploymentStatus(), cRequest.getAddress(), cRequest.getPhoneNumber(),cRequest.getEmail(),cRequest.getBankDetails(),cRequest.isHasDog());
         
         MailCustomerEntity mail = new MailCustomerEntity(cRequest);
 		System.out.println(mail);
@@ -118,6 +121,29 @@ public class CustomerService {
                 .addFilter("customerFilter", SimpleBeanPropertyFilter.filterOutAllExcept("id"))
                 .setFailOnUnknownId(false));
         return wrapper;
+    }
+
+    void setUp(){
+        LocalDate birthdayOfJan= LocalDate.of(1999,11,03);
+        AddressEntity adressJan= new AddressEntity("Hildesheim","Burgerking Hbf",31137);
+        CustomerEntity Jan= new CustomerEntity("Jan", "Lorenz", "", "Mr.","ledig",birthdayOfJan,"student",adressJan , "+49123456789" ,"jan-niklas-johannes.lorenz@stud.hs-hannover.de" ,"DE2131627312371351232", false  );
+
+        LocalDate birthdayofDaniel= LocalDate.of(2002,06,26);
+        AddressEntity adressDaniel= new AddressEntity("Hannover", "Subway Hbf", 12345);
+        CustomerEntity Daniel= new CustomerEntity("Daniel", "Arnold","","Mr.", "ledig", birthdayofDaniel, "student", adressDaniel, "+4942069123123", "daniel.arnold@stud.hs-hannover.de", "DE", false);
+    
+        LocalDate birthdayOfAlex= LocalDate.of(1996,01,14);
+        AddressEntity adressAlex= new AddressEntity("Hildesheim","Burgerking Hbf",31137);
+        CustomerEntity Alex= new CustomerEntity("Alexander","Hampel","","Mr.","ledig",birthdayOfAlex,"student", adressAlex, "+49123456789", "alexander.hampel@stud.hs-hannover.de", "DE2131627312371351232", false);
+
+
+        aRepository.save(adressJan);
+        aRepository.save(adressDaniel);
+        aRepository.save(adressAlex);
+    
+        cRepository.save(Jan);
+        cRepository.save(Daniel);
+        cRepository.save(Alex);
     }
 }
 

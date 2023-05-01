@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>EDA</groupId>
+    <artifactId>Parent</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>${project.groupId}.${project.artifactId}</name>
+    <packaging>pom</packaging>
+    <profiles>
+
+        <profile>
+            <id>default</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <modules>
+                <module>CustomerService</module>
+                <module>PolicyService</module>
+                <module>NotificationService</module>
+                <module>Events</module>
+            </modules>
+        </profile>
+
+        <profile>
+            <id>CustomerService</id>
+            <modules>
+                <module>Events</module>
+                <module>CustomerService</module>
+            </modules>
+        </profile>
+
+        <profile>
+            <id>PolicyService</id>
+            <modules>
+                <module>Events</module>
+                <module>PolicyService</module>
+            </modules>
+        </profile>
+
+        <profile>
+            <id>NotificationService</id>
+            <modules>
+                <module>NotificationService</module>
+                <module>Events</module>
+            </modules>
+        </profile>
+    </profiles>
+
+</project>
