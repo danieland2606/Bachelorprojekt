@@ -12,6 +12,9 @@ import java.time.LocalDate;
 @Table(name="Customer")
 public class Customer implements Serializable {
 
+
+    //TODO Date of birth of Customer hinzufügen
+    //TODO DogOwner hinzufügen
     @Id
     @Column(name = "id")
     private long id;
@@ -33,6 +36,10 @@ public class Customer implements Serializable {
 
     @Column(name = "e_mail", nullable = false)
     private String email;
+
+    @Column (name= "Dog_owner")
+    private boolean dogOwner;
+
 
     public Customer(Long id, String firstName, String lastName, String formOfAddress, String title, Address address, String email) {
         this.id = id;
@@ -103,6 +110,14 @@ public class Customer implements Serializable {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public boolean isDogOwner() {
+        return dogOwner;
+    }
+
+    public void setDogOwner(boolean dogOwner) {
+        this.dogOwner = dogOwner;
     }
 
     public CustomerPojo toPojo() {

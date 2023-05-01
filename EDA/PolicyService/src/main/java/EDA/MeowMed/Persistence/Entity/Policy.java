@@ -5,12 +5,15 @@ import events.policy.PolicyCreatedEvent;
 import jakarta.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.Objects;
 
 
 @Entity
 @Table(name="Policy")
 @JsonFilter("policyFilter")
 public class Policy implements Serializable {
+
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
