@@ -1,6 +1,7 @@
 package EDA.MeowMed.Rest;
 
 import EDA.MeowMed.Exceptions.DatabaseAccessException;
+import EDA.MeowMed.Exceptions.InvalidPolicyDataException;
 import EDA.MeowMed.Exceptions.ObjectNotFoundException;
 import EDA.MeowMed.Exceptions.ErrorResponse;
 
@@ -71,13 +72,15 @@ public class PolicyController {
     public ResponseEntity<?> addPolicy(@PathVariable long c_id, @RequestBody Policy policy) {
         try {
             MappingJacksonValue savedPolicy = this.policyService.addPolicy(c_id, policy);
-            return ResponseEntity.ok(savedPolicy);
+            return ResponseEntity.status(HttpStatus.CREATED).body(savedPolicy);
         } catch (ObjectNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body("Customer with ID " + c_id + " not found \nMore info: " + e.getMessage());
         } catch (DatabaseAccessException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Error accessing the database: " + e.getMessage());
+        } catch (InvalidPolicyDataException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         } catch (Exception e) {
             String errorMessage = "Error adding policy for customer " + c_id + "\nMore infos: " + e.getMessage();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorMessage);

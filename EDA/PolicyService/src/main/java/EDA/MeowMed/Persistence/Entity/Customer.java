@@ -31,22 +31,23 @@ public class Customer implements Serializable {
     @Column(name = "last_name", nullable = false)
     private String lastName;
 
+    @Column(name = "dog_owner")
+    private boolean dogOwner;
+
     @OneToOne(optional = false)
     private Address address;
 
     @Column(name = "e_mail", nullable = false)
     private String email;
 
-    @Column (name= "Dog_owner")
-    private boolean dogOwner;
 
-
-    public Customer(Long id, String firstName, String lastName, String formOfAddress, String title, Address address, String email) {
+    public Customer(Long id, String firstName, String lastName, String formOfAddress, String title, boolean dogOwner, Address address, String email) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.formOfAddress = formOfAddress;
         this.title = title;
+        this.dogOwner = dogOwner;
         this.address = address;
         this.email = email;
     }
@@ -57,6 +58,7 @@ public class Customer implements Serializable {
         this.lastName = c.getLastName();
         this.formOfAddress = c.getFormOfAddress();
         this.title = c.getTitle();
+        this.dogOwner = c.isDogOwner();
         this.address = new Address(c.getAddress());
         this.email = c.getEmail();
     }
@@ -96,6 +98,14 @@ public class Customer implements Serializable {
 
     public void setTitle(String title) {this.title = title;}
 
+    public boolean isDogOwner() {
+        return dogOwner;
+    }
+
+    public void setDogOwner(boolean dogOwner) {
+        this.dogOwner = dogOwner;
+    }
+
     public Address getAddress() {
         return address;
     }
@@ -110,14 +120,6 @@ public class Customer implements Serializable {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public boolean isDogOwner() {
-        return dogOwner;
-    }
-
-    public void setDogOwner(boolean dogOwner) {
-        this.dogOwner = dogOwner;
     }
 
     public CustomerPojo toPojo() {

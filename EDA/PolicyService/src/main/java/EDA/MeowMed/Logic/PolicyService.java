@@ -5,6 +5,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 import EDA.MeowMed.Exceptions.DatabaseAccessException;
+import EDA.MeowMed.Exceptions.InvalidPolicyDataException;
 import EDA.MeowMed.Exceptions.ObjectNotFoundException;
 import EDA.MeowMed.Persistence.*;
 import EDA.MeowMed.Persistence.Entity.CatRace;
@@ -58,7 +59,23 @@ public class PolicyService {
         this.customerRepository = customerRepository;
         this.addressRepository = addressRepository;
         this.catRaceRepository = catRaceRepository;
+        this.setUp();
     }
+
+    private void setUp(){
+        ArrayList<CatRace> entities = new ArrayList<>();
+        entities.add(new CatRace("siamese", 12, 15, 4, 7, 2, new String[]{"seal","blau","lilac","creme"})) ;
+        entities.add(new CatRace("perser", 12, 16, 4, 7, 3, new String[]{"weiß", "schildpatt","schwarz"}));
+        entities.add(new CatRace("bengal", 12, 16, 4, 6, 4, new String[]{"braun", "schildpatt","marmor"}));
+        entities.add(new CatRace("maine-cone", 12, 15, 5, 10, 2, new String[]{"grau","braun","weiß"}));
+        entities.add(new CatRace("sphynx", 12, 15, 4, 6, 5, new String[]{}));
+        entities.add(new CatRace("scottish Fold", 12, 15, 4, 6, 6, new String[]{}));
+        entities.add(new CatRace("british-shorthair", 12, 15, 4, 6, 0, new String[]{}));
+        entities.add(new CatRace("abyssinian", 12, 15, 3, 5, 4, new String[]{"rot", "schildpatt", "zimt"}));
+        entities.add(new CatRace("ragdoll", 12, 15, 4, 7, 3, new String[]{"blau", "seal", "lilac", "schildpatt"}));
+        this.catRaceRepository.saveAll(entities);
+    }
+
 
     /**
      * Finds a policy by its customer ID and policy ID, and returns a filtered MappingJacksonValue of the policy.
@@ -104,8 +121,12 @@ public class PolicyService {
      * @throws ObjectNotFoundException if the customer with the given ID does not exist.
      * @throws DatabaseAccessException if there is an error accessing the database.
      */
-    public MappingJacksonValue addPolicy(long customerID, Policy policy) throws ObjectNotFoundException, DatabaseAccessException {
+    public MappingJacksonValue addPolicy(long customerID, Policy policy) throws ObjectNotFoundException, DatabaseAccessException, InvalidPolicyDataException {
         try {
+            /* No Policies for "sehr verspielte" cats */
+            if (policy.getObjectOfInsurance().getPersonality().contains("sehr verspielt")) {
+                throw new InvalidPolicyDataException("It is not possible to create a Policy for 'sehr verspielte' cats.");
+            }
             // Set the customer and premium for the policy
             policy.setCustomer(this.getCustomer(customerID));
             policy.setPremium(this.getPremium(policy.getCustomer(), policy));
@@ -220,23 +241,22 @@ public class PolicyService {
      */
     public double getPremium(Customer customer, Policy policy) {
         CatRace catRace = catRaceRepository.findByRace(policy.getObjectOfInsurance().getRace());
-       if (catRace == null) return 0;
-        //TODO alter von Customer hinzufügen (Der ist nicht implementiert, und somit funktioniert der Post nicht)
-        //if (policy.getObjectOfInsurance().getPersonality().contains("sehr verspielt") || ChronoUnit.YEARS.between(customer.getDateOfBirth(), LocalDate.now())<=18) return 0;
+        if (catRace == null) return 0;
 
         int coverage = policy.getCoverage();
 
         double basePrice = 0;
         double totalPrice = 0;
 
+        //TODO: Kommentare in Englisch schreiben
         // 0.15% der Jahresdeckung dient als Startwert
         // Ist die Katze Schwarz, ist die Versicherung Teurer um 0.2%
         switch(policy.getObjectOfInsurance().getColor()){
             case "schwarz":
-                basePrice = 0.002* coverage;
+                basePrice = 0.002 * coverage;
                 break;
             default:
-                basePrice = 0.0015* coverage;
+                basePrice = 0.0015 * coverage;
         }
 
         totalPrice = basePrice;
@@ -247,12 +267,12 @@ public class PolicyService {
 
         if (weight < lowerAvgWeight) {
             totalPrice += Math.abs((lowerAvgWeight - weight) * 5);
-         } else if (weight > upperAvgWeight) {
+        } else if (weight > upperAvgWeight) {
             totalPrice += Math.abs((weight - upperAvgWeight) * 5);
-         }
+        }
 
-        // Erhöhe die Kosten des basepriceses um den Wert der Krankheitsanfälligkeitsskala(Skale von 1 bis 10(gilt als extra euros auch))
-        totalPrice += catRace.getIllnessFactor() ;
+        // Erhöhe die Kosten des basepriceses um den Wert der Krankheitsanfälligkeitsskala(Skala von 1 bis 10(gilt als extra euros auch))
+        totalPrice += catRace.getIllnessFactor();
 
         // Ist es eine Draußenkatze, steigere den Preis um 1% des Grundwertes
         boolean outsideCat = (policy.getObjectOfInsurance().getEnvironment().equalsIgnoreCase("draussen"));
@@ -284,20 +304,21 @@ public class PolicyService {
         if (!kastriert) {
             totalPrice += 5;
         }
+
         // Hat der Besitzer eine PLZ die mit 0 oder 1 startet, erhöhe den Preis um 5% des Grundpreises
         if (customer.getAddress().getPostalCode() < 20000) {
             totalPrice += 0.05 * basePrice;
         }
 
-        //TODO Wenn der besitzer ein Hund hat(Muss noch hinzugefügt werden), muss er 30% des Grundpreises aufgerechnet werden
-        //if(customer.isdogOwner()) totalprice += 0.3*baseprice;
+        // Wenn der besitzer ein Hund hat(Muss noch hinzugefügt werden), muss er 30% des Grundpreises aufgerechnet werden
+        if(customer.isDogOwner()) {
+            totalPrice += 0.3 * basePrice;
+        }
 
         // Auf 2 Nachkommastellen runden
         totalPrice = ((int)(totalPrice * 100)) / 100.0;
         return totalPrice;
     }
-
-
 
     /**
      * Checks if a customer with the given ID exists in the database.

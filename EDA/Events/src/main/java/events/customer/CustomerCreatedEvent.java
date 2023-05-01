@@ -22,6 +22,8 @@ public class CustomerCreatedEvent implements Serializable {
     private String maritalStatus;
     private LocalDate dateOfBirth;
     private String employmentStatus;
+
+    private boolean dogOwner;
     private Address address;
     private String phoneNumber;
     private String email;
@@ -30,7 +32,7 @@ public class CustomerCreatedEvent implements Serializable {
     public CustomerCreatedEvent() {
     }
 
-    public CustomerCreatedEvent(Long id, String firstName, String lastName, String formOfAddress, String title, String maritalStatus, LocalDate dateOfBirth, String employmentStatus, Address address, String phoneNumber, String email, String bankDetails) {
+    public CustomerCreatedEvent(Long id, String firstName, String lastName, String formOfAddress, String title, String maritalStatus, LocalDate dateOfBirth, String employmentStatus, boolean dogOwner, Address address, String phoneNumber, String email, String bankDetails) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -39,6 +41,7 @@ public class CustomerCreatedEvent implements Serializable {
         this.maritalStatus = maritalStatus;
         this.dateOfBirth = dateOfBirth;
         this.employmentStatus = employmentStatus;
+        this.dogOwner = dogOwner;
         this.address = address;
         this.phoneNumber = phoneNumber;
         this.email = email;
@@ -99,6 +102,14 @@ public class CustomerCreatedEvent implements Serializable {
 
     public void setEmploymentStatus(String employmentStatus) {
         this.employmentStatus = employmentStatus;
+    }
+
+    public boolean isDogOwner() {
+        return dogOwner;
+    }
+
+    public void setDogOwner(boolean dogOwner) {
+        this.dogOwner = dogOwner;
     }
 
     public Address getAddress() {

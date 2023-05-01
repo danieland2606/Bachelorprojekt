@@ -20,7 +20,7 @@ public class CatRace {
     private int lowerAverageWeight;
     private int upperAverageWeight;
     private int illnessFactor;
-    //Hier wird bei mir ein Fehlergezeigt, aber bei Humple nicht (Wahrscheinlich Datenbank einstellung problematish)
+
     private String[] possibleColors;
 
     public CatRace() {
