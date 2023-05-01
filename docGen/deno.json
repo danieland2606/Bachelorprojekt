@@ -1,0 +1,6 @@
+{
+    "imports": {
+        "widdershins": "npm:widdershins",
+        "yaml": "https://deno.land/std@0.184.0/yaml/mod.ts"
+    }
+}

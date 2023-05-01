@@ -5,8 +5,7 @@ import java.util.*;
 import EDA.MeowMed.Exceptions.DatabaseAccessException;
 import EDA.MeowMed.Exceptions.ObjectNotFoundException;
 import events.customer.CustomerCreatedEvent;
-import events.policy.PolicyCreatedEvent;
-import EDA.MeowMed.Messaging.PolicyCreatedSender;
+import EDA.MeowMed.Messaging.PolicySender;
 import EDA.MeowMed.Persistence.CustomerRepository;
 import EDA.MeowMed.Persistence.Entity.Customer;
 import EDA.MeowMed.Persistence.Entity.Policy;
@@ -16,6 +15,8 @@ import EDA.MeowMed.Persistence.AddressRepository;
 import EDA.MeowMed.Rest.PremiumCalculationData;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
+import events.policy.PolicyChangedEvent;
+import events.policy.subclasses.CustomerPojo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.converter.json.MappingJacksonValue;
@@ -24,7 +25,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class PolicyService {
 
-    private final PolicyCreatedSender policyCreatedSender;
+    private final PolicySender policySender;
 
     private final PolicyRepository policyRepository;
 
@@ -36,19 +37,19 @@ public class PolicyService {
 
     /**
      * Constructor for PolicyService class.
-     * @param policyCreatedSender a sender object used to send notifications when a new policy is added
+     * @param policySender a sender object used to send notifications when a new policy is added
      * @param policyRepository a repository object used to access policies data
      * @param objectOfInsuranceRepository a repository object used to access object of insurance data
      * @param customerRepository a repository object used to access customer data
      * @param addressRepository a repository object used to access address data
      */
     @Autowired
-    public PolicyService(PolicyCreatedSender policyCreatedSender,
+    public PolicyService(PolicySender policySender,
                          PolicyRepository policyRepository,
                          ObjectOfInsuranceRepository objectOfInsuranceRepository,
                          CustomerRepository customerRepository,
                          AddressRepository addressRepository) {
-        this.policyCreatedSender = policyCreatedSender;
+        this.policySender = policySender;
         this.policyRepository = policyRepository;
         this.objectOfInsuranceRepository = objectOfInsuranceRepository;
         this.customerRepository = customerRepository;
@@ -116,7 +117,7 @@ public class PolicyService {
                     .setFailOnUnknownId(false));
 
             // Send a message to notify that the policy was created
-            this.policyCreatedSender.send(policy.createPolicyCreatedEvent());
+            this.policySender.sendPolicyCreated(policy.createPolicyCreatedEvent());
 
             return wrapper;
         } catch (DataAccessException ex) {
@@ -272,5 +273,28 @@ public class PolicyService {
             throw new ObjectNotFoundException("Customer with ID: " + customerID + " does not exist.");
         }
         return customerForPolicy.get();
+    }
+
+    /**
+     * Updates a Policy //TODO: Kommentar fertig schreiben
+     * @param policyID
+     * @param policy
+     */
+    public void updatePolicy(Long policyID, Policy policy /* TODO: Was kommt hier an? Muss in der Rest-Schnittstelle noch implementiert werden */) throws ObjectNotFoundException {
+        Optional<Policy> p = this.policyRepository.findById(policyID);
+        if (p.isEmpty()) {
+            throw new ObjectNotFoundException("The given Policy with PolicyID: " + policyID + " does not exist in the database.");
+        }
+        Policy persistentPolicy = p.get();
+        int oldCoverage = persistentPolicy.getCoverage();
+        double oldPremium = persistentPolicy.getPremium();
+        persistentPolicy.setCoverage(policy.getCoverage());
+        Customer customer = persistentPolicy.getCustomer();
+        persistentPolicy.setPremium(this.getPremium(customer, persistentPolicy));
+        int newCoverage = persistentPolicy.getCoverage();
+        double newPremium = persistentPolicy.getPremium();
+        this.policyRepository.flush();
+        CustomerPojo c = new CustomerPojo(customer.getId(), customer.getFirstName(), customer.getLastName(), customer.getFormOfAddress(), customer.getEmail());
+        this.policySender.sendPolicyChanged(new PolicyChangedEvent(policyID, oldCoverage, newCoverage, oldPremium, newPremium, c));
     }
 }

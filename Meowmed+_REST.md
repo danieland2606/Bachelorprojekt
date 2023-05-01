@@ -18,7 +18,7 @@ headingLevel: 2
 
 <h1 id="meowmed-">Meowmed+ v0.0.1</h1>
 
-> Scroll down for code samples, example requests and responses. Select a language for code samples from the tabs above or the mobile navigation menu.
+> Scroll down for code samples, example requests and responses.
 
 <h1 id="meowmed--customer">customer</h1>
 
@@ -28,6 +28,9 @@ headingLevel: 2
 
 > Code samples
 
+<details>
+<summary>http</summary>
+
 ```http
 GET /customer HTTP/1.1
 
@@ -35,12 +38,22 @@ Accept: application/json
 
 ```
 
+</details>
+
+<details>
+<summary>shell</summary>
+
 ```shell
 # You can also use wget
 curl -X GET /customer \
   -H 'Accept: application/json'
 
 ```
+
+</details>
+
+<details>
+<summary>javascript</summary>
 
 ```javascript
 
@@ -61,6 +74,8 @@ fetch('/customer',
 });
 
 ```
+
+</details>
 
 `GET /customer`
 
@@ -178,6 +193,9 @@ This operation does not require authentication
 
 > Code samples
 
+<details>
+<summary>http</summary>
+
 ```http
 POST /customer HTTP/1.1
 
@@ -186,6 +204,11 @@ Accept: application/json
 
 ```
 
+</details>
+
+<details>
+<summary>shell</summary>
+
 ```shell
 # You can also use wget
 curl -X POST /customer \
@@ -193,6 +216,11 @@ curl -X POST /customer \
   -H 'Accept: application/json'
 
 ```
+
+</details>
+
+<details>
+<summary>javascript</summary>
 
 ```javascript
 const inputBody = '{
@@ -231,6 +259,8 @@ fetch('/customer',
 });
 
 ```
+
+</details>
 
 `POST /customer`
 
@@ -321,6 +351,9 @@ This operation does not require authentication
 
 > Code samples
 
+<details>
+<summary>http</summary>
+
 ```http
 GET /customer/{customerId} HTTP/1.1
 
@@ -328,12 +361,22 @@ Accept: application/json
 
 ```
 
+</details>
+
+<details>
+<summary>shell</summary>
+
 ```shell
 # You can also use wget
 curl -X GET /customer/{customerId} \
   -H 'Accept: application/json'
 
 ```
+
+</details>
+
+<details>
+<summary>javascript</summary>
 
 ```javascript
 
@@ -354,6 +397,8 @@ fetch('/customer/{customerId}',
 });
 
 ```
+
+</details>
 
 `GET /customer/{customerId}`
 
@@ -409,6 +454,9 @@ This operation does not require authentication
 
 > Code samples
 
+<details>
+<summary>http</summary>
+
 ```http
 PUT /customer/{customerId} HTTP/1.1
 
@@ -417,6 +465,11 @@ Accept: application/json
 
 ```
 
+</details>
+
+<details>
+<summary>shell</summary>
+
 ```shell
 # You can also use wget
 curl -X PUT /customer/{customerId} \
@@ -424,6 +477,11 @@ curl -X PUT /customer/{customerId} \
   -H 'Accept: application/json'
 
 ```
+
+</details>
+
+<details>
+<summary>javascript</summary>
 
 ```javascript
 const inputBody = '{
@@ -462,6 +520,8 @@ fetch('/customer/{customerId}',
 });
 
 ```
+
+</details>
 
 `PUT /customer/{customerId}`
 
@@ -536,6 +596,9 @@ This operation does not require authentication
 
 > Code samples
 
+<details>
+<summary>http</summary>
+
 ```http
 GET /customer/{customerId}/policy HTTP/1.1
 
@@ -543,12 +606,22 @@ Accept: application/json
 
 ```
 
+</details>
+
+<details>
+<summary>shell</summary>
+
 ```shell
 # You can also use wget
 curl -X GET /customer/{customerId}/policy \
   -H 'Accept: application/json'
 
 ```
+
+</details>
+
+<details>
+<summary>javascript</summary>
 
 ```javascript
 
@@ -569,6 +642,8 @@ fetch('/customer/{customerId}/policy',
 });
 
 ```
+
+</details>
 
 `GET /customer/{customerId}/policy`
 
@@ -695,6 +770,9 @@ This operation does not require authentication
 
 > Code samples
 
+<details>
+<summary>http</summary>
+
 ```http
 POST /customer/{customerId}/policy HTTP/1.1
 
@@ -703,6 +781,11 @@ Accept: application/json
 
 ```
 
+</details>
+
+<details>
+<summary>shell</summary>
+
 ```shell
 # You can also use wget
 curl -X POST /customer/{customerId}/policy \
@@ -710,6 +793,11 @@ curl -X POST /customer/{customerId}/policy \
   -H 'Accept: application/json'
 
 ```
+
+</details>
+
+<details>
+<summary>javascript</summary>
 
 ```javascript
 const inputBody = '{
@@ -745,6 +833,8 @@ fetch('/customer/{customerId}/policy',
 });
 
 ```
+
+</details>
 
 `POST /customer/{customerId}/policy`
 
@@ -833,6 +923,9 @@ This operation does not require authentication
 
 > Code samples
 
+<details>
+<summary>http</summary>
+
 ```http
 GET /customer/{customerId}/policy/{policyId} HTTP/1.1
 
@@ -840,12 +933,22 @@ Accept: application/json
 
 ```
 
+</details>
+
+<details>
+<summary>shell</summary>
+
 ```shell
 # You can also use wget
 curl -X GET /customer/{customerId}/policy/{policyId} \
   -H 'Accept: application/json'
 
 ```
+
+</details>
+
+<details>
+<summary>javascript</summary>
 
 ```javascript
 
@@ -866,6 +969,8 @@ fetch('/customer/{customerId}/policy/{policyId}',
 });
 
 ```
+
+</details>
 
 `GET /customer/{customerId}/policy/{policyId}`
 
@@ -920,6 +1025,9 @@ This operation does not require authentication
 
 > Code samples
 
+<details>
+<summary>http</summary>
+
 ```http
 PUT /customer/{customerId}/policy/{policyId} HTTP/1.1
 
@@ -928,6 +1036,11 @@ Accept: application/json
 
 ```
 
+</details>
+
+<details>
+<summary>shell</summary>
+
 ```shell
 # You can also use wget
 curl -X PUT /customer/{customerId}/policy/{policyId} \
@@ -935,6 +1048,11 @@ curl -X PUT /customer/{customerId}/policy/{policyId} \
   -H 'Accept: application/json'
 
 ```
+
+</details>
+
+<details>
+<summary>javascript</summary>
 
 ```javascript
 const inputBody = '{
@@ -970,6 +1088,8 @@ fetch('/customer/{customerId}/policy/{policyId}',
 });
 
 ```
+
+</details>
 
 `PUT /customer/{customerId}/policy/{policyId}`
 
@@ -1040,6 +1160,9 @@ This operation does not require authentication
 
 > Code samples
 
+<details>
+<summary>http</summary>
+
 ```http
 POST /policyprice HTTP/1.1
 
@@ -1048,6 +1171,11 @@ Accept: application/json
 
 ```
 
+</details>
+
+<details>
+<summary>shell</summary>
+
 ```shell
 # You can also use wget
 curl -X POST /policyprice \
@@ -1055,6 +1183,11 @@ curl -X POST /policyprice \
   -H 'Accept: application/json'
 
 ```
+
+</details>
+
+<details>
+<summary>javascript</summary>
 
 ```javascript
 const inputBody = '{
@@ -1093,6 +1226,8 @@ fetch('/policyprice',
 });
 
 ```
+
+</details>
 
 `POST /policyprice`
 
@@ -1774,6 +1909,4 @@ List of property names of the Policy Object. Using objectOfInsurance and one or 
 |*anonymous*|objectOfInsurance.personality|
 |*anonymous*|objectOfInsurance.environment|
 |*anonymous*|objectOfInsurance.weight|
-
-undefined
 
