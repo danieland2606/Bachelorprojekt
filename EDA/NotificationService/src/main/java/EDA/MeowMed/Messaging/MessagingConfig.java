@@ -1,5 +1,6 @@
 package EDA.MeowMed.Messaging;
 
+import com.rabbitmq.client.AMQP;
 import org.springframework.amqp.core.*;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -32,7 +33,12 @@ public class MessagingConfig {
         public Queue customerQueue() { return new Queue("customer");}
 
         @Bean
-        public Queue policyQueue() { return new Queue("policy");}
+        public Queue policyCreatedQueue() { return new Queue("policycreated");}
+
+        @Bean
+        public Queue policyChangedQueue() {
+            return new Queue("policychanged");
+        }
 
         /**
          * Binds a queue to an exchange
@@ -48,8 +54,13 @@ public class MessagingConfig {
         }
 
         @Bean
-        public Binding policyBinding(@Qualifier("PolicyTopic") TopicExchange topic, Queue policyQueue) {
-            return BindingBuilder.bind(policyQueue).to(topic).with("policy.created");
+        public Binding policyCreatedBinding(@Qualifier("PolicyTopic") TopicExchange topic, Queue policyCreatedQueue) {
+            return BindingBuilder.bind(policyCreatedQueue).to(topic).with("policy.created");
+        }
+
+        @Bean
+        public Binding policyChangedBinding(@Qualifier("PolicyTopic") TopicExchange topic, Queue policyChangedQueue) {
+            return BindingBuilder.bind(policyChangedQueue).to(topic).with("policy.changed");
         }
 
         @Bean

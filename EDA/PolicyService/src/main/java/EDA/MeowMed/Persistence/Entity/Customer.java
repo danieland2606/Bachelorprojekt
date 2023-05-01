@@ -111,7 +111,6 @@ public class Customer implements Serializable {
                 firstName,
                 lastName,
                 formOfAddress,
-                address.toCustomerAddress(),
                 email
         );
     }

@@ -1,6 +1,7 @@
 package EDA.MeowMed.Application;
 
 import events.customer.CustomerCreatedEvent;
+import events.policy.PolicyChangedEvent;
 import events.policy.PolicyCreatedEvent;
 import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,11 @@ public class NotificationService {
     private final String subjectCustomer = "Willkommen bei MeowMed!";
     private final String templateCustomer = "customernotification";
     private final String subjectPolicy = "Ihre MeowMed Vertragsinformationen";
-    private final String templatePolicy = "policynotification";
+    private final String templatePolicyCreated = "policynotification";
+
+    private final String templatePolicyChanged = "policychangednotification";
+
+    private final String subjectPolicyChanged = "Ihre Vertragsänderungen";
 
     /**
      * This method sends a customer created email using the provided CustomerCreatedEvent object.
@@ -82,7 +87,7 @@ public class NotificationService {
         email.setTo(policyCreated.getCustomer().getEmail());
         email.setFrom(sender);
         email.setSubject(subjectPolicy);
-        email.setTemplate(templatePolicy);
+        email.setTemplate(templatePolicyCreated);
         Map<String, Object> properties = new HashMap<>();
         properties.put("formOfAddress", policyCreated.getCustomer().getFormOfAddress());
         properties.put("firstName", policyCreated.getCustomer().getFirstName());
@@ -96,7 +101,6 @@ public class NotificationService {
         properties.put("environment", policyCreated.getObjectOfInsurance().getEnvironment());
         properties.put("weight", policyCreated.getObjectOfInsurance().getWeight());
         email.setProperties(properties);
-
         try {
             emailSenderService.sendHtmlMessage(email);
         } catch (MessagingException e) {
@@ -104,4 +108,26 @@ public class NotificationService {
         }
     }
 
+    public void sendPolicyChangedMail(PolicyChangedEvent policyChangedEvent) {
+        Email email = new Email();
+        email.setTo(policyChangedEvent.getCustomer().getEmail());
+        email.setFrom(sender);
+        email.setSubject(subjectPolicyChanged);
+        email.setTemplate(templatePolicyChanged);
+        Map<String, Object> properties = new HashMap<>();
+        properties.put("formOfAddress", policyChangedEvent.getCustomer().getFormOfAddress());
+        properties.put("firstName", policyChangedEvent.getCustomer().getFirstName());
+        properties.put("lastName", policyChangedEvent.getCustomer().getLastName());
+        properties.put("pid", policyChangedEvent.getPolicyID());
+        properties.put("oldCoverage", policyChangedEvent.getOldCoverage());
+        properties.put("newCoverage", policyChangedEvent.getNewCoverage());
+        properties.put("oldPremium", policyChangedEvent.getOldPremium());
+        properties.put("newPremium", policyChangedEvent.getNewPremium());
+        email.setProperties(properties);
+        try {
+            emailSenderService.sendHtmlMessage(email);
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
+    }
 }

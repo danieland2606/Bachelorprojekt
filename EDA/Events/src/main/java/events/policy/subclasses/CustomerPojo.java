@@ -2,7 +2,6 @@ package events.policy.subclasses;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.time.LocalDate;
 
 /**
  * Object with select customer information
@@ -16,18 +15,16 @@ public class CustomerPojo implements Serializable {
     private String firstName;
     private String lastName;
     private String formOfAddress;
-    private Address address;
     private String email;
 
     public CustomerPojo() {
     }
 
-    public CustomerPojo(Long id, String firstName, String lastName, String formOfAddress, Address address, String email) {
+    public CustomerPojo(Long id, String firstName, String lastName, String formOfAddress, String email) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.formOfAddress = formOfAddress;
-        this.address = address;
         this.email = email;
     }
 
@@ -58,14 +55,6 @@ public class CustomerPojo implements Serializable {
     public String getFormOfAddress() {return formOfAddress;}
 
     public void setFormOfAddress(String formOfAddress) {this.formOfAddress = formOfAddress;}
-
-    public Address getAddress() {
-        return address;
-    }
-
-    public void setAddress(Address address) {
-        this.address = address;
-    }
 
     public String getEmail() {
         return email;

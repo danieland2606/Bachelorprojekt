@@ -110,28 +110,39 @@ public class PolicyController {
         }
     }
 
-
-    @GetMapping("/policyprice")
-    public ResponseEntity<?> getPremium(@RequestParam("details") String details) {
-        ObjectMapper mapper = new ObjectMapper();
-        String str = new String(Base64.getUrlDecoder().decode(details), StandardCharsets.UTF_8);
-        PremiumCalculationData body = null;
+    /**
+     * Calculates the Premium
+     * @param premiumCalculationData
+     * @return
+     */
+    @PostMapping("/policyprice")
+    public ResponseEntity<?> getPremium(@RequestBody PremiumCalculationData premiumCalculationData) {
         try {
-            mapper.registerModule(new JavaTimeModule());
-            body = mapper.readValue(str,PremiumCalculationData.class);
-            if (body==null){
-                return new ResponseEntity<String>("Convert was not Possible", HttpStatusCode.valueOf(500));
-            }
-            try {
-                return new ResponseEntity<String>(mapper.writeValueAsString(Collections.singletonMap("premium", this.policyService.getPremium(body))), HttpStatusCode.valueOf(200));
-            } catch (ObjectNotFoundException e) {
-                String errorMessage = "Error calculating premium because the customer does not exist\nMore infos: " + e.getMessage();
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorMessage);
-            }
+            ObjectMapper mapper = new ObjectMapper();
+            return new ResponseEntity<String>(mapper.writeValueAsString(Collections.singletonMap("premium", this.policyService.getPremium(premiumCalculationData))), HttpStatusCode.valueOf(200));
+        } catch (ObjectNotFoundException e) {
+            String errorMessage = "Error calculating premium because the customer does not exist\nMore infos: " + e.getMessage();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorMessage);
         } catch (JsonProcessingException e) {
-            System.out.println(e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Conversion failed.");
         }
-        return new ResponseEntity<String>("Convert was not Possible",HttpStatusCode.valueOf(500));
+    }
+
+    /**
+     * Updates the Policy with p_id
+     * @param customerID
+     * @param policyID
+     * @param policy The Policy Data
+     * @return
+     */
+    @PutMapping("/customer/{c_id}/policy/{p_id}")
+    public ResponseEntity<?> changePolicy(@PathVariable("c_id") Long customerID, @PathVariable("p_id") Long policyID, @RequestBody Policy policy) {
+        try {
+            this.policyService.updatePolicy(policyID, policy);
+            return new ResponseEntity<>(HttpStatusCode.valueOf(200));
+        } catch (ObjectNotFoundException e) {
+            return new ResponseEntity<String>("The Policy with ID: " + policyID + " does not exist.",HttpStatusCode.valueOf(404));
+        }
     }
 }
 

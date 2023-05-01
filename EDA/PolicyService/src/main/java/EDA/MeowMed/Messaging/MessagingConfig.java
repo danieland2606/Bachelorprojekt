@@ -10,8 +10,8 @@ import org.springframework.context.annotation.Configuration;
 public class MessagingConfig {
 
     @Bean
-    public PolicyCreatedSender sender() {
-        return new PolicyCreatedSender();
+    public PolicySender sender() {
+        return new PolicySender();
     }
 
     @Bean(name = "PolicyTopic")
