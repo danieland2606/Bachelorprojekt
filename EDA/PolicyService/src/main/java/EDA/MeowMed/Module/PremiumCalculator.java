@@ -1,14 +1,11 @@
 package EDA.MeowMed.Module;
-
-import EDA.MeowMed.Persistence.CatRaceRepository;
 import EDA.MeowMed.Persistence.Entity.CatRace;
 import EDA.MeowMed.Persistence.Entity.Customer;
 import EDA.MeowMed.Persistence.Entity.Policy;
-
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
-
+//TODO: Exceptions auslösen
 /**
  This class provides methods to calculate the price of a cat insurance
  policy based on various factors such as the cat's weight, age, breed,
@@ -97,7 +94,7 @@ public class PremiumCalculator {
         int catUpperAverageAge = catRace.getUpperAverageAge();
         int catLowerAverageAge = catRace.getLowerAverageAge();
         //Calculate the value of the upper life quartile based on the average age range of the cat breed.
-        double upperQuartil = (catUpperAverageAge - catLowerAverageAge) * 0.75;
+        double upperQuartil = (catUpperAverageAge - catLowerAverageAge) * 0.75 + catLowerAverageAge;
 
         //If the cat is in the upper quartile of the average age interval at the time of contract
         // conclusion, add 20% of the base price.

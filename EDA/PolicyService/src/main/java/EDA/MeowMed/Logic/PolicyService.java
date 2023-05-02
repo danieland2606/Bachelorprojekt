@@ -243,6 +243,8 @@ public class PolicyService {
      @param customer The Customer object representing the customer who is taking the policy.
      @param policy The Policy object representing the policy being taken by the customer.
      @return A double value representing the total premium for the given policy and customer.
+     @Test Die Tests waren erfolgreich und ich habe die Ergebnisse mit den vorgegebenen Vorlagen verglichen. Alles hat gut funktioniert
+     TODO Fehlerbehandlung muss hinzugefügt werden
      */
     public double getPremium(Customer customer, Policy policy) {
         // Get the cat race from the catRaceRepository based on the policy's object of insurance race
@@ -251,16 +253,32 @@ public class PolicyService {
         if (catRace == null) return 0;
         // Calculate the base price for the policy using the PremiumCalculator
         double basePrice = PremiumCalculator.calculateBasePrice(policy);
+        System.out.println("base Preise: "+ basePrice);
         // Calculate the total price of the policy by adding the prices for each factor
         double totalPrice = basePrice;
         totalPrice += PremiumCalculator.calculateWeightPrice(policy.getObjectOfInsurance().getWeight(), catRace);
+        System.out.println("base Preise nach WeightPreise: "+ totalPrice); //Funktioniert
+
         totalPrice += PremiumCalculator.calculateIllnessFactorPrice(catRace);
+        System.out.println("base Preise nach IllnessFactorPrice: "+ totalPrice); //Funktioniert
+
         totalPrice += PremiumCalculator.calculateEnvironmentPrice(policy.getObjectOfInsurance().getEnvironment(), basePrice);
+        System.out.println("base Preise nach EnvironmentPrice: "+ totalPrice); //Funktioniert
+
         totalPrice += PremiumCalculator.calculateAgePrice(policy.getObjectOfInsurance().getDateOfBirth(), catRace, basePrice);
+        System.out.println("base Preise nach AgePrice: "+ totalPrice);  //Funktioniert
+
         totalPrice += PremiumCalculator.calculateCastrationPrice(policy.getObjectOfInsurance().isCastrated());
+        System.out.println("base Preise nach CastrationPrice: "+ totalPrice); //Funktioniert
+
         totalPrice += PremiumCalculator.calculatePostalCodePrice(customer.getAddress().getPostalCode(), basePrice);
+        System.out.println("base Preise nach PostalCodePrice: "+ totalPrice); //Funktioniert
+
         totalPrice += PremiumCalculator.applyDogOwnerSurcharge(customer, basePrice);
+        System.out.println("base Preise nach DogOwner: "+ totalPrice);  //Funktioniert
+
         totalPrice = PremiumCalculator.roundToTwoDecimal(totalPrice);
+        System.out.println("base Preise nach roundToTwoDecimal: "+ totalPrice);
         return totalPrice;
     }
 
