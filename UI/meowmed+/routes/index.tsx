@@ -1,13 +1,12 @@
 import { HandlerContext, PageProps } from "$fresh/server.ts";
 import { Item, Table, TableItems } from "../components/Table.tsx";
-import { Address, TableCustomer } from "../util/types.ts";
+import { Address, Customer } from "../generated/models/all.ts";
 import { compareId } from "../util/util.ts";
-
-const fields = ["firstName", "lastName", "address"];
+import { customerClient } from "../util/client.ts";
 
 export const handler = {
   async GET(_: Request, ctx: HandlerContext) {
-    const json = await Deno.readTextFile("./static/test/customers.json");
+    const json = await customerClient.getCustomerList();
     const data = JSON.parse(json);
     const tableData = formatCustomerList(data);
     return ctx.render(tableData);
@@ -30,14 +29,20 @@ export default function Dashboard({ data }: PageProps) {
   );
 }
 
-function formatCustomerList(customerList: Array<TableCustomer>): TableItems {
+function formatCustomerList(customerList: Array<Customer>): TableItems {
   return {
     headers: ["ID", "Vorname", "Nachname", "Adresse"],
     items: customerList.sort(compareId).map(customerToTableRow),
   };
 }
 
-function customerToTableRow(customer: TableCustomer): Item {
+function customerToTableRow(customer: Customer): Item {
+  if (
+    customer.id == null || customer.firstName == null ||
+    customer.lastName == null || customer.address == null
+  ) {
+    throw new Error("Required Fields of Customer missing");
+  }
   return {
     item: [
       customer.id,

@@ -1,5 +1,6 @@
 import { HandlerContext } from "$fresh/server.ts";
 import { EditCustomer } from "../components/EditCustomer.tsx";
+import { customerClient } from "../util/client.ts";
 
 export const handler = {
   async GET(_: Request, ctx: HandlerContext) {

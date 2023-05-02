@@ -1,9 +1,12 @@
 import { HandlerContext, PageProps } from "$fresh/server.ts";
 import { EditPolicy } from "../../../../components/EditPolicy.tsx";
+import { policyClient } from "../../../../util/client.ts";
 
 export const handler = {
   async GET(_: Request, ctx: HandlerContext) {
-    const json = await Deno.readTextFile("./static/test/policy.json");
+    const customerId = Number.parseInt(ctx.params.customerId);
+    const policyId = Number.parseInt(ctx.params.policyId);
+    const json = await policyClient.getPolicy(customerId, policyId);
     const data = JSON.parse(json);
     return await ctx.render(data);
   },

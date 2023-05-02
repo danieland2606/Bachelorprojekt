@@ -1,15 +1,17 @@
 import { HandlerContext, PageProps } from "$fresh/server.ts";
 import { EditCustomer } from "../../components/EditCustomer.tsx";
 import { Table } from "../../components/Table.tsx";
-import { TablePolicy } from "../../util/types.ts";
+import { Policy } from "../../generated/models/all.ts";
 import { compareId } from "../../util/util.ts";
+import { customerClient, policyClient } from "../../util/client.ts";
 
 export const handler = {
   async GET(_: Request, ctx: HandlerContext) {
-    const json = await Deno.readTextFile("./static/test/policies.json");
+    const customerId = Number.parseInt(ctx.params.customerId);
+    const json = await policyClient.getPolicyList(customerId);
     const data = JSON.parse(json);
     const tableData = formatPolicyList(data, ctx.params.customerId);
-    const jsoncust = await Deno.readTextFile("./static/test/customer.json");
+    const jsoncust = await customerClient.getCustomer(customerId);
     const datacust = JSON.parse(jsoncust);
     return ctx.render({ tableData: tableData, customer: datacust });
   },
@@ -41,7 +43,7 @@ export default function ShowCustomer({ data, params }: PageProps) {
   );
 }
 
-function formatPolicyList(policyList: Array<TablePolicy>, customerId: string) {
+function formatPolicyList(policyList: Array<Policy>, customerId: string) {
   const id = Number.parseInt(customerId);
   return {
     headers: ["ID", "Katze", "Beginn", "Ende", "Jahresdeckung"],
@@ -51,7 +53,14 @@ function formatPolicyList(policyList: Array<TablePolicy>, customerId: string) {
   };
 }
 
-function policyToTableRow(policy: TablePolicy, customerId: number) {
+function policyToTableRow(policy: Policy, customerId: number) {
+  if (
+    policy.id == null || policy.objectOfInsurance == null ||
+    policy.startDate == null || policy.endDate == null ||
+    policy.coverage == null
+  ) {
+    throw new Error("");
+  }
   return {
     item: [
       policy.id,

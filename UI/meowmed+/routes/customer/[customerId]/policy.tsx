@@ -1,5 +1,6 @@
 import { HandlerContext, PageProps } from "$fresh/server.ts";
 import { EditPolicy } from "../../../components/EditPolicy.tsx";
+import { policyClient } from "../../../util/client.ts";
 
 export const handler = {
   async GET(_: Request, ctx: HandlerContext) {
