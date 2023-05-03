@@ -1,9 +1,20 @@
 import { Input, Select } from "./Input.tsx";
 import { Form, FormProps } from "./Form.tsx";
+import {
+  CatRaceValues,
+  EnvironmentValues,
+  FurColorValues,
+  PersonalityValues,
+} from "../generated/index.ts";
 
-export function EditPolicy(props: FormProps) {
+export interface EditPolicyProps extends FormProps {
+  customerId: string;
+}
+
+export function EditPolicy(props: EditPolicyProps) {
   return (
     <Form {...props}>
+      <input type="hidden" name="customerId" value={props.customerId}></input>
       <Input type="date" name="startDate" labeltext="Begin"></Input>
       <Input type="date" name="endDate" labeltext="Ende"></Input>
       <Input type="number" name="coverage" labeltext="Deckung"></Input>
@@ -18,30 +29,17 @@ export function EditPolicy(props: FormProps) {
           labeltext="Name"
         >
         </Input>
-        <Select name="objectOfInsurance.race" labeltext="Rasse">
-          <option value="siamese">Siamese</option>
-          <option value="perser">Perser</option>
-          <option value="bengal">Bengal</option>
-          <option value="maine-coon">Maine Coon</option>
-          <option value="sphynx">Sphynx</option>
-          <option value="scottish-fold">Scottish Fold</option>
-          <option value="british-shorthair">British Shorthair</option>
-          <option value="abyssinian">Abyssinian</option>
-          <option value="ragdoll">Ragdoll</option>
+        <Select
+          name="objectOfInsurance.race"
+          labeltext="Rasse"
+          options={CatRaceValues}
+        >
         </Select>
-        <Select name="objectOfInsurance.color" labeltext="Farbe">
-          <option value="seal">Seal</option>
-          <option value="blau">Blau</option>
-          <option value="lilac">Lilac</option>
-          <option value="creme">Creme</option>
-          <option value="weiss">Weiß</option>
-          <option value="schildpatt">Schildpatt</option>
-          <option value="schwarz">Schwarz</option>
-          <option value="braun">Braun</option>
-          <option value="marmor">Marmor</option>
-          <option value="grau">Grau</option>
-          <option value="rot">Rot</option>
-          <option value="zimt">Zimt</option>
+        <Select
+          name="objectOfInsurance.color"
+          labeltext="Farbe"
+          options={FurColorValues}
+        >
         </Select>
         <Input
           type="date"
@@ -53,13 +51,17 @@ export function EditPolicy(props: FormProps) {
           <option value="true">Kastriert</option>
           <option value="false">Nicht Kastriert</option>
         </Select>
-        <Select name="objectOfInsurance.personality" labeltext="Persönlichkeit">
-          <option value="anhaenglich">Anhänglich</option>
-          <option value="spielerisch">Spielerisch</option>
+        <Select
+          name="objectOfInsurance.personality"
+          labeltext="Persönlichkeit"
+          options={PersonalityValues}
+        >
         </Select>
-        <Select name="objectOfInsurance.environment" labeltext="Umgebung">
-          <option value="draussen">Hauskatze</option>
-          <option value="drinnen">Freigänger</option>
+        <Select
+          name="objectOfInsurance.environment"
+          labeltext="Umgebung"
+          options={EnvironmentValues}
+        >
         </Select>
         <Input
           type="number"

@@ -12,4 +12,5 @@
 
 import { HttpFile } from '../http/http.ts';
 
-export type EmploymentStatus = "selbststaendig" | "angestellt" | "arbeitslos" | "arbeitssuchend" | "ausbildung" ;
+export const EmploymentStatusValues =[ "selbststaendig" , "angestellt" , "arbeitslos" , "arbeitssuchend" , "ausbildung" ] as const;
+export type EmploymentStatus = typeof EmploymentStatusValues[number];

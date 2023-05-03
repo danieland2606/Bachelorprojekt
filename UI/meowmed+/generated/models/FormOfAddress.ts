@@ -12,4 +12,5 @@
 
 import { HttpFile } from '../http/http.ts';
 
-export type FormOfAddress = "herr" | "frau" ;
+export const FormOfAddressValues =[ "herr" , "frau" ] as const;
+export type FormOfAddress = typeof FormOfAddressValues[number];

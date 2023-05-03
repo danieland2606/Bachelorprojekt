@@ -4,7 +4,7 @@
     "start-linux": "deno task tailwind-lin & deno run -A --watch=static/,routes/ dev.ts",
     "tailwind-win": "deno cache --node-modules-dir npm:daisyui && ./tailwindcss-windows-x64.exe -i ./input.css -o ./static/meowmed.css --watch",
     "tailwind-lin": "deno cache --node-modules-dir npm:daisyui && ./tailwindcss-linux-x64.exe -i ./input.css -o ./static/meowmed.css --watch",
-    "gen-client": "deno run -A npm:@openapitools/openapi-generator-cli generate -i ../../Meowmed+_REST.yaml -g typescript --additional-properties=platform=deno -o ./generated"
+    "gen-client": "deno run -A npm:@openapitools/openapi-generator-cli generate -i ../../Meowmed+_REST.yaml -g typescript --additional-properties=platform=deno,supportsES6=true -t ./templates -o ./generated"
   },
   "importMap": "./import_map.json",
   "compilerOptions": {

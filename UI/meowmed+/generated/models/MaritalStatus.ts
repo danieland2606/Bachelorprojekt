@@ -12,4 +12,5 @@
 
 import { HttpFile } from '../http/http.ts';
 
-export type MaritalStatus = "ledig" | "verheiratet" | "verwitwet" ;
+export const MaritalStatusValues =[ "ledig" , "verheiratet" , "verwitwet" ] as const;
+export type MaritalStatus = typeof MaritalStatusValues[number];

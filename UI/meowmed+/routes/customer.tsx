@@ -1,6 +1,7 @@
 import { HandlerContext } from "$fresh/server.ts";
 import { EditCustomer } from "../components/EditCustomer.tsx";
 import { customerClient } from "../util/client.ts";
+import { Address, Customer, CustomerAllRequired } from "../generated/index.ts";
 
 export const handler = {
   async GET(_: Request, ctx: HandlerContext) {
@@ -8,9 +9,8 @@ export const handler = {
   },
   async POST(req: Request, _: HandlerContext) {
     const form = await req.formData();
-    for (const [key, val] of form.entries()) {
-      console.debug(`key: ${key}, val: ${val}`);
-    }
+    const customer = deserializeCustomer(form);
+    customerClient.createCustomer(customer);
     const base = new URL(req.url).origin;
     return Response.redirect(new URL("/", base), 303);
   },
@@ -39,4 +39,23 @@ export default function CreateCustomer() {
       </div>
     </>
   );
+}
+
+function deserializeCustomer(form: FormData): CustomerAllRequired {
+  const customer: Record<string, any> = {};
+  const types = Customer.attributeTypeMap.filter(({ name }) => name !== "id");
+  for (const prop of types) {
+    if (form.has(prop.name)) {
+      customer[prop.name] = form.get(prop.name);
+    } else if (prop.type === "Address") {
+      customer[prop.name] = {};
+      for (const subProp of Address.attributeTypeMap) {
+        const qualifiedName = `${prop.name}.${subProp.name}`;
+        if (form.has(qualifiedName)) {
+          customer[prop.name][subProp.name] = form.get(qualifiedName);
+        }
+      }
+    }
+  }
+  return customer as CustomerAllRequired;
 }

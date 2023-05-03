@@ -12,4 +12,5 @@
 
 import { HttpFile } from '../http/http.ts';
 
-export type CatRace = "siamese" | "perser" | "bengal" | "maine-coon" | "sphynx" | "scottish-fold" | "british-shorthair" | "abyssinian" | "ragdoll" ;
+export const CatRaceValues =[ "siamese" , "perser" , "bengal" , "maine-coon" , "sphynx" , "scottish-fold" , "british-shorthair" , "abyssinian" , "ragdoll" ] as const;
+export type CatRace = typeof CatRaceValues[number];

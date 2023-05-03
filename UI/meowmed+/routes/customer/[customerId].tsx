@@ -8,12 +8,10 @@ import { customerClient, policyClient } from "../../util/client.ts";
 export const handler = {
   async GET(_: Request, ctx: HandlerContext) {
     const customerId = Number.parseInt(ctx.params.customerId);
-    const json = await policyClient.getPolicyList(customerId);
-    const data = JSON.parse(json);
-    const tableData = formatPolicyList(data, ctx.params.customerId);
-    const jsoncust = await customerClient.getCustomer(customerId);
-    const datacust = JSON.parse(jsoncust);
-    return ctx.render({ tableData: tableData, customer: datacust });
+    const policyList = await policyClient.getPolicyList(customerId);
+    const tableData = formatPolicyList(policyList, ctx.params.customerId);
+    const customer = await customerClient.getCustomer(customerId);
+    return ctx.render({ tableData, customer });
   },
 };
 
@@ -59,7 +57,7 @@ function policyToTableRow(policy: Policy, customerId: number) {
     policy.startDate == null || policy.endDate == null ||
     policy.coverage == null
   ) {
-    throw new Error("");
+    throw new Error("Required fields of policy missing");
   }
   return {
     item: [

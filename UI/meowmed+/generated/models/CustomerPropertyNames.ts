@@ -12,4 +12,5 @@
 
 import { HttpFile } from '../http/http.ts';
 
-export type CustomerPropertyNames = "firstName" | "lastName" | "formOfAddress" | "title" | "maritalStatus" | "dateOfBirth" | "employmentStatus" | "dogOwner" | "phoneNumber" | "email" | "bankDetails" | "address" | "address.city" | "address.street" | "address.postalCode" ;
+export const CustomerPropertyNamesValues =[ "firstName" , "lastName" , "formOfAddress" , "title" , "maritalStatus" , "dateOfBirth" , "employmentStatus" , "dogOwner" , "phoneNumber" , "email" , "bankDetails" , "address" , "address.city" , "address.street" , "address.postalCode" ] as const;
+export type CustomerPropertyNames = typeof CustomerPropertyNamesValues[number];

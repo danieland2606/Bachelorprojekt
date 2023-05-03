@@ -1,16 +1,22 @@
 import { Input, Select } from "./Input.tsx";
 import { Form, FormProps } from "./Form.tsx";
+import {
+  EmploymentStatusValues,
+  FormOfAddressValues,
+  MaritalStatusValues,
+  TitleValues,
+} from "../generated/index.ts";
 
 export function EditCustomer(props: FormProps) {
   return (
     <Form {...props}>
-      <Select name="formOfAddress" labeltext="Anrede">
-        <option value="herr">Herr</option>
-        <option value="frau">Frau</option>
+      <Select
+        name="formOfAddress"
+        labeltext="Anrede"
+        options={FormOfAddressValues}
+      >
       </Select>
-      <Select name="title" labeltext="Anrede">
-        <option value="doctor">Dr.</option>
-        <option value="professor">Prof.</option>
+      <Select name="title" labeltext="Anrede" options={TitleValues}>
       </Select>
       <Input type="text" name="firstName" labeltext="Vorname">
       </Input>
@@ -30,17 +36,17 @@ export function EditCustomer(props: FormProps) {
         labeltext="Geburtsdatum"
       >
       </Input>
-      <Select name="maritalStatus" labeltext="Familienstatus">
-        <option value="ledig">Ledig</option>
-        <option value="verheiratet">Verheiratet</option>
-        <option value="verwitwet">Verwitwet</option>
+      <Select
+        name="maritalStatus"
+        labeltext="Familienstatus"
+        options={MaritalStatusValues}
+      >
       </Select>
-      <Select name="employmentStatus" labeltext="Berufsstand">
-        <option value="selbststaendig">Selbstständig</option>
-        <option value="angestellt">Angestellt</option>
-        <option value="arbeitslos">Arbeitslos</option>
-        <option value="arbeitssuchend">Arbeitssuchend</option>
-        <option value="ausbildung">In Ausbildung</option>
+      <Select
+        name="employmentStatus"
+        labeltext="Berufsstand"
+        options={EmploymentStatusValues}
+      >
       </Select>
       <Input
         type="text"

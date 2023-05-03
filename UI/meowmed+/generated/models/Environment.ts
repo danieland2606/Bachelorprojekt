@@ -12,4 +12,5 @@
 
 import { HttpFile } from '../http/http.ts';
 
-export type Environment = "draussen" | "drinnen" ;
+export const EnvironmentValues =[ "draussen" , "drinnen" ] as const;
+export type Environment = typeof EnvironmentValues[number];

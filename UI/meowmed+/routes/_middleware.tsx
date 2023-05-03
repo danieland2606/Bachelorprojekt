@@ -8,11 +8,11 @@ export const handler = [
       statusText: response.statusText,
       headers: response.headers,
     };
-    let body = await response.text();
-    body = body.replace(
+    let body: string | null = await response.text();
+    body = body?.replace(
       /^<!DOCTYPE html><html/,
       '<!DOCTYPE html><html data-theme="cupcake"',
-    );
+    ) || null;
     return new Response(body, options);
   },
 ];

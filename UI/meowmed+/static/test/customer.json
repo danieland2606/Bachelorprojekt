@@ -5,6 +5,7 @@
   "title": "",
   "maritalStatus": "single",
   "dateOfBirth": "2000-12-30",
+  "dogOwner": false,
   "employmentStatus": "employed",
   "address": {
     "city": "Hannover",

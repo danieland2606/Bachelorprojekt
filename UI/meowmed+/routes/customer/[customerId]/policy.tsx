@@ -1,19 +1,24 @@
 import { HandlerContext, PageProps } from "$fresh/server.ts";
 import { EditPolicy } from "../../../components/EditPolicy.tsx";
 import { policyClient } from "../../../util/client.ts";
+import {
+  ObjectOfInsurance,
+  Policy,
+  PolicyAllRequired,
+} from "../../../generated/index.ts";
 
 export const handler = {
   async GET(_: Request, ctx: HandlerContext) {
     return await ctx.render();
   },
   async POST(req: Request, ctx: HandlerContext) {
+    const customerId = Number.parseInt(ctx.params.customerId);
     const form = await req.formData();
-    for (const [key, val] of form.entries()) {
-      console.debug(`key: ${key}, val: ${val}`);
-    }
+    const policy = deserializePolicy(form);
+    policyClient.createPolicy(customerId, policy);
     const base = new URL(req.url).origin;
     return Response.redirect(
-      new URL(`/customer/${ctx.params.customerId}`, base),
+      new URL(`/customer/${customerId}`, base),
       303,
     );
   },
@@ -27,6 +32,7 @@ export default function CreatePolicy({ params }: PageProps) {
         id="new-policy"
         action={`/customer/${params.customerId}/policy`}
         method="post"
+        customerId={params.customerId}
       >
         <iframe
           name="premium-calc"
@@ -55,4 +61,25 @@ export default function CreatePolicy({ params }: PageProps) {
       </div>
     </>
   );
+}
+
+export function deserializePolicy(form: FormData): PolicyAllRequired {
+  const policy: Record<string, any> = {};
+  const types = Policy.attributeTypeMap.filter(({ name }) =>
+    name !== "id" && name !== "premium"
+  );
+  for (const prop of types) {
+    if (form.has(prop.name)) {
+      policy[prop.name] = form.get(prop.name);
+    } else if (prop.type === "ObjectOfInsurance") {
+      policy[prop.name] = {};
+      for (const subProp of ObjectOfInsurance.attributeTypeMap) {
+        const qualifiedName = `${prop.name}.${subProp.name}`;
+        if (form.has(qualifiedName)) {
+          policy[prop.name][subProp.name] = form.get(qualifiedName);
+        }
+      }
+    }
+  }
+  return policy as PolicyAllRequired;
 }

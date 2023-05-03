@@ -6,9 +6,8 @@ import { customerClient } from "../util/client.ts";
 
 export const handler = {
   async GET(_: Request, ctx: HandlerContext) {
-    const json = await customerClient.getCustomerList();
-    const data = JSON.parse(json);
-    const tableData = formatCustomerList(data);
+    const customers = await customerClient.getCustomerList();
+    const tableData = formatCustomerList(customers);
     return ctx.render(tableData);
   },
 };
@@ -41,7 +40,7 @@ function customerToTableRow(customer: Customer): Item {
     customer.id == null || customer.firstName == null ||
     customer.lastName == null || customer.address == null
   ) {
-    throw new Error("Required Fields of Customer missing");
+    throw new Error("Required fields of customer missing");
   }
   return {
     item: [

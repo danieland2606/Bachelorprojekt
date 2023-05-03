@@ -12,4 +12,5 @@
 
 import { HttpFile } from '../http/http.ts';
 
-export type FurColor = "seal" | "blau" | "lilac" | "creme" | "weiss" | "schildpatt" | "schwarz" | "braun" | "marmor" | "grau" | "rot" | "zimt" ;
+export const FurColorValues =[ "seal" , "blau" , "lilac" , "creme" , "weiss" , "schildpatt" , "schwarz" , "braun" , "marmor" , "grau" , "rot" , "zimt" ] as const;
+export type FurColor = typeof FurColorValues[number];

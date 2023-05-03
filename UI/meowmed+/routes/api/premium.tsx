@@ -1,4 +1,7 @@
 import { HandlerContext, PageProps } from "$fresh/server.ts";
+import { deserializePolicy } from "../customer/[customerId]/policy.tsx";
+import { policyClient } from "../../util/client.ts";
+import { PolicyCalc } from "../../generated/index.ts";
 
 export const handler = {
   GET(_: Request, ctx: HandlerContext) {
@@ -6,11 +9,9 @@ export const handler = {
   },
   async POST(req: Request, ctx: HandlerContext) {
     const form = await req.formData();
-    console.debug("premium");
-    for (const [key, val] of form.entries()) {
-      console.debug(`key: ${key}, val: ${val}`);
-    }
-    return ctx.render({ premium: 75 });
+    const calcPolicy = deserializePolicyCalc(form);
+    const { premium } = await policyClient.calcPolicyPrice(calcPolicy);
+    return ctx.render({ premium });
   },
 };
 
@@ -20,4 +21,12 @@ export default function PremiumDisplay({ data }: PageProps) {
       <p>{data.premium}</p>
     </>
   );
+}
+
+function deserializePolicyCalc(form: FormData) {
+  const policyCalc: Record<string, any> = {
+    customerId: form.get("customerId"),
+    policy: deserializePolicy(form),
+  };
+  return policyCalc as PolicyCalc;
 }

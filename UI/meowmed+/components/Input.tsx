@@ -1,4 +1,5 @@
 import { JSX } from "preact/jsx-runtime";
+import { capitalize } from "../util/util.ts";
 
 export interface InputProps extends JSX.HTMLAttributes<HTMLInputElement> {
   labeltext: string;
@@ -6,6 +7,7 @@ export interface InputProps extends JSX.HTMLAttributes<HTMLInputElement> {
 
 export interface SelectProps extends JSX.HTMLAttributes<HTMLSelectElement> {
   labeltext: string;
+  options?: readonly string[];
 }
 
 export function Select(props: SelectProps) {
@@ -13,10 +15,21 @@ export function Select(props: SelectProps) {
     <div class="cell">
       <label id={props.name}>{props.labeltext}</label>
       <select {...props} label={props.name}>
-        {props.children}
+        {props.children ??
+          props.options?.map((option) => (
+            <option value={option}>{pretty(option)}</option>
+          ))}
       </select>
     </div>
   );
+}
+
+function pretty(val: string) {
+  const pretty = val.replaceAll("-", " ").replaceAll("ae", "ä").replaceAll(
+    "oe",
+    "ö",
+  ).replaceAll("ue", "ü");
+  return capitalize(pretty);
 }
 
 export function Input(props: InputProps) {

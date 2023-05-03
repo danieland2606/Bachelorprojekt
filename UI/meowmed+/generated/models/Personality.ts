@@ -12,4 +12,5 @@
 
 import { HttpFile } from '../http/http.ts';
 
-export type Personality = "anhaenglich" | "spielerisch" ;
+export const PersonalityValues =[ "anhaenglich" , "spielerisch" ] as const;
+export type Personality = typeof PersonalityValues[number];
