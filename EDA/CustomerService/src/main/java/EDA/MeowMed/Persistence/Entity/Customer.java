@@ -39,6 +39,9 @@ public class Customer implements Serializable {
     @Column(name = "employment_status", nullable = false)
     private String employmentStatus;
 
+    @Column(name = "dog_owner", nullable = false)
+    private boolean dogOwner;
+
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "address_id", nullable = false)
     private Address address;
@@ -55,7 +58,7 @@ public class Customer implements Serializable {
     public Customer() {
     }
 
-    public Customer(Long id, String firstName, String lastName, String formOfAddress, String title, String maritalStatus, LocalDate dateOfBirth, String employmentStatus, Address address, String phoneNumber, String email, String bankDetails) {
+    public Customer(Long id, String firstName, String lastName, String formOfAddress, String title, String maritalStatus, LocalDate dateOfBirth, String employmentStatus, boolean dogOwner, Address address, String phoneNumber, String email, String bankDetails) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -64,6 +67,7 @@ public class Customer implements Serializable {
         this.maritalStatus = maritalStatus;
         this.dateOfBirth = dateOfBirth;
         this.employmentStatus = employmentStatus;
+        this.dogOwner = dogOwner;
         this.address = address;
         this.phoneNumber = phoneNumber;
         this.email = email;
@@ -134,6 +138,14 @@ public class Customer implements Serializable {
         this.employmentStatus = employmentStatus;
     }
 
+    public boolean isDogOwner() {
+        return dogOwner;
+    }
+
+    public void setDogOwner(boolean dogOwner) {
+        this.dogOwner = dogOwner;
+    }
+
     public Address getAddress() {
         return address;
     }
@@ -181,6 +193,7 @@ public class Customer implements Serializable {
                 maritalStatus,
                 dateOfBirth,
                 employmentStatus,
+                dogOwner,
                 address.toCustomerAddress(),
                 phoneNumber,
                 email,

@@ -1,30 +1,35 @@
 package EDA.MeowMed.Logic;
 
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 import EDA.MeowMed.Exceptions.DatabaseAccessException;
+import EDA.MeowMed.Exceptions.InvalidPolicyDataException;
 import EDA.MeowMed.Exceptions.ObjectNotFoundException;
+import EDA.MeowMed.Module.PremiumCalculator;
+import EDA.MeowMed.Persistence.*;
+import EDA.MeowMed.Persistence.Entity.CatRace;
 import events.customer.CustomerCreatedEvent;
-import events.policy.PolicyCreatedEvent;
-import EDA.MeowMed.Messaging.PolicyCreatedSender;
-import EDA.MeowMed.Persistence.CustomerRepository;
+import EDA.MeowMed.Messaging.PolicySender;
 import EDA.MeowMed.Persistence.Entity.Customer;
 import EDA.MeowMed.Persistence.Entity.Policy;
-import EDA.MeowMed.Persistence.ObjectOfInsuranceRepository;
-import EDA.MeowMed.Persistence.PolicyRepository;
-import EDA.MeowMed.Persistence.AddressRepository;
 import EDA.MeowMed.Rest.PremiumCalculationData;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
+import events.policy.PolicyChangedEvent;
+import events.policy.subclasses.CustomerPojo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.stereotype.Service;
 
+import static EDA.MeowMed.Module.PremiumCalculator.calculateWeightPrice;
+
 @Service
 public class PolicyService {
 
-    private final PolicyCreatedSender policyCreatedSender;
+    private final PolicySender policySender;
 
     private final PolicyRepository policyRepository;
 
@@ -34,26 +39,46 @@ public class PolicyService {
 
     private final AddressRepository addressRepository;
 
+    private final CatRaceRepository catRaceRepository;
+
     /**
      * Constructor for PolicyService class.
-     * @param policyCreatedSender a sender object used to send notifications when a new policy is added
+     * @param policySender a sender object used to send notifications when a new policy is added
      * @param policyRepository a repository object used to access policies data
      * @param objectOfInsuranceRepository a repository object used to access object of insurance data
      * @param customerRepository a repository object used to access customer data
      * @param addressRepository a repository object used to access address data
      */
     @Autowired
-    public PolicyService(PolicyCreatedSender policyCreatedSender,
+    public PolicyService(PolicySender policySender,
                          PolicyRepository policyRepository,
                          ObjectOfInsuranceRepository objectOfInsuranceRepository,
                          CustomerRepository customerRepository,
-                         AddressRepository addressRepository) {
-        this.policyCreatedSender = policyCreatedSender;
+                         AddressRepository addressRepository,
+                         CatRaceRepository catRaceRepository) {
+        this.policySender = policySender;
         this.policyRepository = policyRepository;
         this.objectOfInsuranceRepository = objectOfInsuranceRepository;
         this.customerRepository = customerRepository;
         this.addressRepository = addressRepository;
+        this.catRaceRepository = catRaceRepository;
+        this.setUp();
     }
+
+    private void setUp(){
+        ArrayList<CatRace> entities = new ArrayList<>();
+        entities.add(new CatRace("siamese", 12, 15, 4, 7, 2, new String[]{"seal","blau","lilac","creme"})) ;
+        entities.add(new CatRace("perser", 12, 16, 4, 7, 3, new String[]{"weiß", "schildpatt","schwarz"}));
+        entities.add(new CatRace("bengal", 12, 16, 4, 6, 4, new String[]{"braun", "schildpatt","marmor"}));
+        entities.add(new CatRace("maine-cone", 12, 15, 5, 10, 2, new String[]{"grau","braun","weiß"}));
+        entities.add(new CatRace("sphynx", 12, 15, 4, 6, 5, new String[]{}));
+        entities.add(new CatRace("scottish Fold", 12, 15, 4, 6, 6, new String[]{}));
+        entities.add(new CatRace("british-shorthair", 12, 15, 4, 6, 0, new String[]{}));
+        entities.add(new CatRace("abyssinian", 12, 15, 3, 5, 4, new String[]{"rot", "schildpatt", "zimt"}));
+        entities.add(new CatRace("ragdoll", 12, 15, 4, 7, 3, new String[]{"blau", "seal", "lilac", "schildpatt"}));
+        this.catRaceRepository.saveAll(entities);
+    }
+
 
     /**
      * Finds a policy by its customer ID and policy ID, and returns a filtered MappingJacksonValue of the policy.
@@ -99,8 +124,12 @@ public class PolicyService {
      * @throws ObjectNotFoundException if the customer with the given ID does not exist.
      * @throws DatabaseAccessException if there is an error accessing the database.
      */
-    public MappingJacksonValue addPolicy(long customerID, Policy policy) throws ObjectNotFoundException, DatabaseAccessException {
+    public MappingJacksonValue addPolicy(long customerID, Policy policy) throws ObjectNotFoundException, DatabaseAccessException, InvalidPolicyDataException {
         try {
+            /* No Policies for "sehr verspielte" cats */
+            if (policy.getObjectOfInsurance().getPersonality().contains("sehr verspielt")) {
+                throw new InvalidPolicyDataException("It is not possible to create a Policy for 'sehr verspielte' cats.");
+            }
             // Set the customer and premium for the policy
             policy.setCustomer(this.getCustomer(customerID));
             policy.setPremium(this.getPremium(policy.getCustomer(), policy));
@@ -116,7 +145,7 @@ public class PolicyService {
                     .setFailOnUnknownId(false));
 
             // Send a message to notify that the policy was created
-            this.policyCreatedSender.send(policy.createPolicyCreatedEvent());
+            this.policySender.sendPolicyCreated(policy.createPolicyCreatedEvent());
 
             return wrapper;
         } catch (DataAccessException ex) {
@@ -208,47 +237,51 @@ public class PolicyService {
     }
 
     /**
-     * Calculates the premium for a given customer and policy
-     * @param customer the customer for which the premium is being calculated
-     * @param policy the policy for which the premium is being calculated
-     * @return the calculated premium for the given customer and policy
+     This method calculates the premium for a given customer and policy using the PremiumCalculator.
+     It takes in a Customer object and a Policy object as parameters and returns a double value
+     representing the total premium.
+     @param customer The Customer object representing the customer who is taking the policy.
+     @param policy The Policy object representing the policy being taken by the customer.
+     @return A double value representing the total premium for the given policy and customer.
+     @Test Die Tests waren erfolgreich und ich habe die Ergebnisse mit den vorgegebenen Vorlagen verglichen. Alles hat gut funktioniert
+     TODO Fehlerbehandlung muss hinzugefügt werden
      */
     public double getPremium(Customer customer, Policy policy) {
-        double factor = 0.015;
-        if (policy.getObjectOfInsurance().getColor().equals("Schwarz")) {
-            factor = 0.02;
-        }
-        double base = policy.getCoverage() * factor;
+        // Get the cat race from the catRaceRepository based on the policy's object of insurance race
+        CatRace catRace = catRaceRepository.findByRace(policy.getObjectOfInsurance().getRace());
+        // If the cat race is not found, return 0 as the premium
+        if (catRace == null) return 0;
+        // Calculate the base price for the policy using the PremiumCalculator
+        double basePrice = PremiumCalculator.calculateBasePrice(policy);
+        System.out.println("base Preise: "+ basePrice);
+        // Calculate the total price of the policy by adding the prices for each factor
+        double totalPrice = basePrice;
+        totalPrice += PremiumCalculator.calculateWeightPrice(policy.getObjectOfInsurance().getWeight(), catRace);
+        System.out.println("base Preise nach WeightPreise: "+ totalPrice); //Funktioniert
 
-        double added = 0.0;
+        totalPrice += PremiumCalculator.calculateIllnessFactorPrice(catRace);
+        System.out.println("base Preise nach IllnessFactorPrice: "+ totalPrice); //Funktioniert
 
-        /* +5€ pro Kilo abweichend vom Durchschnitt */
-        //TODO
+        totalPrice += PremiumCalculator.calculateEnvironmentPrice(policy.getObjectOfInsurance().getEnvironment(), basePrice);
+        System.out.println("base Preise nach EnvironmentPrice: "+ totalPrice); //Funktioniert
 
-        /* Einberechnung der Krankheitswahrscheinlichkeit */
-        //TODO
+        totalPrice += PremiumCalculator.calculateAgePrice(policy.getObjectOfInsurance().getDateOfBirth(), catRace, basePrice);
+        System.out.println("base Preise nach AgePrice: "+ totalPrice);  //Funktioniert
 
-        /* Draußenkatze */
-        if(policy.getObjectOfInsurance().getEnvironment().equals("draußen")) {
-            added += 10 * base / 100;
-        }
+        totalPrice += PremiumCalculator.calculateCastrationPrice(policy.getObjectOfInsurance().isCastrated());
+        System.out.println("base Preise nach CastrationPrice: "+ totalPrice); //Funktioniert
 
-        /* Alter der Katze im oberen Quantil des Durchschnittsalters oder älter */
-        //TODO
+        totalPrice += PremiumCalculator.calculatePostalCodePrice(customer.getAddress().getPostalCode(), basePrice);
+        System.out.println("base Preise nach PostalCodePrice: "+ totalPrice); //Funktioniert
 
-        /* Alter der Katze <= 2? */
-        //TODO
+        totalPrice += PremiumCalculator.applyDogOwnerSurcharge(customer, basePrice);
+        System.out.println("base Preise nach DogOwner: "+ totalPrice);  //Funktioniert
 
-        /* Kastriert? */
-        if (policy.getObjectOfInsurance().isCastrated()) {
-            added += 5;
-        }
-
-        /* Postal Code Racism */
-        //TODO
-
-        return base + added;
+        totalPrice = PremiumCalculator.roundToTwoDecimal(totalPrice);
+        System.out.println("base Preise nach roundToTwoDecimal: "+ totalPrice);
+        return totalPrice;
     }
+
 
     /**
      * Checks if a customer with the given ID exists in the database.
@@ -272,5 +305,28 @@ public class PolicyService {
             throw new ObjectNotFoundException("Customer with ID: " + customerID + " does not exist.");
         }
         return customerForPolicy.get();
+    }
+
+    /**
+     * Updates a Policy //TODO: Kommentar fertig schreiben
+     * @param policyID
+     * @param policy
+     */
+    public void updatePolicy(Long policyID, Policy policy /* TODO: Was kommt hier an? Muss in der Rest-Schnittstelle noch implementiert werden */) throws ObjectNotFoundException {
+        Optional<Policy> p = this.policyRepository.findById(policyID);
+        if (p.isEmpty()) {
+            throw new ObjectNotFoundException("The given Policy with PolicyID: " + policyID + " does not exist in the database.");
+        }
+        Policy persistentPolicy = p.get();
+        int oldCoverage = persistentPolicy.getCoverage();
+        double oldPremium = persistentPolicy.getPremium();
+        persistentPolicy.setCoverage(policy.getCoverage());
+        Customer customer = persistentPolicy.getCustomer();
+        persistentPolicy.setPremium(this.getPremium(customer, persistentPolicy));
+        int newCoverage = persistentPolicy.getCoverage();
+        double newPremium = persistentPolicy.getPremium();
+        this.policyRepository.flush();
+        CustomerPojo c = new CustomerPojo(customer.getId(), customer.getFirstName(), customer.getLastName(), customer.getFormOfAddress(), customer.getEmail());
+        this.policySender.sendPolicyChanged(new PolicyChangedEvent(policyID, oldCoverage, newCoverage, oldPremium, newPremium, c));
     }
 }

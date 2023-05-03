@@ -139,7 +139,7 @@ public class PolicyService {
     public ResponseEntity<MappingJacksonValue> postPolicy(Long c_id, PolicyRequest pRequest) {
 		CustomerRequest customer = getCustomerRequest(c_id);
 		if(customer == null){
-			MappingJacksonValue errWrapper = new MappingJacksonValue(Collections.singletonMap("error", "Es existiert kein Customer mit der ID"));
+			MappingJacksonValue errWrapper = new MappingJacksonValue(Collections.singletonMap("error", "No Customer under this ID"));
 			return new ResponseEntity<MappingJacksonValue>(errWrapper,HttpStatusCode.valueOf(400));
 		}
 
@@ -172,12 +172,12 @@ public class PolicyService {
     public ResponseEntity<MappingJacksonValue> updatePolicy(Long c_id, Long p_id, PolicyRequest pRequest) {
 		CustomerRequest customer = getCustomerRequest(c_id);
 		if(customer == null){
-			MappingJacksonValue errWrapper = new MappingJacksonValue(Collections.singletonMap("error", "Es existiert kein Customer mit der ID"));
+			MappingJacksonValue errWrapper = new MappingJacksonValue(Collections.singletonMap("error", "No Customer under this ID"));
 			return new ResponseEntity<MappingJacksonValue>(errWrapper,HttpStatusCode.valueOf(404));
 		}
 		Optional<PolicyEntity> currentPolicy = pRepository.findById(p_id);
 		if(currentPolicy.isEmpty()){
-			MappingJacksonValue errWrapper = new MappingJacksonValue(Collections.singletonMap("error", "Es existiert keine Policy mit der ID, somit ist kein Update möglich"));
+			MappingJacksonValue errWrapper = new MappingJacksonValue(Collections.singletonMap("error", "No policy under this id"));
 			return new ResponseEntity<MappingJacksonValue>(errWrapper,HttpStatusCode.valueOf(404));
 		}
 		pRequest.getObjectOfInsurance().setId(currentPolicy.get().getObjectOfInsurance().getId());
@@ -208,64 +208,68 @@ public class PolicyService {
 	 * @return Zurück kommt ein Wert als double für die monatlichen Kosten
 	 */
     public double getPolicyPrice(PriceCalculationEntity body) throws ArithmeticException{
+		// Die Brechnung kommt aus der Katzenpreisberechnungstabelle von CapGemini, die im Git liegt
 		CustomerRequest customer = getCustomerRequest(body.getCustomerId());
-
 		
-		if (body.getPolicy().getObjectOfInsurance().getPersonality().contains("sehr verspielt") || ChronoUnit.YEARS.between(customer.getDateOfBirth(), LocalDate.now())<=18) return 0;
+		if (body.getPolicy().getObjectOfInsurance().getPersonality().contains("sehr verspielt") || ChronoUnit.YEARS.between(customer.getDateOfBirth(), LocalDate.now())<18) return 0;
 		//PriceCalculationEntity body
 		CatEntity cat = cRepository.findByRace(body.getPolicy().getObjectOfInsurance().getRace());
 		if (cat==null) return 0;
-		double grundpreis = 0;
-		double endbetrag = 0;
-		// Die Jahresdeckung dient als Startwert
 
-		// Ist die Katze Schwarz, ist die Versicherung Teurer
+		double baseprice = 0;
+		double totalprice = 0;
+
+		// Die 0,15% der Jahresdeckung/Coverage dient als Startwert 
+		// Ist die Katze Schwarz, ist die Versicherung teurer (0,2%)
 		switch(body.getPolicy().getObjectOfInsurance().getColor()){
 			case "schwarz":
-				grundpreis = 0.002*body.getPolicy().getCoverage();
+				baseprice = 0.002*body.getPolicy().getCoverage();
 				break;
 			default:
-				grundpreis = 0.0015*body.getPolicy().getCoverage();
+				baseprice = 0.0015*body.getPolicy().getCoverage();
 		}
-		//System.out.println("Grundpreis: " + grundpreis + " Endbetrag: " + endbetrag);
-		//  Der aktuelle Preis startet als Grundpreis. Später wird der Preis um Prozentteile des Grundpreises erhöht
-		endbetrag = grundpreis;
+		//System.out.println("baseprice: " + baseprice + " totalprice: " + totalprice);
+		//  Der aktuelle Preis startet als baseprice. Später wird der Preis um Prozentteile des baseprice erhöht
+		totalprice = baseprice;
+
 		// Erhöhe die Kosten um 5€ für jedes Kilo abweichung vom Durchschnittsgewichtes der Rasse
 		if(body.getPolicy().getObjectOfInsurance().getWeight() < cat.getLowerAverageWeight()){
-			endbetrag += Math.abs((cat.getLowerAverageWeight()-body.getPolicy().getObjectOfInsurance().getWeight())*5);
+			totalprice += Math.abs((cat.getLowerAverageWeight()-body.getPolicy().getObjectOfInsurance().getWeight())*5);
 		} else if (body.getPolicy().getObjectOfInsurance().getWeight() > cat.getUpperAverageAge()){
-			endbetrag += Math.abs((cat.getUpperAverageWeight()-body.getPolicy().getObjectOfInsurance().getWeight())*5);
+			totalprice += Math.abs((cat.getUpperAverageWeight()-body.getPolicy().getObjectOfInsurance().getWeight())*5);
 		}
-		// Erhöhe die Kosten um 1% des Grundpreises für jeden Punkt in der Krankheitsanfälligkeitsskala
-		endbetrag += cat.getIllnessFactor();
 
-		//System.out.println("Grundpreis: " + grundpreis + " Endbetrag: " + endbetrag);
+		// Erhöhe die Kosten des basepriceses um den Wert der Krankheitsanfälligkeitsskala (Skala von 1 bis 10)
+		totalprice += cat.getIllnessFactor();
+
+		//System.out.println("baseprice: " + baseprice + " totalprice: " + totalprice);
 
 		// Ist es eine Draußenkatze, steigere den Preis um 1% des Grundwertes
-		if(body.getPolicy().getObjectOfInsurance().getEnvironment() == "draussen") endbetrag += 0.1*grundpreis;
-		// Falls die Katze im oberen Quantil des Durchschnittsalters oder älter ist, erhöhe den Preis um 20% des Grundpreises
-		// Ist die Katze Jung, erhöhe den Preis um 5€
-		if(ChronoUnit.YEARS.between(body.getPolicy().getObjectOfInsurance().getDateOfBirth(), LocalDate.now())>(cat.getUpperAverageAge()*0.75)){
-			endbetrag += 0.2*grundpreis;
+		if(body.getPolicy().getObjectOfInsurance().getEnvironment() == "draussen") totalprice += 0.1*baseprice;
+
+		// Ist die Katze (zum Zeitpunkt des Vertragsschlusses) im oberen Quartil des Durchschnittsalterintervals, werden 20% des Grundpreises draufgeschlagen. 
+		// -10% vom Grundwert, wenn das Alter der Katze (zum Zeitpunkt des Vertragsschlusses) <=2 ist. 
+		double upperQuartil  = (cat.getUpperAverageAge()-cat.getLowerAverageAge())*0.75+cat.getLowerAverageAge();
+		if(ChronoUnit.YEARS.between(body.getPolicy().getObjectOfInsurance().getDateOfBirth(), LocalDate.now())>(upperQuartil)){
+			totalprice += 0.2*baseprice;
 		} else if (ChronoUnit.YEARS.between(body.getPolicy().getObjectOfInsurance().getDateOfBirth(), LocalDate.now())<=2){
-			endbetrag-=(grundpreis*0.1);
+			totalprice-=(baseprice*0.1);
 		};
+		//System.out.println("baseprice: " + baseprice + " totalprice: " + totalprice);
 
-		// Hat der Besitzer noch einen Hund, muss 30% des Grundpreises noch auf den Betrag drauf gerechnet werden
-		if(customer.isHasDog()) endbetrag += 0.3*grundpreis;
+		// Ist die Katze unkastriert, erhöhe den Preis um 5€
+		if(!body.getPolicy().getObjectOfInsurance().isCastrated()) totalprice+=5;
+		// Hat der Besitzer eine PLZ die mit 0 oder 1 startet, erhöhe den Preis um 5% des basepricees
+		if(customer.getAddress().getPostalCode()<20000) totalprice+= 0.05*baseprice;
 
-		//System.out.println("Grundpreis: " + grundpreis + " Endbetrag: " + endbetrag);
-
-		// Ist die Katze kastriert, erhöhe den Preis um 5€
-		if(!body.getPolicy().getObjectOfInsurance().isCastrated()) endbetrag+=5;
-		// Hat der Besitzer eine PLZ die mit 0 oder 1 startet, erhöhe den Preis um 5% des Grundpreises
-		if(customer.getAddress().getPostalCode()<20000) endbetrag+= 0.05*grundpreis;
+		// Hat der Besitzer noch einen Hund, muss 30% des basepricees noch auf den Betrag drauf gerechnet werden
+		if(customer.isdogOwner()) totalprice += 0.3*baseprice;
 
 		// Auf 2 Nachkommastellen runden
-		endbetrag = ((int)(endbetrag*100))/100;
-		//System.out.println("Grundpreis: " + grundpreis + " Endbetrag: " + endbetrag);
+		totalprice = ((int)(totalprice*100))/100;
+		//System.out.println("baseprice: " + baseprice + " totalprice: " + totalprice);
 
-		return endbetrag;
+		return totalprice;
 	}
 
 	/**

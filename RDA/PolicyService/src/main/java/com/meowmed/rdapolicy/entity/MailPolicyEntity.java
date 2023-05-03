@@ -16,6 +16,7 @@ public class MailPolicyEntity {
     private String phoneNumber;
     private String email;
     private String bankDetails;
+    private boolean dogOwner;
     private long pid;
     private long cid;
     private LocalDate startDate;
@@ -34,7 +35,7 @@ public class MailPolicyEntity {
     }
     public MailPolicyEntity(String firstName, String lastName, String title, String formOfAdress, String maritalStatus,
             LocalDate cDateOfBirth, String employmentStatus, String city, String street, int postalCode,
-            String phoneNumber, String email, String bankDetails, long pid, long cid, LocalDate startDate,
+            String phoneNumber, String email, String bankDetails, boolean dogOwner, long pid, long cid, LocalDate startDate,
             LocalDate endDate, int coverage, double premium, String name, String race, String color,
             LocalDate oDateOfBirth, boolean castrated, String personality, String environment, int weight) {
         this.firstName = firstName;
@@ -50,6 +51,7 @@ public class MailPolicyEntity {
         this.phoneNumber = phoneNumber;
         this.email = email;
         this.bankDetails = bankDetails;
+        this.dogOwner = dogOwner;
         this.pid = pid;
         this.cid = cid;
         this.startDate = startDate;
@@ -79,6 +81,7 @@ public class MailPolicyEntity {
         this.phoneNumber = cRequest.getPhoneNumber();
         this.email = cRequest.getEmail();
         this.bankDetails = cRequest.getBankDetails();
+        this.dogOwner = cRequest.isdogOwner();
         this.pid = entity.getId();
         this.cid = entity.getC_id();
         this.startDate = entity.getStartDate();
@@ -171,6 +174,12 @@ public class MailPolicyEntity {
     }
     public void setBankDetails(String bankDetails) {
         this.bankDetails = bankDetails;
+    }
+    public boolean isDogOwner() {
+        return dogOwner;
+    }
+    public void setDogOwner(boolean dogOwner) {
+        this.dogOwner = dogOwner;
     }
     public long getPid() {
         return pid;
@@ -273,6 +282,7 @@ public class MailPolicyEntity {
         result = prime * result + ((phoneNumber == null) ? 0 : phoneNumber.hashCode());
         result = prime * result + ((email == null) ? 0 : email.hashCode());
         result = prime * result + ((bankDetails == null) ? 0 : bankDetails.hashCode());
+        result = prime * result + (dogOwner ? 1231 : 1237);
         result = prime * result + (int) (pid ^ (pid >>> 32));
         result = prime * result + (int) (cid ^ (cid >>> 32));
         result = prime * result + ((startDate == null) ? 0 : startDate.hashCode());
@@ -362,6 +372,8 @@ public class MailPolicyEntity {
                 return false;
         } else if (!bankDetails.equals(other.bankDetails))
             return false;
+        if (dogOwner != other.dogOwner)
+            return false;
         if (pid != other.pid)
             return false;
         if (cid != other.cid)
@@ -422,13 +434,10 @@ public class MailPolicyEntity {
                 + ", formOfAdress=" + formOfAdress + ", maritalStatus=" + maritalStatus + ", cDateOfBirth="
                 + cDateOfBirth + ", employmentStatus=" + employmentStatus + ", city=" + city + ", street=" + street
                 + ", postalCode=" + postalCode + ", phoneNumber=" + phoneNumber + ", email=" + email + ", bankDetails="
-                + bankDetails + ", pid=" + pid + ", cid=" + cid + ", startDate=" + startDate + ", endDate=" + endDate
-                + ", coverage=" + coverage + ", premium=" + premium + ", name=" + name + ", race=" + race + ", color="
-                + color + ", oDateOfBirth=" + oDateOfBirth + ", castrated=" + castrated + ", personality=" + personality
-                + ", environment=" + environment + ", weight=" + weight + "]";
+                + bankDetails + ", dogOwner=" + dogOwner + ", pid=" + pid + ", cid=" + cid + ", startDate=" + startDate
+                + ", endDate=" + endDate + ", coverage=" + coverage + ", premium=" + premium + ", name=" + name
+                + ", race=" + race + ", color=" + color + ", oDateOfBirth=" + oDateOfBirth + ", castrated=" + castrated
+                + ", personality=" + personality + ", environment=" + environment + ", weight=" + weight + "]";
     }
-
-    
-    
-    
+        
 }
