@@ -10,7 +10,7 @@ export const handler = {
   async POST(req: Request, _: HandlerContext) {
     const form = await req.formData();
     const customer = deserializeCustomer(form);
-    customerClient.createCustomer(customer);
+    await customerClient.createCustomer(customer);
     const base = new URL(req.url).origin;
     return Response.redirect(new URL("/", base), 303);
   },

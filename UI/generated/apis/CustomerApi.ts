@@ -196,7 +196,7 @@ export class CustomerApiResponseProcessor {
             ) as Error;
             throw new ApiException<Error>(response.httpStatusCode, "invalid customer data", body, response.headers);
         }
-        if (isCodeInRange("500", response.httpStatusCode)) {
+        if (isCodeInRange("0", response.httpStatusCode)) {
             const body: { [key: string]: any; } = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
                 "{ [key: string]: any; }", ""
@@ -235,7 +235,7 @@ export class CustomerApiResponseProcessor {
         if (isCodeInRange("404", response.httpStatusCode)) {
             throw new ApiException<undefined>(response.httpStatusCode, "no customer at this location", undefined, response.headers);
         }
-        if (isCodeInRange("500", response.httpStatusCode)) {
+        if (isCodeInRange("0", response.httpStatusCode)) {
             const body: { [key: string]: any; } = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
                 "{ [key: string]: any; }", ""
@@ -278,7 +278,7 @@ export class CustomerApiResponseProcessor {
             ) as Error;
             throw new ApiException<Error>(response.httpStatusCode, "invalid fields parameter", body, response.headers);
         }
-        if (isCodeInRange("500", response.httpStatusCode)) {
+        if (isCodeInRange("0", response.httpStatusCode)) {
             const body: { [key: string]: any; } = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
                 "{ [key: string]: any; }", ""
@@ -320,7 +320,7 @@ export class CustomerApiResponseProcessor {
             ) as Error;
             throw new ApiException<Error>(response.httpStatusCode, "invalid customer data", body, response.headers);
         }
-        if (isCodeInRange("500", response.httpStatusCode)) {
+        if (isCodeInRange("0", response.httpStatusCode)) {
             const body: { [key: string]: any; } = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
                 "{ [key: string]: any; }", ""

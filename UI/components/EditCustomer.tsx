@@ -16,7 +16,7 @@ export function EditCustomer(props: FormProps) {
         options={FormOfAddressValues}
       >
       </Select>
-      <Select name="title" labeltext="Anrede" options={TitleValues}>
+      <Select name="title" labeltext="Titel" options={TitleValues}>
       </Select>
       <Input type="text" name="firstName" labeltext="Vorname">
       </Input>

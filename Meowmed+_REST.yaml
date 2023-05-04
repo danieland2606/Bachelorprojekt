@@ -30,7 +30,7 @@ paths:
               $ref: '#/components/links/updateCustomer'
         400:
           $ref: '#/components/responses/InvalidFields'
-        500:
+        default:
           $ref: '#/components/responses/UnknownError'
     post:
       operationId: createCustomer
@@ -53,7 +53,7 @@ paths:
               $ref: '#/components/links/updateCustomer'
         400:
           $ref: '#/components/responses/InvalidCustomer'
-        500:
+        default:
           $ref: '#/components/responses/UnknownError'
   /customer/{customerId}:
     parameters:
@@ -72,7 +72,7 @@ paths:
                 $ref: '#/components/schemas/CustomerAllRequired'
         404:
           description: no customer at this location
-        500:
+        default:
           $ref: '#/components/responses/UnknownError'
     put:
       operationId: updateCustomer
@@ -88,7 +88,7 @@ paths:
           description: no customer at this location
         400:
           $ref: '#/components/responses/InvalidCustomer'
-        500:
+        default:
           $ref: '#/components/responses/UnknownError'
   /customer/{customerId}/policy:
     parameters:
@@ -119,7 +119,7 @@ paths:
               $ref: '#/components/links/updatePolicy'
         400:
           $ref: '#/components/responses/InvalidFields'
-        500:
+        default:
           $ref: '#/components/responses/UnknownError'
     post:
       operationId: createPolicy
@@ -142,7 +142,7 @@ paths:
               $ref: '#/components/links/updatePolicy'
         400:
           $ref: '#/components/responses/InvalidPolicy'
-        500:
+        default:
           $ref: '#/components/responses/UnknownError'
   /customer/{customerId}/policy/{policyId}:
     parameters:
@@ -166,7 +166,7 @@ paths:
                 $ref: '#/components/schemas/PolicyAllRequired'
         404:
           description: no policy at this location
-        500:
+        default:
           $ref: '#/components/responses/UnknownError'
     put:
       operationId: updatePolicy
@@ -182,7 +182,7 @@ paths:
           description: no policy at this location
         400:
           $ref: '#/components/responses/InvalidPolicy'
-        500:
+        default:
           $ref: '#/components/responses/UnknownError'
   /policyprice:
     post:
@@ -214,7 +214,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-        500:
+        default:
           $ref: '#/components/responses/UnknownError'
 components:
   parameters:
@@ -271,8 +271,16 @@ components:
       content:
         application/json:
           schema:
-            type: object
-            additionalProperties: true
+            $ref: '#/components/schemas/UnknownError'
+        application/xml:
+          schema:
+            $ref: '#/components/schemas/UnknownError'
+        text/plain:
+          schema:
+            type: string
+        text/html:
+          schema:
+            type: string
     InvalidCustomer:
       description: invalid customer data
       content:
@@ -324,6 +332,11 @@ components:
           description: 'short description of error condition'
       required:
         - error
+    UnknownError:
+      type: object
+      additionalProperties: true
+      xml:
+        name: Error
     Customer:
       type: object
       properties:

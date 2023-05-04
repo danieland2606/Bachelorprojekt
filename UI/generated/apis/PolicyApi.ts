@@ -271,7 +271,7 @@ export class PolicyApiResponseProcessor {
             ) as Error;
             throw new ApiException<Error>(response.httpStatusCode, "invalid customerId or policy data", body, response.headers);
         }
-        if (isCodeInRange("500", response.httpStatusCode)) {
+        if (isCodeInRange("0", response.httpStatusCode)) {
             const body: { [key: string]: any; } = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
                 "{ [key: string]: any; }", ""
@@ -314,7 +314,7 @@ export class PolicyApiResponseProcessor {
             ) as Error;
             throw new ApiException<Error>(response.httpStatusCode, "invalid policy data", body, response.headers);
         }
-        if (isCodeInRange("500", response.httpStatusCode)) {
+        if (isCodeInRange("0", response.httpStatusCode)) {
             const body: { [key: string]: any; } = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
                 "{ [key: string]: any; }", ""
@@ -353,7 +353,7 @@ export class PolicyApiResponseProcessor {
         if (isCodeInRange("404", response.httpStatusCode)) {
             throw new ApiException<undefined>(response.httpStatusCode, "no policy at this location", undefined, response.headers);
         }
-        if (isCodeInRange("500", response.httpStatusCode)) {
+        if (isCodeInRange("0", response.httpStatusCode)) {
             const body: { [key: string]: any; } = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
                 "{ [key: string]: any; }", ""
@@ -396,7 +396,7 @@ export class PolicyApiResponseProcessor {
             ) as Error;
             throw new ApiException<Error>(response.httpStatusCode, "invalid fields parameter", body, response.headers);
         }
-        if (isCodeInRange("500", response.httpStatusCode)) {
+        if (isCodeInRange("0", response.httpStatusCode)) {
             const body: { [key: string]: any; } = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
                 "{ [key: string]: any; }", ""
@@ -438,7 +438,7 @@ export class PolicyApiResponseProcessor {
             ) as Error;
             throw new ApiException<Error>(response.httpStatusCode, "invalid policy data", body, response.headers);
         }
-        if (isCodeInRange("500", response.httpStatusCode)) {
+        if (isCodeInRange("0", response.httpStatusCode)) {
             const body: { [key: string]: any; } = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
                 "{ [key: string]: any; }", ""

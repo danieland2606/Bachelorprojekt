@@ -57,7 +57,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: application/json
- - **Accept**: application/json
+ - **Accept**: application/json, application/xml, text/plain, text/html
 
 
 ### HTTP response details
@@ -65,7 +65,7 @@ No authorization required
 |-------------|-------------|------------------|
 **200** | price calculated |  -  |
 **400** | invalid customerId or policy data |  -  |
-**500** | unexpected error |  -  |
+**0** | unexpected error |  -  |
 
 [[Back to top]](#) [[Back to API list]](README.md#documentation-for-api-endpoints) [[Back to Model list]](README.md#documentation-for-models) [[Back to README]](README.md)
 
@@ -115,7 +115,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: application/json
- - **Accept**: application/json
+ - **Accept**: application/json, application/xml, text/plain, text/html
 
 
 ### HTTP response details
@@ -123,7 +123,7 @@ No authorization required
 |-------------|-------------|------------------|
 **201** | policy created |  -  |
 **400** | invalid policy data |  -  |
-**500** | unexpected error |  -  |
+**0** | unexpected error |  -  |
 
 [[Back to top]](#) [[Back to API list]](README.md#documentation-for-api-endpoints) [[Back to Model list]](README.md#documentation-for-models) [[Back to README]](README.md)
 
@@ -173,7 +173,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/json
+ - **Accept**: application/json, application/xml, text/plain, text/html
 
 
 ### HTTP response details
@@ -181,7 +181,7 @@ No authorization required
 |-------------|-------------|------------------|
 **200** | policy found |  -  |
 **404** | no policy at this location |  -  |
-**500** | unexpected error |  -  |
+**0** | unexpected error |  -  |
 
 [[Back to top]](#) [[Back to API list]](README.md#documentation-for-api-endpoints) [[Back to Model list]](README.md#documentation-for-models) [[Back to README]](README.md)
 
@@ -233,7 +233,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/json
+ - **Accept**: application/json, application/xml, text/plain, text/html
 
 
 ### HTTP response details
@@ -241,7 +241,7 @@ No authorization required
 |-------------|-------------|------------------|
 **200** | success |  -  |
 **400** | invalid fields parameter |  -  |
-**500** | unexpected error |  -  |
+**0** | unexpected error |  -  |
 
 [[Back to top]](#) [[Back to API list]](README.md#documentation-for-api-endpoints) [[Back to Model list]](README.md#documentation-for-models) [[Back to README]](README.md)
 
@@ -294,7 +294,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: application/json
- - **Accept**: application/json
+ - **Accept**: application/json, application/xml, text/plain, text/html
 
 
 ### HTTP response details
@@ -303,7 +303,7 @@ No authorization required
 **200** | policy updated |  -  |
 **404** | no policy at this location |  -  |
 **400** | invalid policy data |  -  |
-**500** | unexpected error |  -  |
+**0** | unexpected error |  -  |
 
 [[Back to top]](#) [[Back to API list]](README.md#documentation-for-api-endpoints) [[Back to Model list]](README.md#documentation-for-models) [[Back to README]](README.md)
 

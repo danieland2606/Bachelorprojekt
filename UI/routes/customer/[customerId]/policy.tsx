@@ -15,7 +15,7 @@ export const handler = {
     const customerId = Number.parseInt(ctx.params.customerId);
     const form = await req.formData();
     const policy = deserializePolicy(form);
-    policyClient.createPolicy(customerId, policy);
+    await policyClient.createPolicy(customerId, policy);
     const base = new URL(req.url).origin;
     return Response.redirect(
       new URL(`/customer/${customerId}`, base),
@@ -33,6 +33,7 @@ export default function CreatePolicy({ params }: PageProps) {
         action={`/customer/${params.customerId}/policy`}
         method="post"
         customerId={params.customerId}
+        allrequired
       >
         <iframe
           name="premium-calc"

@@ -135,13 +135,24 @@ fetch('/customer',
 ]
 ```
 
+> default Response
+
+```xml
+<?xml version="1.0" encoding="UTF-8" ?>
+<Error/>
+```
+
+```
+"string"
+```
+
 <h3 id="getcustomerlist-responses">Responses</h3>
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|success|Inline|
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|invalid fields parameter|[Error](#schemaerror)|
-|500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|unexpected error|Inline|
+|default|Default|unexpected error|string|
 
 <h3 id="getcustomerlist-responseschema">Response Schema</h3>
 
@@ -299,15 +310,24 @@ fetch('/customer',
 }
 ```
 
+> default Response
+
+```xml
+<?xml version="1.0" encoding="UTF-8" ?>
+<Error/>
+```
+
+```
+"string"
+```
+
 <h3 id="createcustomer-responses">Responses</h3>
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
 |201|[Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)|customer created|[ID](#schemaid)|
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|invalid customer data|[Error](#schemaerror)|
-|500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|unexpected error|Inline|
-
-<h3 id="createcustomer-responseschema">Response Schema</h3>
+|default|Default|unexpected error|string|
 
 <aside class="success">
 This operation does not require authentication
@@ -404,15 +424,24 @@ fetch('/customer/{customerId}',
 }
 ```
 
+> default Response
+
+```xml
+<?xml version="1.0" encoding="UTF-8" ?>
+<Error/>
+```
+
+```
+"string"
+```
+
 <h3 id="getcustomer-responses">Responses</h3>
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|customer found|[CustomerAllRequired](#schemacustomerallrequired)|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|no customer at this location|None|
-|500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|unexpected error|Inline|
-
-<h3 id="getcustomer-responseschema">Response Schema</h3>
+|default|Default|unexpected error|string|
 
 <aside class="success">
 This operation does not require authentication
@@ -537,6 +566,17 @@ fetch('/customer/{customerId}',
 }
 ```
 
+> default Response
+
+```xml
+<?xml version="1.0" encoding="UTF-8" ?>
+<Error/>
+```
+
+```
+"string"
+```
+
 <h3 id="updatecustomer-responses">Responses</h3>
 
 |Status|Meaning|Description|Schema|
@@ -544,9 +584,7 @@ fetch('/customer/{customerId}',
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|customer updated|None|
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|invalid customer data|[Error](#schemaerror)|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|no customer at this location|None|
-|500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|unexpected error|Inline|
-
-<h3 id="updatecustomer-responseschema">Response Schema</h3>
+|default|Default|unexpected error|string|
 
 <aside class="success">
 This operation does not require authentication
@@ -664,13 +702,24 @@ fetch('/customer/{customerId}/policy',
 ]
 ```
 
+> default Response
+
+```xml
+<?xml version="1.0" encoding="UTF-8" ?>
+<Error/>
+```
+
+```
+"string"
+```
+
 <h3 id="getpolicylist-responses">Responses</h3>
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|success|Inline|
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|invalid fields parameter|[Error](#schemaerror)|
-|500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|unexpected error|Inline|
+|default|Default|unexpected error|string|
 
 <h3 id="getpolicylist-responseschema">Response Schema</h3>
 
@@ -835,15 +884,24 @@ fetch('/customer/{customerId}/policy',
 }
 ```
 
+> default Response
+
+```xml
+<?xml version="1.0" encoding="UTF-8" ?>
+<Error/>
+```
+
+```
+"string"
+```
+
 <h3 id="createpolicy-responses">Responses</h3>
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
 |201|[Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)|policy created|[ID](#schemaid)|
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|invalid policy data|[Error](#schemaerror)|
-|500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|unexpected error|Inline|
-
-<h3 id="createpolicy-responseschema">Response Schema</h3>
+|default|Default|unexpected error|string|
 
 <aside class="success">
 This operation does not require authentication
@@ -939,15 +997,24 @@ fetch('/customer/{customerId}/policy/{policyId}',
 }
 ```
 
+> default Response
+
+```xml
+<?xml version="1.0" encoding="UTF-8" ?>
+<Error/>
+```
+
+```
+"string"
+```
+
 <h3 id="getpolicy-responses">Responses</h3>
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|policy found|[PolicyAllRequired](#schemapolicyallrequired)|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|no policy at this location|None|
-|500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|unexpected error|Inline|
-
-<h3 id="getpolicy-responseschema">Response Schema</h3>
+|default|Default|unexpected error|string|
 
 <aside class="success">
 This operation does not require authentication
@@ -1067,6 +1134,17 @@ fetch('/customer/{customerId}/policy/{policyId}',
 }
 ```
 
+> default Response
+
+```xml
+<?xml version="1.0" encoding="UTF-8" ?>
+<Error/>
+```
+
+```
+"string"
+```
+
 <h3 id="updatepolicy-responses">Responses</h3>
 
 |Status|Meaning|Description|Schema|
@@ -1074,9 +1152,7 @@ fetch('/customer/{customerId}/policy/{policyId}',
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|policy updated|None|
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|invalid policy data|[Error](#schemaerror)|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|no policy at this location|None|
-|500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|unexpected error|Inline|
-
-<h3 id="updatepolicy-responseschema">Response Schema</h3>
+|default|Default|unexpected error|string|
 
 <aside class="success">
 This operation does not require authentication
@@ -1200,13 +1276,24 @@ fetch('/policyprice',
 }
 ```
 
+> default Response
+
+```xml
+<?xml version="1.0" encoding="UTF-8" ?>
+<Error/>
+```
+
+```
+"string"
+```
+
 <h3 id="calcpolicyprice-responses">Responses</h3>
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|price calculated|Inline|
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|invalid customerId or policy data|[Error](#schemaerror)|
-|500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|unexpected error|Inline|
+|default|Default|unexpected error|string|
 
 <h3 id="calcpolicyprice-responseschema">Response Schema</h3>
 
@@ -1261,6 +1348,22 @@ This operation does not require authentication
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
 |error|string|true|none|short description of error condition|
+
+<h2 id="tocS_UnknownError">UnknownError</h2>
+<!-- backwards compatibility -->
+<a id="schemaunknownerror"></a>
+<a id="schema_UnknownError"></a>
+<a id="tocSunknownerror"></a>
+<a id="tocsunknownerror"></a>
+
+```json
+{}
+
+```
+
+### Properties
+
+*None*
 
 <h2 id="tocS_Customer">Customer</h2>
 <!-- backwards compatibility -->

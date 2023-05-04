@@ -53,7 +53,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: application/json
- - **Accept**: application/json
+ - **Accept**: application/json, application/xml, text/plain, text/html
 
 
 ### HTTP response details
@@ -61,7 +61,7 @@ No authorization required
 |-------------|-------------|------------------|
 **201** | customer created |  -  |
 **400** | invalid customer data |  -  |
-**500** | unexpected error |  -  |
+**0** | unexpected error |  -  |
 
 [[Back to top]](#) [[Back to API list]](README.md#documentation-for-api-endpoints) [[Back to Model list]](README.md#documentation-for-models) [[Back to README]](README.md)
 
@@ -108,7 +108,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/json
+ - **Accept**: application/json, application/xml, text/plain, text/html
 
 
 ### HTTP response details
@@ -116,7 +116,7 @@ No authorization required
 |-------------|-------------|------------------|
 **200** | customer found |  -  |
 **404** | no customer at this location |  -  |
-**500** | unexpected error |  -  |
+**0** | unexpected error |  -  |
 
 [[Back to top]](#) [[Back to API list]](README.md#documentation-for-api-endpoints) [[Back to Model list]](README.md#documentation-for-models) [[Back to README]](README.md)
 
@@ -165,7 +165,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/json
+ - **Accept**: application/json, application/xml, text/plain, text/html
 
 
 ### HTTP response details
@@ -173,7 +173,7 @@ No authorization required
 |-------------|-------------|------------------|
 **200** | success |  -  |
 **400** | invalid fields parameter |  -  |
-**500** | unexpected error |  -  |
+**0** | unexpected error |  -  |
 
 [[Back to top]](#) [[Back to API list]](README.md#documentation-for-api-endpoints) [[Back to Model list]](README.md#documentation-for-models) [[Back to README]](README.md)
 
@@ -223,7 +223,7 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: application/json
- - **Accept**: application/json
+ - **Accept**: application/json, application/xml, text/plain, text/html
 
 
 ### HTTP response details
@@ -232,7 +232,7 @@ No authorization required
 **200** | customer updated |  -  |
 **404** | no customer at this location |  -  |
 **400** | invalid customer data |  -  |
-**500** | unexpected error |  -  |
+**0** | unexpected error |  -  |
 
 [[Back to top]](#) [[Back to API list]](README.md#documentation-for-api-endpoints) [[Back to Model list]](README.md#documentation-for-models) [[Back to README]](README.md)
 
