@@ -6,8 +6,10 @@ services:
         mode: test
       context: .
       dockerfile: Dockerfile
+    env_file:
+      - ui.env
     container_name: ui-services
     networks:
       - "default"
     ports:
-      - 80:80
+      - 80:8000

@@ -1,0 +1,18 @@
+{
+  "firstName": "John",
+  "lastName": "Doe",
+  "formOfAddress": "Mr",
+  "title": "",
+  "maritalStatus": "single",
+  "dateOfBirth": "2000-12-30",
+  "dogOwner": false,
+  "employmentStatus": "employed",
+  "address": {
+    "city": "Hannover",
+    "street": "Berliner Allee 100",
+    "postalCode": "30855"
+  },
+  "phoneNumber": "+4951177488375",
+  "email": "example@aol.com",
+  "bankDetails": "IE12BOFI90000112345678"
+}

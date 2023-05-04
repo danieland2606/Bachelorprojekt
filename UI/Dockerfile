@@ -1,22 +1,25 @@
 ARG mode='prod'
 
-FROM httpd:2.4-alpine AS base
-COPY ./site/index.html ./site/meowmed.css ./site/src.js ./site/favicon.ico /usr/local/apache2/htdocs/
-COPY ./site/framework /usr/local/apache2/htdocs/framework
-COPY ./site/assets /usr/local/apache2/htdocs/assets
-COPY ./httpd.conf /usr/local/apache2/conf/
-COPY ./cors.conf /usr/local/apache2/conf/extra/
+FROM denoland/deno:alpine-1.33.0 AS base
+WORKDIR /app
+COPY ./components ./components
+COPY ./generated ./generated
+COPY ./islands ./islands
+COPY ./routes ./routes
+COPY ./static ./static
+COPY ./util ./util
+COPY ./main.ts ./fresh.gen.ts ./import_map.json ./deno.json ./
 
 FROM base AS meowmed-ui-test
-COPY ./site/fetch.js /usr/local/apache2/htdocs/
-COPY ./site/test_data /usr/local/apache2/htdocs/test_data
+RUN rm /app/util/client_prod.ts
 
 FROM base AS meowmed-ui-prod
 ARG customerService
 ARG policyService
-COPY ./site/fetch_prod.js /usr/local/apache2/htdocs/fetch.js
-RUN sed -i s~\${customerService}~$customerService~ /usr/local/apache2/htdocs/fetch.js
-RUN sed -i s~\${policyService}~$policyService~ /usr/local/apache2/htdocs/fetch.js
+RUN mv ./util/client_prod.ts ./util/client.ts
+RUN sed -i s~\${customerService}~$customerService~ ./util/client.ts
+RUN sed -i s~\${policyService}~$policyService~ ./util/client.ts
 
 FROM meowmed-ui-${mode} AS meowmed-ui
-EXPOSE 80
+EXPOSE 8000
+CMD ["run", "-A", "main.ts"]
