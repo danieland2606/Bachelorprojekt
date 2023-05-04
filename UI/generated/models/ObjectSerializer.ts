@@ -1,7 +1,6 @@
 export * from '../models/Address.ts';
 export * from '../models/CalcPolicyPrice200Response.ts';
 export * from '../models/CatRace.ts';
-export * from '../models/CreateCustomer201Response.ts';
 export * from '../models/Customer.ts';
 export * from '../models/CustomerAllRequired.ts';
 export * from '../models/CustomerAllRequiredAllOf.ts';
@@ -11,9 +10,10 @@ export * from '../models/Environment.ts';
 export * from '../models/FormOfAddress.ts';
 export * from '../models/FurColor.ts';
 export * from '../models/GetCustomerList200ResponseInner.ts';
-export * from '../models/GetCustomerList400Response.ts';
 export * from '../models/GetPolicyList200ResponseInner.ts';
+export * from '../models/ID.ts';
 export * from '../models/MaritalStatus.ts';
+export * from '../models/ModelError.ts';
 export * from '../models/ObjectOfInsurance.ts';
 export * from '../models/Personality.ts';
 export * from '../models/Policy.ts';
@@ -26,7 +26,6 @@ export * from '../models/Title.ts';
 import { Address } from '../models/Address.ts';
 import { CalcPolicyPrice200Response } from '../models/CalcPolicyPrice200Response.ts';
 import { CatRace } from '../models/CatRace.ts';
-import { CreateCustomer201Response } from '../models/CreateCustomer201Response.ts';
 import { Customer              } from '../models/Customer.ts';
 import { CustomerAllRequired              } from '../models/CustomerAllRequired.ts';
 import { CustomerAllRequiredAllOf } from '../models/CustomerAllRequiredAllOf.ts';
@@ -36,9 +35,10 @@ import { Environment } from '../models/Environment.ts';
 import { FormOfAddress } from '../models/FormOfAddress.ts';
 import { FurColor } from '../models/FurColor.ts';
 import { GetCustomerList200ResponseInner              } from '../models/GetCustomerList200ResponseInner.ts';
-import { GetCustomerList400Response } from '../models/GetCustomerList400Response.ts';
 import { GetPolicyList200ResponseInner } from '../models/GetPolicyList200ResponseInner.ts';
+import { ID } from '../models/ID.ts';
 import { MaritalStatus } from '../models/MaritalStatus.ts';
+import { ModelError } from '../models/ModelError.ts';
 import { ObjectOfInsurance         } from '../models/ObjectOfInsurance.ts';
 import { Personality } from '../models/Personality.ts';
 import { Policy } from '../models/Policy.ts';
@@ -83,13 +83,13 @@ let enumsMap: Set<string> = new Set<string>([
 let typeMap: {[index: string]: any} = {
     "Address": Address,
     "CalcPolicyPrice200Response": CalcPolicyPrice200Response,
-    "CreateCustomer201Response": CreateCustomer201Response,
     "Customer": Customer,
     "CustomerAllRequired": CustomerAllRequired,
     "CustomerAllRequiredAllOf": CustomerAllRequiredAllOf,
     "GetCustomerList200ResponseInner": GetCustomerList200ResponseInner,
-    "GetCustomerList400Response": GetCustomerList400Response,
     "GetPolicyList200ResponseInner": GetPolicyList200ResponseInner,
+    "ID": ID,
+    "ModelError": ModelError,
     "ObjectOfInsurance": ObjectOfInsurance,
     "Policy": Policy,
     "PolicyAllRequired": PolicyAllRequired,

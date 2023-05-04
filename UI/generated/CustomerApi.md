@@ -11,7 +11,7 @@ Method | HTTP request | Description
 
 
 # **createCustomer**
-> CreateCustomer201Response createCustomer(customerAllRequired)
+> ID createCustomer(customerAllRequired)
 
 
 ### Example
@@ -44,7 +44,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-**CreateCustomer201Response**
+**ID**
 
 ### Authorization
 
@@ -60,7 +60,7 @@ No authorization required
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **201** | customer created |  -  |
-**400** | incorrect request |  -  |
+**400** | invalid customer data |  -  |
 **500** | unexpected error |  -  |
 
 [[Back to top]](#) [[Back to API list]](README.md#documentation-for-api-endpoints) [[Back to Model list]](README.md#documentation-for-models) [[Back to README]](README.md)
@@ -135,7 +135,7 @@ const configuration = .createConfiguration();
 const apiInstance = new .CustomerApi(configuration);
 
 let body:.CustomerApiGetCustomerListRequest = {
-  // Set<CustomerPropertyNames> | A filter for which properties of Customer should be transmitted. If no fields are specified, only id is transmitted. (optional)
+  // Set<CustomerPropertyNames> | A filter for which properties of Customer should be transmitted. If no fields are specified, only id is transmitted. Using address and one or more of its sub properties in the same query is a semantic error. (optional)
   fields: [
     "firstName",
   ],
@@ -151,7 +151,7 @@ apiInstance.getCustomerList(body).then((data:any) => {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **fields** | **Set&lt;CustomerPropertyNames&gt;** | A filter for which properties of Customer should be transmitted. If no fields are specified, only id is transmitted. | (optional) defaults to undefined
+ **fields** | **Set&lt;CustomerPropertyNames&gt;** | A filter for which properties of Customer should be transmitted. If no fields are specified, only id is transmitted. Using address and one or more of its sub properties in the same query is a semantic error. | (optional) defaults to undefined
 
 
 ### Return type
@@ -172,7 +172,7 @@ No authorization required
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **200** | success |  -  |
-**400** | incorrect request |  -  |
+**400** | invalid fields parameter |  -  |
 **500** | unexpected error |  -  |
 
 [[Back to top]](#) [[Back to API list]](README.md#documentation-for-api-endpoints) [[Back to Model list]](README.md#documentation-for-models) [[Back to README]](README.md)
@@ -231,7 +231,7 @@ No authorization required
 |-------------|-------------|------------------|
 **200** | customer updated |  -  |
 **404** | no customer at this location |  -  |
-**400** | incorrect request |  -  |
+**400** | invalid customer data |  -  |
 **500** | unexpected error |  -  |
 
 [[Back to top]](#) [[Back to API list]](README.md#documentation-for-api-endpoints) [[Back to Model list]](README.md#documentation-for-models) [[Back to README]](README.md)

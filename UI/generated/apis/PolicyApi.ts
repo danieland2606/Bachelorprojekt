@@ -9,9 +9,8 @@ import {SecurityAuthentication} from '../auth/auth.ts';
 
 
 import { CalcPolicyPrice200Response } from '../models/CalcPolicyPrice200Response.ts';
-import { CreateCustomer201Response } from '../models/CreateCustomer201Response.ts';
-import { GetCustomerList400Response } from '../models/GetCustomerList400Response.ts';
 import { GetPolicyList200ResponseInner } from '../models/GetPolicyList200ResponseInner.ts';
+import { ID } from '../models/ID.ts';
 import { PolicyAllRequired } from '../models/PolicyAllRequired.ts';
 import { PolicyCalc } from '../models/PolicyCalc.ts';
 import { PolicyPropertyNames } from '../models/PolicyPropertyNames.ts';
@@ -153,7 +152,7 @@ export class PolicyApiRequestFactory extends BaseAPIRequestFactory {
     /**
      * get a list of policies
      * @param customerId 
-     * @param fields A filter for which properties of Policy should be transmitted. If no fields are specified, only id is transmitted.
+     * @param fields A filter for which properties of Policy should be transmitted. If no fields are specified, only id is transmitted. Using objectOfInsurance and one or more of its sub properties in the same query is a semantic error.
      */
     public async getPolicyList(customerId: number, fields?: Set<PolicyPropertyNames>, _options?: Configuration): Promise<RequestContext> {
         let _config = _options || this.configuration;
@@ -266,14 +265,18 @@ export class PolicyApiResponseProcessor {
             return body;
         }
         if (isCodeInRange("400", response.httpStatusCode)) {
-            const body: GetCustomerList400Response = ObjectSerializer.deserialize(
+            const body: Error = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
-                "GetCustomerList400Response", ""
-            ) as GetCustomerList400Response;
-            throw new ApiException<GetCustomerList400Response>(response.httpStatusCode, "incorrect request", body, response.headers);
+                "Error", ""
+            ) as Error;
+            throw new ApiException<Error>(response.httpStatusCode, "invalid customerId or policy data", body, response.headers);
         }
         if (isCodeInRange("500", response.httpStatusCode)) {
-            throw new ApiException<undefined>(response.httpStatusCode, "unexpected error", undefined, response.headers);
+            const body: { [key: string]: any; } = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                "{ [key: string]: any; }", ""
+            ) as { [key: string]: any; };
+            throw new ApiException<{ [key: string]: any; }>(response.httpStatusCode, "unexpected error", body, response.headers);
         }
 
         // Work around for missing responses in specification, e.g. for petstore.yaml
@@ -295,32 +298,36 @@ export class PolicyApiResponseProcessor {
      * @params response Response returned by the server for a request to createPolicy
      * @throws ApiException if the response code was not in [200, 299]
      */
-     public async createPolicy(response: ResponseContext): Promise<CreateCustomer201Response > {
+     public async createPolicy(response: ResponseContext): Promise<ID > {
         const contentType = ObjectSerializer.normalizeMediaType(response.headers["content-type"]);
         if (isCodeInRange("201", response.httpStatusCode)) {
-            const body: CreateCustomer201Response = ObjectSerializer.deserialize(
+            const body: ID = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
-                "CreateCustomer201Response", ""
-            ) as CreateCustomer201Response;
+                "ID", ""
+            ) as ID;
             return body;
         }
         if (isCodeInRange("400", response.httpStatusCode)) {
-            const body: GetCustomerList400Response = ObjectSerializer.deserialize(
+            const body: Error = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
-                "GetCustomerList400Response", ""
-            ) as GetCustomerList400Response;
-            throw new ApiException<GetCustomerList400Response>(response.httpStatusCode, "incorrect request", body, response.headers);
+                "Error", ""
+            ) as Error;
+            throw new ApiException<Error>(response.httpStatusCode, "invalid policy data", body, response.headers);
         }
         if (isCodeInRange("500", response.httpStatusCode)) {
-            throw new ApiException<undefined>(response.httpStatusCode, "unexpected error", undefined, response.headers);
+            const body: { [key: string]: any; } = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                "{ [key: string]: any; }", ""
+            ) as { [key: string]: any; };
+            throw new ApiException<{ [key: string]: any; }>(response.httpStatusCode, "unexpected error", body, response.headers);
         }
 
         // Work around for missing responses in specification, e.g. for petstore.yaml
         if (response.httpStatusCode >= 200 && response.httpStatusCode <= 299) {
-            const body: CreateCustomer201Response = ObjectSerializer.deserialize(
+            const body: ID = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
-                "CreateCustomer201Response", ""
-            ) as CreateCustomer201Response;
+                "ID", ""
+            ) as ID;
             return body;
         }
 
@@ -347,7 +354,11 @@ export class PolicyApiResponseProcessor {
             throw new ApiException<undefined>(response.httpStatusCode, "no policy at this location", undefined, response.headers);
         }
         if (isCodeInRange("500", response.httpStatusCode)) {
-            throw new ApiException<undefined>(response.httpStatusCode, "unexpected error", undefined, response.headers);
+            const body: { [key: string]: any; } = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                "{ [key: string]: any; }", ""
+            ) as { [key: string]: any; };
+            throw new ApiException<{ [key: string]: any; }>(response.httpStatusCode, "unexpected error", body, response.headers);
         }
 
         // Work around for missing responses in specification, e.g. for petstore.yaml
@@ -379,14 +390,18 @@ export class PolicyApiResponseProcessor {
             return body;
         }
         if (isCodeInRange("400", response.httpStatusCode)) {
-            const body: GetCustomerList400Response = ObjectSerializer.deserialize(
+            const body: Error = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
-                "GetCustomerList400Response", ""
-            ) as GetCustomerList400Response;
-            throw new ApiException<GetCustomerList400Response>(response.httpStatusCode, "incorrect request", body, response.headers);
+                "Error", ""
+            ) as Error;
+            throw new ApiException<Error>(response.httpStatusCode, "invalid fields parameter", body, response.headers);
         }
         if (isCodeInRange("500", response.httpStatusCode)) {
-            throw new ApiException<undefined>(response.httpStatusCode, "unexpected error", undefined, response.headers);
+            const body: { [key: string]: any; } = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                "{ [key: string]: any; }", ""
+            ) as { [key: string]: any; };
+            throw new ApiException<{ [key: string]: any; }>(response.httpStatusCode, "unexpected error", body, response.headers);
         }
 
         // Work around for missing responses in specification, e.g. for petstore.yaml
@@ -417,14 +432,18 @@ export class PolicyApiResponseProcessor {
             throw new ApiException<undefined>(response.httpStatusCode, "no policy at this location", undefined, response.headers);
         }
         if (isCodeInRange("400", response.httpStatusCode)) {
-            const body: GetCustomerList400Response = ObjectSerializer.deserialize(
+            const body: Error = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
-                "GetCustomerList400Response", ""
-            ) as GetCustomerList400Response;
-            throw new ApiException<GetCustomerList400Response>(response.httpStatusCode, "incorrect request", body, response.headers);
+                "Error", ""
+            ) as Error;
+            throw new ApiException<Error>(response.httpStatusCode, "invalid policy data", body, response.headers);
         }
         if (isCodeInRange("500", response.httpStatusCode)) {
-            throw new ApiException<undefined>(response.httpStatusCode, "unexpected error", undefined, response.headers);
+            const body: { [key: string]: any; } = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                "{ [key: string]: any; }", ""
+            ) as { [key: string]: any; };
+            throw new ApiException<{ [key: string]: any; }>(response.httpStatusCode, "unexpected error", body, response.headers);
         }
 
         // Work around for missing responses in specification, e.g. for petstore.yaml

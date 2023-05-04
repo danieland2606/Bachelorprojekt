@@ -1,9 +1,9 @@
 import {
   CalcPolicyPrice200Response,
-  CreateCustomer201Response,
   CustomerAllRequired,
   GetCustomerList200ResponseInner,
   GetPolicyList200ResponseInner,
+  ID,
   PolicyAllRequired,
   PolicyCalc,
 } from "../generated/index.ts";
@@ -26,9 +26,9 @@ export const customerClient = {
     console.debug(JSON.stringify(customer));
     return ObjectSerializer.deserialize(
       await Promise.resolve(0),
-      "CreateCustomer201Response",
+      "ID",
       "",
-    ) as CreateCustomer201Response;
+    ) as ID;
   },
   updateCustomer: (_: number, customer: CustomerAllRequired) => {
     console.debug(JSON.stringify(customer));
@@ -53,9 +53,9 @@ export const policyClient = {
     console.debug(JSON.stringify(policy));
     return ObjectSerializer.deserialize(
       await Promise.resolve(0),
-      "CreateCustomer201Response",
+      "ID",
       "",
-    ) as CreateCustomer201Response;
+    ) as ID;
   },
   updatePolicy: (
     _1: number,

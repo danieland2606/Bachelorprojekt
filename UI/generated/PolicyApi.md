@@ -64,13 +64,13 @@ No authorization required
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **200** | price calculated |  -  |
-**400** | incorrect request |  -  |
+**400** | invalid customerId or policy data |  -  |
 **500** | unexpected error |  -  |
 
 [[Back to top]](#) [[Back to API list]](README.md#documentation-for-api-endpoints) [[Back to Model list]](README.md#documentation-for-models) [[Back to README]](README.md)
 
 # **createPolicy**
-> CreateCustomer201Response createPolicy(policyAllRequired)
+> ID createPolicy(policyAllRequired)
 
 
 ### Example
@@ -106,7 +106,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-**CreateCustomer201Response**
+**ID**
 
 ### Authorization
 
@@ -122,7 +122,7 @@ No authorization required
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **201** | policy created |  -  |
-**400** | incorrect request |  -  |
+**400** | invalid policy data |  -  |
 **500** | unexpected error |  -  |
 
 [[Back to top]](#) [[Back to API list]](README.md#documentation-for-api-endpoints) [[Back to Model list]](README.md#documentation-for-models) [[Back to README]](README.md)
@@ -202,7 +202,7 @@ const apiInstance = new .PolicyApi(configuration);
 let body:.PolicyApiGetPolicyListRequest = {
   // number
   customerId: 1,
-  // Set<PolicyPropertyNames> | A filter for which properties of Policy should be transmitted. If no fields are specified, only id is transmitted. (optional)
+  // Set<PolicyPropertyNames> | A filter for which properties of Policy should be transmitted. If no fields are specified, only id is transmitted. Using objectOfInsurance and one or more of its sub properties in the same query is a semantic error. (optional)
   fields: [
     "startDate",
   ],
@@ -219,7 +219,7 @@ apiInstance.getPolicyList(body).then((data:any) => {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **customerId** | [**number**] |  | defaults to undefined
- **fields** | **Set&lt;PolicyPropertyNames&gt;** | A filter for which properties of Policy should be transmitted. If no fields are specified, only id is transmitted. | (optional) defaults to undefined
+ **fields** | **Set&lt;PolicyPropertyNames&gt;** | A filter for which properties of Policy should be transmitted. If no fields are specified, only id is transmitted. Using objectOfInsurance and one or more of its sub properties in the same query is a semantic error. | (optional) defaults to undefined
 
 
 ### Return type
@@ -240,7 +240,7 @@ No authorization required
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **200** | success |  -  |
-**400** | incorrect request |  -  |
+**400** | invalid fields parameter |  -  |
 **500** | unexpected error |  -  |
 
 [[Back to top]](#) [[Back to API list]](README.md#documentation-for-api-endpoints) [[Back to Model list]](README.md#documentation-for-models) [[Back to README]](README.md)
@@ -302,7 +302,7 @@ No authorization required
 |-------------|-------------|------------------|
 **200** | policy updated |  -  |
 **404** | no policy at this location |  -  |
-**400** | incorrect request |  -  |
+**400** | invalid policy data |  -  |
 **500** | unexpected error |  -  |
 
 [[Back to top]](#) [[Back to API list]](README.md#documentation-for-api-endpoints) [[Back to Model list]](README.md#documentation-for-models) [[Back to README]](README.md)

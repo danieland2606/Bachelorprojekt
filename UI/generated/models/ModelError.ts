@@ -12,7 +12,7 @@
 
 import { HttpFile } from '../http/http.ts';
 
-export class GetCustomerList400Response {
+export class ModelError {
     /**
     * short description of error condition
     */
@@ -29,7 +29,7 @@ export class GetCustomerList400Response {
         }    ];
 
     static getAttributeTypeMap() {
-        return GetCustomerList400Response.attributeTypeMap;
+        return ModelError.attributeTypeMap;
     }
 
     public constructor() {

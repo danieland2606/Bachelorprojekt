@@ -1,4 +1,5 @@
 .gitignore
+.openapi-generator-ignore
 CustomerApi.md
 PolicyApi.md
 apis/CustomerApi.ts
@@ -15,7 +16,6 @@ middleware.ts
 models/Address.ts
 models/CalcPolicyPrice200Response.ts
 models/CatRace.ts
-models/CreateCustomer201Response.ts
 models/Customer.ts
 models/CustomerAllRequired.ts
 models/CustomerAllRequiredAllOf.ts
@@ -25,9 +25,10 @@ models/Environment.ts
 models/FormOfAddress.ts
 models/FurColor.ts
 models/GetCustomerList200ResponseInner.ts
-models/GetCustomerList400Response.ts
 models/GetPolicyList200ResponseInner.ts
+models/ID.ts
 models/MaritalStatus.ts
+models/ModelError.ts
 models/ObjectOfInsurance.ts
 models/ObjectSerializer.ts
 models/Personality.ts

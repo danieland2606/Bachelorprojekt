@@ -10,15 +10,7 @@ paths:
       tags:
         - customer
       parameters:
-        - in: query
-          name: fields
-          schema:
-            $ref: '#/components/schemas/CustomerFields'
-          style: form
-          explode: false
-          description: >-
-            A filter for which properties of Customer should be transmitted. If
-            no fields are specified, only id is transmitted.
+        - $ref: '#/components/parameters/CustomerFields'
       responses:
         200:
           description: success
@@ -33,53 +25,36 @@ paths:
                         - id
           links:
             get:
-              operationId: getCustomer
-              parameters:
-                customerId: '$response.body#/id'
+              $ref: '#/components/links/getCustomer'
             put:
-              operationId: updateCustomer
-              parameters:
-                customerId: '$response.body#/id'
+              $ref: '#/components/links/updateCustomer'
         400:
-          $ref: '#/components/responses/ClientError'
+          $ref: '#/components/responses/InvalidFields'
         500:
-          description: unexpected error
+          $ref: '#/components/responses/UnknownError'
     post:
       operationId: createCustomer
       summary: create a new customer
       tags:
         - customer
       requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CustomerAllRequired'
+        $ref: '#/components/requestBodies/FullCustomer'
       responses:
         201:
           description: customer created
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  id:
-                    type: integer
-                required:
-                  - id
+                $ref: '#/components/schemas/ID'
           links:
             get:
-              operationId: getCustomer
-              parameters:
-                customerId: '$response.body#/id'
+              $ref: '#/components/links/getCustomer'
             put:
-              operationId: updateCustomer
-              parameters:
-                customerId: '$response.body#/id'
+              $ref: '#/components/links/updateCustomer'
         400:
-          $ref: '#/components/responses/ClientError'
+          $ref: '#/components/responses/InvalidCustomer'
         500:
-          description: unexpected error
+          $ref: '#/components/responses/UnknownError'
   /customer/{customerId}:
     parameters:
       - $ref: '#/components/parameters/CustomerId'
@@ -98,27 +73,23 @@ paths:
         404:
           description: no customer at this location
         500:
-          description: unexpected error
+          $ref: '#/components/responses/UnknownError'
     put:
       operationId: updateCustomer
       summary: replace a customer
       tags:
         - customer
       requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CustomerAllRequired'
+        $ref: '#/components/requestBodies/FullCustomer'
       responses:
         200:
           description: customer updated
         404:
           description: no customer at this location
         400:
-          $ref: '#/components/responses/ClientError'
+          $ref: '#/components/responses/InvalidCustomer'
         500:
-          description: unexpected error
+          $ref: '#/components/responses/UnknownError'
   /customer/{customerId}/policy:
     parameters:
       - $ref: '#/components/parameters/CustomerId'
@@ -128,15 +99,7 @@ paths:
       tags:
         - policy
       parameters:
-        - in: query
-          name: fields
-          schema:
-            $ref: '#/components/schemas/PolicyFields'
-          style: form
-          explode: false
-          description: >-
-            A filter for which properties of Policy should be transmitted. If no
-            fields are specified, only id is transmitted.
+        - $ref: '#/components/parameters/PolicyFields'
       responses:
         200:
           description: success
@@ -151,53 +114,36 @@ paths:
                         - id
           links:
             get:
-              operationId: getPolicy
-              parameters:
-                policyId: '$response.body#/id'
+              $ref: '#/components/links/getPolicy'
             put:
-              operationId: updatePolicy
-              parameters:
-                policyId: '$response.body#/id'
+              $ref: '#/components/links/updatePolicy'
         400:
-          $ref: '#/components/responses/ClientError'
+          $ref: '#/components/responses/InvalidFields'
         500:
-          description: unexpected error
+          $ref: '#/components/responses/UnknownError'
     post:
       operationId: createPolicy
       summary: create new policy
       tags:
         - policy
       requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PolicyAllRequired'
+        $ref: '#/components/requestBodies/FullPolicy'
       responses:
         201:
           description: policy created
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  id:
-                    type: integer
-                required:
-                  - id
+                $ref: '#/components/schemas/ID'
           links:
             get:
-              operationId: getPolicy
-              parameters:
-                policyId: '$response.body#/id'
+              $ref: '#/components/links/getPolicy'
             put:
-              operationId: updatePolicy
-              parameters:
-                policyId: '$response.body#/id'
+              $ref: '#/components/links/updatePolicy'
         400:
-          $ref: '#/components/responses/ClientError'
+          $ref: '#/components/responses/InvalidPolicy'
         500:
-          description: unexpected error
+          $ref: '#/components/responses/UnknownError'
   /customer/{customerId}/policy/{policyId}:
     parameters:
       - $ref: '#/components/parameters/CustomerId'
@@ -221,27 +167,23 @@ paths:
         404:
           description: no policy at this location
         500:
-          description: unexpected error
+          $ref: '#/components/responses/UnknownError'
     put:
       operationId: updatePolicy
       summary: replace a policy
       tags:
         - policy
       requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PolicyAllRequired'
+        $ref: '#/components/requestBodies/FullPolicy'
       responses:
         200:
           description: policy updated
         404:
           description: no policy at this location
         400:
-          $ref: '#/components/responses/ClientError'
+          $ref: '#/components/responses/InvalidPolicy'
         500:
-          description: unexpected error
+          $ref: '#/components/responses/UnknownError'
   /policyprice:
     post:
       operationId: calcPolicyPrice
@@ -267,9 +209,13 @@ paths:
                 required:
                   - premium
         400:
-          $ref: '#/components/responses/ClientError'
+          description: invalid customerId or policy data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
         500:
-          description: unexpected error
+          $ref: '#/components/responses/UnknownError'
 components:
   parameters:
     CustomerId:
@@ -278,20 +224,106 @@ components:
       required: true
       schema:
         type: integer
+    CustomerFields:
+      name: fields
+      in: query
+      style: form
+      explode: false
+      description: >-
+        A filter for which properties of Customer should be transmitted. If
+        no fields are specified, only id is transmitted. Using address and one or
+        more of its sub properties in the same query is a semantic error.
+      schema:
+        type: array
+        uniqueItems: true
+        items:
+          $ref: '#/components/schemas/CustomerPropertyNames'
+    PolicyFields:
+      name: fields
+      in: query
+      style: form
+      explode: false
+      description: >-
+        A filter for which properties of Policy should be transmitted. If no
+        fields are specified, only id is transmitted. Using objectOfInsurance and
+        one or more of its sub properties in the same query is a semantic error.
+      schema:
+        type: array
+        uniqueItems: true
+        items:
+          $ref: '#/components/schemas/PolicyPropertyNames'
+  requestBodies:
+    FullCustomer:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CustomerAllRequired'
+    FullPolicy:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/PolicyAllRequired'
   responses:
-    ClientError:
-      description: incorrect request
+    UnknownError:
+      description: unexpected error
       content:
         application/json:
           schema:
             type: object
-            properties:
-              error:
-                type: string
-                description: 'short description of error condition'
-            required:
-              - error
+            additionalProperties: true
+    InvalidCustomer:
+      description: invalid customer data
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    InvalidPolicy:
+      description: invalid policy data
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    InvalidFields:
+      description: invalid fields parameter
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  links:
+    getCustomer:
+      operationId: getCustomer
+      parameters:
+        customerId: '$response.body#/id'
+    updateCustomer:
+      operationId: updateCustomer
+      parameters:
+        customerId: '$response.body#/id'
+    getPolicy:
+      operationId: getPolicy
+      parameters:
+        policyId: '$response.body#/id'
+    updatePolicy:
+      operationId: updatePolicy
+      parameters:
+        policyId: '$response.body#/id'
   schemas:
+    ID:
+      type: object
+      properties:
+        id:
+          type: integer
+      required:
+        - id
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: 'short description of error condition'
+      required:
+        - error
     Customer:
       type: object
       properties:
@@ -358,6 +390,24 @@ components:
                 - city
                 - street
                 - postalCode
+    CustomerPropertyNames:
+      type: string
+      enum:
+        - firstName
+        - lastName
+        - formOfAddress
+        - title
+        - maritalStatus
+        - dateOfBirth
+        - employmentStatus
+        - dogOwner
+        - phoneNumber
+        - email
+        - bankDetails
+        - address
+        - address.city
+        - address.street
+        - address.postalCode
     Policy:
       type: object
       properties:
@@ -417,6 +467,22 @@ components:
                 - personality
                 - environment
                 - weight
+    PolicyPropertyNames:
+      type: string
+      enum:
+        - startDate
+        - endDate
+        - coverage
+        - premium
+        - objectOfInsurance
+        - objectOfInsurance.name
+        - objectOfInsurance.race
+        - objectOfInsurance.color
+        - objectOfInsurance.dateOfBirth
+        - objectOfInsurance.castrated
+        - objectOfInsurance.personality
+        - objectOfInsurance.environment
+        - objectOfInsurance.weight
     PolicyCalc:
       type: object
       properties:
@@ -427,23 +493,6 @@ components:
       required:
         - customerId
         - policy
-    CustomerFields:
-      type: array
-      uniqueItems: true
-      items:
-        $ref: '#/components/schemas/CustomerPropertyNames'
-      description: >-
-        List of property names of the Customer Object. Using address and one or
-        more of its sub properties in the same array is a semantic error.
-    PolicyFields:
-      type: array
-      uniqueItems: true
-      items:
-        $ref: '#/components/schemas/PolicyPropertyNames'
-      description: >-
-        List of property names of the Policy Object. Using objectOfInsurance and
-        one or more of its sub properties in the same array is a semantic
-        error.
     FormOfAddress:
       type: string
       enum:
@@ -506,37 +555,3 @@ components:
         - grau
         - rot
         - zimt
-    CustomerPropertyNames:
-      type: string
-      enum:
-        - firstName
-        - lastName
-        - formOfAddress
-        - title
-        - maritalStatus
-        - dateOfBirth
-        - employmentStatus
-        - dogOwner
-        - phoneNumber
-        - email
-        - bankDetails
-        - address
-        - address.city
-        - address.street
-        - address.postalCode
-    PolicyPropertyNames:
-      type: string
-      enum:
-        - startDate
-        - endDate
-        - coverage
-        - premium
-        - objectOfInsurance
-        - objectOfInsurance.name
-        - objectOfInsurance.race
-        - objectOfInsurance.color
-        - objectOfInsurance.dateOfBirth
-        - objectOfInsurance.castrated
-        - objectOfInsurance.personality
-        - objectOfInsurance.environment
-        - objectOfInsurance.weight

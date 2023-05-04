@@ -4,7 +4,6 @@ import { Configuration} from '../configuration.ts'
 import { Address } from '../models/Address.ts';
 import { CalcPolicyPrice200Response } from '../models/CalcPolicyPrice200Response.ts';
 import { CatRace } from '../models/CatRace.ts';
-import { CreateCustomer201Response } from '../models/CreateCustomer201Response.ts';
 import { Customer } from '../models/Customer.ts';
 import { CustomerAllRequired } from '../models/CustomerAllRequired.ts';
 import { CustomerAllRequiredAllOf } from '../models/CustomerAllRequiredAllOf.ts';
@@ -14,9 +13,10 @@ import { Environment } from '../models/Environment.ts';
 import { FormOfAddress } from '../models/FormOfAddress.ts';
 import { FurColor } from '../models/FurColor.ts';
 import { GetCustomerList200ResponseInner } from '../models/GetCustomerList200ResponseInner.ts';
-import { GetCustomerList400Response } from '../models/GetCustomerList400Response.ts';
 import { GetPolicyList200ResponseInner } from '../models/GetPolicyList200ResponseInner.ts';
+import { ID } from '../models/ID.ts';
 import { MaritalStatus } from '../models/MaritalStatus.ts';
+import { ModelError } from '../models/ModelError.ts';
 import { ObjectOfInsurance } from '../models/ObjectOfInsurance.ts';
 import { Personality } from '../models/Personality.ts';
 import { Policy } from '../models/Policy.ts';
@@ -49,7 +49,7 @@ export interface CustomerApiGetCustomerRequest {
 
 export interface CustomerApiGetCustomerListRequest {
     /**
-     * A filter for which properties of Customer should be transmitted. If no fields are specified, only id is transmitted.
+     * A filter for which properties of Customer should be transmitted. If no fields are specified, only id is transmitted. Using address and one or more of its sub properties in the same query is a semantic error.
      * @type Set&lt;CustomerPropertyNames&gt;
      * @memberof CustomerApigetCustomerList
      */
@@ -82,7 +82,7 @@ export class ObjectCustomerApi {
      * create a new customer
      * @param param the request object
      */
-    public createCustomer(param: CustomerApiCreateCustomerRequest, options?: Configuration): Promise<CreateCustomer201Response> {
+    public createCustomer(param: CustomerApiCreateCustomerRequest, options?: Configuration): Promise<ID> {
         return this.api.createCustomer(param.customerAllRequired,  options).toPromise();
     }
 
@@ -162,7 +162,7 @@ export interface PolicyApiGetPolicyListRequest {
      */
     customerId: number
     /**
-     * A filter for which properties of Policy should be transmitted. If no fields are specified, only id is transmitted.
+     * A filter for which properties of Policy should be transmitted. If no fields are specified, only id is transmitted. Using objectOfInsurance and one or more of its sub properties in the same query is a semantic error.
      * @type Set&lt;PolicyPropertyNames&gt;
      * @memberof PolicyApigetPolicyList
      */
@@ -209,7 +209,7 @@ export class ObjectPolicyApi {
      * create new policy
      * @param param the request object
      */
-    public createPolicy(param: PolicyApiCreatePolicyRequest, options?: Configuration): Promise<CreateCustomer201Response> {
+    public createPolicy(param: PolicyApiCreatePolicyRequest, options?: Configuration): Promise<ID> {
         return this.api.createPolicy(param.customerId, param.policyAllRequired,  options).toPromise();
     }
 

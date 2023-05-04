@@ -85,7 +85,7 @@ fetch('/customer',
 
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
-|fields|query|[CustomerFields](#schemacustomerfields)|false|A filter for which properties of Customer should be transmitted. If no fields are specified, only id is transmitted.|
+|fields|query|array[string]|false|A filter for which properties of Customer should be transmitted. If no fields are specified, only id is transmitted. Using address and one or more of its sub properties in the same query is a semantic error.|
 
 #### Enumerated Values
 
@@ -140,8 +140,8 @@ fetch('/customer',
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|success|Inline|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|incorrect request|Inline|
-|500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|unexpected error|None|
+|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|invalid fields parameter|[Error](#schemaerror)|
+|500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|unexpected error|Inline|
 
 <h3 id="getcustomerlist-responseschema">Response Schema</h3>
 
@@ -176,12 +176,6 @@ fetch('/customer',
 |Parameter|Expression|
 |---|---|
 |customerId|$response.body#/id|
-
-Status Code **400**
-
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|» error|string|true|none|short description of error condition|
 
 <aside class="success">
 This operation does not require authentication
@@ -309,37 +303,11 @@ fetch('/customer',
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
-|201|[Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)|customer created|Inline|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|incorrect request|Inline|
-|500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|unexpected error|None|
+|201|[Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)|customer created|[ID](#schemaid)|
+|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|invalid customer data|[Error](#schemaerror)|
+|500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|unexpected error|Inline|
 
 <h3 id="createcustomer-responseschema">Response Schema</h3>
-
-Status Code **201**
-
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|» id|integer|true|none|none|
-
-#### Links
-
-**get** => <a href="#opIdgetCustomer">getCustomer</a>
-
-|Parameter|Expression|
-|---|---|
-|customerId|$response.body#/id|
-
-**put** => <a href="#opIdupdateCustomer">updateCustomer</a>
-
-|Parameter|Expression|
-|---|---|
-|customerId|$response.body#/id|
-
-Status Code **400**
-
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|» error|string|true|none|short description of error condition|
 
 <aside class="success">
 This operation does not require authentication
@@ -442,7 +410,9 @@ fetch('/customer/{customerId}',
 |---|---|---|---|
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|customer found|[CustomerAllRequired](#schemacustomerallrequired)|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|no customer at this location|None|
-|500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|unexpected error|None|
+|500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|unexpected error|Inline|
+
+<h3 id="getcustomer-responseschema">Response Schema</h3>
 
 <aside class="success">
 This operation does not require authentication
@@ -572,17 +542,11 @@ fetch('/customer/{customerId}',
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|customer updated|None|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|incorrect request|Inline|
+|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|invalid customer data|[Error](#schemaerror)|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|no customer at this location|None|
-|500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|unexpected error|None|
+|500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|unexpected error|Inline|
 
 <h3 id="updatecustomer-responseschema">Response Schema</h3>
-
-Status Code **400**
-
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|» error|string|true|none|short description of error condition|
 
 <aside class="success">
 This operation does not require authentication
@@ -653,7 +617,7 @@ fetch('/customer/{customerId}/policy',
 
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
-|fields|query|[PolicyFields](#schemapolicyfields)|false|A filter for which properties of Policy should be transmitted. If no fields are specified, only id is transmitted.|
+|fields|query|array[string]|false|A filter for which properties of Policy should be transmitted. If no fields are specified, only id is transmitted. Using objectOfInsurance and one or more of its sub properties in the same query is a semantic error.|
 |customerId|path|integer|true|none|
 
 #### Enumerated Values
@@ -705,8 +669,8 @@ fetch('/customer/{customerId}/policy',
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|success|Inline|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|incorrect request|Inline|
-|500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|unexpected error|None|
+|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|invalid fields parameter|[Error](#schemaerror)|
+|500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|unexpected error|Inline|
 
 <h3 id="getpolicylist-responseschema">Response Schema</h3>
 
@@ -753,12 +717,6 @@ fetch('/customer/{customerId}/policy',
 |Parameter|Expression|
 |---|---|
 |policyId|$response.body#/id|
-
-Status Code **400**
-
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|» error|string|true|none|short description of error condition|
 
 <aside class="success">
 This operation does not require authentication
@@ -881,37 +839,11 @@ fetch('/customer/{customerId}/policy',
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
-|201|[Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)|policy created|Inline|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|incorrect request|Inline|
-|500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|unexpected error|None|
+|201|[Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)|policy created|[ID](#schemaid)|
+|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|invalid policy data|[Error](#schemaerror)|
+|500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|unexpected error|Inline|
 
 <h3 id="createpolicy-responseschema">Response Schema</h3>
-
-Status Code **201**
-
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|» id|integer|true|none|none|
-
-#### Links
-
-**get** => <a href="#opIdgetPolicy">getPolicy</a>
-
-|Parameter|Expression|
-|---|---|
-|policyId|$response.body#/id|
-
-**put** => <a href="#opIdupdatePolicy">updatePolicy</a>
-
-|Parameter|Expression|
-|---|---|
-|policyId|$response.body#/id|
-
-Status Code **400**
-
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|» error|string|true|none|short description of error condition|
 
 <aside class="success">
 This operation does not require authentication
@@ -1013,7 +945,9 @@ fetch('/customer/{customerId}/policy/{policyId}',
 |---|---|---|---|
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|policy found|[PolicyAllRequired](#schemapolicyallrequired)|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|no policy at this location|None|
-|500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|unexpected error|None|
+|500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|unexpected error|Inline|
+
+<h3 id="getpolicy-responseschema">Response Schema</h3>
 
 <aside class="success">
 This operation does not require authentication
@@ -1138,17 +1072,11 @@ fetch('/customer/{customerId}/policy/{policyId}',
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|policy updated|None|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|incorrect request|Inline|
+|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|invalid policy data|[Error](#schemaerror)|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|no policy at this location|None|
-|500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|unexpected error|None|
+|500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|unexpected error|Inline|
 
 <h3 id="updatepolicy-responseschema">Response Schema</h3>
-
-Status Code **400**
-
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|» error|string|true|none|short description of error condition|
 
 <aside class="success">
 This operation does not require authentication
@@ -1277,8 +1205,8 @@ fetch('/policyprice',
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|price calculated|Inline|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|incorrect request|Inline|
-|500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|unexpected error|None|
+|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|invalid customerId or policy data|[Error](#schemaerror)|
+|500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|unexpected error|Inline|
 
 <h3 id="calcpolicyprice-responseschema">Response Schema</h3>
 
@@ -1288,17 +1216,51 @@ Status Code **200**
 |---|---|---|---|---|
 |» premium|number|true|none|none|
 
-Status Code **400**
-
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|» error|string|true|none|short description of error condition|
-
 <aside class="success">
 This operation does not require authentication
 </aside>
 
 # Schemas
+
+<h2 id="tocS_ID">ID</h2>
+<!-- backwards compatibility -->
+<a id="schemaid"></a>
+<a id="schema_ID"></a>
+<a id="tocSid"></a>
+<a id="tocsid"></a>
+
+```json
+{
+  "id": 0
+}
+
+```
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|id|integer|true|none|none|
+
+<h2 id="tocS_Error">Error</h2>
+<!-- backwards compatibility -->
+<a id="schemaerror"></a>
+<a id="schema_Error"></a>
+<a id="tocSerror"></a>
+<a id="tocserror"></a>
+
+```json
+{
+  "error": "string"
+}
+
+```
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|error|string|true|none|short description of error condition|
 
 <h2 id="tocS_Customer">Customer</h2>
 <!-- backwards compatibility -->
@@ -1420,6 +1382,44 @@ This operation does not require authentication
 |email|string(email)|true|none|none|
 |bankDetails|string|true|none|none|
 
+<h2 id="tocS_CustomerPropertyNames">CustomerPropertyNames</h2>
+<!-- backwards compatibility -->
+<a id="schemacustomerpropertynames"></a>
+<a id="schema_CustomerPropertyNames"></a>
+<a id="tocScustomerpropertynames"></a>
+<a id="tocscustomerpropertynames"></a>
+
+```json
+"firstName"
+
+```
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|*anonymous*|string|false|none|none|
+
+#### Enumerated Values
+
+|Property|Value|
+|---|---|
+|*anonymous*|firstName|
+|*anonymous*|lastName|
+|*anonymous*|formOfAddress|
+|*anonymous*|title|
+|*anonymous*|maritalStatus|
+|*anonymous*|dateOfBirth|
+|*anonymous*|employmentStatus|
+|*anonymous*|dogOwner|
+|*anonymous*|phoneNumber|
+|*anonymous*|email|
+|*anonymous*|bankDetails|
+|*anonymous*|address|
+|*anonymous*|address.city|
+|*anonymous*|address.street|
+|*anonymous*|address.postalCode|
+
 <h2 id="tocS_Policy">Policy</h2>
 <!-- backwards compatibility -->
 <a id="schemapolicy"></a>
@@ -1532,6 +1532,42 @@ This operation does not require authentication
 |premium|number|true|read-only|none|
 |objectOfInsurance|[ObjectOfInsurance](#schemaobjectofinsurance)|true|none|none|
 
+<h2 id="tocS_PolicyPropertyNames">PolicyPropertyNames</h2>
+<!-- backwards compatibility -->
+<a id="schemapolicypropertynames"></a>
+<a id="schema_PolicyPropertyNames"></a>
+<a id="tocSpolicypropertynames"></a>
+<a id="tocspolicypropertynames"></a>
+
+```json
+"startDate"
+
+```
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|*anonymous*|string|false|none|none|
+
+#### Enumerated Values
+
+|Property|Value|
+|---|---|
+|*anonymous*|startDate|
+|*anonymous*|endDate|
+|*anonymous*|coverage|
+|*anonymous*|premium|
+|*anonymous*|objectOfInsurance|
+|*anonymous*|objectOfInsurance.name|
+|*anonymous*|objectOfInsurance.race|
+|*anonymous*|objectOfInsurance.color|
+|*anonymous*|objectOfInsurance.dateOfBirth|
+|*anonymous*|objectOfInsurance.castrated|
+|*anonymous*|objectOfInsurance.personality|
+|*anonymous*|objectOfInsurance.environment|
+|*anonymous*|objectOfInsurance.weight|
+
 <h2 id="tocS_PolicyCalc">PolicyCalc</h2>
 <!-- backwards compatibility -->
 <a id="schemapolicycalc"></a>
@@ -1569,50 +1605,6 @@ This operation does not require authentication
 |---|---|---|---|---|
 |customerId|integer|true|none|none|
 |policy|[PolicyAllRequired](#schemapolicyallrequired)|true|none|none|
-
-<h2 id="tocS_CustomerFields">CustomerFields</h2>
-<!-- backwards compatibility -->
-<a id="schemacustomerfields"></a>
-<a id="schema_CustomerFields"></a>
-<a id="tocScustomerfields"></a>
-<a id="tocscustomerfields"></a>
-
-```json
-[
-  "firstName"
-]
-
-```
-
-List of property names of the Customer Object. Using address and one or more of its sub properties in the same array is a semantic error.
-
-### Properties
-
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|[[CustomerPropertyNames](#schemacustomerpropertynames)]|false|none|List of property names of the Customer Object. Using address and one or more of its sub properties in the same array is a semantic error.|
-
-<h2 id="tocS_PolicyFields">PolicyFields</h2>
-<!-- backwards compatibility -->
-<a id="schemapolicyfields"></a>
-<a id="schema_PolicyFields"></a>
-<a id="tocSpolicyfields"></a>
-<a id="tocspolicyfields"></a>
-
-```json
-[
-  "startDate"
-]
-
-```
-
-List of property names of the Policy Object. Using objectOfInsurance and one or more of its sub properties in the same array is a semantic error.
-
-### Properties
-
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|[[PolicyPropertyNames](#schemapolicypropertynames)]|false|none|List of property names of the Policy Object. Using objectOfInsurance and one or more of its sub properties in the same array is a semantic error.|
 
 <h2 id="tocS_FormOfAddress">FormOfAddress</h2>
 <!-- backwards compatibility -->
@@ -1835,78 +1827,4 @@ List of property names of the Policy Object. Using objectOfInsurance and one or 
 |*anonymous*|grau|
 |*anonymous*|rot|
 |*anonymous*|zimt|
-
-<h2 id="tocS_CustomerPropertyNames">CustomerPropertyNames</h2>
-<!-- backwards compatibility -->
-<a id="schemacustomerpropertynames"></a>
-<a id="schema_CustomerPropertyNames"></a>
-<a id="tocScustomerpropertynames"></a>
-<a id="tocscustomerpropertynames"></a>
-
-```json
-"firstName"
-
-```
-
-### Properties
-
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|string|false|none|none|
-
-#### Enumerated Values
-
-|Property|Value|
-|---|---|
-|*anonymous*|firstName|
-|*anonymous*|lastName|
-|*anonymous*|formOfAddress|
-|*anonymous*|title|
-|*anonymous*|maritalStatus|
-|*anonymous*|dateOfBirth|
-|*anonymous*|employmentStatus|
-|*anonymous*|dogOwner|
-|*anonymous*|phoneNumber|
-|*anonymous*|email|
-|*anonymous*|bankDetails|
-|*anonymous*|address|
-|*anonymous*|address.city|
-|*anonymous*|address.street|
-|*anonymous*|address.postalCode|
-
-<h2 id="tocS_PolicyPropertyNames">PolicyPropertyNames</h2>
-<!-- backwards compatibility -->
-<a id="schemapolicypropertynames"></a>
-<a id="schema_PolicyPropertyNames"></a>
-<a id="tocSpolicypropertynames"></a>
-<a id="tocspolicypropertynames"></a>
-
-```json
-"startDate"
-
-```
-
-### Properties
-
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|string|false|none|none|
-
-#### Enumerated Values
-
-|Property|Value|
-|---|---|
-|*anonymous*|startDate|
-|*anonymous*|endDate|
-|*anonymous*|coverage|
-|*anonymous*|premium|
-|*anonymous*|objectOfInsurance|
-|*anonymous*|objectOfInsurance.name|
-|*anonymous*|objectOfInsurance.race|
-|*anonymous*|objectOfInsurance.color|
-|*anonymous*|objectOfInsurance.dateOfBirth|
-|*anonymous*|objectOfInsurance.castrated|
-|*anonymous*|objectOfInsurance.personality|
-|*anonymous*|objectOfInsurance.environment|
-|*anonymous*|objectOfInsurance.weight|
 

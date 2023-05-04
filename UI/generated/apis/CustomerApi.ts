@@ -8,11 +8,10 @@ import {canConsumeForm, isCodeInRange} from '../util.ts';
 import {SecurityAuthentication} from '../auth/auth.ts';
 
 
-import { CreateCustomer201Response } from '../models/CreateCustomer201Response.ts';
 import { CustomerAllRequired } from '../models/CustomerAllRequired.ts';
 import { CustomerPropertyNames } from '../models/CustomerPropertyNames.ts';
 import { GetCustomerList200ResponseInner } from '../models/GetCustomerList200ResponseInner.ts';
-import { GetCustomerList400Response } from '../models/GetCustomerList400Response.ts';
+import { ID } from '../models/ID.ts';
 
 /**
  * no description
@@ -93,7 +92,7 @@ export class CustomerApiRequestFactory extends BaseAPIRequestFactory {
 
     /**
      * get a list of customers
-     * @param fields A filter for which properties of Customer should be transmitted. If no fields are specified, only id is transmitted.
+     * @param fields A filter for which properties of Customer should be transmitted. If no fields are specified, only id is transmitted. Using address and one or more of its sub properties in the same query is a semantic error.
      */
     public async getCustomerList(fields?: Set<CustomerPropertyNames>, _options?: Configuration): Promise<RequestContext> {
         let _config = _options || this.configuration;
@@ -181,32 +180,36 @@ export class CustomerApiResponseProcessor {
      * @params response Response returned by the server for a request to createCustomer
      * @throws ApiException if the response code was not in [200, 299]
      */
-     public async createCustomer(response: ResponseContext): Promise<CreateCustomer201Response > {
+     public async createCustomer(response: ResponseContext): Promise<ID > {
         const contentType = ObjectSerializer.normalizeMediaType(response.headers["content-type"]);
         if (isCodeInRange("201", response.httpStatusCode)) {
-            const body: CreateCustomer201Response = ObjectSerializer.deserialize(
+            const body: ID = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
-                "CreateCustomer201Response", ""
-            ) as CreateCustomer201Response;
+                "ID", ""
+            ) as ID;
             return body;
         }
         if (isCodeInRange("400", response.httpStatusCode)) {
-            const body: GetCustomerList400Response = ObjectSerializer.deserialize(
+            const body: Error = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
-                "GetCustomerList400Response", ""
-            ) as GetCustomerList400Response;
-            throw new ApiException<GetCustomerList400Response>(response.httpStatusCode, "incorrect request", body, response.headers);
+                "Error", ""
+            ) as Error;
+            throw new ApiException<Error>(response.httpStatusCode, "invalid customer data", body, response.headers);
         }
         if (isCodeInRange("500", response.httpStatusCode)) {
-            throw new ApiException<undefined>(response.httpStatusCode, "unexpected error", undefined, response.headers);
+            const body: { [key: string]: any; } = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                "{ [key: string]: any; }", ""
+            ) as { [key: string]: any; };
+            throw new ApiException<{ [key: string]: any; }>(response.httpStatusCode, "unexpected error", body, response.headers);
         }
 
         // Work around for missing responses in specification, e.g. for petstore.yaml
         if (response.httpStatusCode >= 200 && response.httpStatusCode <= 299) {
-            const body: CreateCustomer201Response = ObjectSerializer.deserialize(
+            const body: ID = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
-                "CreateCustomer201Response", ""
-            ) as CreateCustomer201Response;
+                "ID", ""
+            ) as ID;
             return body;
         }
 
@@ -233,7 +236,11 @@ export class CustomerApiResponseProcessor {
             throw new ApiException<undefined>(response.httpStatusCode, "no customer at this location", undefined, response.headers);
         }
         if (isCodeInRange("500", response.httpStatusCode)) {
-            throw new ApiException<undefined>(response.httpStatusCode, "unexpected error", undefined, response.headers);
+            const body: { [key: string]: any; } = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                "{ [key: string]: any; }", ""
+            ) as { [key: string]: any; };
+            throw new ApiException<{ [key: string]: any; }>(response.httpStatusCode, "unexpected error", body, response.headers);
         }
 
         // Work around for missing responses in specification, e.g. for petstore.yaml
@@ -265,14 +272,18 @@ export class CustomerApiResponseProcessor {
             return body;
         }
         if (isCodeInRange("400", response.httpStatusCode)) {
-            const body: GetCustomerList400Response = ObjectSerializer.deserialize(
+            const body: Error = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
-                "GetCustomerList400Response", ""
-            ) as GetCustomerList400Response;
-            throw new ApiException<GetCustomerList400Response>(response.httpStatusCode, "incorrect request", body, response.headers);
+                "Error", ""
+            ) as Error;
+            throw new ApiException<Error>(response.httpStatusCode, "invalid fields parameter", body, response.headers);
         }
         if (isCodeInRange("500", response.httpStatusCode)) {
-            throw new ApiException<undefined>(response.httpStatusCode, "unexpected error", undefined, response.headers);
+            const body: { [key: string]: any; } = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                "{ [key: string]: any; }", ""
+            ) as { [key: string]: any; };
+            throw new ApiException<{ [key: string]: any; }>(response.httpStatusCode, "unexpected error", body, response.headers);
         }
 
         // Work around for missing responses in specification, e.g. for petstore.yaml
@@ -303,14 +314,18 @@ export class CustomerApiResponseProcessor {
             throw new ApiException<undefined>(response.httpStatusCode, "no customer at this location", undefined, response.headers);
         }
         if (isCodeInRange("400", response.httpStatusCode)) {
-            const body: GetCustomerList400Response = ObjectSerializer.deserialize(
+            const body: Error = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
-                "GetCustomerList400Response", ""
-            ) as GetCustomerList400Response;
-            throw new ApiException<GetCustomerList400Response>(response.httpStatusCode, "incorrect request", body, response.headers);
+                "Error", ""
+            ) as Error;
+            throw new ApiException<Error>(response.httpStatusCode, "invalid customer data", body, response.headers);
         }
         if (isCodeInRange("500", response.httpStatusCode)) {
-            throw new ApiException<undefined>(response.httpStatusCode, "unexpected error", undefined, response.headers);
+            const body: { [key: string]: any; } = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                "{ [key: string]: any; }", ""
+            ) as { [key: string]: any; };
+            throw new ApiException<{ [key: string]: any; }>(response.httpStatusCode, "unexpected error", body, response.headers);
         }
 
         // Work around for missing responses in specification, e.g. for petstore.yaml

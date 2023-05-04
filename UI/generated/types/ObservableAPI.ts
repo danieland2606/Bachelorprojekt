@@ -5,7 +5,6 @@ import {mergeMap, map} from  '../rxjsStub.ts';
 import { Address } from '../models/Address.ts';
 import { CalcPolicyPrice200Response } from '../models/CalcPolicyPrice200Response.ts';
 import { CatRace } from '../models/CatRace.ts';
-import { CreateCustomer201Response } from '../models/CreateCustomer201Response.ts';
 import { Customer } from '../models/Customer.ts';
 import { CustomerAllRequired } from '../models/CustomerAllRequired.ts';
 import { CustomerAllRequiredAllOf } from '../models/CustomerAllRequiredAllOf.ts';
@@ -15,9 +14,10 @@ import { Environment } from '../models/Environment.ts';
 import { FormOfAddress } from '../models/FormOfAddress.ts';
 import { FurColor } from '../models/FurColor.ts';
 import { GetCustomerList200ResponseInner } from '../models/GetCustomerList200ResponseInner.ts';
-import { GetCustomerList400Response } from '../models/GetCustomerList400Response.ts';
 import { GetPolicyList200ResponseInner } from '../models/GetPolicyList200ResponseInner.ts';
+import { ID } from '../models/ID.ts';
 import { MaritalStatus } from '../models/MaritalStatus.ts';
+import { ModelError } from '../models/ModelError.ts';
 import { ObjectOfInsurance } from '../models/ObjectOfInsurance.ts';
 import { Personality } from '../models/Personality.ts';
 import { Policy } from '../models/Policy.ts';
@@ -47,7 +47,7 @@ export class ObservableCustomerApi {
      * create a new customer
      * @param customerAllRequired 
      */
-    public createCustomer(customerAllRequired: CustomerAllRequired, _options?: Configuration): Observable<CreateCustomer201Response> {
+    public createCustomer(customerAllRequired: CustomerAllRequired, _options?: Configuration): Observable<ID> {
         const requestContextPromise = this.requestFactory.createCustomer(customerAllRequired, _options);
 
         // build promise chain
@@ -91,7 +91,7 @@ export class ObservableCustomerApi {
 
     /**
      * get a list of customers
-     * @param fields A filter for which properties of Customer should be transmitted. If no fields are specified, only id is transmitted.
+     * @param fields A filter for which properties of Customer should be transmitted. If no fields are specified, only id is transmitted. Using address and one or more of its sub properties in the same query is a semantic error.
      */
     public getCustomerList(fields?: Set<CustomerPropertyNames>, _options?: Configuration): Observable<Array<GetCustomerList200ResponseInner>> {
         const requestContextPromise = this.requestFactory.getCustomerList(fields, _options);
@@ -182,7 +182,7 @@ export class ObservablePolicyApi {
      * @param customerId 
      * @param policyAllRequired 
      */
-    public createPolicy(customerId: number, policyAllRequired: PolicyAllRequired, _options?: Configuration): Observable<CreateCustomer201Response> {
+    public createPolicy(customerId: number, policyAllRequired: PolicyAllRequired, _options?: Configuration): Observable<ID> {
         const requestContextPromise = this.requestFactory.createPolicy(customerId, policyAllRequired, _options);
 
         // build promise chain
@@ -228,7 +228,7 @@ export class ObservablePolicyApi {
     /**
      * get a list of policies
      * @param customerId 
-     * @param fields A filter for which properties of Policy should be transmitted. If no fields are specified, only id is transmitted.
+     * @param fields A filter for which properties of Policy should be transmitted. If no fields are specified, only id is transmitted. Using objectOfInsurance and one or more of its sub properties in the same query is a semantic error.
      */
     public getPolicyList(customerId: number, fields?: Set<PolicyPropertyNames>, _options?: Configuration): Observable<Array<GetPolicyList200ResponseInner>> {
         const requestContextPromise = this.requestFactory.getPolicyList(customerId, fields, _options);

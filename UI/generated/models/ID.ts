@@ -12,7 +12,7 @@
 
 import { HttpFile } from '../http/http.ts';
 
-export class CreateCustomer201Response {
+export class ID {
     'id': number;
 
     static readonly discriminator: string | undefined = undefined;
@@ -26,7 +26,7 @@ export class CreateCustomer201Response {
         }    ];
 
     static getAttributeTypeMap() {
-        return CreateCustomer201Response.attributeTypeMap;
+        return ID.attributeTypeMap;
     }
 
     public constructor() {
