@@ -1,52 +1,14 @@
-export * from '../models/Address.ts';
-export * from '../models/CalcPolicyPrice200Response.ts';
-export * from '../models/CatRace.ts';
-export * from '../models/CreateCustomer201Response.ts';
-export * from '../models/Customer.ts';
-export * from '../models/CustomerAllRequired.ts';
-export * from '../models/CustomerAllRequiredAllOf.ts';
-export * from '../models/CustomerPropertyNames.ts';
-export * from '../models/EmploymentStatus.ts';
-export * from '../models/Environment.ts';
-export * from '../models/FormOfAddress.ts';
-export * from '../models/FurColor.ts';
-export * from '../models/GetCustomerList200ResponseInner.ts';
-export * from '../models/GetCustomerList400Response.ts';
-export * from '../models/GetPolicyList200ResponseInner.ts';
-export * from '../models/MaritalStatus.ts';
-export * from '../models/ObjectOfInsurance.ts';
-export * from '../models/Personality.ts';
-export * from '../models/Policy.ts';
-export * from '../models/PolicyAllRequired.ts';
-export * from '../models/PolicyAllRequiredAllOf.ts';
-export * from '../models/PolicyCalc.ts';
-export * from '../models/PolicyPropertyNames.ts';
-export * from '../models/Title.ts';
+{{#models}}
+{{#model}}
+export * from '{{{ importPath }}}{{importFileExtension}}';
+{{/model}}
+{{/models}}
 
-import { Address } from '../models/Address.ts';
-import { CalcPolicyPrice200Response } from '../models/CalcPolicyPrice200Response.ts';
-import { CatRace } from '../models/CatRace.ts';
-import { CreateCustomer201Response } from '../models/CreateCustomer201Response.ts';
-import { Customer              } from '../models/Customer.ts';
-import { CustomerAllRequired              } from '../models/CustomerAllRequired.ts';
-import { CustomerAllRequiredAllOf } from '../models/CustomerAllRequiredAllOf.ts';
-import { CustomerPropertyNames } from '../models/CustomerPropertyNames.ts';
-import { EmploymentStatus } from '../models/EmploymentStatus.ts';
-import { Environment } from '../models/Environment.ts';
-import { FormOfAddress } from '../models/FormOfAddress.ts';
-import { FurColor } from '../models/FurColor.ts';
-import { GetCustomerList200ResponseInner              } from '../models/GetCustomerList200ResponseInner.ts';
-import { GetCustomerList400Response } from '../models/GetCustomerList400Response.ts';
-import { GetPolicyList200ResponseInner } from '../models/GetPolicyList200ResponseInner.ts';
-import { MaritalStatus } from '../models/MaritalStatus.ts';
-import { ObjectOfInsurance         } from '../models/ObjectOfInsurance.ts';
-import { Personality } from '../models/Personality.ts';
-import { Policy } from '../models/Policy.ts';
-import { PolicyAllRequired } from '../models/PolicyAllRequired.ts';
-import { PolicyAllRequiredAllOf } from '../models/PolicyAllRequiredAllOf.ts';
-import { PolicyCalc } from '../models/PolicyCalc.ts';
-import { PolicyPropertyNames } from '../models/PolicyPropertyNames.ts';
-import { Title } from '../models/Title.ts';
+{{#models}}
+{{#model}}
+import { {{classname}}{{#hasEnums}}{{#vars}}{{#isEnum}}, {{classname}}{{enumName}} {{/isEnum}} {{/vars}}{{/hasEnums}} } from '{{{ importPath }}}{{importFileExtension}}';
+{{/model}}
+{{/models}}
 
 /* tslint:disable:no-unused-variable */
 let primitives = [
@@ -68,33 +30,30 @@ const supportedMediaTypes: { [mediaType: string]: number } = {
 
 
 let enumsMap: Set<string> = new Set<string>([
-    "CatRace",
-    "CustomerPropertyNames",
-    "EmploymentStatus",
-    "Environment",
-    "FormOfAddress",
-    "FurColor",
-    "MaritalStatus",
-    "Personality",
-    "PolicyPropertyNames",
-    "Title",
+    {{#models}}
+        {{#model}}
+            {{#isEnum}}
+    "{{classname}}{{enumName}}",
+            {{/isEnum}}
+            {{#hasEnums}}
+                {{#vars}}
+                    {{#isEnum}}
+    "{{classname}}{{enumName}}",
+                    {{/isEnum}}
+                {{/vars}}
+            {{/hasEnums}}
+        {{/model}}
+    {{/models}}
 ]);
 
 let typeMap: {[index: string]: any} = {
-    "Address": Address,
-    "CalcPolicyPrice200Response": CalcPolicyPrice200Response,
-    "CreateCustomer201Response": CreateCustomer201Response,
-    "Customer": Customer,
-    "CustomerAllRequired": CustomerAllRequired,
-    "CustomerAllRequiredAllOf": CustomerAllRequiredAllOf,
-    "GetCustomerList200ResponseInner": GetCustomerList200ResponseInner,
-    "GetCustomerList400Response": GetCustomerList400Response,
-    "GetPolicyList200ResponseInner": GetPolicyList200ResponseInner,
-    "ObjectOfInsurance": ObjectOfInsurance,
-    "Policy": Policy,
-    "PolicyAllRequired": PolicyAllRequired,
-    "PolicyAllRequiredAllOf": PolicyAllRequiredAllOf,
-    "PolicyCalc": PolicyCalc,
+    {{#models}}
+        {{#model}}
+            {{^isEnum}}
+    "{{classname}}": {{classname}},
+            {{/isEnum}}
+        {{/model}}
+    {{/models}}
 }
 
 export class ObjectSerializer {

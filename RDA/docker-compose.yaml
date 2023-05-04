@@ -5,15 +5,17 @@ services:
     build:
       args:
         mode: "prod"
-        customerService: "http://localhost:82"
-        policyService: "http://localhost:81"
+        customerService: "http://customer:8080"
+        policyService: "http://policy:8080"
       context: ../UI
       dockerfile: Dockerfile
     container_name: ui-service
+    env_file:
+      - ../UI/ui.env
     networks:
       - "default"
     ports:
-      - 80:80 
+      - 80:8000 
   policy:
     build:
       context: ./PolicyService
