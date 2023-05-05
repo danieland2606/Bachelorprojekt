@@ -23,9 +23,6 @@ public class CustomerController {
      */
     @GetMapping(value = "/customer", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> getCustomerList(@RequestParam(value = "fields", required = false) String fields) {
-        if (fields == null) {
-            fields = "";
-        }
         try {
             String responseBody = customerService.getCustomerList(fields);
             if (responseBody == null) {
@@ -36,7 +33,7 @@ public class CustomerController {
         } catch (JsonProcessingException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.badRequest().body(errorJsonBody(e.getMessage()));
         }
     }
 
@@ -74,7 +71,11 @@ public class CustomerController {
         } catch (JsonProcessingException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.badRequest().body(errorJsonBody(e.getMessage()));
         }
+    }
+
+    private String errorJsonBody(String message) {
+        return "{\"error\":\"" + message + "\"}";
     }
 }
