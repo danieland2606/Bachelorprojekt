@@ -52,6 +52,10 @@ public class AddressEntity {
         this.postalCode = postalCode;
     }
 
+    public long getId () {return id;}
+
+    public void setId (long id) {this.id = id;}
+
     @Override
     public int hashCode() {
         final int prime = 31;

@@ -127,7 +127,7 @@ public class CustomerEntity {
         this.bankDetails = bankDetails;
     }
     public boolean isDogOwner() { return dogOwner;}
-    public void setDogOwner(boolean hasDog) { this.dogOwner = hasDog;}
+    public void setDogOwner(boolean dogOwner) { this.dogOwner = dogOwner;}
 
     @Override
     public boolean equals(Object o) {
@@ -156,7 +156,7 @@ public class CustomerEntity {
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", email='" + email + '\'' +
                 ", bankDetails='" + bankDetails + '\'' +
-                ", hasDog=" + dogOwner +
+                ", dogOwner=" + dogOwner +
                 '}';
     }
 }
