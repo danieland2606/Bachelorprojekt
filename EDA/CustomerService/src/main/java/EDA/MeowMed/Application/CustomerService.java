@@ -58,14 +58,23 @@ public class CustomerService {
      * @throws IllegalArgumentException
      */
     public String getCustomerList(String fields) throws JsonProcessingException, IllegalArgumentException {
+
+        // request all Customers
         List<Customer> request = customerRepository.findAll();
+        // checks if request is empty or not
         if (request.isEmpty()) {
             return null;
         } else {
+            // if no fields where transmitted declare as empty
+            if (fields == null) {
+                fields = "";
+            }
+            // add "id" as base field to filter by
             fields = "id," + fields;
+            // transform to list, by splitting at ","
             List<String> filterList = Arrays.asList(fields.split(","));
 
-            //
+            // filters all elements important for customer and address out of the filterList
             Set<String> customerFilter = filterList.stream()
                     .filter(s -> !s.contains("address."))
                     .collect(Collectors.toSet());
@@ -75,7 +84,7 @@ public class CustomerService {
                     .map(s -> s.replace("address.", ""))
                     .collect(Collectors.toSet());
 
-            //
+            // gets all field names for customer and address, and removes "id" from address
             Set<String> customerFields = Arrays.stream(Customer.class.getDeclaredFields())
                     .map(Field::getName)
                     .collect(Collectors.toSet());
@@ -85,6 +94,7 @@ public class CustomerService {
                     .collect(Collectors.toSet());
             addressFields.remove("id");
 
+            // checks if all filter elements are valid
             for (String filter : customerFilter) {
                 if (!customerFields.contains(filter))
                     throw new IllegalArgumentException(filter + " is not a valid field-parameter for customer!");
@@ -95,8 +105,11 @@ public class CustomerService {
                     throw new IllegalArgumentException(filter + " is not a valid field-parameter for address!");
             }
 
+            // sets filters for all customers
             FilterProvider filters = new SimpleFilterProvider();
 
+            // if there are elements in address that need to be filtered, but address is not wanted,
+            // filter them and add address so those sub-elements can be shown
             if (!customerFilter.contains("address") && !addressFilter.isEmpty()) {
                 customerFilter.add("address");
                 ((SimpleFilterProvider) filters).addFilter("addressFilter", SimpleBeanPropertyFilter.filterOutAllExcept(addressFilter));
@@ -105,14 +118,19 @@ public class CustomerService {
             ((SimpleFilterProvider) filters).setFailOnUnknownId(false);
 
             ObjectMapper mapper = new ObjectMapper();
+
+            // sets format for LocalDate
             mapper.registerModule(new JavaTimeModule());
             mapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm a z"));
+
+            // apply filter and return filtered list of customers
             return mapper.writer(filters).writeValueAsString(request);
         }
     }
 
     /**
      * TODO: Add comment
+     * TODO: Add better validation for jsonParsing
      *
      * @param jsonCustomer
      * @return

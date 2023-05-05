@@ -138,7 +138,7 @@ public class Customer implements Serializable {
         this.employmentStatus = employmentStatus;
     }
 
-    public boolean isDogOwner() {
+    public boolean getDogOwner() {
         return dogOwner;
     }
 
