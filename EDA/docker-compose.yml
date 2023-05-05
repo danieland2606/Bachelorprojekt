@@ -5,7 +5,7 @@ services:
       args:
         mode: "prod"
         customerService: "http://customer:8081"
-        policyService: "http://policy:8082"
+        policyService: "http://policy:8080"
       context: ../UI
       dockerfile: Dockerfile
     container_name: ui-service

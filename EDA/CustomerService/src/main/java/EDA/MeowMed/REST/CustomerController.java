@@ -1,7 +1,6 @@
 package EDA.MeowMed.REST;
 
 import EDA.MeowMed.Application.CustomerService;
-import EDA.MeowMed.Persistence.Entity.Customer;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -10,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 @RestController
-@RequestMapping()
+@RequestMapping
 public class CustomerController {
     @Autowired
     private CustomerService customerService;
@@ -66,7 +65,7 @@ public class CustomerController {
      * @param customer
      * @return
      */
-    @PostMapping(value = "/customer", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/customer", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> postCustomer(@RequestBody String customer) {
         try {
             String responseBody = customerService.addCustomer(customer);
