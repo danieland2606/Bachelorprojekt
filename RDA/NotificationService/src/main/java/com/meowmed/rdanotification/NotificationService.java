@@ -63,7 +63,7 @@ public class NotificationService {
             properties.put("phoneNumber", details.getPhoneNumber());
             properties.put("bankDetails", details.getBankDetails());
             properties.put("address", details.getStreet() + ", " + details.getPostalCode() + " " + details.getCity());
-            if(details.isHasDog()){
+            if(details.isDogOwner()){
                 properties.put("hasDog", "Ja");
             }else{
                 properties.put("hasDog", "Nein");
