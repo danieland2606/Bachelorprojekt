@@ -26,6 +26,7 @@ public class CatEntity {
     private int lowerAverageWeight;
     private int upperAverageWeight;
     private int illnessFactor;
+    //TODO: Checken, warum Mustafa hier ein IDE-Fehler hat
     private String[] possibleColors;
     
     public CatEntity() {
