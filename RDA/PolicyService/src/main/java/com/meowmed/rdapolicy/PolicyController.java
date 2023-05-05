@@ -1,8 +1,12 @@
 package com.meowmed.rdapolicy;
 
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.reactive.function.client.WebClientException;
+
+import java.util.Collections;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +19,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.meowmed.rdapolicy.entity.PolicyRequest;
 import com.meowmed.rdapolicy.entity.PriceCalculationEntity;
+import com.meowmed.rdapolicy.exceptions.CustomerNotFoundException;
+import com.meowmed.rdapolicy.exceptions.MailSendException;
+import com.meowmed.rdapolicy.exceptions.PolicyNotFoundException;
 
 /**
  * Diese Klasse ist der REST-Controller
@@ -66,8 +73,13 @@ public class PolicyController {
 		]
 	 */
 	@GetMapping("/customer/{c_id}/policy")
-	public ResponseEntity<MappingJacksonValue> getPolicyList(@PathVariable Long c_id, @RequestParam(value = "fields") String fields) throws JsonProcessingException {
-		return pService.getPolicyList(c_id,fields);
+	public ResponseEntity<MappingJacksonValue> getPolicyList(@PathVariable Long c_id, @RequestParam(value = "fields") String fields){
+		try{
+			return new ResponseEntity<MappingJacksonValue>(pService.getPolicyList(c_id,fields),HttpStatusCode.valueOf(200));
+		} catch (Exception e){
+			MappingJacksonValue errWrapper = new MappingJacksonValue(Collections.singletonMap("error", "Something went horrible wrong"));
+			return new ResponseEntity<MappingJacksonValue>(errWrapper,HttpStatusCode.valueOf(400));
+		}
 	}
 
 	/**
@@ -94,8 +106,16 @@ public class PolicyController {
 			}
 	 */
 	@GetMapping("/customer/{c_id}/policy/{p_id}")
-	public ResponseEntity<MappingJacksonValue> getPolicy(@PathVariable Long c_id, @PathVariable Long p_id) throws JsonProcessingException{
-		return pService.getPolicy(c_id, p_id);
+	public ResponseEntity<MappingJacksonValue> getPolicy(@PathVariable Long c_id, @PathVariable Long p_id){
+		try {
+			return new ResponseEntity<MappingJacksonValue>(pService.getPolicy(c_id,p_id),HttpStatusCode.valueOf(200));
+		} catch (IllegalArgumentException e) {
+			MappingJacksonValue errWrapper = new MappingJacksonValue(Collections.singletonMap("error", "Einer der Übergabewerte ist null"));
+			return ResponseEntity.status(400).body(errWrapper);
+		} catch (PolicyNotFoundException e){
+			MappingJacksonValue errWrapper = new MappingJacksonValue(Collections.singletonMap("error", "Policy/Customer not found"));
+			return ResponseEntity.status(404).body(errWrapper);
+		}
 	}
 
 	/**
@@ -125,8 +145,26 @@ public class PolicyController {
 	 * 
 	 */
 	@PostMapping("/customer/{c_id}/policy")
-	public ResponseEntity<MappingJacksonValue> postPolicy(@PathVariable Long c_id, @RequestBody PolicyRequest pRequest) throws JsonProcessingException{
-		return pService.postPolicy(c_id, pRequest);
+	public ResponseEntity<MappingJacksonValue> postPolicy(@PathVariable Long c_id, @RequestBody PolicyRequest pRequest){
+		try {
+			return new ResponseEntity<MappingJacksonValue>(pService.postPolicy(c_id, pRequest),HttpStatusCode.valueOf(201));
+		} catch (CustomerNotFoundException e) {
+			MappingJacksonValue errWrapper = new MappingJacksonValue(Collections.singletonMap("error", "Unter der angegebenen Customer-ID wurde kein Customer gefunden"));
+			return ResponseEntity.status(400).body(errWrapper);
+		} catch (IllegalArgumentException e) {
+			MappingJacksonValue errWrapper = new MappingJacksonValue(Collections.singletonMap("error", "Einer der Parameter ist null"));
+			return ResponseEntity.status(400).body(errWrapper);
+		} catch (MailSendException e){
+			MappingJacksonValue errWrapper = new MappingJacksonValue(Collections.singletonMap("error", "Mail-Versand fehlgeschlagen, Daten sind aber gespeichert."));
+			return ResponseEntity.status(400).body(errWrapper);
+		} catch (WebClientException e){
+			MappingJacksonValue errWrapper = new MappingJacksonValue(Collections.singletonMap("error", "Mail-Service erzeugt unerwarteten Fehler, Daten sind aber gespeichert."));
+			return ResponseEntity.status(400).body(errWrapper);
+		} catch (ArithmeticException e){
+			MappingJacksonValue errWrapper = new MappingJacksonValue(Collections.singletonMap("error", "Bei der Preisberechnung ist ein Fehler entstanden"));
+			return ResponseEntity.status(400).body(errWrapper);
+		}
+		//return pService.postPolicy(c_id, pRequest);
 	}
 
 		/**
@@ -156,10 +194,29 @@ public class PolicyController {
 	 * 
 	 */
 	@PutMapping("/customer/{c_id}/policy/{p_id}")
-	public ResponseEntity<MappingJacksonValue> postPolicy(@PathVariable("c_id") Long c_id, @PathVariable("p_id") Long p_id, @RequestBody PolicyRequest pRequest) throws JsonProcessingException{
-		return pService.updatePolicy(c_id, p_id, pRequest);
+	public ResponseEntity<MappingJacksonValue> updatePolicy(@PathVariable("c_id") Long c_id, @PathVariable("p_id") Long p_id, @RequestBody PolicyRequest pRequest) throws JsonProcessingException{
+		try {
+			return new ResponseEntity<MappingJacksonValue>(pService.updatePolicy(c_id, p_id, pRequest),HttpStatusCode.valueOf(200));
+		} catch (CustomerNotFoundException e) {
+			MappingJacksonValue errWrapper = new MappingJacksonValue(Collections.singletonMap("error", "Unter der angegebenen Customer-ID wurde kein Customer gefunden"));
+			return ResponseEntity.status(400).body(errWrapper);		
+		} catch (MailSendException e) {
+			MappingJacksonValue errWrapper = new MappingJacksonValue(Collections.singletonMap("error", "Mail-Versand fehlgeschlagen, Daten sind aber gespeichert."));
+			return ResponseEntity.status(400).body(errWrapper);
+		} catch (WebClientException e) {
+			MappingJacksonValue errWrapper = new MappingJacksonValue(Collections.singletonMap("error", "Mail-Service erzeugt unerwarteten Fehler, Daten sind aber gespeichert."));
+			return ResponseEntity.status(400).body(errWrapper);
+		} catch (PolicyNotFoundException e) {
+			MappingJacksonValue errWrapper = new MappingJacksonValue(Collections.singletonMap("error", "Unter der angegebenen Policy-ID wurde keine Policy gefunden"));
+			return ResponseEntity.status(400).body(errWrapper);
+		} catch (IllegalArgumentException e) {
+			MappingJacksonValue errWrapper = new MappingJacksonValue(Collections.singletonMap("error", "Einer der Argumente ist null"));
+			return ResponseEntity.status(400).body(errWrapper);
+		}
+		
+		//return pService.updatePolicy(c_id, p_id, pRequest);
 	}
-
+	//CustomerNotFoundException, MailSendException, PolicyNotFoundException, IllegalArgumentException
 	/**
 	 * Diese Methode gibt den Preis für den Berechnungsbutton auf der Webseite zurück
 	 * @param body Die Parameter für die Berechnung als Objekt PriceCalculationEntity
@@ -181,6 +238,18 @@ public class PolicyController {
 	 */
 	@GetMapping("/policyprice")
 	public ResponseEntity<MappingJacksonValue> getPolicyPrice(@RequestBody PriceCalculationEntity details) throws JsonProcessingException{
-		return pService.getPolicyPriceRequest(details);
+		try {
+			return new ResponseEntity<MappingJacksonValue>(pService.getPolicyPriceRequest(details),HttpStatusCode.valueOf(200));
+		} catch (ArithmeticException e) {
+			MappingJacksonValue errWrapper = new MappingJacksonValue(Collections.singletonMap("error", "Bei der Berechnung ist ein Fehler aufgetreten."));
+			return ResponseEntity.status(400).body(errWrapper);
+		} catch (CustomerNotFoundException e) {
+			MappingJacksonValue errWrapper = new MappingJacksonValue(Collections.singletonMap("error", "Unter der angegebenen Customer-ID wurde kein Customer gefunden"));
+			return ResponseEntity.status(400).body(errWrapper);		
+		} catch (WebClientException e) {
+			MappingJacksonValue errWrapper = new MappingJacksonValue(Collections.singletonMap("error", "Mail-Service erzeugt unerwarteten Fehler, Daten sind aber gespeichert."));
+			return ResponseEntity.status(400).body(errWrapper);
+		} 
+		//return pService.getPolicyPriceRequest(details);
 	}
 }
