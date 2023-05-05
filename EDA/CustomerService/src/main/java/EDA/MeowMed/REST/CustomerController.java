@@ -10,10 +10,11 @@ import org.springframework.web.bind.annotation.*;
 
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping()
 public class CustomerController {
     @Autowired
     private CustomerService customerService;
+
     /**
      * TODO: Add comment
      *
@@ -33,12 +34,14 @@ public class CustomerController {
             return ResponseEntity.ok(responseBody);
 
         } catch (JsonProcessingException e) {
-            return ResponseEntity.internalServerError().body("Somethings wrong. I can feel it!");
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
     /**
-     * TODO: Add comment & ResponseEntity
+     * TODO: Add comment
      *
      * @param c_id
      * @return
@@ -58,21 +61,20 @@ public class CustomerController {
     }
 
     /**
-     * TODO: Add comment & ResponseEntity
+     * TODO: Add comment
      *
      * @param customer
      * @return
      */
-    @PostMapping(value = "/customer",consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> postCustomer(@RequestBody String customer) throws JsonProcessingException {
+    @PostMapping(value = "/customer", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> postCustomer(@RequestBody String customer) {
         try {
             String responseBody = customerService.addCustomer(customer);
             return ResponseEntity.ok(responseBody);
         } catch (JsonProcessingException e) {
-            throw e;
-            //return ResponseEntity.internalServerError().body(e.toString());
+            return ResponseEntity.badRequest().body(e.getMessage());
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.internalServerError().body("Somethings wrong. I can feel it!");
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 }

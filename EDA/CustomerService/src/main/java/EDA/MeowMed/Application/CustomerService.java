@@ -2,6 +2,7 @@ package EDA.MeowMed.Application;
 
 import EDA.MeowMed.Messaging.EventSenderService;
 import EDA.MeowMed.Persistence.CustomerRepository;
+import EDA.MeowMed.Persistence.Entity.Address;
 import EDA.MeowMed.Persistence.Entity.Customer;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -12,6 +13,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -53,19 +55,48 @@ public class CustomerService {
      * @param fields
      * @return
      * @throws JsonProcessingException
+     * @throws IllegalArgumentException
      */
-    public String getCustomerList(String fields) throws JsonProcessingException {
+    public String getCustomerList(String fields) throws JsonProcessingException, IllegalArgumentException {
         List<Customer> request = customerRepository.findAll();
         if (request.isEmpty()) {
             return null;
         } else {
             fields = "id," + fields;
-            List<String> filter = Arrays.asList(fields.split(","));
-            filter.stream().filter(s -> s.contains(".")).collect(Collectors.toSet());
-            Set<String> addressFilter = filter.stream().filter(s -> s.contains(".")).map(s -> s.replace("address.", "")).collect(Collectors.toSet());
-            Set<String> customerFilter = filter.stream().filter(s -> !s.contains(".")).collect(Collectors.toSet());
+            List<String> filterList = Arrays.asList(fields.split(","));
+
+            //
+            Set<String> customerFilter = filterList.stream()
+                    .filter(s -> !s.contains("address."))
+                    .collect(Collectors.toSet());
+
+            Set<String> addressFilter = filterList.stream()
+                    .filter(s -> s.contains("address."))
+                    .map(s -> s.replace("address.", ""))
+                    .collect(Collectors.toSet());
+
+            //
+            Set<String> customerFields = Arrays.stream(Customer.class.getDeclaredFields())
+                    .map(Field::getName)
+                    .collect(Collectors.toSet());
+
+            Set<String> addressFields = Arrays.stream(Address.class.getDeclaredFields())
+                    .map(Field::getName)
+                    .collect(Collectors.toSet());
+            addressFields.remove("id");
+
+            for (String filter : customerFilter) {
+                if (!customerFields.contains(filter))
+                    throw new IllegalArgumentException(filter + " is not a valid field-parameter for customer!");
+            }
+
+            for (String filter : addressFilter) {
+                if (!addressFields.contains(filter))
+                    throw new IllegalArgumentException(filter + " is not a valid field-parameter for address!");
+            }
 
             FilterProvider filters = new SimpleFilterProvider();
+
             if (!customerFilter.contains("address") && !addressFilter.isEmpty()) {
                 customerFilter.add("address");
                 ((SimpleFilterProvider) filters).addFilter("addressFilter", SimpleBeanPropertyFilter.filterOutAllExcept(addressFilter));
@@ -91,10 +122,11 @@ public class CustomerService {
         if (jsonCustomer.contains("\"id\":")) {
             throw new IllegalArgumentException("Wrong Json Format");
         }
+
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
         mapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm a z"));
-        Customer customer = mapper.readValue(jsonCustomer,Customer.class);
+        Customer customer = mapper.readValue(jsonCustomer, Customer.class);
 
         customerValidatorService.validateCustomer(customer);
 

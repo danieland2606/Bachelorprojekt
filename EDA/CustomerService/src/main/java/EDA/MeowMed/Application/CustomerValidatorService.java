@@ -13,7 +13,7 @@ import java.util.Set;
 @Service
 public class CustomerValidatorService {
     private final String[] formOfAddressElements = {
-            "Herr", "Frau"
+            "herr", "frau"
     };
     private final String[] titleElements = {
             "", "doctor", "professor"
