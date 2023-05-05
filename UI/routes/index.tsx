@@ -1,4 +1,5 @@
 import { HandlerContext, PageProps } from "$fresh/server.ts";
+import { asset } from "$fresh/runtime.ts";
 import { Item, Table, TableItems } from "../components/Table.tsx";
 import { Address, Customer } from "../generated/models/all.ts";
 import { compareId } from "../util/util.ts";
@@ -19,7 +20,7 @@ export default function Dashboard({ data }: PageProps) {
       <div class="box-row">
         <div class="search-container">
           <input type="text" placeholder="Suche.." />
-          <img src="search.svg" alt="lupe" />
+          <img src={asset("/search.svg")} alt="lupe" />
         </div>
         <a class="button create-new" href="/customer">Neuer Kunde</a>
       </div>

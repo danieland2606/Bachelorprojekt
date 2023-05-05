@@ -91,9 +91,9 @@ export class ObservableCustomerApi {
 
     /**
      * get a list of customers
-     * @param fields A filter for which properties of Customer should be transmitted. If no fields are specified, only id is transmitted. Using address and one or more of its sub properties in the same query is a semantic error.
+     * @param fields A filter for which properties of Customer should be transmitted. If no  fields are specified, only id is transmitted. The value &#39;address&#39;  indicates that the entire Address object should be transmitted. Using  &#39;address&#39; and one or more of its sub properties in the same query is a  semantic error.
      */
-    public getCustomerList(fields?: Set<CustomerPropertyNames>, _options?: Configuration): Observable<Array<GetCustomerList200ResponseInner>> {
+    public getCustomerList(fields?: Set<CustomerPropertyNames>, _options?: Configuration): Observable<void | Array<GetCustomerList200ResponseInner>> {
         const requestContextPromise = this.requestFactory.getCustomerList(fields, _options);
 
         // build promise chain
@@ -228,9 +228,9 @@ export class ObservablePolicyApi {
     /**
      * get a list of policies
      * @param customerId 
-     * @param fields A filter for which properties of Policy should be transmitted. If no fields are specified, only id is transmitted. Using objectOfInsurance and one or more of its sub properties in the same query is a semantic error.
+     * @param fields A filter for which properties of Policy should be transmitted. If no fields are specified, only id is transmitted. The value  &#39;objectOfInsurance&#39; indicates that the entire ObjectOfInsurance object  should be transmitted. Using &#39;objectOfInsurance&#39; and one or more of its  sub properties in the same query is a semantic error.
      */
-    public getPolicyList(customerId: number, fields?: Set<PolicyPropertyNames>, _options?: Configuration): Observable<Array<GetPolicyList200ResponseInner>> {
+    public getPolicyList(customerId: number, fields?: Set<PolicyPropertyNames>, _options?: Configuration): Observable<Array<GetPolicyList200ResponseInner> | void> {
         const requestContextPromise = this.requestFactory.getPolicyList(customerId, fields, _options);
 
         // build promise chain

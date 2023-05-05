@@ -1,4 +1,5 @@
 import { HandlerContext, PageProps } from "$fresh/server.ts";
+import { asset } from "$fresh/runtime.ts";
 import { EditCustomer } from "../../components/EditCustomer.tsx";
 import { Table } from "../../components/Table.tsx";
 import { Policy } from "../../generated/models/all.ts";
@@ -24,7 +25,7 @@ export default function ShowCustomer({ data, params }: PageProps) {
       <div class="box-row">
         <div class="search-container">
           <input type="text" placeholder="Suche.." />
-          <img src="search.svg" alt="lupe" />
+          <img src={asset("/search.svg")} alt="lupe" />
         </div>
         <a
           class="button create-new"

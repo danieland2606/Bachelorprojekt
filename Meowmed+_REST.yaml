@@ -28,6 +28,8 @@ paths:
               $ref: '#/components/links/getCustomer'
             put:
               $ref: '#/components/links/updateCustomer'
+        204:
+          description: no customers
         400:
           $ref: '#/components/responses/InvalidFields'
         default:
@@ -71,7 +73,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/CustomerAllRequired'
         404:
-          description: no customer at this location
+          $ref: '#/components/responses/NoCustomerFound'
         default:
           $ref: '#/components/responses/UnknownError'
     put:
@@ -82,10 +84,10 @@ paths:
       requestBody:
         $ref: '#/components/requestBodies/FullCustomer'
       responses:
-        200:
+        204:
           description: customer updated
         404:
-          description: no customer at this location
+          $ref: '#/components/responses/NoCustomerFound'
         400:
           $ref: '#/components/responses/InvalidCustomer'
         default:
@@ -117,6 +119,8 @@ paths:
               $ref: '#/components/links/getPolicy'
             put:
               $ref: '#/components/links/updatePolicy'
+        204:
+          description: no policies for selected customer
         400:
           $ref: '#/components/responses/InvalidFields'
         default:
@@ -165,7 +169,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/PolicyAllRequired'
         404:
-          description: no policy at this location
+          $ref: '#/components/responses/NoPolicyFound'
         default:
           $ref: '#/components/responses/UnknownError'
     put:
@@ -176,10 +180,10 @@ paths:
       requestBody:
         $ref: '#/components/requestBodies/FullPolicy'
       responses:
-        200:
+        204:
           description: policy updated
         404:
-          description: no policy at this location
+          $ref: '#/components/responses/NoPolicyFound'
         400:
           $ref: '#/components/responses/InvalidPolicy'
         default:
@@ -230,9 +234,11 @@ components:
       style: form
       explode: false
       description: >-
-        A filter for which properties of Customer should be transmitted. If
-        no fields are specified, only id is transmitted. Using address and one or
-        more of its sub properties in the same query is a semantic error.
+        A filter for which properties of Customer should be transmitted. If no 
+        fields are specified, only id is transmitted. The value 'address' 
+        indicates that the entire Address object should be transmitted. Using 
+        'address' and one or more of its sub properties in the same query is a 
+        semantic error.
       schema:
         type: array
         uniqueItems: true
@@ -245,8 +251,10 @@ components:
       explode: false
       description: >-
         A filter for which properties of Policy should be transmitted. If no
-        fields are specified, only id is transmitted. Using objectOfInsurance and
-        one or more of its sub properties in the same query is a semantic error.
+        fields are specified, only id is transmitted. The value 
+        'objectOfInsurance' indicates that the entire ObjectOfInsurance object 
+        should be transmitted. Using 'objectOfInsurance' and one or more of its 
+        sub properties in the same query is a semantic error.
       schema:
         type: array
         uniqueItems: true
@@ -295,6 +303,18 @@ components:
             $ref: '#/components/schemas/Error'
     InvalidFields:
       description: invalid fields parameter
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NoCustomerFound:
+      description: no customer at this location
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NoPolicyFound:
+      description: no policy at this location
       content:
         application/json:
           schema:

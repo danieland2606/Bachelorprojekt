@@ -85,7 +85,7 @@ fetch('/customer',
 
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
-|fields|query|array[string]|false|A filter for which properties of Customer should be transmitted. If no fields are specified, only id is transmitted. Using address and one or more of its sub properties in the same query is a semantic error.|
+|fields|query|array[string]|false|A filter for which properties of Customer should be transmitted. If no  fields are specified, only id is transmitted. The value 'address'  indicates that the entire Address object should be transmitted. Using  'address' and one or more of its sub properties in the same query is a  semantic error.|
 
 #### Enumerated Values
 
@@ -151,6 +151,7 @@ fetch('/customer',
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|success|Inline|
+|204|[No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5)|no customers|None|
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|invalid fields parameter|[Error](#schemaerror)|
 |default|Default|unexpected error|string|
 
@@ -440,7 +441,7 @@ fetch('/customer/{customerId}',
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|customer found|[CustomerAllRequired](#schemacustomerallrequired)|
-|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|no customer at this location|None|
+|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|no customer at this location|[Error](#schemaerror)|
 |default|Default|unexpected error|string|
 
 <aside class="success">
@@ -581,9 +582,9 @@ fetch('/customer/{customerId}',
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|customer updated|None|
+|204|[No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5)|customer updated|None|
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|invalid customer data|[Error](#schemaerror)|
-|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|no customer at this location|None|
+|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|no customer at this location|[Error](#schemaerror)|
 |default|Default|unexpected error|string|
 
 <aside class="success">
@@ -655,7 +656,7 @@ fetch('/customer/{customerId}/policy',
 
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
-|fields|query|array[string]|false|A filter for which properties of Policy should be transmitted. If no fields are specified, only id is transmitted. Using objectOfInsurance and one or more of its sub properties in the same query is a semantic error.|
+|fields|query|array[string]|false|A filter for which properties of Policy should be transmitted. If no fields are specified, only id is transmitted. The value  'objectOfInsurance' indicates that the entire ObjectOfInsurance object  should be transmitted. Using 'objectOfInsurance' and one or more of its  sub properties in the same query is a semantic error.|
 |customerId|path|integer|true|none|
 
 #### Enumerated Values
@@ -718,6 +719,7 @@ fetch('/customer/{customerId}/policy',
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|success|Inline|
+|204|[No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5)|no policies for selected customer|None|
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|invalid fields parameter|[Error](#schemaerror)|
 |default|Default|unexpected error|string|
 
@@ -1013,7 +1015,7 @@ fetch('/customer/{customerId}/policy/{policyId}',
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|policy found|[PolicyAllRequired](#schemapolicyallrequired)|
-|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|no policy at this location|None|
+|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|no policy at this location|[Error](#schemaerror)|
 |default|Default|unexpected error|string|
 
 <aside class="success">
@@ -1149,9 +1151,9 @@ fetch('/customer/{customerId}/policy/{policyId}',
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|policy updated|None|
+|204|[No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5)|policy updated|None|
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|invalid policy data|[Error](#schemaerror)|
-|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|no policy at this location|None|
+|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|no policy at this location|[Error](#schemaerror)|
 |default|Default|unexpected error|string|
 
 <aside class="success">

@@ -59,9 +59,9 @@ export class PromiseCustomerApi {
 
     /**
      * get a list of customers
-     * @param fields A filter for which properties of Customer should be transmitted. If no fields are specified, only id is transmitted. Using address and one or more of its sub properties in the same query is a semantic error.
+     * @param fields A filter for which properties of Customer should be transmitted. If no  fields are specified, only id is transmitted. The value &#39;address&#39;  indicates that the entire Address object should be transmitted. Using  &#39;address&#39; and one or more of its sub properties in the same query is a  semantic error.
      */
-    public getCustomerList(fields?: Set<CustomerPropertyNames>, _options?: Configuration): Promise<Array<GetCustomerList200ResponseInner>> {
+    public getCustomerList(fields?: Set<CustomerPropertyNames>, _options?: Configuration): Promise<void | Array<GetCustomerList200ResponseInner>> {
         const result = this.api.getCustomerList(fields, _options);
         return result.toPromise();
     }
@@ -127,9 +127,9 @@ export class PromisePolicyApi {
     /**
      * get a list of policies
      * @param customerId 
-     * @param fields A filter for which properties of Policy should be transmitted. If no fields are specified, only id is transmitted. Using objectOfInsurance and one or more of its sub properties in the same query is a semantic error.
+     * @param fields A filter for which properties of Policy should be transmitted. If no fields are specified, only id is transmitted. The value  &#39;objectOfInsurance&#39; indicates that the entire ObjectOfInsurance object  should be transmitted. Using &#39;objectOfInsurance&#39; and one or more of its  sub properties in the same query is a semantic error.
      */
-    public getPolicyList(customerId: number, fields?: Set<PolicyPropertyNames>, _options?: Configuration): Promise<Array<GetPolicyList200ResponseInner>> {
+    public getPolicyList(customerId: number, fields?: Set<PolicyPropertyNames>, _options?: Configuration): Promise<Array<GetPolicyList200ResponseInner> | void> {
         const result = this.api.getPolicyList(customerId, fields, _options);
         return result.toPromise();
     }

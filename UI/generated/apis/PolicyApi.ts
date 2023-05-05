@@ -152,7 +152,7 @@ export class PolicyApiRequestFactory extends BaseAPIRequestFactory {
     /**
      * get a list of policies
      * @param customerId 
-     * @param fields A filter for which properties of Policy should be transmitted. If no fields are specified, only id is transmitted. Using objectOfInsurance and one or more of its sub properties in the same query is a semantic error.
+     * @param fields A filter for which properties of Policy should be transmitted. If no fields are specified, only id is transmitted. The value  &#39;objectOfInsurance&#39; indicates that the entire ObjectOfInsurance object  should be transmitted. Using &#39;objectOfInsurance&#39; and one or more of its  sub properties in the same query is a semantic error.
      */
     public async getPolicyList(customerId: number, fields?: Set<PolicyPropertyNames>, _options?: Configuration): Promise<RequestContext> {
         let _config = _options || this.configuration;
@@ -351,7 +351,11 @@ export class PolicyApiResponseProcessor {
             return body;
         }
         if (isCodeInRange("404", response.httpStatusCode)) {
-            throw new ApiException<undefined>(response.httpStatusCode, "no policy at this location", undefined, response.headers);
+            const body: Error = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                "Error", ""
+            ) as Error;
+            throw new ApiException<Error>(response.httpStatusCode, "no policy at this location", body, response.headers);
         }
         if (isCodeInRange("0", response.httpStatusCode)) {
             const body: { [key: string]: any; } = ObjectSerializer.deserialize(
@@ -380,7 +384,7 @@ export class PolicyApiResponseProcessor {
      * @params response Response returned by the server for a request to getPolicyList
      * @throws ApiException if the response code was not in [200, 299]
      */
-     public async getPolicyList(response: ResponseContext): Promise<Array<GetPolicyList200ResponseInner> > {
+     public async getPolicyList(response: ResponseContext): Promise<Array<GetPolicyList200ResponseInner> | void > {
         const contentType = ObjectSerializer.normalizeMediaType(response.headers["content-type"]);
         if (isCodeInRange("200", response.httpStatusCode)) {
             const body: Array<GetPolicyList200ResponseInner> = ObjectSerializer.deserialize(
@@ -388,6 +392,9 @@ export class PolicyApiResponseProcessor {
                 "Array<GetPolicyList200ResponseInner>", ""
             ) as Array<GetPolicyList200ResponseInner>;
             return body;
+        }
+        if (isCodeInRange("204", response.httpStatusCode)) {
+            return;
         }
         if (isCodeInRange("400", response.httpStatusCode)) {
             const body: Error = ObjectSerializer.deserialize(
@@ -406,10 +413,10 @@ export class PolicyApiResponseProcessor {
 
         // Work around for missing responses in specification, e.g. for petstore.yaml
         if (response.httpStatusCode >= 200 && response.httpStatusCode <= 299) {
-            const body: Array<GetPolicyList200ResponseInner> = ObjectSerializer.deserialize(
+            const body: Array<GetPolicyList200ResponseInner> | void = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
-                "Array<GetPolicyList200ResponseInner>", ""
-            ) as Array<GetPolicyList200ResponseInner>;
+                "Array<GetPolicyList200ResponseInner> | void", ""
+            ) as Array<GetPolicyList200ResponseInner> | void;
             return body;
         }
 
@@ -425,11 +432,15 @@ export class PolicyApiResponseProcessor {
      */
      public async updatePolicy(response: ResponseContext): Promise<void > {
         const contentType = ObjectSerializer.normalizeMediaType(response.headers["content-type"]);
-        if (isCodeInRange("200", response.httpStatusCode)) {
+        if (isCodeInRange("204", response.httpStatusCode)) {
             return;
         }
         if (isCodeInRange("404", response.httpStatusCode)) {
-            throw new ApiException<undefined>(response.httpStatusCode, "no policy at this location", undefined, response.headers);
+            const body: Error = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                "Error", ""
+            ) as Error;
+            throw new ApiException<Error>(response.httpStatusCode, "no policy at this location", body, response.headers);
         }
         if (isCodeInRange("400", response.httpStatusCode)) {
             const body: Error = ObjectSerializer.deserialize(

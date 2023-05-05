@@ -49,7 +49,7 @@ export interface CustomerApiGetCustomerRequest {
 
 export interface CustomerApiGetCustomerListRequest {
     /**
-     * A filter for which properties of Customer should be transmitted. If no fields are specified, only id is transmitted. Using address and one or more of its sub properties in the same query is a semantic error.
+     * A filter for which properties of Customer should be transmitted. If no  fields are specified, only id is transmitted. The value &#39;address&#39;  indicates that the entire Address object should be transmitted. Using  &#39;address&#39; and one or more of its sub properties in the same query is a  semantic error.
      * @type Set&lt;CustomerPropertyNames&gt;
      * @memberof CustomerApigetCustomerList
      */
@@ -98,7 +98,7 @@ export class ObjectCustomerApi {
      * get a list of customers
      * @param param the request object
      */
-    public getCustomerList(param: CustomerApiGetCustomerListRequest = {}, options?: Configuration): Promise<Array<GetCustomerList200ResponseInner>> {
+    public getCustomerList(param: CustomerApiGetCustomerListRequest = {}, options?: Configuration): Promise<void | Array<GetCustomerList200ResponseInner>> {
         return this.api.getCustomerList(param.fields,  options).toPromise();
     }
 
@@ -162,7 +162,7 @@ export interface PolicyApiGetPolicyListRequest {
      */
     customerId: number
     /**
-     * A filter for which properties of Policy should be transmitted. If no fields are specified, only id is transmitted. Using objectOfInsurance and one or more of its sub properties in the same query is a semantic error.
+     * A filter for which properties of Policy should be transmitted. If no fields are specified, only id is transmitted. The value  &#39;objectOfInsurance&#39; indicates that the entire ObjectOfInsurance object  should be transmitted. Using &#39;objectOfInsurance&#39; and one or more of its  sub properties in the same query is a semantic error.
      * @type Set&lt;PolicyPropertyNames&gt;
      * @memberof PolicyApigetPolicyList
      */
@@ -225,7 +225,7 @@ export class ObjectPolicyApi {
      * get a list of policies
      * @param param the request object
      */
-    public getPolicyList(param: PolicyApiGetPolicyListRequest, options?: Configuration): Promise<Array<GetPolicyList200ResponseInner>> {
+    public getPolicyList(param: PolicyApiGetPolicyListRequest, options?: Configuration): Promise<Array<GetPolicyList200ResponseInner> | void> {
         return this.api.getPolicyList(param.customerId, param.fields,  options).toPromise();
     }
 

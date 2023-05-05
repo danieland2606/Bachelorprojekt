@@ -92,7 +92,7 @@ export class CustomerApiRequestFactory extends BaseAPIRequestFactory {
 
     /**
      * get a list of customers
-     * @param fields A filter for which properties of Customer should be transmitted. If no fields are specified, only id is transmitted. Using address and one or more of its sub properties in the same query is a semantic error.
+     * @param fields A filter for which properties of Customer should be transmitted. If no  fields are specified, only id is transmitted. The value &#39;address&#39;  indicates that the entire Address object should be transmitted. Using  &#39;address&#39; and one or more of its sub properties in the same query is a  semantic error.
      */
     public async getCustomerList(fields?: Set<CustomerPropertyNames>, _options?: Configuration): Promise<RequestContext> {
         let _config = _options || this.configuration;
@@ -233,7 +233,11 @@ export class CustomerApiResponseProcessor {
             return body;
         }
         if (isCodeInRange("404", response.httpStatusCode)) {
-            throw new ApiException<undefined>(response.httpStatusCode, "no customer at this location", undefined, response.headers);
+            const body: Error = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                "Error", ""
+            ) as Error;
+            throw new ApiException<Error>(response.httpStatusCode, "no customer at this location", body, response.headers);
         }
         if (isCodeInRange("0", response.httpStatusCode)) {
             const body: { [key: string]: any; } = ObjectSerializer.deserialize(
@@ -262,7 +266,7 @@ export class CustomerApiResponseProcessor {
      * @params response Response returned by the server for a request to getCustomerList
      * @throws ApiException if the response code was not in [200, 299]
      */
-     public async getCustomerList(response: ResponseContext): Promise<Array<GetCustomerList200ResponseInner> > {
+     public async getCustomerList(response: ResponseContext): Promise<void | Array<GetCustomerList200ResponseInner> > {
         const contentType = ObjectSerializer.normalizeMediaType(response.headers["content-type"]);
         if (isCodeInRange("200", response.httpStatusCode)) {
             const body: Array<GetCustomerList200ResponseInner> = ObjectSerializer.deserialize(
@@ -270,6 +274,9 @@ export class CustomerApiResponseProcessor {
                 "Array<GetCustomerList200ResponseInner>", ""
             ) as Array<GetCustomerList200ResponseInner>;
             return body;
+        }
+        if (isCodeInRange("204", response.httpStatusCode)) {
+            return;
         }
         if (isCodeInRange("400", response.httpStatusCode)) {
             const body: Error = ObjectSerializer.deserialize(
@@ -288,10 +295,10 @@ export class CustomerApiResponseProcessor {
 
         // Work around for missing responses in specification, e.g. for petstore.yaml
         if (response.httpStatusCode >= 200 && response.httpStatusCode <= 299) {
-            const body: Array<GetCustomerList200ResponseInner> = ObjectSerializer.deserialize(
+            const body: void | Array<GetCustomerList200ResponseInner> = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
-                "Array<GetCustomerList200ResponseInner>", ""
-            ) as Array<GetCustomerList200ResponseInner>;
+                "void | Array<GetCustomerList200ResponseInner>", ""
+            ) as void | Array<GetCustomerList200ResponseInner>;
             return body;
         }
 
@@ -307,11 +314,15 @@ export class CustomerApiResponseProcessor {
      */
      public async updateCustomer(response: ResponseContext): Promise<void > {
         const contentType = ObjectSerializer.normalizeMediaType(response.headers["content-type"]);
-        if (isCodeInRange("200", response.httpStatusCode)) {
+        if (isCodeInRange("204", response.httpStatusCode)) {
             return;
         }
         if (isCodeInRange("404", response.httpStatusCode)) {
-            throw new ApiException<undefined>(response.httpStatusCode, "no customer at this location", undefined, response.headers);
+            const body: Error = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                "Error", ""
+            ) as Error;
+            throw new ApiException<Error>(response.httpStatusCode, "no customer at this location", body, response.headers);
         }
         if (isCodeInRange("400", response.httpStatusCode)) {
             const body: Error = ObjectSerializer.deserialize(

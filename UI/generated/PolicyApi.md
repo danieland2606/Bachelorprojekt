@@ -186,7 +186,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](README.md#documentation-for-api-endpoints) [[Back to Model list]](README.md#documentation-for-models) [[Back to README]](README.md)
 
 # **getPolicyList**
-> Array<GetPolicyList200ResponseInner> getPolicyList()
+> Array<GetPolicyList200ResponseInner> | void getPolicyList()
 
 
 ### Example
@@ -202,7 +202,7 @@ const apiInstance = new .PolicyApi(configuration);
 let body:.PolicyApiGetPolicyListRequest = {
   // number
   customerId: 1,
-  // Set<PolicyPropertyNames> | A filter for which properties of Policy should be transmitted. If no fields are specified, only id is transmitted. Using objectOfInsurance and one or more of its sub properties in the same query is a semantic error. (optional)
+  // Set<PolicyPropertyNames> | A filter for which properties of Policy should be transmitted. If no fields are specified, only id is transmitted. The value  'objectOfInsurance' indicates that the entire ObjectOfInsurance object  should be transmitted. Using 'objectOfInsurance' and one or more of its  sub properties in the same query is a semantic error. (optional)
   fields: [
     "startDate",
   ],
@@ -219,12 +219,12 @@ apiInstance.getPolicyList(body).then((data:any) => {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **customerId** | [**number**] |  | defaults to undefined
- **fields** | **Set&lt;PolicyPropertyNames&gt;** | A filter for which properties of Policy should be transmitted. If no fields are specified, only id is transmitted. Using objectOfInsurance and one or more of its sub properties in the same query is a semantic error. | (optional) defaults to undefined
+ **fields** | **Set&lt;PolicyPropertyNames&gt;** | A filter for which properties of Policy should be transmitted. If no fields are specified, only id is transmitted. The value  &#39;objectOfInsurance&#39; indicates that the entire ObjectOfInsurance object  should be transmitted. Using &#39;objectOfInsurance&#39; and one or more of its  sub properties in the same query is a semantic error. | (optional) defaults to undefined
 
 
 ### Return type
 
-**Array<GetPolicyList200ResponseInner>**
+**Array<GetPolicyList200ResponseInner> | void**
 
 ### Authorization
 
@@ -240,6 +240,7 @@ No authorization required
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **200** | success |  -  |
+**204** | no policies for selected customer |  -  |
 **400** | invalid fields parameter |  -  |
 **0** | unexpected error |  -  |
 
@@ -300,7 +301,7 @@ No authorization required
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-**200** | policy updated |  -  |
+**204** | policy updated |  -  |
 **404** | no policy at this location |  -  |
 **400** | invalid policy data |  -  |
 **0** | unexpected error |  -  |
