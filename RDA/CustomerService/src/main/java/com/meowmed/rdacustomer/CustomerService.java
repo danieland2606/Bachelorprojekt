@@ -16,10 +16,7 @@ import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Arrays;
-import java.util.Set;
+import java.util.*;
 import java.time.LocalDate;
 
 /**
@@ -102,7 +99,7 @@ public class CustomerService {
     public MappingJacksonValue postCustomer(CustomerRequest cRequest) {
         aRepository.save(cRequest.getAddress());
         CustomerEntity customer= new CustomerEntity(cRequest.getFirstName(), cRequest.getLastName(), cRequest.getTitle(), cRequest.getFormOfAdress(), cRequest.getMaritalStatus(), cRequest.getDateOfBirth(), cRequest.getEmploymentStatus(), cRequest.getAddress(), cRequest.getPhoneNumber(),cRequest.getEmail(),cRequest.getBankDetails(),cRequest.isDogOwner());
-        
+        cRepository.save(customer);
         MailCustomerEntity mail = new MailCustomerEntity(cRequest);
 		System.out.println(mail);
 		//WebClient notificationClient = WebClient.create("http://" + notificationUrl + ":8080");
@@ -121,6 +118,41 @@ public class CustomerService {
                 .addFilter("customerFilter", SimpleBeanPropertyFilter.filterOutAllExcept("id"))
                 .setFailOnUnknownId(false));
         return wrapper;
+    }
+
+    public MappingJacksonValue customerUpdate(Long c_id, CustomerRequest cRequest) {
+
+        Optional<CustomerEntity> currentCustomer = cRepository.findById(c_id);
+        if(currentCustomer.isEmpty()) throw new RuntimeException();
+
+        cRequest.getAddress().setId(currentCustomer.get().getAddress().getId());
+
+
+        // Erzeugen und ersetzen der Policy
+        CustomerEntity customer= new CustomerEntity(cRequest.getFirstName(), cRequest.getLastName(), cRequest.getTitle(), cRequest.getFormOfAdress(), cRequest.getMaritalStatus(), cRequest.getDateOfBirth(), cRequest.getEmploymentStatus(), cRequest.getAddress(), cRequest.getPhoneNumber(),cRequest.getEmail(),cRequest.getBankDetails(),cRequest.isDogOwner());
+        aRepository.save(cRequest.getAddress());
+        customer.setId(c_id);
+        customer = cRepository.save(customer);
+
+        /*// Versand der Mail
+        MailPolicyEntity mail = new MailPolicyEntity(policy, customer);
+        ResponseEntity<String> response = sendMail("policychangenotification", mail);
+        if (response.getStatusCode() != HttpStatus.OK) throw new MailSendException();
+		{
+			MappingJacksonValue errWrapper = new MappingJacksonValue(Collections.singletonMap("error", "Es gab Probleme, die Mail zu versenden, Daten wurden aber gespeichert"));
+			return new ResponseEntity<MappingJacksonValue>(errWrapper,HttpStatusCode.valueOf(400));
+		}
+        if(debugmode) System.out.println("updatePolicy: mail: " + mail + " response: " + response);
+        */
+        // Verpacken und Filtern von der Ausgabe
+        MappingJacksonValue wrapper = new MappingJacksonValue(customer);
+        wrapper.setFilters(new SimpleFilterProvider()
+                .addFilter("customerFilter", SimpleBeanPropertyFilter.filterOutAllExcept("id"))
+                .setFailOnUnknownId(false));
+
+        return wrapper;
+        //return new ResponseEntity<MappingJacksonValue>(wrapper,HttpStatusCode.valueOf(201));
+
     }
 
     void setUp(){
