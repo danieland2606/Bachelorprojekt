@@ -64,9 +64,9 @@ public class NotificationService {
             properties.put("bankDetails", details.getBankDetails());
             properties.put("address", details.getStreet() + ", " + details.getPostalCode() + " " + details.getCity());
             if(details.isDogOwner()){
-                properties.put("hasDog", "Ja");
+                properties.put("dogOwner", "Ja");
             }else{
-                properties.put("hasDog", "Nein");
+                properties.put("dogOwner", "Nein");
             }
             Context context = new Context();
             context.setVariables(properties);
