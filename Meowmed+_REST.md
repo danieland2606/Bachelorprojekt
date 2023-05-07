@@ -4,6 +4,16 @@
 
 > Scroll down for code samples, example requests and responses.
 
+Base URLs:
+
+* <a href="http://localhost:8081">http://localhost:8081</a>
+
+* <a href="http://localhost:8082">http://localhost:8082</a>
+
+* <a href="http://localhost:8071">http://localhost:8071</a>
+
+* <a href="http://localhost:8072">http://localhost:8072</a>
+
 <h1 id="meowmed--customer">customer</h1>
 
 ## getCustomerList
@@ -18,7 +28,7 @@
 ```http
 GET /customer HTTP/1.1
 Accept: application/json
-Host: example.com
+Host: localhost:8081
 
 ```
 
@@ -29,7 +39,7 @@ Host: example.com
 
 ```shell
 curl --request GET \
-  --url https://example.com/customer \
+  --url http://localhost:8081/customer \
   --header 'Accept: application/json'
 ```
 
@@ -39,7 +49,7 @@ curl --request GET \
 <summary>javascript</summary>
 
 ```javascript
-fetch("https://example.com/customer", {
+fetch("http://localhost:8081/customer", {
   "method": "GET",
   "headers": {
     "Accept": "application/json"
@@ -96,7 +106,7 @@ fetch("https://example.com/customer", {
     "firstName": "string",
     "lastName": "string",
     "formOfAddress": "herr",
-    "title": "",
+    "title": "none",
     "maritalStatus": "ledig",
     "dateOfBirth": "2019-08-24",
     "employmentStatus": "selbststaendig",
@@ -141,7 +151,7 @@ fetch("https://example.com/customer", {
 |---|---|
 |formOfAddress|herr|
 |formOfAddress|frau|
-|title||
+|title|none|
 |title|doctor|
 |title|professor|
 |maritalStatus|ledig|
@@ -184,10 +194,10 @@ This operation does not require authentication
 POST /customer HTTP/1.1
 Content-Type: application/json
 Accept: application/json
-Host: example.com
-Content-Length: 320
+Host: localhost:8081
+Content-Length: 324
 
-{"firstName":"string","lastName":"string","formOfAddress":"herr","title":"","maritalStatus":"ledig","dateOfBirth":"2019-08-24","employmentStatus":"selbststaendig","dogOwner":true,"address":{"city":"string","street":"string","postalCode":"string"},"phoneNumber":"string","email":"user@example.com","bankDetails":"string"}
+{"firstName":"string","lastName":"string","formOfAddress":"herr","title":"none","maritalStatus":"ledig","dateOfBirth":"2019-08-24","employmentStatus":"selbststaendig","dogOwner":true,"address":{"city":"string","street":"string","postalCode":"string"},"phoneNumber":"string","email":"user@example.com","bankDetails":"string"}
 ```
 
 </details>
@@ -197,10 +207,10 @@ Content-Length: 320
 
 ```shell
 curl --request POST \
-  --url https://example.com/customer \
+  --url http://localhost:8081/customer \
   --header 'Accept: application/json' \
   --header 'Content-Type: application/json' \
-  --data '{"firstName":"string","lastName":"string","formOfAddress":"herr","title":"","maritalStatus":"ledig","dateOfBirth":"2019-08-24","employmentStatus":"selbststaendig","dogOwner":true,"address":{"city":"string","street":"string","postalCode":"string"},"phoneNumber":"string","email":"user@example.com","bankDetails":"string"}'
+  --data '{"firstName":"string","lastName":"string","formOfAddress":"herr","title":"none","maritalStatus":"ledig","dateOfBirth":"2019-08-24","employmentStatus":"selbststaendig","dogOwner":true,"address":{"city":"string","street":"string","postalCode":"string"},"phoneNumber":"string","email":"user@example.com","bankDetails":"string"}'
 ```
 
 </details>
@@ -209,13 +219,13 @@ curl --request POST \
 <summary>javascript</summary>
 
 ```javascript
-fetch("https://example.com/customer", {
+fetch("http://localhost:8081/customer", {
   "method": "POST",
   "headers": {
     "Content-Type": "application/json",
     "Accept": "application/json"
   },
-  "body": "{\"firstName\":\"string\",\"lastName\":\"string\",\"formOfAddress\":\"herr\",\"title\":\"\",\"maritalStatus\":\"ledig\",\"dateOfBirth\":\"2019-08-24\",\"employmentStatus\":\"selbststaendig\",\"dogOwner\":true,\"address\":{\"city\":\"string\",\"street\":\"string\",\"postalCode\":\"string\"},\"phoneNumber\":\"string\",\"email\":\"user@example.com\",\"bankDetails\":\"string\"}"
+  "body": "{\"firstName\":\"string\",\"lastName\":\"string\",\"formOfAddress\":\"herr\",\"title\":\"none\",\"maritalStatus\":\"ledig\",\"dateOfBirth\":\"2019-08-24\",\"employmentStatus\":\"selbststaendig\",\"dogOwner\":true,\"address\":{\"city\":\"string\",\"street\":\"string\",\"postalCode\":\"string\"},\"phoneNumber\":\"string\",\"email\":\"user@example.com\",\"bankDetails\":\"string\"}"
 })
 .then(response => {
   console.log(response);
@@ -238,7 +248,7 @@ fetch("https://example.com/customer", {
   "firstName": "string",
   "lastName": "string",
   "formOfAddress": "herr",
-  "title": "",
+  "title": "none",
   "maritalStatus": "ledig",
   "dateOfBirth": "2019-08-24",
   "employmentStatus": "selbststaendig",
@@ -305,7 +315,7 @@ This operation does not require authentication
 ```http
 GET /customer/0 HTTP/1.1
 Accept: application/json
-Host: example.com
+Host: localhost:8081
 
 ```
 
@@ -316,7 +326,7 @@ Host: example.com
 
 ```shell
 curl --request GET \
-  --url https://example.com/customer/0 \
+  --url http://localhost:8081/customer/0 \
   --header 'Accept: application/json'
 ```
 
@@ -326,7 +336,7 @@ curl --request GET \
 <summary>javascript</summary>
 
 ```javascript
-fetch("https://example.com/customer/0", {
+fetch("http://localhost:8081/customer/0", {
   "method": "GET",
   "headers": {
     "Accept": "application/json"
@@ -362,7 +372,7 @@ fetch("https://example.com/customer/0", {
   "firstName": "string",
   "lastName": "string",
   "formOfAddress": "herr",
-  "title": "",
+  "title": "none",
   "maritalStatus": "ledig",
   "dateOfBirth": "2019-08-24",
   "employmentStatus": "selbststaendig",
@@ -401,130 +411,6 @@ fetch("https://example.com/customer/0", {
 This operation does not require authentication
 </aside>
 
-## updateCustomer
-
-<a id="opIdupdateCustomer"></a>
-
-> Code samples
-
-<details>
-<summary>http</summary>
-
-```http
-PUT /customer/0 HTTP/1.1
-Content-Type: application/json
-Accept: application/json
-Host: example.com
-Content-Length: 320
-
-{"firstName":"string","lastName":"string","formOfAddress":"herr","title":"","maritalStatus":"ledig","dateOfBirth":"2019-08-24","employmentStatus":"selbststaendig","dogOwner":true,"address":{"city":"string","street":"string","postalCode":"string"},"phoneNumber":"string","email":"user@example.com","bankDetails":"string"}
-```
-
-</details>
-
-<details>
-<summary>shell</summary>
-
-```shell
-curl --request PUT \
-  --url https://example.com/customer/0 \
-  --header 'Accept: application/json' \
-  --header 'Content-Type: application/json' \
-  --data '{"firstName":"string","lastName":"string","formOfAddress":"herr","title":"","maritalStatus":"ledig","dateOfBirth":"2019-08-24","employmentStatus":"selbststaendig","dogOwner":true,"address":{"city":"string","street":"string","postalCode":"string"},"phoneNumber":"string","email":"user@example.com","bankDetails":"string"}'
-```
-
-</details>
-
-<details>
-<summary>javascript</summary>
-
-```javascript
-fetch("https://example.com/customer/0", {
-  "method": "PUT",
-  "headers": {
-    "Content-Type": "application/json",
-    "Accept": "application/json"
-  },
-  "body": "{\"firstName\":\"string\",\"lastName\":\"string\",\"formOfAddress\":\"herr\",\"title\":\"\",\"maritalStatus\":\"ledig\",\"dateOfBirth\":\"2019-08-24\",\"employmentStatus\":\"selbststaendig\",\"dogOwner\":true,\"address\":{\"city\":\"string\",\"street\":\"string\",\"postalCode\":\"string\"},\"phoneNumber\":\"string\",\"email\":\"user@example.com\",\"bankDetails\":\"string\"}"
-})
-.then(response => {
-  console.log(response);
-})
-.catch(err => {
-  console.error(err);
-});
-```
-
-</details>
-
-`PUT /customer/{customerId}`
-
-*replace a customer*
-
-> Body parameter
-
-```json
-{
-  "firstName": "string",
-  "lastName": "string",
-  "formOfAddress": "herr",
-  "title": "",
-  "maritalStatus": "ledig",
-  "dateOfBirth": "2019-08-24",
-  "employmentStatus": "selbststaendig",
-  "dogOwner": true,
-  "address": {
-    "city": "string",
-    "street": "string",
-    "postalCode": "string"
-  },
-  "phoneNumber": "string",
-  "email": "user@example.com",
-  "bankDetails": "string"
-}
-```
-
-<h3 id="updatecustomer-parameters">Parameters</h3>
-
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|body|body|[CustomerAllRequired](#schemacustomerallrequired)|true|none|
-|customerId|path|integer|true|none|
-
-> Example responses
-
-> 400 Response
-
-```json
-{
-  "error": "string"
-}
-```
-
-> default Response
-
-```xml
-<?xml version="1.0" encoding="UTF-8" ?>
-<Error/>
-```
-
-```
-"string"
-```
-
-<h3 id="updatecustomer-responses">Responses</h3>
-
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|204|[No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5)|customer updated|None|
-|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|invalid customer data|[Error](#schemaerror)|
-|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|no customer at this location|[Error](#schemaerror)|
-|default|Default|unexpected error|string|
-
-<aside class="success">
-This operation does not require authentication
-</aside>
-
 <h1 id="meowmed--policy">policy</h1>
 
 ## getPolicyList
@@ -539,7 +425,7 @@ This operation does not require authentication
 ```http
 GET /customer/0/policy HTTP/1.1
 Accept: application/json
-Host: example.com
+Host: localhost:8081
 
 ```
 
@@ -550,7 +436,7 @@ Host: example.com
 
 ```shell
 curl --request GET \
-  --url https://example.com/customer/0/policy \
+  --url http://localhost:8081/customer/0/policy \
   --header 'Accept: application/json'
 ```
 
@@ -560,7 +446,7 @@ curl --request GET \
 <summary>javascript</summary>
 
 ```javascript
-fetch("https://example.com/customer/0/policy", {
+fetch("http://localhost:8081/customer/0/policy", {
   "method": "GET",
   "headers": {
     "Accept": "application/json"
@@ -714,7 +600,7 @@ This operation does not require authentication
 POST /customer/0/policy HTTP/1.1
 Content-Type: application/json
 Accept: application/json
-Host: example.com
+Host: localhost:8081
 Content-Length: 240
 
 {"startDate":"2019-08-24","endDate":"2019-08-24","coverage":0,"objectOfInsurance":{"name":"string","race":"siamese","color":"seal","dateOfBirth":"2019-08-24","castrated":true,"personality":"anhaenglich","environment":"draussen","weight":0}}
@@ -727,7 +613,7 @@ Content-Length: 240
 
 ```shell
 curl --request POST \
-  --url https://example.com/customer/0/policy \
+  --url http://localhost:8081/customer/0/policy \
   --header 'Accept: application/json' \
   --header 'Content-Type: application/json' \
   --data '{"startDate":"2019-08-24","endDate":"2019-08-24","coverage":0,"objectOfInsurance":{"name":"string","race":"siamese","color":"seal","dateOfBirth":"2019-08-24","castrated":true,"personality":"anhaenglich","environment":"draussen","weight":0}}'
@@ -739,7 +625,7 @@ curl --request POST \
 <summary>javascript</summary>
 
 ```javascript
-fetch("https://example.com/customer/0/policy", {
+fetch("http://localhost:8081/customer/0/policy", {
   "method": "POST",
   "headers": {
     "Content-Type": "application/json",
@@ -833,7 +719,7 @@ This operation does not require authentication
 ```http
 GET /customer/0/policy/0 HTTP/1.1
 Accept: application/json
-Host: example.com
+Host: localhost:8081
 
 ```
 
@@ -844,7 +730,7 @@ Host: example.com
 
 ```shell
 curl --request GET \
-  --url https://example.com/customer/0/policy/0 \
+  --url http://localhost:8081/customer/0/policy/0 \
   --header 'Accept: application/json'
 ```
 
@@ -854,7 +740,7 @@ curl --request GET \
 <summary>javascript</summary>
 
 ```javascript
-fetch("https://example.com/customer/0/policy/0", {
+fetch("http://localhost:8081/customer/0/policy/0", {
   "method": "GET",
   "headers": {
     "Accept": "application/json"
@@ -941,7 +827,7 @@ This operation does not require authentication
 PUT /customer/0/policy/0 HTTP/1.1
 Content-Type: application/json
 Accept: application/json
-Host: example.com
+Host: localhost:8081
 Content-Length: 240
 
 {"startDate":"2019-08-24","endDate":"2019-08-24","coverage":0,"objectOfInsurance":{"name":"string","race":"siamese","color":"seal","dateOfBirth":"2019-08-24","castrated":true,"personality":"anhaenglich","environment":"draussen","weight":0}}
@@ -954,7 +840,7 @@ Content-Length: 240
 
 ```shell
 curl --request PUT \
-  --url https://example.com/customer/0/policy/0 \
+  --url http://localhost:8081/customer/0/policy/0 \
   --header 'Accept: application/json' \
   --header 'Content-Type: application/json' \
   --data '{"startDate":"2019-08-24","endDate":"2019-08-24","coverage":0,"objectOfInsurance":{"name":"string","race":"siamese","color":"seal","dateOfBirth":"2019-08-24","castrated":true,"personality":"anhaenglich","environment":"draussen","weight":0}}'
@@ -966,7 +852,7 @@ curl --request PUT \
 <summary>javascript</summary>
 
 ```javascript
-fetch("https://example.com/customer/0/policy/0", {
+fetch("http://localhost:8081/customer/0/policy/0", {
   "method": "PUT",
   "headers": {
     "Content-Type": "application/json",
@@ -1063,7 +949,7 @@ This operation does not require authentication
 POST /policyprice HTTP/1.1
 Content-Type: application/json
 Accept: application/json
-Host: example.com
+Host: localhost:8081
 Content-Length: 266
 
 {"customerId":0,"policy":{"startDate":"2019-08-24","endDate":"2019-08-24","coverage":0,"objectOfInsurance":{"name":"string","race":"siamese","color":"seal","dateOfBirth":"2019-08-24","castrated":true,"personality":"anhaenglich","environment":"draussen","weight":0}}}
@@ -1076,7 +962,7 @@ Content-Length: 266
 
 ```shell
 curl --request POST \
-  --url https://example.com/policyprice \
+  --url http://localhost:8081/policyprice \
   --header 'Accept: application/json' \
   --header 'Content-Type: application/json' \
   --data '{"customerId":0,"policy":{"startDate":"2019-08-24","endDate":"2019-08-24","coverage":0,"objectOfInsurance":{"name":"string","race":"siamese","color":"seal","dateOfBirth":"2019-08-24","castrated":true,"personality":"anhaenglich","environment":"draussen","weight":0}}}'
@@ -1088,7 +974,7 @@ curl --request POST \
 <summary>javascript</summary>
 
 ```javascript
-fetch("https://example.com/policyprice", {
+fetch("http://localhost:8081/policyprice", {
   "method": "POST",
   "headers": {
     "Content-Type": "application/json",
@@ -1251,7 +1137,7 @@ This operation does not require authentication
   "firstName": "string",
   "lastName": "string",
   "formOfAddress": "herr",
-  "title": "",
+  "title": "none",
   "maritalStatus": "ledig",
   "dateOfBirth": "2019-08-24",
   "employmentStatus": "selbststaendig",
@@ -1323,7 +1209,7 @@ This operation does not require authentication
   "firstName": "string",
   "lastName": "string",
   "formOfAddress": "herr",
-  "title": "",
+  "title": "none",
   "maritalStatus": "ledig",
   "dateOfBirth": "2019-08-24",
   "employmentStatus": "selbststaendig",
@@ -1615,7 +1501,7 @@ This operation does not require authentication
 <a id="tocstitle"></a>
 
 ```json
-""
+"none"
 
 ```
 
@@ -1629,7 +1515,7 @@ This operation does not require authentication
 
 |Property|Value|
 |---|---|
-|*anonymous*||
+|*anonymous*|none|
 |*anonymous*|doctor|
 |*anonymous*|professor|
 

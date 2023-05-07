@@ -12,5 +12,5 @@
 
 import { HttpFile } from '../http/http.ts';
 
-export const TitleValues =[ "" , "doctor" , "professor" ] as const;
+export const TitleValues =[ "none" , "doctor" , "professor" ] as const;
 export type Title = typeof TitleValues[number];

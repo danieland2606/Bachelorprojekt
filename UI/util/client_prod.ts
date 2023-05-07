@@ -21,12 +21,11 @@ const customerFields = new Set<CustomerPropertyNames>([
 ]);
 
 export const customerClient = {
-  getCustomerList: () => customerApi.getCustomerList(customerFields),
+  getCustomerList: () =>
+    customerApi.getCustomerList(customerFields).then(voidToEmpty),
   getCustomer: (id: number) => customerApi.getCustomer(id),
   createCustomer: (customer: CustomerAllRequired) =>
     customerApi.createCustomer(customer),
-  updateCustomer: (id: number, customer: CustomerAllRequired) =>
-    customerApi.updateCustomer(id, customer),
 };
 
 const policyServer = new ServerConfiguration("${policyService}", {});
@@ -41,8 +40,9 @@ const policyFields = new Set<PolicyPropertyNames>([
 ]);
 
 export const policyClient = {
-  getPolicyList: (customerId: number) =>
-    policyApi.getPolicyList(customerId, policyFields),
+  getPolicyList: (
+    customerId: number,
+  ) => policyApi.getPolicyList(customerId, policyFields).then(voidToEmpty),
   getPolicy: (customerId: number, policyId: number) =>
     policyApi.getPolicy(customerId, policyId),
   createPolicy: (customerId: number, policy: PolicyAllRequired) =>
@@ -54,3 +54,10 @@ export const policyClient = {
   ) => policyApi.updatePolicy(customerId, policyId, policy),
   calcPolicyPrice: (calc: PolicyCalc) => policyApi.calcPolicyPrice(calc),
 };
+
+function voidToEmpty<T>(arg: T[] | void) { //typescript sucks
+  if (typeof arg === "undefined") {
+    return [] as T[];
+  }
+  return arg;
+}

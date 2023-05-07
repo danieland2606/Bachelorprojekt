@@ -50,6 +50,9 @@ export class ServerConfiguration<T extends { [key: string]: string }> implements
     }
 }
 
-export const server1 = new ServerConfiguration<{  }>("", {  })
+export const server1 = new ServerConfiguration<{  }>("http://localhost:8081", {  })
+export const server2 = new ServerConfiguration<{  }>("http://localhost:8082", {  })
+export const server3 = new ServerConfiguration<{  }>("http://localhost:8071", {  })
+export const server4 = new ServerConfiguration<{  }>("http://localhost:8072", {  })
 
-export const servers = [server1];
+export const servers = [server1, server2, server3, server4];

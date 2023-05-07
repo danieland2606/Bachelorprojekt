@@ -2,6 +2,15 @@ openapi: 3.0.3
 info:
   title: Meowmed+
   version: 0.0.1
+servers: 
+  - url: http://localhost:8081
+    description: rda customer testserver
+  - url: http://localhost:8082
+    description: rda policy testserver
+  - url: http://localhost:8071
+    description: eda customer testserver
+  - url: http://localhost:8072
+    description: eda policy testserver
 paths:
   /customer:
     get:
@@ -77,22 +86,22 @@ paths:
           $ref: '#/components/responses/NoCustomerFound'
         default:
           $ref: '#/components/responses/UnknownError'
-    put:
-      operationId: updateCustomer
-      summary: replace a customer
-      tags:
-        - customer
-      requestBody:
-        $ref: '#/components/requestBodies/FullCustomer'
-      responses:
-        204:
-          description: customer updated
-        404:
-          $ref: '#/components/responses/NoCustomerFound'
-        400:
-          $ref: '#/components/responses/InvalidCustomer'
-        default:
-          $ref: '#/components/responses/UnknownError'
+#    put:
+#      operationId: updateCustomer
+#      summary: replace a customer
+#      tags:
+#        - customer
+#      requestBody:
+#        $ref: '#/components/requestBodies/FullCustomer'
+#      responses:
+#        204:
+#          description: customer updated
+#        404:
+#          $ref: '#/components/responses/NoCustomerFound'
+#        400:
+#          $ref: '#/components/responses/InvalidCustomer'
+#        default:
+#          $ref: '#/components/responses/UnknownError'
   /customer/{customerId}/policy:
     parameters:
       - $ref: '#/components/parameters/CustomerId'
@@ -542,7 +551,7 @@ components:
     Title:
       type: string
       enum:
-        - ''
+        - none
         - doctor
         - professor
     MaritalStatus:

@@ -69,8 +69,8 @@ function policyToTableRow(policy: Policy, customerId: number) {
       policy.coverage,
     ],
     actions: {
-      details: `/customer/${customerId}/policy/${policy.id}`,
-      edit: "",
+      details: "",
+      edit: `/customer/${customerId}/policy/${policy.id}`,
       delete: "",
     },
   };

@@ -25,6 +25,9 @@ export function Select(props: SelectProps) {
 }
 
 function pretty(val: string) {
+  if (val === "none") {
+    return "";
+  }
   const pretty = val.replaceAll("-", " ").replaceAll("ae", "ä").replaceAll(
     "oe",
     "ö",
