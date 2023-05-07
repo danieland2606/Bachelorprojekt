@@ -4,6 +4,7 @@ export * from '../models/CatRace.ts';
 export * from '../models/Customer.ts';
 export * from '../models/CustomerAllRequired.ts';
 export * from '../models/CustomerAllRequiredAllOf.ts';
+export * from '../models/CustomerAllRequiredAllOfAddress.ts';
 export * from '../models/CustomerPropertyNames.ts';
 export * from '../models/EmploymentStatus.ts';
 export * from '../models/Environment.ts';
@@ -19,6 +20,7 @@ export * from '../models/Personality.ts';
 export * from '../models/Policy.ts';
 export * from '../models/PolicyAllRequired.ts';
 export * from '../models/PolicyAllRequiredAllOf.ts';
+export * from '../models/PolicyAllRequiredAllOfObjectOfInsurance.ts';
 export * from '../models/PolicyCalc.ts';
 export * from '../models/PolicyPropertyNames.ts';
 export * from '../models/Title.ts';
@@ -29,6 +31,7 @@ import { CatRace } from '../models/CatRace.ts';
 import { Customer              } from '../models/Customer.ts';
 import { CustomerAllRequired              } from '../models/CustomerAllRequired.ts';
 import { CustomerAllRequiredAllOf } from '../models/CustomerAllRequiredAllOf.ts';
+import { CustomerAllRequiredAllOfAddress } from '../models/CustomerAllRequiredAllOfAddress.ts';
 import { CustomerPropertyNames } from '../models/CustomerPropertyNames.ts';
 import { EmploymentStatus } from '../models/EmploymentStatus.ts';
 import { Environment } from '../models/Environment.ts';
@@ -44,6 +47,7 @@ import { Personality } from '../models/Personality.ts';
 import { Policy } from '../models/Policy.ts';
 import { PolicyAllRequired } from '../models/PolicyAllRequired.ts';
 import { PolicyAllRequiredAllOf } from '../models/PolicyAllRequiredAllOf.ts';
+import { PolicyAllRequiredAllOfObjectOfInsurance         } from '../models/PolicyAllRequiredAllOfObjectOfInsurance.ts';
 import { PolicyCalc } from '../models/PolicyCalc.ts';
 import { PolicyPropertyNames } from '../models/PolicyPropertyNames.ts';
 import { Title } from '../models/Title.ts';
@@ -86,6 +90,7 @@ let typeMap: {[index: string]: any} = {
     "Customer": Customer,
     "CustomerAllRequired": CustomerAllRequired,
     "CustomerAllRequiredAllOf": CustomerAllRequiredAllOf,
+    "CustomerAllRequiredAllOfAddress": CustomerAllRequiredAllOfAddress,
     "GetCustomerList200ResponseInner": GetCustomerList200ResponseInner,
     "GetPolicyList200ResponseInner": GetPolicyList200ResponseInner,
     "ID": ID,
@@ -94,6 +99,7 @@ let typeMap: {[index: string]: any} = {
     "Policy": Policy,
     "PolicyAllRequired": PolicyAllRequired,
     "PolicyAllRequiredAllOf": PolicyAllRequiredAllOf,
+    "PolicyAllRequiredAllOfObjectOfInsurance": PolicyAllRequiredAllOfObjectOfInsurance,
     "PolicyCalc": PolicyCalc,
 }
 

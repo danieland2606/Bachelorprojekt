@@ -3,7 +3,7 @@ import widdershins from "widdershins";
 
 let options = {};
 options.codeSamples = true;
-options.httpsnippet = false;
+options.httpsnippet = true;
 options.language_tabs = [
   { "http": "HTTP" },
   { "shell": "SHELL" },
@@ -20,7 +20,9 @@ options.shallowSchemas = false; //true is buggy
 options.tocSummary = false;
 options.headings = 2;
 options.yaml = false;
+options.expandBody = false;
 options.user_templates = "./templates";
+options.omitHeader = true;
 
 options.templateCallback = function (_1, _2, data) {
   const schemas = data.components.schemas;

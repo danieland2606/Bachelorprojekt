@@ -21,7 +21,8 @@ paths:
                 items:
                   allOf:
                     - $ref: '#/components/schemas/Customer'
-                    - required:
+                    - type: object
+                      required:
                         - id
           links:
             get:
@@ -112,7 +113,8 @@ paths:
                 items:
                   allOf:
                     - $ref: '#/components/schemas/Policy'
-                    - required:
+                    - type: object
+                      required:
                         - id
           links:
             get:
@@ -349,7 +351,7 @@ components:
       properties:
         error:
           type: string
-          description: 'short description of error condition'
+          description: short description of error condition
       required:
         - error
     UnknownError:
@@ -404,7 +406,8 @@ components:
     CustomerAllRequired:
       allOf:
         - $ref: '#/components/schemas/Customer'
-        - required:
+        - type: object
+          required:
             - firstName
             - lastName
             - formOfAddress
@@ -417,12 +420,14 @@ components:
             - email
             - bankDetails
             - address
-        - properties:
+          properties:
             address:
-              required:
-                - city
-                - street
-                - postalCode
+              allOf: 
+                - $ref: "#/components/schemas/Address"
+                - required:
+                    - city
+                    - street
+                    - postalCode
     CustomerPropertyNames:
       type: string
       enum:
@@ -483,23 +488,26 @@ components:
     PolicyAllRequired:
       allOf:
         - $ref: '#/components/schemas/Policy'
-        - required:
+        - type: object
+          required:
             - startDate
             - endDate
             - coverage
             - premium
             - objectOfInsurance
-        - properties:
+          properties:
             objectOfInsurance:
-              required:
-                - name
-                - race
-                - color
-                - dateOfBirth
-                - castrated
-                - personality
-                - environment
-                - weight
+              allOf: 
+                - $ref: "#/components/schemas/ObjectOfInsurance"
+                - required:
+                    - name
+                    - race
+                    - color
+                    - dateOfBirth
+                    - castrated
+                    - personality
+                    - environment
+                    - weight
     PolicyPropertyNames:
       type: string
       enum:

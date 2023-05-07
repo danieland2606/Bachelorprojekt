@@ -10,6 +10,7 @@
  * Do not edit the class manually.
  */
 
+import { PolicyAllRequiredAllOfObjectOfInsurance } from '../models/PolicyAllRequiredAllOfObjectOfInsurance.ts';
 import { HttpFile } from '../http/http.ts';
 
 export class PolicyAllRequired {
@@ -18,7 +19,7 @@ export class PolicyAllRequired {
     'endDate': string;
     'coverage': number;
     'premium': number;
-    'objectOfInsurance': any | null;
+    'objectOfInsurance': PolicyAllRequiredAllOfObjectOfInsurance;
 
     static readonly discriminator: string | undefined = undefined;
 
@@ -56,7 +57,7 @@ export class PolicyAllRequired {
         {
             "name": "objectOfInsurance",
             "baseName": "objectOfInsurance",
-            "type": "any",
+            "type": "PolicyAllRequiredAllOfObjectOfInsurance",
             "format": ""
         }    ];
 

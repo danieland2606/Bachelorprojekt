@@ -10,10 +10,11 @@
  * Do not edit the class manually.
  */
 
+import { CustomerAllRequiredAllOfAddress } from '../models/CustomerAllRequiredAllOfAddress.ts';
 import { HttpFile } from '../http/http.ts';
 
 export class CustomerAllRequiredAllOf {
-    'address'?: any | null;
+    'address': CustomerAllRequiredAllOfAddress;
 
     static readonly discriminator: string | undefined = undefined;
 
@@ -21,7 +22,7 @@ export class CustomerAllRequiredAllOf {
         {
             "name": "address",
             "baseName": "address",
-            "type": "any",
+            "type": "CustomerAllRequiredAllOfAddress",
             "format": ""
         }    ];
 

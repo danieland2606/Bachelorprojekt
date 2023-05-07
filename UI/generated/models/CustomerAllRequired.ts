@@ -10,6 +10,7 @@
  * Do not edit the class manually.
  */
 
+import { CustomerAllRequiredAllOfAddress } from '../models/CustomerAllRequiredAllOfAddress.ts';
 import { EmploymentStatus } from '../models/EmploymentStatus.ts';
 import { FormOfAddress } from '../models/FormOfAddress.ts';
 import { MaritalStatus } from '../models/MaritalStatus.ts';
@@ -26,7 +27,7 @@ export class CustomerAllRequired {
     'dateOfBirth': string;
     'employmentStatus': EmploymentStatus;
     'dogOwner': boolean;
-    'address': any | null;
+    'address': CustomerAllRequiredAllOfAddress;
     'phoneNumber': string;
     'email': string;
     'bankDetails': string;
@@ -91,7 +92,7 @@ export class CustomerAllRequired {
         {
             "name": "address",
             "baseName": "address",
-            "type": "any",
+            "type": "CustomerAllRequiredAllOfAddress",
             "format": ""
         },
         {

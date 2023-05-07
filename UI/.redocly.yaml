@@ -1,0 +1,17 @@
+organization: HSH
+
+extends:
+  - minimal
+
+apis:
+  meowmed:
+    root: ../Meowmed+_REST.yaml
+    rules:
+      no-ambiguous-paths: error
+
+theme:
+  openapi:
+    schemaExpansionLevel: 3
+    generateCodeSamples:
+      languages:
+        - lang: JavaScript

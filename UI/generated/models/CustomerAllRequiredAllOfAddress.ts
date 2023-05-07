@@ -10,24 +10,37 @@
  * Do not edit the class manually.
  */
 
-import { PolicyAllRequiredAllOfObjectOfInsurance } from '../models/PolicyAllRequiredAllOfObjectOfInsurance.ts';
 import { HttpFile } from '../http/http.ts';
 
-export class PolicyAllRequiredAllOf {
-    'objectOfInsurance': PolicyAllRequiredAllOfObjectOfInsurance;
+export class CustomerAllRequiredAllOfAddress {
+    'city': string;
+    'street': string;
+    'postalCode': string;
 
     static readonly discriminator: string | undefined = undefined;
 
     static readonly attributeTypeMap: Array<{name: string, baseName: string, type: string, format: string}> = [
         {
-            "name": "objectOfInsurance",
-            "baseName": "objectOfInsurance",
-            "type": "PolicyAllRequiredAllOfObjectOfInsurance",
+            "name": "city",
+            "baseName": "city",
+            "type": "string",
+            "format": ""
+        },
+        {
+            "name": "street",
+            "baseName": "street",
+            "type": "string",
+            "format": ""
+        },
+        {
+            "name": "postalCode",
+            "baseName": "postalCode",
+            "type": "string",
             "format": ""
         }    ];
 
     static getAttributeTypeMap() {
-        return PolicyAllRequiredAllOf.attributeTypeMap;
+        return CustomerAllRequiredAllOfAddress.attributeTypeMap;
     }
 
     public constructor() {

@@ -1,19 +1,3 @@
----
-title: Meowmed+ v0.0.1
-language_tabs:
-  - http: HTTP
-  - shell: SHELL
-  - javascript: JavaScript
-language_clients:
-  - javascript: fetch
-toc_footers: []
-includes: []
-search: true
-highlight_theme: darkula
-headingLevel: 2
-
----
-
 <!-- Generator: Widdershins v4.0.1 -->
 
 <h1 id="meowmed-">Meowmed+ v0.0.1</h1>
@@ -33,8 +17,8 @@ headingLevel: 2
 
 ```http
 GET /customer HTTP/1.1
-
 Accept: application/json
+Host: example.com
 
 ```
 
@@ -44,10 +28,9 @@ Accept: application/json
 <summary>shell</summary>
 
 ```shell
-# You can also use wget
-curl -X GET /customer \
-  -H 'Accept: application/json'
-
+curl --request GET \
+  --url https://example.com/customer \
+  --header 'Accept: application/json'
 ```
 
 </details>
@@ -56,23 +39,18 @@ curl -X GET /customer \
 <summary>javascript</summary>
 
 ```javascript
-
-const headers = {
-  'Accept':'application/json'
-};
-
-fetch('/customer',
-{
-  method: 'GET',
-
-  headers: headers
+fetch("https://example.com/customer", {
+  "method": "GET",
+  "headers": {
+    "Accept": "application/json"
+  }
 })
-.then(function(res) {
-    return res.json();
-}).then(function(body) {
-    console.log(body);
+.then(response => {
+  console.log(response);
+})
+.catch(err => {
+  console.error(err);
 });
-
 ```
 
 </details>
@@ -204,10 +182,12 @@ This operation does not require authentication
 
 ```http
 POST /customer HTTP/1.1
-
 Content-Type: application/json
 Accept: application/json
+Host: example.com
+Content-Length: 320
 
+{"firstName":"string","lastName":"string","formOfAddress":"herr","title":"","maritalStatus":"ledig","dateOfBirth":"2019-08-24","employmentStatus":"selbststaendig","dogOwner":true,"address":{"city":"string","street":"string","postalCode":"string"},"phoneNumber":"string","email":"user@example.com","bankDetails":"string"}
 ```
 
 </details>
@@ -216,11 +196,11 @@ Accept: application/json
 <summary>shell</summary>
 
 ```shell
-# You can also use wget
-curl -X POST /customer \
-  -H 'Content-Type: application/json' \
-  -H 'Accept: application/json'
-
+curl --request POST \
+  --url https://example.com/customer \
+  --header 'Accept: application/json' \
+  --header 'Content-Type: application/json' \
+  --data '{"firstName":"string","lastName":"string","formOfAddress":"herr","title":"","maritalStatus":"ledig","dateOfBirth":"2019-08-24","employmentStatus":"selbststaendig","dogOwner":true,"address":{"city":"string","street":"string","postalCode":"string"},"phoneNumber":"string","email":"user@example.com","bankDetails":"string"}'
 ```
 
 </details>
@@ -229,41 +209,20 @@ curl -X POST /customer \
 <summary>javascript</summary>
 
 ```javascript
-const inputBody = '{
-  "firstName": "string",
-  "lastName": "string",
-  "formOfAddress": "herr",
-  "title": "",
-  "maritalStatus": "ledig",
-  "dateOfBirth": "2019-08-24",
-  "employmentStatus": "selbststaendig",
-  "dogOwner": true,
-  "address": {
-    "city": "string",
-    "street": "string",
-    "postalCode": "string"
+fetch("https://example.com/customer", {
+  "method": "POST",
+  "headers": {
+    "Content-Type": "application/json",
+    "Accept": "application/json"
   },
-  "phoneNumber": "string",
-  "email": "user@example.com",
-  "bankDetails": "string"
-}';
-const headers = {
-  'Content-Type':'application/json',
-  'Accept':'application/json'
-};
-
-fetch('/customer',
-{
-  method: 'POST',
-  body: inputBody,
-  headers: headers
+  "body": "{\"firstName\":\"string\",\"lastName\":\"string\",\"formOfAddress\":\"herr\",\"title\":\"\",\"maritalStatus\":\"ledig\",\"dateOfBirth\":\"2019-08-24\",\"employmentStatus\":\"selbststaendig\",\"dogOwner\":true,\"address\":{\"city\":\"string\",\"street\":\"string\",\"postalCode\":\"string\"},\"phoneNumber\":\"string\",\"email\":\"user@example.com\",\"bankDetails\":\"string\"}"
 })
-.then(function(res) {
-    return res.json();
-}).then(function(body) {
-    console.log(body);
+.then(response => {
+  console.log(response);
+})
+.catch(err => {
+  console.error(err);
 });
-
 ```
 
 </details>
@@ -344,9 +303,9 @@ This operation does not require authentication
 <summary>http</summary>
 
 ```http
-GET /customer/{customerId} HTTP/1.1
-
+GET /customer/0 HTTP/1.1
 Accept: application/json
+Host: example.com
 
 ```
 
@@ -356,10 +315,9 @@ Accept: application/json
 <summary>shell</summary>
 
 ```shell
-# You can also use wget
-curl -X GET /customer/{customerId} \
-  -H 'Accept: application/json'
-
+curl --request GET \
+  --url https://example.com/customer/0 \
+  --header 'Accept: application/json'
 ```
 
 </details>
@@ -368,23 +326,18 @@ curl -X GET /customer/{customerId} \
 <summary>javascript</summary>
 
 ```javascript
-
-const headers = {
-  'Accept':'application/json'
-};
-
-fetch('/customer/{customerId}',
-{
-  method: 'GET',
-
-  headers: headers
+fetch("https://example.com/customer/0", {
+  "method": "GET",
+  "headers": {
+    "Accept": "application/json"
+  }
 })
-.then(function(res) {
-    return res.json();
-}).then(function(body) {
-    console.log(body);
+.then(response => {
+  console.log(response);
+})
+.catch(err => {
+  console.error(err);
 });
-
 ```
 
 </details>
@@ -458,11 +411,13 @@ This operation does not require authentication
 <summary>http</summary>
 
 ```http
-PUT /customer/{customerId} HTTP/1.1
-
+PUT /customer/0 HTTP/1.1
 Content-Type: application/json
 Accept: application/json
+Host: example.com
+Content-Length: 320
 
+{"firstName":"string","lastName":"string","formOfAddress":"herr","title":"","maritalStatus":"ledig","dateOfBirth":"2019-08-24","employmentStatus":"selbststaendig","dogOwner":true,"address":{"city":"string","street":"string","postalCode":"string"},"phoneNumber":"string","email":"user@example.com","bankDetails":"string"}
 ```
 
 </details>
@@ -471,11 +426,11 @@ Accept: application/json
 <summary>shell</summary>
 
 ```shell
-# You can also use wget
-curl -X PUT /customer/{customerId} \
-  -H 'Content-Type: application/json' \
-  -H 'Accept: application/json'
-
+curl --request PUT \
+  --url https://example.com/customer/0 \
+  --header 'Accept: application/json' \
+  --header 'Content-Type: application/json' \
+  --data '{"firstName":"string","lastName":"string","formOfAddress":"herr","title":"","maritalStatus":"ledig","dateOfBirth":"2019-08-24","employmentStatus":"selbststaendig","dogOwner":true,"address":{"city":"string","street":"string","postalCode":"string"},"phoneNumber":"string","email":"user@example.com","bankDetails":"string"}'
 ```
 
 </details>
@@ -484,41 +439,20 @@ curl -X PUT /customer/{customerId} \
 <summary>javascript</summary>
 
 ```javascript
-const inputBody = '{
-  "firstName": "string",
-  "lastName": "string",
-  "formOfAddress": "herr",
-  "title": "",
-  "maritalStatus": "ledig",
-  "dateOfBirth": "2019-08-24",
-  "employmentStatus": "selbststaendig",
-  "dogOwner": true,
-  "address": {
-    "city": "string",
-    "street": "string",
-    "postalCode": "string"
+fetch("https://example.com/customer/0", {
+  "method": "PUT",
+  "headers": {
+    "Content-Type": "application/json",
+    "Accept": "application/json"
   },
-  "phoneNumber": "string",
-  "email": "user@example.com",
-  "bankDetails": "string"
-}';
-const headers = {
-  'Content-Type':'application/json',
-  'Accept':'application/json'
-};
-
-fetch('/customer/{customerId}',
-{
-  method: 'PUT',
-  body: inputBody,
-  headers: headers
+  "body": "{\"firstName\":\"string\",\"lastName\":\"string\",\"formOfAddress\":\"herr\",\"title\":\"\",\"maritalStatus\":\"ledig\",\"dateOfBirth\":\"2019-08-24\",\"employmentStatus\":\"selbststaendig\",\"dogOwner\":true,\"address\":{\"city\":\"string\",\"street\":\"string\",\"postalCode\":\"string\"},\"phoneNumber\":\"string\",\"email\":\"user@example.com\",\"bankDetails\":\"string\"}"
 })
-.then(function(res) {
-    return res.json();
-}).then(function(body) {
-    console.log(body);
+.then(response => {
+  console.log(response);
+})
+.catch(err => {
+  console.error(err);
 });
-
 ```
 
 </details>
@@ -603,9 +537,9 @@ This operation does not require authentication
 <summary>http</summary>
 
 ```http
-GET /customer/{customerId}/policy HTTP/1.1
-
+GET /customer/0/policy HTTP/1.1
 Accept: application/json
+Host: example.com
 
 ```
 
@@ -615,10 +549,9 @@ Accept: application/json
 <summary>shell</summary>
 
 ```shell
-# You can also use wget
-curl -X GET /customer/{customerId}/policy \
-  -H 'Accept: application/json'
-
+curl --request GET \
+  --url https://example.com/customer/0/policy \
+  --header 'Accept: application/json'
 ```
 
 </details>
@@ -627,23 +560,18 @@ curl -X GET /customer/{customerId}/policy \
 <summary>javascript</summary>
 
 ```javascript
-
-const headers = {
-  'Accept':'application/json'
-};
-
-fetch('/customer/{customerId}/policy',
-{
-  method: 'GET',
-
-  headers: headers
+fetch("https://example.com/customer/0/policy", {
+  "method": "GET",
+  "headers": {
+    "Accept": "application/json"
+  }
 })
-.then(function(res) {
-    return res.json();
-}).then(function(body) {
-    console.log(body);
+.then(response => {
+  console.log(response);
+})
+.catch(err => {
+  console.error(err);
 });
-
 ```
 
 </details>
@@ -783,11 +711,13 @@ This operation does not require authentication
 <summary>http</summary>
 
 ```http
-POST /customer/{customerId}/policy HTTP/1.1
-
+POST /customer/0/policy HTTP/1.1
 Content-Type: application/json
 Accept: application/json
+Host: example.com
+Content-Length: 240
 
+{"startDate":"2019-08-24","endDate":"2019-08-24","coverage":0,"objectOfInsurance":{"name":"string","race":"siamese","color":"seal","dateOfBirth":"2019-08-24","castrated":true,"personality":"anhaenglich","environment":"draussen","weight":0}}
 ```
 
 </details>
@@ -796,11 +726,11 @@ Accept: application/json
 <summary>shell</summary>
 
 ```shell
-# You can also use wget
-curl -X POST /customer/{customerId}/policy \
-  -H 'Content-Type: application/json' \
-  -H 'Accept: application/json'
-
+curl --request POST \
+  --url https://example.com/customer/0/policy \
+  --header 'Accept: application/json' \
+  --header 'Content-Type: application/json' \
+  --data '{"startDate":"2019-08-24","endDate":"2019-08-24","coverage":0,"objectOfInsurance":{"name":"string","race":"siamese","color":"seal","dateOfBirth":"2019-08-24","castrated":true,"personality":"anhaenglich","environment":"draussen","weight":0}}'
 ```
 
 </details>
@@ -809,38 +739,20 @@ curl -X POST /customer/{customerId}/policy \
 <summary>javascript</summary>
 
 ```javascript
-const inputBody = '{
-  "startDate": "2019-08-24",
-  "endDate": "2019-08-24",
-  "coverage": 0,
-  "objectOfInsurance": {
-    "name": "string",
-    "race": "siamese",
-    "color": "seal",
-    "dateOfBirth": "2019-08-24",
-    "castrated": true,
-    "personality": "anhaenglich",
-    "environment": "draussen",
-    "weight": 0
-  }
-}';
-const headers = {
-  'Content-Type':'application/json',
-  'Accept':'application/json'
-};
-
-fetch('/customer/{customerId}/policy',
-{
-  method: 'POST',
-  body: inputBody,
-  headers: headers
+fetch("https://example.com/customer/0/policy", {
+  "method": "POST",
+  "headers": {
+    "Content-Type": "application/json",
+    "Accept": "application/json"
+  },
+  "body": "{\"startDate\":\"2019-08-24\",\"endDate\":\"2019-08-24\",\"coverage\":0,\"objectOfInsurance\":{\"name\":\"string\",\"race\":\"siamese\",\"color\":\"seal\",\"dateOfBirth\":\"2019-08-24\",\"castrated\":true,\"personality\":\"anhaenglich\",\"environment\":\"draussen\",\"weight\":0}}"
 })
-.then(function(res) {
-    return res.json();
-}).then(function(body) {
-    console.log(body);
+.then(response => {
+  console.log(response);
+})
+.catch(err => {
+  console.error(err);
 });
-
 ```
 
 </details>
@@ -919,9 +831,9 @@ This operation does not require authentication
 <summary>http</summary>
 
 ```http
-GET /customer/{customerId}/policy/{policyId} HTTP/1.1
-
+GET /customer/0/policy/0 HTTP/1.1
 Accept: application/json
+Host: example.com
 
 ```
 
@@ -931,10 +843,9 @@ Accept: application/json
 <summary>shell</summary>
 
 ```shell
-# You can also use wget
-curl -X GET /customer/{customerId}/policy/{policyId} \
-  -H 'Accept: application/json'
-
+curl --request GET \
+  --url https://example.com/customer/0/policy/0 \
+  --header 'Accept: application/json'
 ```
 
 </details>
@@ -943,23 +854,18 @@ curl -X GET /customer/{customerId}/policy/{policyId} \
 <summary>javascript</summary>
 
 ```javascript
-
-const headers = {
-  'Accept':'application/json'
-};
-
-fetch('/customer/{customerId}/policy/{policyId}',
-{
-  method: 'GET',
-
-  headers: headers
+fetch("https://example.com/customer/0/policy/0", {
+  "method": "GET",
+  "headers": {
+    "Accept": "application/json"
+  }
 })
-.then(function(res) {
-    return res.json();
-}).then(function(body) {
-    console.log(body);
+.then(response => {
+  console.log(response);
+})
+.catch(err => {
+  console.error(err);
 });
-
 ```
 
 </details>
@@ -1032,11 +938,13 @@ This operation does not require authentication
 <summary>http</summary>
 
 ```http
-PUT /customer/{customerId}/policy/{policyId} HTTP/1.1
-
+PUT /customer/0/policy/0 HTTP/1.1
 Content-Type: application/json
 Accept: application/json
+Host: example.com
+Content-Length: 240
 
+{"startDate":"2019-08-24","endDate":"2019-08-24","coverage":0,"objectOfInsurance":{"name":"string","race":"siamese","color":"seal","dateOfBirth":"2019-08-24","castrated":true,"personality":"anhaenglich","environment":"draussen","weight":0}}
 ```
 
 </details>
@@ -1045,11 +953,11 @@ Accept: application/json
 <summary>shell</summary>
 
 ```shell
-# You can also use wget
-curl -X PUT /customer/{customerId}/policy/{policyId} \
-  -H 'Content-Type: application/json' \
-  -H 'Accept: application/json'
-
+curl --request PUT \
+  --url https://example.com/customer/0/policy/0 \
+  --header 'Accept: application/json' \
+  --header 'Content-Type: application/json' \
+  --data '{"startDate":"2019-08-24","endDate":"2019-08-24","coverage":0,"objectOfInsurance":{"name":"string","race":"siamese","color":"seal","dateOfBirth":"2019-08-24","castrated":true,"personality":"anhaenglich","environment":"draussen","weight":0}}'
 ```
 
 </details>
@@ -1058,38 +966,20 @@ curl -X PUT /customer/{customerId}/policy/{policyId} \
 <summary>javascript</summary>
 
 ```javascript
-const inputBody = '{
-  "startDate": "2019-08-24",
-  "endDate": "2019-08-24",
-  "coverage": 0,
-  "objectOfInsurance": {
-    "name": "string",
-    "race": "siamese",
-    "color": "seal",
-    "dateOfBirth": "2019-08-24",
-    "castrated": true,
-    "personality": "anhaenglich",
-    "environment": "draussen",
-    "weight": 0
-  }
-}';
-const headers = {
-  'Content-Type':'application/json',
-  'Accept':'application/json'
-};
-
-fetch('/customer/{customerId}/policy/{policyId}',
-{
-  method: 'PUT',
-  body: inputBody,
-  headers: headers
+fetch("https://example.com/customer/0/policy/0", {
+  "method": "PUT",
+  "headers": {
+    "Content-Type": "application/json",
+    "Accept": "application/json"
+  },
+  "body": "{\"startDate\":\"2019-08-24\",\"endDate\":\"2019-08-24\",\"coverage\":0,\"objectOfInsurance\":{\"name\":\"string\",\"race\":\"siamese\",\"color\":\"seal\",\"dateOfBirth\":\"2019-08-24\",\"castrated\":true,\"personality\":\"anhaenglich\",\"environment\":\"draussen\",\"weight\":0}}"
 })
-.then(function(res) {
-    return res.json();
-}).then(function(body) {
-    console.log(body);
+.then(response => {
+  console.log(response);
+})
+.catch(err => {
+  console.error(err);
 });
-
 ```
 
 </details>
@@ -1171,10 +1061,12 @@ This operation does not require authentication
 
 ```http
 POST /policyprice HTTP/1.1
-
 Content-Type: application/json
 Accept: application/json
+Host: example.com
+Content-Length: 266
 
+{"customerId":0,"policy":{"startDate":"2019-08-24","endDate":"2019-08-24","coverage":0,"objectOfInsurance":{"name":"string","race":"siamese","color":"seal","dateOfBirth":"2019-08-24","castrated":true,"personality":"anhaenglich","environment":"draussen","weight":0}}}
 ```
 
 </details>
@@ -1183,11 +1075,11 @@ Accept: application/json
 <summary>shell</summary>
 
 ```shell
-# You can also use wget
-curl -X POST /policyprice \
-  -H 'Content-Type: application/json' \
-  -H 'Accept: application/json'
-
+curl --request POST \
+  --url https://example.com/policyprice \
+  --header 'Accept: application/json' \
+  --header 'Content-Type: application/json' \
+  --data '{"customerId":0,"policy":{"startDate":"2019-08-24","endDate":"2019-08-24","coverage":0,"objectOfInsurance":{"name":"string","race":"siamese","color":"seal","dateOfBirth":"2019-08-24","castrated":true,"personality":"anhaenglich","environment":"draussen","weight":0}}}'
 ```
 
 </details>
@@ -1196,41 +1088,20 @@ curl -X POST /policyprice \
 <summary>javascript</summary>
 
 ```javascript
-const inputBody = '{
-  "customerId": 0,
-  "policy": {
-    "startDate": "2019-08-24",
-    "endDate": "2019-08-24",
-    "coverage": 0,
-    "objectOfInsurance": {
-      "name": "string",
-      "race": "siamese",
-      "color": "seal",
-      "dateOfBirth": "2019-08-24",
-      "castrated": true,
-      "personality": "anhaenglich",
-      "environment": "draussen",
-      "weight": 0
-    }
-  }
-}';
-const headers = {
-  'Content-Type':'application/json',
-  'Accept':'application/json'
-};
-
-fetch('/policyprice',
-{
-  method: 'POST',
-  body: inputBody,
-  headers: headers
+fetch("https://example.com/policyprice", {
+  "method": "POST",
+  "headers": {
+    "Content-Type": "application/json",
+    "Accept": "application/json"
+  },
+  "body": "{\"customerId\":0,\"policy\":{\"startDate\":\"2019-08-24\",\"endDate\":\"2019-08-24\",\"coverage\":0,\"objectOfInsurance\":{\"name\":\"string\",\"race\":\"siamese\",\"color\":\"seal\",\"dateOfBirth\":\"2019-08-24\",\"castrated\":true,\"personality\":\"anhaenglich\",\"environment\":\"draussen\",\"weight\":0}}}"
 })
-.then(function(res) {
-    return res.json();
-}).then(function(body) {
-    console.log(body);
+.then(response => {
+  console.log(response);
+})
+.catch(err => {
+  console.error(err);
 });
-
 ```
 
 </details>
