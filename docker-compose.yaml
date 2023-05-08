@@ -47,7 +47,7 @@ services:
       - spring.datasource.url=jdbc:mariadb://policydb.rda:3306/Policy
       - spring.datasource.username=user
       - spring.datasource.password=123456789
-      - docker_customerurl=customer
+      - docker_customerurl=customer.rda
       - docker_notificationurl=notification.rda
       - docker_debugmode=false
   policydb.rda:
