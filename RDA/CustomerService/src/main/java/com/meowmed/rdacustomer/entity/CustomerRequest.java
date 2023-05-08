@@ -120,7 +120,7 @@ public class CustomerRequest {
                 "firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", title='" + title + '\'' +
-                ", formOfAdress='" + formOfAddress + '\'' +
+                ", formOfAddress='" + formOfAddress + '\'' +
                 ", maritalStatus='" + maritalStatus + '\'' +
                 ", dateOfBirth=" + dateOfBirth +
                 ", employmentStatus='" + employmentStatus + '\'' +
