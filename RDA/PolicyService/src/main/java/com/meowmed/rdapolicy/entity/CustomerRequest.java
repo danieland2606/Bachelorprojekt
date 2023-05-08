@@ -8,7 +8,7 @@ public class CustomerRequest {
     private String firstName;
     private String lastName;
     private String title;
-    private String formOfAdress;
+    private String formOfAddress;
     private String maritalStatus;
     private LocalDate dateOfBirth;
     private String employmentStatus;
@@ -19,13 +19,13 @@ public class CustomerRequest {
     private boolean dogOwner;
     public CustomerRequest() {
     }
-    public CustomerRequest(String firstName, String lastName, String title, String formOfAdress, String maritalStatus,
+    public CustomerRequest(String firstName, String lastName, String title, String formOfAddress, String maritalStatus,
                            LocalDate dateOfBirth, String employmentStatus, AddressEntity address, String phoneNumber, String email,
                            String bankDetails, boolean dogOwner) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.title = title;
-        this.formOfAdress = formOfAdress;
+        this.formOfAddress = formOfAddress;
         this.maritalStatus = maritalStatus;
         this.dateOfBirth = dateOfBirth;
         this.employmentStatus = employmentStatus;
@@ -53,11 +53,11 @@ public class CustomerRequest {
     public void setTitle(String title) {
         this.title = title;
     }
-    public String getFormOfAdress() {
-        return formOfAdress;
+    public String getFormOfAddress() {
+        return formOfAddress;
     }
-    public void setFormOfAdress(String formOfAdress) {
-        this.formOfAdress = formOfAdress;
+    public void setFormOfAddress(String formOfAddress) {
+        this.formOfAddress = formOfAddress;
     }
     public String getMaritalStatus() {
         return maritalStatus;
@@ -108,11 +108,11 @@ public class CustomerRequest {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof CustomerRequest that)) return false;
-        return dogOwner == that.dogOwner && firstName.equals(that.firstName) && lastName.equals(that.lastName) && title.equals(that.title) && formOfAdress.equals(that.formOfAdress) && maritalStatus.equals(that.maritalStatus) && dateOfBirth.equals(that.dateOfBirth) && employmentStatus.equals(that.employmentStatus) && address.equals(that.address) && phoneNumber.equals(that.phoneNumber) && email.equals(that.email) && bankDetails.equals(that.bankDetails);
+        return dogOwner == that.dogOwner && firstName.equals(that.firstName) && lastName.equals(that.lastName) && title.equals(that.title) && formOfAddress.equals(that.formOfAddress) && maritalStatus.equals(that.maritalStatus) && dateOfBirth.equals(that.dateOfBirth) && employmentStatus.equals(that.employmentStatus) && address.equals(that.address) && phoneNumber.equals(that.phoneNumber) && email.equals(that.email) && bankDetails.equals(that.bankDetails);
     }
     @Override
     public int hashCode() {
-        return Objects.hash(firstName, lastName, title, formOfAdress, maritalStatus, dateOfBirth, employmentStatus, address, phoneNumber, email, bankDetails, dogOwner);
+        return Objects.hash(firstName, lastName, title, formOfAddress, maritalStatus, dateOfBirth, employmentStatus, address, phoneNumber, email, bankDetails, dogOwner);
     }
     @Override
     public String toString() {
@@ -120,7 +120,7 @@ public class CustomerRequest {
                 "firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", title='" + title + '\'' +
-                ", formOfAdress='" + formOfAdress + '\'' +
+                ", formOfAddress='" + formOfAddress + '\'' +
                 ", maritalStatus='" + maritalStatus + '\'' +
                 ", dateOfBirth=" + dateOfBirth +
                 ", employmentStatus='" + employmentStatus + '\'' +
