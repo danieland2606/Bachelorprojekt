@@ -76,9 +76,12 @@ public class PolicyController {
 	public ResponseEntity<MappingJacksonValue> getPolicyList(@PathVariable Long c_id, @RequestParam(value = "fields") String fields){
 		try{
 			return new ResponseEntity<MappingJacksonValue>(pService.getPolicyList(c_id,fields),HttpStatusCode.valueOf(200));
-		} catch (Exception e){
+		} catch (IllegalArgumentException e){
 			MappingJacksonValue errWrapper = new MappingJacksonValue(Collections.singletonMap("error", "Something went horrible wrong"));
 			return new ResponseEntity<MappingJacksonValue>(errWrapper,HttpStatusCode.valueOf(400));
+		} catch (PolicyNotFoundException e) {
+			MappingJacksonValue errWrapper = new MappingJacksonValue(Collections.singletonMap("message", "No Policy found"));
+			return new ResponseEntity<MappingJacksonValue>(errWrapper,HttpStatusCode.valueOf(204));
 		}
 	}
 

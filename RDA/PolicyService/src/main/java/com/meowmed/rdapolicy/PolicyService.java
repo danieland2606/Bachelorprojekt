@@ -81,11 +81,11 @@ public class PolicyService {
 	 * @param fields Eine Liste an Komma-separierten an benötigten Feldern (z.B. startDate,endDate,coverage,objectOfInsurance.name)
 	 * @return Zurück kommt eine gefilterte Liste an PolicyEntitys, die ähnlich dem Beispiel aussieht:
 	 */
-    public MappingJacksonValue getPolicyList(Long c_id, String fields) throws IllegalArgumentException{
+    public MappingJacksonValue getPolicyList(Long c_id, String fields) throws IllegalArgumentException, PolicyNotFoundException{
 		if(debugmode) System.out.println("getPolicyList: String:" + fields);
 		//Holen der benötigten Objekte
 		List<PolicyEntity> policyList = pRepository.findByCid(c_id);
-		//if(policyList.isEmpty()) throw new IllegalArgumentException();
+		if(policyList.isEmpty()) throw new PolicyNotFoundException();
 		
 		// Filtern der fields in 2 Arrays
 		List<String> policyArgList = new ArrayList<String>();
