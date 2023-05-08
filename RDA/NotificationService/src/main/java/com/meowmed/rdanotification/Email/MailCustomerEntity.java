@@ -8,13 +8,13 @@ public class MailCustomerEntity {
     private String firstName;
     private String lastName;
     private String title;
-    private String formOfAdress;
+    private String formOfAddress;
     private String maritalStatus;
     private LocalDate dateOfBirth;
     private String employmentStatus;
     private String city;
     private String street;
-    private int postalCode;
+    private String postalCode;
     private String phoneNumber;
     private String email;
     private String bankDetails;
@@ -23,13 +23,13 @@ public class MailCustomerEntity {
     }
 
 
-    public MailCustomerEntity(String firstName, String lastName, String title, String formOfAdress,
+    public MailCustomerEntity(String firstName, String lastName, String title, String formOfAddress,
                               String maritalStatus, LocalDate dateOfBirth, String employmentStatus, String city, String street,
-                              int postalCode, String phoneNumber, String email, String bankDetails, boolean dogOwner) {
+                              String postalCode, String phoneNumber, String email, String bankDetails, boolean dogOwner) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.title = title;
-        this.formOfAdress = formOfAdress;
+        this.formOfAddress = formOfAddress;
         this.maritalStatus = maritalStatus;
         this.dateOfBirth = dateOfBirth;
         this.employmentStatus = employmentStatus;
@@ -60,11 +60,11 @@ public class MailCustomerEntity {
     public void setTitle(String title) {
         this.title = title;
     }
-    public String getFormOfAdress() {
-        return formOfAdress;
+    public String getFormOfAddress() {
+        return formOfAddress;
     }
-    public void setFormOfAdress(String formOfAdress) {
-        this.formOfAdress = formOfAdress;
+    public void setFormOfAddress(String formOfAddress) {
+        this.formOfAddress = formOfAddress;
     }
     public String getMaritalStatus() {
         return maritalStatus;
@@ -96,10 +96,10 @@ public class MailCustomerEntity {
     public void setStreet(String street) {
         this.street = street;
     }
-    public int getPostalCode() {
+    public String getPostalCode() {
         return postalCode;
     }
-    public void setPostalCode(int postalCode) {
+    public void setPostalCode(String postalCode) {
         this.postalCode = postalCode;
     }
     public String getPhoneNumber() {
@@ -127,12 +127,12 @@ public class MailCustomerEntity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof MailCustomerEntity that)) return false;
-        return postalCode == that.postalCode && dogOwner == that.dogOwner && firstName.equals(that.firstName) && lastName.equals(that.lastName) && title.equals(that.title) && formOfAdress.equals(that.formOfAdress) && maritalStatus.equals(that.maritalStatus) && dateOfBirth.equals(that.dateOfBirth) && employmentStatus.equals(that.employmentStatus) && city.equals(that.city) && street.equals(that.street) && phoneNumber.equals(that.phoneNumber) && email.equals(that.email) && bankDetails.equals(that.bankDetails);
+        return postalCode == that.postalCode && dogOwner == that.dogOwner && firstName.equals(that.firstName) && lastName.equals(that.lastName) && title.equals(that.title) && formOfAddress.equals(that.formOfAddress) && maritalStatus.equals(that.maritalStatus) && dateOfBirth.equals(that.dateOfBirth) && employmentStatus.equals(that.employmentStatus) && city.equals(that.city) && street.equals(that.street) && phoneNumber.equals(that.phoneNumber) && email.equals(that.email) && bankDetails.equals(that.bankDetails);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(firstName, lastName, title, formOfAdress, maritalStatus, dateOfBirth, employmentStatus, city, street, postalCode, phoneNumber, email, bankDetails, dogOwner);
+        return Objects.hash(firstName, lastName, title, formOfAddress, maritalStatus, dateOfBirth, employmentStatus, city, street, postalCode, phoneNumber, email, bankDetails, dogOwner);
     }
 
     @Override
@@ -141,7 +141,7 @@ public class MailCustomerEntity {
                 "firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", title='" + title + '\'' +
-                ", formOfAdress='" + formOfAdress + '\'' +
+                ", formOfAddress='" + formOfAddress + '\'' +
                 ", maritalStatus='" + maritalStatus + '\'' +
                 ", dateOfBirth=" + dateOfBirth +
                 ", employmentStatus='" + employmentStatus + '\'' +
