@@ -52,7 +52,7 @@ public class NotificationService {
             mimeMessageHelper.setTo(details.getEmail());
             mimeMessageHelper.setSubject("Vielen Dank für ihr Vertrauen in MeowMed+");
             Map<String,Object> properties = new HashMap<>();
-            properties.put("formOfAddress", details.getFormOfAdress());
+            properties.put("formOfAddress", details.getFormOfAddress());
             properties.put("firstName", details.getFirstName());
             properties.put("lastName", details.getLastName());
             
@@ -107,7 +107,7 @@ public class NotificationService {
             mimeMessageHelper.setTo(details.getEmail());
             mimeMessageHelper.setSubject("Vielen Dank für ihr Vertrauen in MeowMed+");
             Map<String,Object> properties = new HashMap<>();
-            properties.put("formOfAddress", details.getFormOfAdress());
+            properties.put("formOfAddress", details.getFormOfAddress());
             properties.put("firstName", details.getFirstName());
             properties.put("lastName", details.getLastName());
             properties.put("pid", details.getPid());
@@ -151,7 +151,7 @@ public class NotificationService {
             mimeMessageHelper.setTo(details.getEmail());
             mimeMessageHelper.setSubject("Änderung ihres Vertrages bei MeowMed+");
             Map<String,Object> properties = new HashMap<>();
-            properties.put("formOfAddress", details.getFormOfAdress());
+            properties.put("formOfAddress", details.getFormOfAddress());
             properties.put("firstName", details.getFirstName());
             properties.put("lastName", details.getLastName());
             properties.put("pid", details.getPid());

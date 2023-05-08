@@ -6,7 +6,7 @@ public class MailPolicyEntity {
     private String firstName;
     private String lastName;
     private String title;
-    private String formOfAdress;
+    private String formOfAddress;
     private String maritalStatus;
     private LocalDate cDateOfBirth;
     private String employmentStatus;
@@ -33,7 +33,7 @@ public class MailPolicyEntity {
     private int weight;
     public MailPolicyEntity() {
     }
-    public MailPolicyEntity(String firstName, String lastName, String title, String formOfAdress, String maritalStatus,
+    public MailPolicyEntity(String firstName, String lastName, String title, String formOfAddress, String maritalStatus,
             LocalDate cDateOfBirth, String employmentStatus, String city, String street, String postalCode,
             String phoneNumber, String email, String bankDetails, boolean dogOwner, long pid, long cid, LocalDate startDate,
             LocalDate endDate, int coverage, double premium, String name, String race, String color,
@@ -41,7 +41,7 @@ public class MailPolicyEntity {
         this.firstName = firstName;
         this.lastName = lastName;
         this.title = title;
-        this.formOfAdress = formOfAdress;
+        this.formOfAddress = formOfAddress;
         this.maritalStatus = maritalStatus;
         this.cDateOfBirth = cDateOfBirth;
         this.employmentStatus = employmentStatus;
@@ -85,11 +85,11 @@ public class MailPolicyEntity {
     public void setTitle(String title) {
         this.title = title;
     }
-    public String getFormOfAdress() {
-        return formOfAdress;
+    public String getFormOfAddress() {
+        return formOfAddress;
     }
-    public void setFormOfAdress(String formOfAdress) {
-        this.formOfAdress = formOfAdress;
+    public void setFormOfAddress(String formOfAddress) {
+        this.formOfAddress = formOfAddress;
     }
     public String getMaritalStatus() {
         return maritalStatus;
@@ -242,7 +242,7 @@ public class MailPolicyEntity {
         result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
         result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
         result = prime * result + ((title == null) ? 0 : title.hashCode());
-        result = prime * result + ((formOfAdress == null) ? 0 : formOfAdress.hashCode());
+        result = prime * result + ((formOfAddress == null) ? 0 : formOfAddress.hashCode());
         result = prime * result + ((maritalStatus == null) ? 0 : maritalStatus.hashCode());
         result = prime * result + ((cDateOfBirth == null) ? 0 : cDateOfBirth.hashCode());
         result = prime * result + ((employmentStatus == null) ? 0 : employmentStatus.hashCode());
@@ -295,10 +295,10 @@ public class MailPolicyEntity {
                 return false;
         } else if (!title.equals(other.title))
             return false;
-        if (formOfAdress == null) {
-            if (other.formOfAdress != null)
+        if (formOfAddress == null) {
+            if (other.formOfAddress != null)
                 return false;
-        } else if (!formOfAdress.equals(other.formOfAdress))
+        } else if (!formOfAddress.equals(other.formOfAddress))
             return false;
         if (maritalStatus == null) {
             if (other.maritalStatus != null)
@@ -401,7 +401,7 @@ public class MailPolicyEntity {
     @Override
     public String toString() {
         return "MailPolicyEntity [firstName=" + firstName + ", lastName=" + lastName + ", title=" + title
-                + ", formOfAdress=" + formOfAdress + ", maritalStatus=" + maritalStatus + ", cDateOfBirth="
+                + ", formOfAddress=" + formOfAddress + ", maritalStatus=" + maritalStatus + ", cDateOfBirth="
                 + cDateOfBirth + ", employmentStatus=" + employmentStatus + ", city=" + city + ", street=" + street
                 + ", postalCode=" + postalCode + ", phoneNumber=" + phoneNumber + ", email=" + email + ", bankDetails="
                 + bankDetails + ", dogOwner=" + dogOwner + ", pid=" + pid + ", cid=" + cid + ", startDate=" + startDate
