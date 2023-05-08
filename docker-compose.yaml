@@ -19,6 +19,8 @@ services:
       context: ./UI
       dockerfile: Dockerfile
     container_name: ui-service
+    profiles:
+      - rda
     env_file:
       - ./UI/ui.env
     networks:
@@ -33,6 +35,8 @@ services:
       context: ./RDA/PolicyService
       dockerfile: Dockerfile
     container_name: policy-service-rda
+    profiles:
+      - rda
     networks:
       - rda
     ports:
@@ -49,6 +53,8 @@ services:
   policydb.rda:
     image: mariadb:latest
     container_name: policydb-rda
+    profiles:
+      - rda
     networks:
       - rda
     environment:
@@ -65,6 +71,8 @@ services:
       context: ./RDA/CustomerService
       dockerfile: Dockerfile
     container_name: customer-service-rda
+    profiles:
+      - rda
     depends_on:
       - customerdb.rda
     networks:
@@ -79,6 +87,8 @@ services:
   customerdb.rda:
     image: mariadb:latest
     container_name: customerdb-rda
+    profiles:
+      - rda
     networks:
       - rda
     environment:
@@ -95,6 +105,8 @@ services:
       context: ./RDA/NotificationService
       dockerfile: Dockerfile
     container_name: notification-service-rda
+    profiles:
+      - rda
     networks:
       - rda
     environment:
@@ -114,6 +126,8 @@ services:
       context: ./UI
       dockerfile: Dockerfile
     container_name: ui-service-eda
+    profiles:
+      - eda
     env_file:
       - ./UI/ui.env
     networks:
@@ -130,6 +144,8 @@ services:
       args:
         service: CustomerService
     container_name: customer-service-eda
+    profiles:
+      - eda
     networks:
       - eda
     environment:
@@ -148,6 +164,8 @@ services:
   customerdb.eda:
     image: mariadb:latest
     container_name: customerdb-eda
+    profiles:
+      - eda
     command: --general-log=1
     networks:
       - eda
@@ -163,6 +181,8 @@ services:
       args:
         service: NotificationService
     container_name: notification-service-eda
+    profiles:
+      - eda
     networks:
       - eda
     environment:
@@ -176,6 +196,8 @@ services:
       args:
         service: PolicyService
     container_name: policy-service-eda
+    profiles:
+      - eda
     depends_on:
       - policydb.eda
       - rabbitmq
@@ -191,6 +213,8 @@ services:
   policydb.eda:
     image: mariadb:latest
     container_name: policydb-eda
+    profiles:
+      - eda
     networks:
       - eda
     environment:
@@ -205,6 +229,8 @@ services:
   rabbitmq:
     image: rabbitmq:management-alpine
     container_name: rabbitmq
+    profiles:
+      - eda
     networks:
       - eda
     ports:
