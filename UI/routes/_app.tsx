@@ -16,7 +16,9 @@ export default function App({ Component }: AppProps) {
         </meta>
         <link rel="stylesheet" href={asset("/meowmed.css")}></link>
       </Head>
-      <Component></Component>
+      <div class="p-5 max-w-screen-xl mx-auto">
+        <Component></Component>
+      </div>
     </>
   );
 }

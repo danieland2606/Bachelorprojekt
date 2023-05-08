@@ -26,27 +26,29 @@ export function Table(props: TableProps) {
   const { headers, items } = props.tabledata;
   const hasActions = hasAnyActions(items);
   return (
-    <table {...props} class={`${props.class} table w-full table-zebra`}>
-      <thead>
-        <tr>
-          {headers.map((header) => <th scope="col">{header}</th>)}
-          {hasActions && <th scope="col">Aktionen</th>}
-        </tr>
-      </thead>
-      <tbody>
-        {items.map(({ item, actions }) => (
+    <div class="overflow-x-auto">
+      <table {...props} class={`${props.class} table w-full table-zebra`}>
+        <thead>
           <tr>
-            {item.map((field) => <td>{field}</td>)}
-            {hasActions && (
-              <td>
-                {actions.details && <a href={actions.details}>details</a>}
-                {actions.edit && <a href={actions.edit}>edit</a>}
-                {actions.delete && <a href={actions.delete}>delete</a>}
-              </td>
-            )}
+            {headers.map((header) => <th scope="col">{header}</th>)}
+            {hasActions && <th scope="col">Aktionen</th>}
           </tr>
-        ))}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          {items.map(({ item, actions }) => (
+            <tr>
+              {item.map((field) => <td>{field}</td>)}
+              {hasActions && (
+                <td>
+                  {actions.details && <a class="btn btn-outline btn-sm capitalize rounded-none" href={actions.details}>details</a>}
+                  {actions.edit && <a href={actions.edit}>edit</a>}
+                  {actions.delete && <a href={actions.delete}>delete</a>}
+                </td>
+              )}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   );
 }

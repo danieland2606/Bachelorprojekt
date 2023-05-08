@@ -1,3 +1,20 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+    .input {
+        @apply input-bordered w-full max-w-xs focus:outline-0 focus:border-2 focus:border-black max-w-none
+    }
+    .btn.btn-normal {
+        @apply hover:bg-transparent hover:text-inherit hover:border-2 focus:bg-transparent focus:text-inherit focus:border-2
+    }
+}
+
+.table :where(thead, tfoot) :where(th, td) {
+    font-size: inherit;
+}
+
+.table th:first-child {
+    position: static;
+}

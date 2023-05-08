@@ -16,13 +16,13 @@ export const handler = {
 export default function Dashboard({ data }: PageProps) {
   return (
     <>
-      <h1>Mitarbeiter Dashboard</h1>
-      <div class="box-row">
-        <div class="search-container">
-          <input type="text" placeholder="Suche.." />
-          <img src={asset("/search.svg")} alt="lupe" />
+      <h1 class="text-4xl font-medium">Dashboard</h1>
+      <div class="sm:flex py-5 justify-between block">
+        <div class="relative sm:inline-block block mb-4 sm:mb-0">
+          <input type="text" placeholder="Suche..." class="input"/>
+          <img src={asset("/search.svg")} alt="lupe" class="absolute right-4 top-1/2 -translate-y-1/2" />
         </div>
-        <a class="button create-new" href="/customer">Neuer Kunde</a>
+        <a class="btn btn-normal flex sm:inline-flex" href="/customer">Neuer Kunde</a>
       </div>
       <Table tabledata={data}></Table>
     </>
