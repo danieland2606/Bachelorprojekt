@@ -22,7 +22,7 @@ services:
     env_file:
       - ./UI/ui.env
     networks:
-      - "default"
+      - rda
     ports:
       - 81:8000
     depends_on:
@@ -34,7 +34,7 @@ services:
       dockerfile: Dockerfile
     container_name: policy-service-rda
     networks:
-      - "default"
+      - rda
     ports:
       - 8082:8080
     depends_on:
@@ -50,7 +50,7 @@ services:
     image: mariadb:latest
     container_name: policydb-rda
     networks:
-      - "default"
+      - rda
     environment:
       MARIADB_ROOT_PASSWORD: test
       MYSQL_DATABASE: Policy
@@ -68,7 +68,7 @@ services:
     depends_on:
       - customerdb.rda
     networks:
-      - "default"
+      - rda
     ports:
       - 8081:8080
     environment:
@@ -80,7 +80,7 @@ services:
     image: mariadb:latest
     container_name: customerdb-rda
     networks:
-      - "default"
+      - rda
     environment:
       MARIADB_ROOT_PASSWORD: test
       MYSQL_DATABASE: Customer
@@ -96,7 +96,7 @@ services:
       dockerfile: Dockerfile
     container_name: notification-service-rda
     networks:
-      - "default"
+      - rda
     environment:
       - spring_mail_host=smtp.gmail.com
       - spring_mail_port=587
@@ -117,7 +117,7 @@ services:
     env_file:
       - ./UI/ui.env
     networks:
-      - "default"
+      - eda
     ports:
       - "82:8000"
     depends_on:
@@ -131,7 +131,7 @@ services:
         service: CustomerService
     container_name: customer-service-eda
     networks:
-      - "default"
+      - eda
     environment:
       - spring.rabbitmq.host=rabbitmq
       - spring.datasource.url=jdbc:mariadb://customerdb.eda:3306/Customer
@@ -150,7 +150,7 @@ services:
     container_name: customerdb-eda
     command: --general-log=1
     networks:
-      - "default"
+      - eda
     environment:
       MARIADB_ROOT_PASSWORD: test
       MYSQL_DATABASE: Customer
@@ -164,7 +164,7 @@ services:
         service: NotificationService
     container_name: notification-service-eda
     networks:
-      - "default"
+      - eda
     environment:
       - spring.rabbitmq.host=rabbitmq
     depends_on:
@@ -180,7 +180,7 @@ services:
       - policydb.eda
       - rabbitmq
     networks:
-      - "default"
+      - eda
     ports:
       - "8072:8080"
     environment:
@@ -192,7 +192,7 @@ services:
     image: mariadb:latest
     container_name: policydb-eda
     networks:
-      - "default"
+      - eda
     environment:
       MARIADB_ROOT_PASSWORD: test
       MYSQL_DATABASE: Policy
@@ -206,7 +206,7 @@ services:
     image: rabbitmq:management-alpine
     container_name: rabbitmq
     networks:
-      - "default"
+      - eda
     ports:
       - "15671:15671"
       - "15672:15672"
@@ -217,3 +217,7 @@ volumes:
   policydb_data_eda:
   customerdb_data_rda:
   policydb_data_rda:
+
+networks:
+  rda:
+  eda:

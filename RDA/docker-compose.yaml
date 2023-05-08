@@ -13,7 +13,7 @@ services:
     env_file:
       - ../UI/ui.env
     networks:
-      - "default"
+      - rda
     ports:
       - 80:8000 
   policy:
@@ -22,7 +22,7 @@ services:
       dockerfile: Dockerfile
     container_name: policy-service
     networks:
-      - "default"
+      - rda
     ports:
       - 81:8080
     depends_on: 
@@ -38,7 +38,7 @@ services:
     image: mariadb:latest
     container_name: policydb
     networks:
-      - "default"
+      - rda
     environment:
       MARIADB_ROOT_PASSWORD: test
       MYSQL_DATABASE: Policy
@@ -56,7 +56,7 @@ services:
     depends_on: 
       - customerdb
     networks:
-      - "default"
+      - rda
     ports:
       - 82:8080   
     environment:
@@ -68,7 +68,7 @@ services:
     image: mariadb:latest
     container_name: customerdb
     networks:
-      - "default"
+      - rda
     environment:
       MARIADB_ROOT_PASSWORD: test
       MYSQL_DATABASE: Customer
@@ -84,7 +84,7 @@ services:
       dockerfile: Dockerfile
     container_name: notification-service
     networks:
-      - "default"
+      - rda
     ports:
       - 83:8080
     environment:
@@ -98,3 +98,6 @@ services:
 volumes:
   policydb_data:
   customerdb_data:
+
+networks:
+  rda:
