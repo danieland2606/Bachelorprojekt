@@ -8,6 +8,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
+import java.util.Objects;
+
 @Entity
 @JsonFilter("addressFilter")
 public class AddressEntity {
@@ -17,10 +19,10 @@ public class AddressEntity {
     private long id;
     private String city;
     private String street;
-    private int postalCode;
+    private String postalCode;
 
     
-    public AddressEntity(String city, String street, int postalCode) {
+    public AddressEntity(String city, String street, String postalCode) {
         this.city = city;
         this.street = street;
         this.postalCode = postalCode;
@@ -44,11 +46,11 @@ public class AddressEntity {
         this.street = street;
     }
 
-    public int getPostalCode() {
+    public String getPostalCode() {
         return postalCode;
     }
 
-    public void setPostalCode(int postalCode) {
+    public void setPostalCode(String postalCode) {
         this.postalCode = postalCode;
     }
 
@@ -57,42 +59,23 @@ public class AddressEntity {
     public void setId (long id) {this.id = id;}
 
     @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((city == null) ? 0 : city.hashCode());
-        result = prime * result + ((street == null) ? 0 : street.hashCode());
-        result = prime * result + postalCode;
-        return result;
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof AddressEntity that)) return false;
+        return id == that.id && city.equals(that.city) && street.equals(that.street) && postalCode.equals(that.postalCode);
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        AddressEntity other = (AddressEntity) obj;
-        if (city == null) {
-            if (other.city != null)
-                return false;
-        } else if (!city.equals(other.city))
-            return false;
-        if (street == null) {
-            if (other.street != null)
-                return false;
-        } else if (!street.equals(other.street))
-            return false;
-        if (postalCode != other.postalCode)
-            return false;
-        return true;
+    public int hashCode() {
+        return Objects.hash(id, city, street, postalCode);
     }
-
     @Override
     public String toString() {
-        return "AddressEntity [id=" + id + ", city=" + city + ", street=" + street + ", postalCode=" + postalCode + "]";
+        return "AddressEntity{" +
+                "id=" + id +
+                ", city='" + city + '\'' +
+                ", street='" + street + '\'' +
+                ", postalCode='" + postalCode + '\'' +
+                '}';
     }
-
 }

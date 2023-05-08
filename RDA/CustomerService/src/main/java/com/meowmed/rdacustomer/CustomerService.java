@@ -98,7 +98,7 @@ public class CustomerService {
      */
     public MappingJacksonValue postCustomer(CustomerRequest cRequest) {
         aRepository.save(cRequest.getAddress());
-        CustomerEntity customer= new CustomerEntity(cRequest.getFirstName(), cRequest.getLastName(), cRequest.getTitle(), cRequest.getFormOfAdress(), cRequest.getMaritalStatus(), cRequest.getDateOfBirth(), cRequest.getEmploymentStatus(), cRequest.getAddress(), cRequest.getPhoneNumber(),cRequest.getEmail(),cRequest.getBankDetails(),cRequest.isDogOwner());
+        CustomerEntity customer= new CustomerEntity(cRequest.getFirstName(), cRequest.getLastName(), cRequest.getTitle(), cRequest.getFormOfAddress(), cRequest.getMaritalStatus(), cRequest.getDateOfBirth(), cRequest.getEmploymentStatus(), cRequest.getAddress(), cRequest.getPhoneNumber(),cRequest.getEmail(),cRequest.getBankDetails(),cRequest.isDogOwner());
         cRepository.save(customer);
         MailCustomerEntity mail = new MailCustomerEntity(cRequest);
 		System.out.println(mail);
@@ -129,7 +129,7 @@ public class CustomerService {
 
 
         // Erzeugen und ersetzen der Policy
-        CustomerEntity customer= new CustomerEntity(cRequest.getFirstName(), cRequest.getLastName(), cRequest.getTitle(), cRequest.getFormOfAdress(), cRequest.getMaritalStatus(), cRequest.getDateOfBirth(), cRequest.getEmploymentStatus(), cRequest.getAddress(), cRequest.getPhoneNumber(),cRequest.getEmail(),cRequest.getBankDetails(),cRequest.isDogOwner());
+        CustomerEntity customer= new CustomerEntity(cRequest.getFirstName(), cRequest.getLastName(), cRequest.getTitle(), cRequest.getFormOfAddress(), cRequest.getMaritalStatus(), cRequest.getDateOfBirth(), cRequest.getEmploymentStatus(), cRequest.getAddress(), cRequest.getPhoneNumber(),cRequest.getEmail(),cRequest.getBankDetails(),cRequest.isDogOwner());
         aRepository.save(cRequest.getAddress());
         customer.setId(c_id);
         customer = cRepository.save(customer);
@@ -157,15 +157,15 @@ public class CustomerService {
 
     void setUp(){
         LocalDate birthdayOfJan= LocalDate.of(1999,11,03);
-        AddressEntity adressJan= new AddressEntity("Hildesheim","Burgerking Hbf",31137);
+        AddressEntity adressJan= new AddressEntity("Hildesheim","Burgerking Hbf","31137");
         CustomerEntity Jan= new CustomerEntity("Jan", "Lorenz", "", "Mr.","ledig",birthdayOfJan,"student",adressJan , "+49123456789" ,"jan-niklas-johannes.lorenz@stud.hs-hannover.de" ,"DE2131627312371351232", false  );
 
         LocalDate birthdayofDaniel= LocalDate.of(2002,06,26);
-        AddressEntity adressDaniel= new AddressEntity("Hannover", "Subway Hbf", 12345);
+        AddressEntity adressDaniel= new AddressEntity("Hannover", "Subway Hbf", "12345");
         CustomerEntity Daniel= new CustomerEntity("Daniel", "Arnold","","Mr.", "ledig", birthdayofDaniel, "student", adressDaniel, "+4942069123123", "daniel.arnold@stud.hs-hannover.de", "DE", false);
     
         LocalDate birthdayOfAlex= LocalDate.of(1996,01,14);
-        AddressEntity adressAlex= new AddressEntity("Hildesheim","Burgerking Hbf",31137);
+        AddressEntity adressAlex= new AddressEntity("Hildesheim","Burgerking Hbf","31137");
         CustomerEntity Alex= new CustomerEntity("Alexander","Hampel","","Mr.","ledig",birthdayOfAlex,"student", adressAlex, "+49123456789", "alexander.hampel@stud.hs-hannover.de", "DE2131627312371351232", false);
 
 
