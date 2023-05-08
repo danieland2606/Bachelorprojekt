@@ -150,7 +150,7 @@ public class PolicyController {
 	@PostMapping("/customer/{c_id}/policy")
 	public ResponseEntity<MappingJacksonValue> postPolicy(@PathVariable Long c_id, @RequestBody PolicyRequest pRequest){
 		try {
-			return new ResponseEntity<MappingJacksonValue>(pService.postPolicy(c_id, pRequest),HttpStatusCode.valueOf(201));
+			return new ResponseEntity<MappingJacksonValue>(pService.postPolicy(c_id, pRequest),HttpStatusCode.valueOf(204));
 		} catch (CustomerNotFoundException e) {
 			MappingJacksonValue errWrapper = new MappingJacksonValue(Collections.singletonMap("error", "Unter der angegebenen Customer-ID wurde kein Customer gefunden"));
 			return ResponseEntity.status(400).body(errWrapper);
@@ -159,13 +159,13 @@ public class PolicyController {
 			return ResponseEntity.status(400).body(errWrapper);
 		} catch (MailSendException e){
 			MappingJacksonValue errWrapper = new MappingJacksonValue(Collections.singletonMap("error", "Mail-Versand fehlgeschlagen, Daten sind aber gespeichert."));
-			return ResponseEntity.status(400).body(errWrapper);
+			return ResponseEntity.status(500).body(errWrapper);
 		} catch (WebClientException e){
 			MappingJacksonValue errWrapper = new MappingJacksonValue(Collections.singletonMap("error", "Mail-Service erzeugt unerwarteten Fehler, Daten sind aber gespeichert."));
-			return ResponseEntity.status(400).body(errWrapper);
+			return ResponseEntity.status(500).body(errWrapper);
 		} catch (ArithmeticException e){
 			MappingJacksonValue errWrapper = new MappingJacksonValue(Collections.singletonMap("error", "Bei der Preisberechnung ist ein Fehler entstanden"));
-			return ResponseEntity.status(400).body(errWrapper);
+			return ResponseEntity.status(500).body(errWrapper);
 		}
 		//return pService.postPolicy(c_id, pRequest);
 	}
@@ -205,10 +205,10 @@ public class PolicyController {
 			return ResponseEntity.status(400).body(errWrapper);		
 		} catch (MailSendException e) {
 			MappingJacksonValue errWrapper = new MappingJacksonValue(Collections.singletonMap("error", "Mail-Versand fehlgeschlagen, Daten sind aber gespeichert."));
-			return ResponseEntity.status(400).body(errWrapper);
+			return ResponseEntity.status(500).body(errWrapper);
 		} catch (WebClientException e) {
 			MappingJacksonValue errWrapper = new MappingJacksonValue(Collections.singletonMap("error", "Mail-Service erzeugt unerwarteten Fehler, Daten sind aber gespeichert."));
-			return ResponseEntity.status(400).body(errWrapper);
+			return ResponseEntity.status(500).body(errWrapper);
 		} catch (PolicyNotFoundException e) {
 			MappingJacksonValue errWrapper = new MappingJacksonValue(Collections.singletonMap("error", "Unter der angegebenen Policy-ID wurde keine Policy gefunden"));
 			return ResponseEntity.status(400).body(errWrapper);
@@ -245,13 +245,13 @@ public class PolicyController {
 			return new ResponseEntity<MappingJacksonValue>(pService.getPolicyPriceRequest(details),HttpStatusCode.valueOf(200));
 		} catch (ArithmeticException e) {
 			MappingJacksonValue errWrapper = new MappingJacksonValue(Collections.singletonMap("error", "Bei der Berechnung ist ein Fehler aufgetreten."));
-			return ResponseEntity.status(400).body(errWrapper);
+			return ResponseEntity.status(500).body(errWrapper);
 		} catch (CustomerNotFoundException e) {
 			MappingJacksonValue errWrapper = new MappingJacksonValue(Collections.singletonMap("error", "Unter der angegebenen Customer-ID wurde kein Customer gefunden"));
 			return ResponseEntity.status(400).body(errWrapper);		
 		} catch (WebClientException e) {
 			MappingJacksonValue errWrapper = new MappingJacksonValue(Collections.singletonMap("error", "Mail-Service erzeugt unerwarteten Fehler, Daten sind aber gespeichert."));
-			return ResponseEntity.status(400).body(errWrapper);
+			return ResponseEntity.status(500).body(errWrapper);
 		} 
 		//return pService.getPolicyPriceRequest(details);
 	}

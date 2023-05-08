@@ -12,7 +12,7 @@ public class MailPolicyEntity {
     private String employmentStatus;
     private String city;
     private String street;
-    private int postalCode;
+    private String postalCode;
     private String phoneNumber;
     private String email;
     private String bankDetails;
@@ -34,7 +34,7 @@ public class MailPolicyEntity {
     public MailPolicyEntity() {
     }
     public MailPolicyEntity(String firstName, String lastName, String title, String formOfAdress, String maritalStatus,
-            LocalDate cDateOfBirth, String employmentStatus, String city, String street, int postalCode,
+            LocalDate cDateOfBirth, String employmentStatus, String city, String street, String postalCode,
             String phoneNumber, String email, String bankDetails, boolean dogOwner, long pid, long cid, LocalDate startDate,
             LocalDate endDate, int coverage, double premium, String name, String race, String color,
             LocalDate oDateOfBirth, boolean castrated, String personality, String environment, int weight) {
@@ -151,10 +151,10 @@ public class MailPolicyEntity {
     public void setStreet(String street) {
         this.street = street;
     }
-    public int getPostalCode() {
+    public String getPostalCode() {
         return postalCode;
     }
-    public void setPostalCode(int postalCode) {
+    public void setPostalCode(String postalCode) {
         this.postalCode = postalCode;
     }
     public String getPhoneNumber() {
@@ -278,7 +278,7 @@ public class MailPolicyEntity {
         result = prime * result + ((employmentStatus == null) ? 0 : employmentStatus.hashCode());
         result = prime * result + ((city == null) ? 0 : city.hashCode());
         result = prime * result + ((street == null) ? 0 : street.hashCode());
-        result = prime * result + postalCode;
+        result = prime * result + ((postalCode == null) ? 0 : postalCode.hashCode());
         result = prime * result + ((phoneNumber == null) ? 0 : phoneNumber.hashCode());
         result = prime * result + ((email == null) ? 0 : email.hashCode());
         result = prime * result + ((bankDetails == null) ? 0 : bankDetails.hashCode());

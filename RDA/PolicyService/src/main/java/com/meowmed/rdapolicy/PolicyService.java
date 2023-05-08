@@ -98,6 +98,14 @@ public class PolicyService {
 				ooIArgList.add(result.substring(18));
 				removeList.add(result);
 				containsOoI = true;
+			} else if (result.contains("objectOfInsurance")){
+				ooIArgList.add("name");
+				ooIArgList.add("race");
+				ooIArgList.add("color");
+				ooIArgList.add("dateOfBirth");
+				ooIArgList.add("castrated");
+				ooIArgList.add("environment");
+				ooIArgList.add("weight");
 			}
 		}
 		policyList.removeAll(removeList);
@@ -315,7 +323,7 @@ public class PolicyService {
 		if(debugmode) System.out.println("getPolicyPrice: Nach Kastrierungsberechnung: totalprice: " + totalprice + " Differenz: " + (totalprice - debugprice));
 		debugprice = totalprice;
 		// Hat der Besitzer eine PLZ die mit 0 oder 1 startet, erhöhe den Preis um 5% des basepricees
-		if(customer.getAddress().getPostalCode()<20000) totalprice+= 0.05*baseprice;
+		if(Integer.parseInt(customer.getAddress().getPostalCode())<20000) totalprice+= 0.05*baseprice;
 		if(debugmode) System.out.println("getPolicyPrice: Nach Postleitzahlberechnung: totalprice: " + totalprice + " Differenz: " + (totalprice - debugprice));
 		debugprice = totalprice;
 
