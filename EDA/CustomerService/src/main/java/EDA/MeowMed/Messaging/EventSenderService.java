@@ -22,7 +22,9 @@ public class EventSenderService {
     public EventSenderService() {
     }
 
-    private final String routingKey = "customer.created";
+    private final String CREATED_ROUTING_KEY = "customer.created";
+    private final String CHANGED_ROUTING_KEY = "customer.changed";
+
 
     /**
      * Sends an event to a topic exchange when new customer is created
@@ -33,7 +35,18 @@ public class EventSenderService {
      */
     public boolean sendCustomerCreatedEvent(Customer customer) {
         try {
-            template.convertAndSend(topicExchange.getName(), routingKey, customer.createCustomerCreatedEvent());
+            template.convertAndSend(topicExchange.getName(), CREATED_ROUTING_KEY, customer.createCustomerCreatedEvent());
+            System.out.println(" [x] Sent");
+        } catch (Exception e) {
+            System.out.println("Fehler beim Senden");
+            e.printStackTrace();
+        }
+        return true;
+    }
+
+    public boolean sendCustomerChangedEvent(Customer customer) {
+        try {
+            template.convertAndSend(topicExchange.getName(), CHANGED_ROUTING_KEY, customer.createCustomerCreatedEvent());
             System.out.println(" [x] Sent");
         } catch (Exception e) {
             System.out.println("Fehler beim Senden");

@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class MessagingConfig {
 
-    private final String exchangeName = "MeowMedTopicExchange";
+    private final String EXCHANGE_NAME = "MeowMedTopicExchange";
 
 
     /**
@@ -20,7 +20,7 @@ public class MessagingConfig {
      */
     @Bean
     public TopicExchange topicExchange() {
-        return new TopicExchange(exchangeName);
+        return new TopicExchange(EXCHANGE_NAME);
     }
 
     @Bean
