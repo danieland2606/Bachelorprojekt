@@ -128,13 +128,13 @@ public class CustomerService {
         cRequest.getAddress().setId(currentCustomer.get().getAddress().getId());
 
 
-        // Erzeugen und ersetzen der Policy
+        // Erzeugen und ersetzen der Customer
         CustomerEntity customer= new CustomerEntity(cRequest.getFirstName(), cRequest.getLastName(), cRequest.getTitle(), cRequest.getFormOfAddress(), cRequest.getMaritalStatus(), cRequest.getDateOfBirth(), cRequest.getEmploymentStatus(), cRequest.getAddress(), cRequest.getPhoneNumber(),cRequest.getEmail(),cRequest.getBankDetails(),cRequest.isDogOwner());
         aRepository.save(cRequest.getAddress());
         customer.setId(c_id);
         customer = cRepository.save(customer);
 
-        /*// Versand der Mail
+        /*// Versand der Mail TEST
         MailPolicyEntity mail = new MailPolicyEntity(policy, customer);
         ResponseEntity<String> response = sendMail("policychangenotification", mail);
         if (response.getStatusCode() != HttpStatus.OK) throw new MailSendException();
@@ -142,7 +142,6 @@ public class CustomerService {
 			MappingJacksonValue errWrapper = new MappingJacksonValue(Collections.singletonMap("error", "Es gab Probleme, die Mail zu versenden, Daten wurden aber gespeichert"));
 			return new ResponseEntity<MappingJacksonValue>(errWrapper,HttpStatusCode.valueOf(400));
 		}
-        if(debugmode) System.out.println("updatePolicy: mail: " + mail + " response: " + response);
         */
         // Verpacken und Filtern von der Ausgabe
         MappingJacksonValue wrapper = new MappingJacksonValue(customer);
