@@ -49,7 +49,7 @@ services:
       - spring.datasource.password=123456789
       - docker_customerurl=customer.rda
       - docker_notificationurl=notification.rda
-      - docker_debugmode=false
+      - docker_debugmode=true
   policydb.rda:
     image: mariadb:latest
     container_name: policydb-rda

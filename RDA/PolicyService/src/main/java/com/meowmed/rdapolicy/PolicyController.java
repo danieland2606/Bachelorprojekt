@@ -239,7 +239,7 @@ public class PolicyController {
 		"premium": 75
 		}
 	 */
-	@GetMapping("/policyprice")
+	@PostMapping("/policyprice")
 	public ResponseEntity<MappingJacksonValue> getPolicyPrice(@RequestBody PriceCalculationEntity details) throws JsonProcessingException{
 		try {
 			return new ResponseEntity<MappingJacksonValue>(pService.getPolicyPriceRequest(details),HttpStatusCode.valueOf(200));
