@@ -1,11 +1,25 @@
 import { Input, Select } from "./Input.tsx";
 import { Form, FormProps } from "./Form.tsx";
 import {
+  Customer,
   EmploymentStatusValues,
   FormOfAddressValues,
   MaritalStatusValues,
   TitleValues,
 } from "../generated/index.ts";
+
+type proptype = {
+  name: string;
+  baseName: string;
+  type: string;
+  format: string;
+};
+
+const customerProps = function () {
+  const props = new Map<string, proptype>();
+  //TODO
+  return props;
+}();
 
 export function EditCustomer(props: FormProps) {
   return (

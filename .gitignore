@@ -168,3 +168,4 @@ nb-configuration.xml
 *.backup
 
 .vite
+*.html.gz

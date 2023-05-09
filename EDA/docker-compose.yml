@@ -8,7 +8,7 @@ services:
         policyService: "http://policy:8080"
       context: ../UI
       dockerfile: Dockerfile
-    container_name: ui-service
+    container_name: ui-service-l
     env_file:
       - ../UI/ui.env
     networks:
@@ -38,8 +38,10 @@ services:
     ports:
       - "81:8081"
     depends_on:
-      - customerdb
-      - rabbitmq
+      customerdb:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_started
 
   customerdb:
     image: mariadb:latest
@@ -52,6 +54,11 @@ services:
       MYSQL_DATABASE: Customer
       MYSQL_USER: user
       MYSQL_PASSWORD: test12345
+    healthcheck:
+      test: "mariadb --user=root --password=$$MARIADB_ROOT_PASSWORD --execute \"SHOW DATABASES;\""
+      interval: 5s
+      timeout: 20s
+      retries: 10
 
 
 
@@ -61,13 +68,14 @@ services:
       dockerfile: ./NotificationService/Dockerfile
       args:
         service: NotificationService
-    container_name: notification-service
+    container_name: notification-service-l
     networks:
       - "default"
     environment:
       - spring.rabbitmq.host=rabbitmq
     depends_on:
-      - rabbitmq
+      rabbitmq:
+        condition: service_started
 
 
 
@@ -78,9 +86,11 @@ services:
       args:
         service: PolicyService
     container_name: policy-service
-    depends_on: 
-      - policydb
-      - rabbitmq
+    depends_on:
+      policydb:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_started
     networks:
       - "default"
     ports:
@@ -101,6 +111,11 @@ services:
       MYSQL_DATABASE: Policy
       MYSQL_USER: user
       MYSQL_PASSWORD: 123456789
+    healthcheck:
+      test: "mariadb --user=root --password=$$MARIADB_ROOT_PASSWORD --execute \"SHOW DATABASES;\""
+      interval: 5s
+      timeout: 20s
+      retries: 10
     #ports:
     #  - "3306:3306"
     volumes:
@@ -110,7 +125,7 @@ services:
 
   rabbitmq:
     image: rabbitmq:management-alpine
-    container_name: rabbitmq
+    container_name: rabbitmq-l
     networks:
       - "default"
     ports:

@@ -86,22 +86,22 @@ paths:
           $ref: '#/components/responses/NoCustomerFound'
         default:
           $ref: '#/components/responses/UnknownError'
-#    put:
-#      operationId: updateCustomer
-#      summary: replace a customer
-#      tags:
-#        - customer
-#      requestBody:
-#        $ref: '#/components/requestBodies/FullCustomer'
-#      responses:
-#        204:
-#          description: customer updated
-#        404:
-#          $ref: '#/components/responses/NoCustomerFound'
-#        400:
-#          $ref: '#/components/responses/InvalidCustomer'
-#        default:
-#          $ref: '#/components/responses/UnknownError'
+    put:
+      operationId: updateCustomer
+      summary: replace a customer
+      tags:
+        - customer
+      requestBody:
+        $ref: '#/components/requestBodies/FullCustomer'
+      responses:
+        204:
+          description: customer updated
+        404:
+          $ref: '#/components/responses/NoCustomerFound'
+        400:
+          $ref: '#/components/responses/InvalidCustomer'
+        default:
+          $ref: '#/components/responses/UnknownError'
   /customer/{customerId}/policy:
     parameters:
       - $ref: '#/components/parameters/CustomerId'
@@ -472,6 +472,9 @@ components:
         premium:
           type: number
           readOnly: true
+        active:
+          type: boolean
+          readOnly: true
         objectOfInsurance:
           $ref: '#/components/schemas/ObjectOfInsurance'
     ObjectOfInsurance:
@@ -503,6 +506,7 @@ components:
             - endDate
             - coverage
             - premium
+            - active
             - objectOfInsurance
           properties:
             objectOfInsurance:
@@ -524,6 +528,7 @@ components:
         - endDate
         - coverage
         - premium
+        - active
         - objectOfInsurance
         - objectOfInsurance.name
         - objectOfInsurance.race

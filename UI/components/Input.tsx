@@ -18,7 +18,7 @@ export function Select(props: SelectProps) {
         {props.children ??
           props.options?.map((option) => (
             <option value={option}>{pretty(option)}</option>
-          ))}
+          )) ?? ""}
       </select>
     </div>
   );
