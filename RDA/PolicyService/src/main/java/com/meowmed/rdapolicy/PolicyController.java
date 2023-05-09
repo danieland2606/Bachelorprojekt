@@ -199,7 +199,7 @@ public class PolicyController {
 	@PutMapping("/customer/{c_id}/policy/{p_id}")
 	public ResponseEntity<MappingJacksonValue> updatePolicy(@PathVariable("c_id") Long c_id, @PathVariable("p_id") Long p_id, @RequestBody PolicyRequest pRequest) throws JsonProcessingException{
 		try {
-			return new ResponseEntity<MappingJacksonValue>(pService.updatePolicy(c_id, p_id, pRequest),HttpStatusCode.valueOf(200));
+			return new ResponseEntity<MappingJacksonValue>(pService.updatePolicy(c_id, p_id, pRequest),HttpStatusCode.valueOf(204));
 		} catch (CustomerNotFoundException e) {
 			MappingJacksonValue errWrapper = new MappingJacksonValue(Collections.singletonMap("error", "Unter der angegebenen Customer-ID wurde kein Customer gefunden"));
 			return ResponseEntity.status(400).body(errWrapper);		
