@@ -8,12 +8,13 @@ public class Address implements Serializable {
     private static final long serialVersionUID = 2L;
     private String city;
     private String street;
-    private int postalCode;
+    private String postalCode;
+
     public Address() {
 
     }
 
-    public Address(String city, String street, int postalCode) {
+    public Address(String city, String street, String postalCode) {
         this.city = city;
         this.street = street;
         this.postalCode = postalCode;
@@ -35,16 +36,16 @@ public class Address implements Serializable {
         this.street = street;
     }
 
-    public int getPostalCode() {
+    public String getPostalCode() {
         return postalCode;
     }
 
-    public void setPostalCode(int postalCode) {
+    public void setPostalCode(String postalCode) {
         this.postalCode = postalCode;
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return postalCode + " " + city + ", " + street;
     }
 }

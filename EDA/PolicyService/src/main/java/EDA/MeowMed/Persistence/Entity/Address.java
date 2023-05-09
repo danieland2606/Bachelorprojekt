@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import java.io.Serializable;
 
 @Entity
-@Table(name="Address")
+@Table(name = "Address")
 public class Address implements Serializable {
 
     @Id
@@ -15,9 +15,9 @@ public class Address implements Serializable {
     private Long id;
 
     @Column(name = "postal_code", nullable = false)
-    private int postalCode;
+    private String postalCode;
 
-    public Address(int postalCode) {
+    public Address(String postalCode) {
         this.postalCode = postalCode;
     }
 
@@ -25,13 +25,14 @@ public class Address implements Serializable {
         this.postalCode = a.getPostalCode();
     }
 
-    public Address() {}
+    public Address() {
+    }
 
-    public int getPostalCode() {
+    public String getPostalCode() {
         return postalCode;
     }
 
-    public void setPostalCode(int postalCode) {
+    public void setPostalCode(String postalCode) {
         this.postalCode = postalCode;
     }
 

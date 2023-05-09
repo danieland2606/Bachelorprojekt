@@ -1,28 +1,32 @@
 package EDA.MeowMed.Module;
+
 import EDA.MeowMed.Persistence.Entity.CatRace;
 import EDA.MeowMed.Persistence.Entity.Customer;
 import EDA.MeowMed.Persistence.Entity.Policy;
+
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
 //TODO: Exceptions auslösen
+
 /**
- This class provides methods to calculate the price of a cat insurance
- policy based on various factors such as the cat's weight, age, breed,
- postal code, and owner's status as a dog owner.
+ * This class provides methods to calculate the price of a cat insurance
+ * policy based on various factors such as the cat's weight, age, breed,
+ * postal code, and owner's status as a dog owner.
  */
 public class PremiumCalculator {
     /**
-     Calculates the base price of the cat insurance policy based on the coverage
-     amount and color of the cat.
-     @param policy The policy object containing the coverage amount and object of
-     insurance (i.e., the cat).
-     @return The base price of the cat insurance policy.
+     * Calculates the base price of the cat insurance policy based on the coverage
+     * amount and color of the cat.
+     *
+     * @param policy The policy object containing the coverage amount and object of
+     *               insurance (i.e., the cat).
+     * @return The base price of the cat insurance policy.
      */
     public static double calculateBasePrice(Policy policy) {
         int coverage = policy.getCoverage();
         double basePrice;
-        switch(policy.getObjectOfInsurance().getColor()) {
+        switch (policy.getObjectOfInsurance().getColor()) {
             case "schwarz": // If the cat is black, increase the insurance price by 0.2%.
                 basePrice = 0.002 * coverage;
                 break;
@@ -34,10 +38,11 @@ public class PremiumCalculator {
     }
 
     /**
-     Calculates the extra price for the cat insurance policy based on the weight of the cat.
-     @param weight The weight of the cat.
-     @param catRace The cat race object containing information on the average weight of the breed.
-     @return The extra price of the cat insurance policy based on the cat's weight.
+     * Calculates the extra price for the cat insurance policy based on the weight of the cat.
+     *
+     * @param weight  The weight of the cat.
+     * @param catRace The cat race object containing information on the average weight of the breed.
+     * @return The extra price of the cat insurance policy based on the cat's weight.
      */
     public static double calculateWeightPrice(double weight, CatRace catRace) {
         double extraPrice = 0;
@@ -54,9 +59,10 @@ public class PremiumCalculator {
     }
 
     /**
-     Calculates the extra price for the cat insurance policy based on the breed's illness factor.
-     @param catRace The cat race object containing information on the illness factor of the breed.
-     @return The extra price of the cat insurance policy based on the breed's illness factor.
+     * Calculates the extra price for the cat insurance policy based on the breed's illness factor.
+     *
+     * @param catRace The cat race object containing information on the illness factor of the breed.
+     * @return The extra price of the cat insurance policy based on the breed's illness factor.
      */
     public static double calculateIllnessFactorPrice(CatRace catRace) {
         // Increase the price by the breed's illness factor value. Every one point more, every Euro more.
@@ -65,10 +71,11 @@ public class PremiumCalculator {
 
 
     /**
-     Calculates the extra price for the cat insurance policy based on whether the cat lives outdoors or not.
-     @param environment The environment in which the cat lives.
-     @param basePrice The base price of the cat insurance policy.
-     @return The extra price of the cat insurance policy based on whether the cat lives outdoors or not.
+     * Calculates the extra price for the cat insurance policy based on whether the cat lives outdoors or not.
+     *
+     * @param environment The environment in which the cat lives.
+     * @param basePrice   The base price of the cat insurance policy.
+     * @return The extra price of the cat insurance policy based on whether the cat lives outdoors or not.
      */
     public static double calculateEnvironmentPrice(String environment, double basePrice) {
         // Increase the price by 1% of the base price if the cat lives outdoors.
@@ -80,11 +87,12 @@ public class PremiumCalculator {
 
 
     /**
-     Calculates the price increase or decrease based on the age of the cat.
-     @param catBirthDate the birth date of the cat
-     @param catRace the race of the cat
-     @param basePrice the base price of the insurance premium
-     @return the price increase or decrease based on the age of the cat
+     * Calculates the price increase or decrease based on the age of the cat.
+     *
+     * @param catBirthDate the birth date of the cat
+     * @param catRace      the race of the cat
+     * @param basePrice    the base price of the insurance premium
+     * @return the price increase or decrease based on the age of the cat
      */
     public static double calculateAgePrice(LocalDate catBirthDate, CatRace catRace, double basePrice) {
 
@@ -98,8 +106,7 @@ public class PremiumCalculator {
 
         //If the cat is in the upper quartile of the average age interval at the time of contract
         // conclusion, add 20% of the base price.
-        if (catAgeInYears > upperQuartil)
-        {
+        if (catAgeInYears > upperQuartil) {
             totalPrice += 0.2 * basePrice;
         }
         //If the cat is <=2 years old at the time of contract conclusion, subtract 10% of the base price.
@@ -110,9 +117,10 @@ public class PremiumCalculator {
     }
 
     /**
-     Calculates the price increase if the cat is not castrated.
-     @param isCastrated indicates whether the cat is castrated
-     @return the price increase if the cat is not castrated
+     * Calculates the price increase if the cat is not castrated.
+     *
+     * @param isCastrated indicates whether the cat is castrated
+     * @return the price increase if the cat is not castrated
      */
     public static double calculateCastrationPrice(boolean isCastrated) {
         //If the cat is not castrated, add 5€ to the premium.
@@ -124,14 +132,15 @@ public class PremiumCalculator {
 
 
     /**
-     Calculates the price increase if the owner's postal code starts with 0 or 1.
-     @param postalCode the postal code of the customer
-     @param basePrice the base price of the insurance premium
-     @return the price increase if the owner's postal code starts with 0 or 1
+     * Calculates the price increase if the owner's postal code starts with 0 or 1.
+     *
+     * @param postalCode the postal code of the customer
+     * @param basePrice  the base price of the insurance premium
+     * @return the price increase if the owner's postal code starts with 0 or 1
      */
-    public static double calculatePostalCodePrice(int postalCode, double basePrice) {
-    //If the owner's postal code starts with 0 or 1, add 5% of the base price to the premium.
-        if (postalCode < 20000) {
+    public static double calculatePostalCodePrice(String postalCode, double basePrice) {
+        //If the owner's postal code starts with 0 or 1, add 5% of the base price to the premium.
+        if (postalCode.charAt(0) == '0' || postalCode.charAt(0) == '1') {
             return 0.05 * basePrice;
         }
         return 0;
@@ -139,10 +148,11 @@ public class PremiumCalculator {
 
 
     /**
-     Calculates the price increase if the customer owns a dog.
-     @param customer the customer who owns the cat
-     @param basePrice the base price of the insurance premium
-     @return the price increase if the customer owns a dog
+     * Calculates the price increase if the customer owns a dog.
+     *
+     * @param customer  the customer who owns the cat
+     * @param basePrice the base price of the insurance premium
+     * @return the price increase if the customer owns a dog
      */
     public static double applyDogOwnerSurcharge(Customer customer, double basePrice) {
         //If the customer owns a dog, add 30% of the base price to the premium.
@@ -153,24 +163,22 @@ public class PremiumCalculator {
     }
 
     /**
-     This method rounds the given total price to two decimal places and returns the result.
-
-     Multiply the total price by 100 to move the decimal point two places to the right,
-     cast it to an integer to remove any decimal places, then divide it by 100.0 to
-     move the decimal point back two places to the left and get the rounded result as
-     a double value.
-     @param totalPrice The total price to be rounded to two decimal places.
-     @return The rounded total price as a double value.
+     * This method rounds the given total price to two decimal places and returns the result.
+     * <p>
+     * Multiply the total price by 100 to move the decimal point two places to the right,
+     * cast it to an integer to remove any decimal places, then divide it by 100.0 to
+     * move the decimal point back two places to the left and get the rounded result as
+     * a double value.
+     *
+     * @param totalPrice The total price to be rounded to two decimal places.
+     * @return The rounded total price as a double value.
      */
     public static double roundToTwoDecimal(double totalPrice) {
 
-        return ((int)(totalPrice * 100)) / 100.0;
+        return ((int) (totalPrice * 100)) / 100.0;
     }
 
 }
-
-
-
 
 
 //RESERVE !! BITTE NICHT ENTFERNEN !! WICHTIG ALS ERSATZ !!

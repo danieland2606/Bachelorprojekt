@@ -1,7 +1,5 @@
 package EDA.MeowMed.Logic;
 
-import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 import EDA.MeowMed.Exceptions.DatabaseAccessException;
@@ -24,8 +22,6 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.stereotype.Service;
 
-import static EDA.MeowMed.Module.PremiumCalculator.calculateWeightPrice;
-
 @Service
 public class PolicyService {
 
@@ -43,11 +39,12 @@ public class PolicyService {
 
     /**
      * Constructor for PolicyService class.
-     * @param policySender a sender object used to send notifications when a new policy is added
-     * @param policyRepository a repository object used to access policies data
+     *
+     * @param policySender                a sender object used to send notifications when a new policy is added
+     * @param policyRepository            a repository object used to access policies data
      * @param objectOfInsuranceRepository a repository object used to access object of insurance data
-     * @param customerRepository a repository object used to access customer data
-     * @param addressRepository a repository object used to access address data
+     * @param customerRepository          a repository object used to access customer data
+     * @param addressRepository           a repository object used to access address data
      */
     @Autowired
     public PolicyService(PolicySender policySender,
@@ -65,12 +62,12 @@ public class PolicyService {
         this.setUp();
     }
 
-    private void setUp(){
+    private void setUp() {
         ArrayList<CatRace> entities = new ArrayList<>();
-        entities.add(new CatRace("siamese", 12, 15, 4, 7, 2, new String[]{"seal","blau","lilac","creme"})) ;
-        entities.add(new CatRace("perser", 12, 16, 4, 7, 3, new String[]{"weiß", "schildpatt","schwarz"}));
-        entities.add(new CatRace("bengal", 12, 16, 4, 6, 4, new String[]{"braun", "schildpatt","marmor"}));
-        entities.add(new CatRace("maine-cone", 12, 15, 5, 10, 2, new String[]{"grau","braun","weiß"}));
+        entities.add(new CatRace("siamese", 12, 15, 4, 7, 2, new String[]{"seal", "blau", "lilac", "creme"}));
+        entities.add(new CatRace("perser", 12, 16, 4, 7, 3, new String[]{"weiß", "schildpatt", "schwarz"}));
+        entities.add(new CatRace("bengal", 12, 16, 4, 6, 4, new String[]{"braun", "schildpatt", "marmor"}));
+        entities.add(new CatRace("maine-cone", 12, 15, 5, 10, 2, new String[]{"grau", "braun", "weiß"}));
         entities.add(new CatRace("sphynx", 12, 15, 4, 6, 5, new String[]{}));
         entities.add(new CatRace("scottish Fold", 12, 15, 4, 6, 6, new String[]{}));
         entities.add(new CatRace("british-shorthair", 12, 15, 4, 6, 0, new String[]{}));
@@ -82,8 +79,9 @@ public class PolicyService {
 
     /**
      * Finds a policy by its customer ID and policy ID, and returns a filtered MappingJacksonValue of the policy.
+     *
      * @param customerID the ID of the customer who owns the policy
-     * @param policyID the ID of the policy to be retrieved
+     * @param policyID   the ID of the policy to be retrieved
      * @return a MappingJacksonValue object containing the filtered policy retrieved
      * @throws ObjectNotFoundException if the customer or policy is not found
      * @throws DatabaseAccessException if there is an error accessing the database
@@ -99,8 +97,8 @@ public class PolicyService {
             Policy policy = this.policyRepository.findPolicyByCustomerIDAndPolicyID(customerID, policyID);
 
             // Throw an ObjectNotFoundException if the policy is not found
-            if(policy == null){
-                throw new ObjectNotFoundException("Policy ID "+ policyID +" not found for customer ID " + customerID);
+            if (policy == null) {
+                throw new ObjectNotFoundException("Policy ID " + policyID + " not found for customer ID " + customerID);
             }
 
             // Filter the policy and return it as a MappingJacksonValue
@@ -118,8 +116,9 @@ public class PolicyService {
 
     /**
      * Adds a policy for the specified customer.
+     *
      * @param customerID The ID of the customer for whom the policy is being added.
-     * @param policy The policy to be added.
+     * @param policy     The policy to be added.
      * @return A {@link MappingJacksonValue} object containing the policy that was added.
      * @throws ObjectNotFoundException if the customer with the given ID does not exist.
      * @throws DatabaseAccessException if there is an error accessing the database.
@@ -155,8 +154,9 @@ public class PolicyService {
 
     /**
      * Retrieves a list of policies for a customer with specified ID, with the option to select specific fields to include
+     *
      * @param customerID the ID of the customer to retrieve policies for
-     * @param fields comma-separated list of fields to include in the response
+     * @param fields     comma-separated list of fields to include in the response
      * @return a {@link MappingJacksonValue} object containing the list of policies retrieved
      * @throws ObjectNotFoundException if the customer with the specified ID does not exist
      * @throws DatabaseAccessException if there is an error accessing the database
@@ -172,7 +172,7 @@ public class PolicyService {
             List<Policy> list = this.policyRepository.getPolicyList(customerID);
 
             // throw ObjectNotFoundException if list is empty
-            if(list == null ){
+            if (list == null) {
                 throw new ObjectNotFoundException("Policy list not found for customer ID " + customerID);
             }
 
@@ -186,7 +186,7 @@ public class PolicyService {
 
             boolean containsOoI = false;
             for (String result : fieldList) {
-                if(result.contains("objectOfInsurance.")){
+                if (result.contains("objectOfInsurance.")) {
                     ooIList.add(result.substring(18));
                     policyList.remove(result);
                     containsOoI = true;
@@ -196,7 +196,7 @@ public class PolicyService {
             }
 
             // add objectOfInsurance field if it was included in the fields parameter
-            if(containsOoI) {
+            if (containsOoI) {
                 policyList.add("objectOfInsurance");
             }
             policyList.add("id");
@@ -215,6 +215,7 @@ public class PolicyService {
     /**
      * Adds a new customer to the database based on the information provided in a CustomerCreatedEvent.
      * The address of the customer is also saved in the database.
+     *
      * @param customerCreatedEvent an event containing the information of the new customer
      * @throws DataAccessException if there's an error accessing the database
      */
@@ -228,6 +229,7 @@ public class PolicyService {
 
     /**
      * Wrapper for {@link EDA.MeowMed.Logic.PolicyService#getPremium(Customer customer, Policy policy) getPremium(Customer customer, Policy policy)}
+     *
      * @param calculationData the calculationData Object
      * @return the calculated Premium
      * @throws ObjectNotFoundException if the customer does not exist
@@ -237,14 +239,15 @@ public class PolicyService {
     }
 
     /**
-     This method calculates the premium for a given customer and policy using the PremiumCalculator.
-     It takes in a Customer object and a Policy object as parameters and returns a double value
-     representing the total premium.
-     @param customer The Customer object representing the customer who is taking the policy.
-     @param policy The Policy object representing the policy being taken by the customer.
-     @return A double value representing the total premium for the given policy and customer.
-     @Test Die Tests waren erfolgreich und ich habe die Ergebnisse mit den vorgegebenen Vorlagen verglichen. Alles hat gut funktioniert
-     TODO Fehlerbehandlung muss hinzugefügt werden
+     * This method calculates the premium for a given customer and policy using the PremiumCalculator.
+     * It takes in a Customer object and a Policy object as parameters and returns a double value
+     * representing the total premium.
+     *
+     * @param customer The Customer object representing the customer who is taking the policy.
+     * @param policy   The Policy object representing the policy being taken by the customer.
+     * @return A double value representing the total premium for the given policy and customer.
+     * @Test Die Tests waren erfolgreich und ich habe die Ergebnisse mit den vorgegebenen Vorlagen verglichen. Alles hat gut funktioniert
+     * TODO Fehlerbehandlung muss hinzugefügt werden
      */
     public double getPremium(Customer customer, Policy policy) {
         // Get the cat race from the catRaceRepository based on the policy's object of insurance race
@@ -253,38 +256,39 @@ public class PolicyService {
         if (catRace == null) return 0;
         // Calculate the base price for the policy using the PremiumCalculator
         double basePrice = PremiumCalculator.calculateBasePrice(policy);
-        System.out.println("base Preise: "+ basePrice);
+        System.out.println("base Preise: " + basePrice);
         // Calculate the total price of the policy by adding the prices for each factor
         double totalPrice = basePrice;
         totalPrice += PremiumCalculator.calculateWeightPrice(policy.getObjectOfInsurance().getWeight(), catRace);
-        System.out.println("base Preise nach WeightPreise: "+ totalPrice); //Funktioniert
+        System.out.println("base Preise nach WeightPreise: " + totalPrice); //Funktioniert
 
         totalPrice += PremiumCalculator.calculateIllnessFactorPrice(catRace);
-        System.out.println("base Preise nach IllnessFactorPrice: "+ totalPrice); //Funktioniert
+        System.out.println("base Preise nach IllnessFactorPrice: " + totalPrice); //Funktioniert
 
         totalPrice += PremiumCalculator.calculateEnvironmentPrice(policy.getObjectOfInsurance().getEnvironment(), basePrice);
-        System.out.println("base Preise nach EnvironmentPrice: "+ totalPrice); //Funktioniert
+        System.out.println("base Preise nach EnvironmentPrice: " + totalPrice); //Funktioniert
 
         totalPrice += PremiumCalculator.calculateAgePrice(policy.getObjectOfInsurance().getDateOfBirth(), catRace, basePrice);
-        System.out.println("base Preise nach AgePrice: "+ totalPrice);  //Funktioniert
+        System.out.println("base Preise nach AgePrice: " + totalPrice);  //Funktioniert
 
         totalPrice += PremiumCalculator.calculateCastrationPrice(policy.getObjectOfInsurance().isCastrated());
-        System.out.println("base Preise nach CastrationPrice: "+ totalPrice); //Funktioniert
+        System.out.println("base Preise nach CastrationPrice: " + totalPrice); //Funktioniert
 
         totalPrice += PremiumCalculator.calculatePostalCodePrice(customer.getAddress().getPostalCode(), basePrice);
-        System.out.println("base Preise nach PostalCodePrice: "+ totalPrice); //Funktioniert
+        System.out.println("base Preise nach PostalCodePrice: " + totalPrice); //Funktioniert
 
         totalPrice += PremiumCalculator.applyDogOwnerSurcharge(customer, basePrice);
-        System.out.println("base Preise nach DogOwner: "+ totalPrice);  //Funktioniert
+        System.out.println("base Preise nach DogOwner: " + totalPrice);  //Funktioniert
 
         totalPrice = PremiumCalculator.roundToTwoDecimal(totalPrice);
-        System.out.println("base Preise nach roundToTwoDecimal: "+ totalPrice);
+        System.out.println("base Preise nach roundToTwoDecimal: " + totalPrice);
         return totalPrice;
     }
 
 
     /**
      * Checks if a customer with the given ID exists in the database.
+     *
      * @param customerID The ID of the customer to check
      * @return true if the customer exists, false otherwise
      */
@@ -295,6 +299,7 @@ public class PolicyService {
 
     /**
      * Get Customer by CustomerID
+     *
      * @param customerID the id of the customer
      * @return the customer object
      * @throws ObjectNotFoundException when the Customer does not exist
@@ -309,6 +314,7 @@ public class PolicyService {
 
     /**
      * Updates a Policy //TODO: Kommentar fertig schreiben
+     *
      * @param policyID
      * @param policy
      */
