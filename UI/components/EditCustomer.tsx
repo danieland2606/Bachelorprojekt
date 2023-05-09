@@ -42,6 +42,10 @@ export function EditCustomer(props: FormProps) {
         options={MaritalStatusValues}
       >
       </Select>
+      <Select name="dogOwner" labeltext="Hundebesitzer">
+        <option value="true">Besitzt einen Hund</option>
+        <option value="false">Besitzt keinen Hund</option>
+      </Select>
       <Select
         name="employmentStatus"
         labeltext="Berufsstand"
