@@ -43,8 +43,8 @@ export function EditCustomer(props: FormProps) {
       >
       </Select>
       <Select name="dogOwner" labeltext="Hundebesitzer">
-        <option value="true">Besitzt einen Hund</option>
-        <option value="false">Besitzt keinen Hund</option>
+        <option value={true.toString()}>Besitzt einen Hund</option>
+        <option value={false.toString()}>Besitzt keinen Hund</option>
       </Select>
       <Select
         name="employmentStatus"

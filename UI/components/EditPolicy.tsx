@@ -48,8 +48,8 @@ export function EditPolicy(props: EditPolicyProps) {
         >
         </Input>
         <Select name="objectOfInsurance.castrated" labeltext="Kastriert">
-          <option value="true">Kastriert</option>
-          <option value="false">Nicht Kastriert</option>
+          <option value={true.toString()}>Kastriert</option>
+          <option value={false.toString()}>Nicht Kastriert</option>
         </Select>
         <Select
           name="objectOfInsurance.personality"
