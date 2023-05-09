@@ -25,7 +25,7 @@ public class CustomerService {
     @Autowired
     private EventSenderService eventSenderService;
     @Autowired
-    private CustomerValidatorService customerValidatorService;
+    private CustomerValidationService customerValidationService;
 
     /**
      * TODO: Add comment
@@ -146,7 +146,7 @@ public class CustomerService {
         mapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm a z"));
         Customer customer = mapper.readValue(jsonCustomer, Customer.class);
 
-        customerValidatorService.validateCustomer(customer);
+        customerValidationService.validateCustomer(customer);
 
         this.customerRepository.save(customer);
         eventSenderService.sendCustomerCreatedEvent(customer);
