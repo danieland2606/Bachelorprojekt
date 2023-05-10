@@ -2,6 +2,7 @@ package EDA.MeowMed.Persistence.Entity;
 
 
 import events.customer.CustomerCreatedEvent;
+import events.customer.subclasses.CustomerData;
 import events.policy.subclasses.CustomerPojo;
 import jakarta.persistence.*;
 
@@ -40,8 +41,11 @@ public class Customer implements Serializable {
     @Column(name = "e_mail", nullable = false)
     private String email;
 
+    @Column(name = "employment_status", nullable = false)
+    private String employmentStatus;
 
-    public Customer(Long id, String firstName, String lastName, String formOfAddress, String title, boolean dogOwner, Address address, String email) {
+
+    public Customer(Long id, String firstName, String lastName, String formOfAddress, String title, boolean dogOwner, Address address, String email, String employmentStatus) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -50,6 +54,7 @@ public class Customer implements Serializable {
         this.dogOwner = dogOwner;
         this.address = address;
         this.email = email;
+        this.employmentStatus = employmentStatus;
     }
 
     public Customer(CustomerCreatedEvent c) {
@@ -61,6 +66,7 @@ public class Customer implements Serializable {
         this.dogOwner = c.isDogOwner();
         this.address = new Address(c.getAddress());
         this.email = c.getEmail();
+        this.employmentStatus = c.getEmploymentStatus();
     }
 
     public Customer() {
@@ -120,6 +126,14 @@ public class Customer implements Serializable {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getEmploymentStatus() {
+        return this.employmentStatus;
+    }
+
+    public void setEmploymentStatus(String employmentStatus) {
+        this.employmentStatus = employmentStatus;
     }
 
     public CustomerPojo toPojo() {

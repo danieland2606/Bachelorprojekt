@@ -5,15 +5,11 @@ import events.policy.PolicyCreatedEvent;
 import jakarta.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.Objects;
-
 
 @Entity
 @Table(name="Policy")
 @JsonFilter("policyFilter")
 public class Policy implements Serializable {
-
-
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,6 +32,9 @@ public class Policy implements Serializable {
     @Column(name = "premium", nullable = false  )
     private double premium;
 
+    @Column(name = "cancelled", nullable = false)
+    private boolean cancelled;
+
     @OneToOne(optional = false)
     @JoinColumn(name = "object_of_insurance_id")
     private ObjectOfInsurance objectOfInsurance;
@@ -44,12 +43,13 @@ public class Policy implements Serializable {
     @JoinColumn(name = "customer_id")
     private Customer customer;
 
-    public Policy(long id, LocalDate startDate, LocalDate endDate, int coverage, int premium, ObjectOfInsurance objectOfInsurance) {
+    public Policy(long id, LocalDate startDate, LocalDate endDate, int coverage, int premium, boolean cancelled, ObjectOfInsurance objectOfInsurance) {
         this.id = id;
         this.startDate = startDate;
         this.endDate = endDate;
         this.coverage = coverage;
         this.premium = premium;
+        this.cancelled = cancelled;
         this.objectOfInsurance = objectOfInsurance;
     }
 
@@ -95,6 +95,14 @@ public class Policy implements Serializable {
 
     public void setPremium(double premium) {
         this.premium = premium;
+    }
+
+    public boolean isCancelled() {
+        return cancelled;
+    }
+
+    public void setCancelled(boolean cancelled) {
+        this.cancelled = cancelled;
     }
 
     public ObjectOfInsurance getObjectOfInsurance() {

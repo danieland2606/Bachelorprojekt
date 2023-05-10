@@ -7,7 +7,9 @@ import EDA.MeowMed.Exceptions.InvalidPolicyDataException;
 import EDA.MeowMed.Exceptions.ObjectNotFoundException;
 import EDA.MeowMed.Module.PremiumCalculator;
 import EDA.MeowMed.Persistence.*;
+import EDA.MeowMed.Persistence.Entity.Address;
 import EDA.MeowMed.Persistence.Entity.CatRace;
+import events.customer.CustomerChangedEvent;
 import events.customer.CustomerCreatedEvent;
 import EDA.MeowMed.Messaging.PolicySender;
 import EDA.MeowMed.Persistence.Entity.Customer;
@@ -15,6 +17,7 @@ import EDA.MeowMed.Persistence.Entity.Policy;
 import EDA.MeowMed.Rest.PremiumCalculationData;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
+import events.customer.subclasses.CustomerData;
 import events.policy.PolicyChangedEvent;
 import events.policy.subclasses.CustomerPojo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -161,11 +164,12 @@ public class PolicyService {
      * @throws ObjectNotFoundException if the customer with the specified ID does not exist
      * @throws DatabaseAccessException if there is an error accessing the database
      */
-    public MappingJacksonValue getPolicyList(long customerID, String fields) throws ObjectNotFoundException, DatabaseAccessException {
+    public MappingJacksonValue getPolicyList(long customerID, String fields) throws ObjectNotFoundException, DatabaseAccessException, IllegalArgumentException {
         try {
-            // check if customer exists
-            if (!doesCustomerExist(customerID)) {
-                throw new ObjectNotFoundException("Customer with ID " + customerID + " not found");
+            // check if customer is not "arbeitslos"
+            Customer customer = this.getCustomer(customerID);
+            if (customer.getEmploymentStatus().equals("arbeitslos")) {
+                throw new IllegalArgumentException("Policies for customers with employment status 'arbeitslos' cannot be created.");
             }
 
             // retrieve list of policies for the customer
@@ -334,5 +338,46 @@ public class PolicyService {
         this.policyRepository.flush();
         CustomerPojo c = new CustomerPojo(customer.getId(), customer.getFirstName(), customer.getLastName(), customer.getFormOfAddress(), customer.getEmail());
         this.policySender.sendPolicyChanged(new PolicyChangedEvent(policyID, oldCoverage, newCoverage, oldPremium, newPremium, c));
+    }
+
+    /**
+     * TODO: comments
+     * @param customerChangedEvent
+     */
+    public void updateCustomer(CustomerChangedEvent customerChangedEvent) {
+        CustomerData newData = customerChangedEvent.getNewCustomer();
+        if (newData.getEmploymentStatus().equals("arbeitslos")) {
+            this.cancelPoliciesOfCustomer(newData.getId());
+        }
+        Customer customer = this.getCustomer(newData.getId());
+        customer.setFirstName(newData.getFirstName());
+        customer.setLastName(newData.getLastName());
+        customer.setFormOfAddress(newData.getFormOfAddress());
+        customer.setTitle(newData.getTitle());
+        customer.setDogOwner(newData.getDogOwner());
+        customer.getAddress().setPostalCode(newData.getAddress().getPostalCode());
+        customer.setEmail(newData.getEmail());
+        customer.setEmploymentStatus(newData.getEmploymentStatus());
+        this.customerRepository.flush();
+    }
+
+    /**
+     * TODO: comments
+     * @param customerID
+     */
+    public void cancelPoliciesOfCustomer(Long customerID) {
+        for (Policy p : this.policyRepository.getPolicyList(customerID)) {
+            this.cancelPolicy(p);
+        }
+    }
+
+    /**
+     * TODO: comments
+     * @param p
+     */
+    public void cancelPolicy(Policy p) {
+        p.setCancelled(true);
+        this.policyRepository.flush();
+        //TODO: notification
     }
 }

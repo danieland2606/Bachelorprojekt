@@ -1,65 +1,45 @@
-package EDA.MeowMed.Persistence.Entity;
+package events.customer.subclasses;
 
-import com.fasterxml.jackson.annotation.JsonFilter;
-import events.customer.CustomerCreatedEvent;
-import events.customer.subclasses.CustomerData;
-import jakarta.persistence.*;
+import events.customer.subclasses.Address;
 
-import java.io.Serializable;
+import java.io.Serial;
 import java.time.LocalDate;
 
-@Entity
-@Table(name = "Customer")
-@JsonFilter("customerFilter")
-public class Customer implements Serializable {
+public class CustomerData {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "customer_id", unique = true, nullable = false)
+    @Serial
+    private static final long serialVersionUID = 8L;
+
     private Long id;
 
-    @Column(name = "form_Of_Address", nullable = false)
     private String formOfAddress;
 
-    @Column(name = "title")
     private String title;
 
-    @Column(name = "first_name", nullable = false)
     private String firstName;
 
-    @Column(name = "last_name", nullable = false)
     private String lastName;
 
-    @Column(name = "marital_status", nullable = false)
     private String maritalStatus;
 
-    @Column(name = "date_of_birth", nullable = false)
     private LocalDate dateOfBirth;
 
-    @Column(name = "employment_status", nullable = false)
     private String employmentStatus;
 
-    @Column(name = "dog_owner", nullable = false)
     private boolean dogOwner;
 
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "address_id", nullable = false)
     private Address address;
 
-    @Column(name = "phone_number", nullable = false)
     private String phoneNumber;
 
-    @Column(name = "e_mail", nullable = false)
     private String email;
 
-    @Column(name = "bank_details", nullable = false)
     private String bankDetails;
 
-    public Customer() {
+    public CustomerData() {
     }
 
-    public Customer(Long id, String firstName, String lastName, String formOfAddress, String title, String maritalStatus, LocalDate dateOfBirth, String employmentStatus, boolean dogOwner, Address address, String phoneNumber, String email, String bankDetails) {
+    public CustomerData(Long id, String firstName, String lastName, String formOfAddress, String title, String maritalStatus, LocalDate dateOfBirth, String employmentStatus, boolean dogOwner, Address address, String phoneNumber, String email, String bankDetails) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -177,46 +157,5 @@ public class Customer implements Serializable {
 
     public void setBankDetails(String bankDetails) {
         this.bankDetails = bankDetails;
-    }
-
-    /**
-     * TODO: Add comment
-     *
-     * @return
-     */
-    public CustomerCreatedEvent createCustomerCreatedEvent() {
-        return new CustomerCreatedEvent(
-                id,
-                firstName,
-                lastName,
-                formOfAddress,
-                title,
-                maritalStatus,
-                dateOfBirth,
-                employmentStatus,
-                dogOwner,
-                address.toCustomerAddress(),
-                phoneNumber,
-                email,
-                bankDetails
-        );
-    }
-
-    public CustomerData toCustomerChangedEventData() {
-        return new CustomerData(
-                id,
-                firstName,
-                lastName,
-                formOfAddress,
-                title,
-                maritalStatus,
-                dateOfBirth,
-                employmentStatus,
-                dogOwner,
-                address.toCustomerAddress(),
-                phoneNumber,
-                email,
-                bankDetails
-        );
     }
 }

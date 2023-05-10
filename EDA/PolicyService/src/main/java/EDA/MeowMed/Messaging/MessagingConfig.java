@@ -20,8 +20,8 @@ public class MessagingConfig {
     }
 
     @Bean
-    public CustomerCreatedReceiver receiver(PolicyService policyService) {
-        return new CustomerCreatedReceiver(policyService);
+    public CustomerReceiver receiver(PolicyService policyService) {
+        return new CustomerReceiver(policyService);
     }
 
     @Bean(name = "CustomerCreatedQueue")
@@ -29,8 +29,18 @@ public class MessagingConfig {
         return new AnonymousQueue();
     }
 
+    @Bean(name = "CustomerChangedQueue")
+    public Queue CustomerChangedQueue() {
+        return new AnonymousQueue();
+    }
+
     @Bean
     public Binding bindCustomerCreated(TopicExchange topic, @Qualifier("CustomerCreatedQueue") Queue queue) {
         return BindingBuilder.bind(queue).to(topic).with("customer.created");
+    }
+
+    @Bean
+    public Binding binCustomerChanged(TopicExchange topic, @Qualifier("CustomerChangedQueue") Queue queue) {
+        return BindingBuilder.bind(queue).to(topic).with("customer.changed");
     }
 }
