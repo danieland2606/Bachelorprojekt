@@ -17,10 +17,17 @@ public class EventReceiver {
     @Autowired
     private NotificationService notificationService;
 
-    @RabbitListener(queues = "#{customerQueue.name}")
+    @RabbitListener(queues = "#{customerCreatedQueue.name}")
     public void receiveCustomer(CustomerCreatedEvent customerCreatedEvent) throws InterruptedException {
         System.out.println("Received newly created Customer");
         notificationService.sendCustomerCreatedMail(customerCreatedEvent);
+    }
+
+    //FIXME Neuen Eventtyp anlegen?
+    @RabbitListener(queues = "#{customerChangedQueue.name}")
+    public void receiveCustomerChanged(CustomerCreatedEvent customerCreatedEvent) throws InterruptedException {
+        System.out.println("Received changed Customer Data");
+        notificationService.sendCustomerTerminatedMail(customerCreatedEvent);
     }
 
     @RabbitListener(queues = "#{policyCreatedQueue.name}")

@@ -19,8 +19,11 @@ public class NotificationService {
     @Autowired
     private EmailSenderService emailSenderService;
     private final String sender = "noreply@meowmed.com";
-    private final String subjectCustomer = "Willkommen bei MeowMed!";
-    private final String templateCustomer = "customernotification";
+    private final String subjectCustomerCreated = "Willkommen bei MeowMed!";
+    private final String templateCustomerCreated = "customernotification";
+    private final String subjectCustomerTerminated = "Kündigung Ihres Vertrags bei MeowMed";
+    private final String templateCustomerTerminated = "customertermination";
+
     private final String subjectPolicy = "Ihre MeowMed Vertragsinformationen";
     private final String templatePolicyCreated = "policynotification";
 
@@ -34,7 +37,7 @@ public class NotificationService {
      * and "properties".
      * The "properties" map and "to" email address are obtained from the CustomerCreatedEvent object.
      * "from", "subject" and "template" are all internally defined as final.
-     * Which properties are needed for the email are defined in the "templateCustomer".html file.
+     * Which properties are needed for the email are defined in the "templateCustomerCreated".html file.
      * After all "properties" are filled the emailSenderService is called
      * to send the HTML message using the Email object.
      * If any exception occurs during the email sending process, it will be caught and printed
@@ -46,8 +49,8 @@ public class NotificationService {
         Email email = new Email();
         email.setTo(customerCreated.getEmail());
         email.setFrom(sender);
-        email.setSubject(subjectCustomer);
-        email.setTemplate(templateCustomer);
+        email.setSubject(subjectCustomerCreated);
+        email.setTemplate(templateCustomerCreated);
         Map<String, Object> properties = new HashMap<>();
         properties.put("formOfAddress", customerCreated.getFormOfAddress());
         properties.put("firstName", customerCreated.getFirstName());
@@ -59,6 +62,29 @@ public class NotificationService {
         properties.put("phoneNumber", customerCreated.getPhoneNumber());
         properties.put("bankDetails", customerCreated.getBankDetails());
         properties.put("address", customerCreated.getAddress().toString());
+        email.setProperties(properties);
+
+        try {
+            emailSenderService.sendHtmlMessage(email);
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     *
+     * @param customerCreated
+     */
+    public void sendCustomerTerminatedMail(CustomerCreatedEvent customerCreated) {
+        Email email = new Email();
+        email.setTo(customerCreated.getEmail());
+        email.setFrom(sender);
+        email.setSubject(subjectCustomerTerminated);
+        email.setTemplate(templateCustomerTerminated);
+        Map<String, Object> properties = new HashMap<>();
+        properties.put("formOfAddress", customerCreated.getFormOfAddress());
+        properties.put("firstName", customerCreated.getFirstName());
+        properties.put("lastName", customerCreated.getLastName());
         email.setProperties(properties);
 
         try {

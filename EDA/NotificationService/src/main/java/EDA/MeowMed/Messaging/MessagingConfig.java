@@ -25,7 +25,10 @@ public class MessagingConfig {
          * @return New Queue object with specified name
          */
         @Bean
-        public Queue customerQueue() { return new Queue("customer");}
+        public Queue customerCreatedQueue() { return new Queue("customercreated");}
+
+        @Bean
+        public Queue customerChangedQueue() { return new Queue("customerchanged");}
 
         @Bean
         public Queue policyCreatedQueue() { return new Queue("policycreated");}
@@ -39,23 +42,27 @@ public class MessagingConfig {
          * Binds a queue to an exchange
          * Consumes only events witch specified routing key
          * @param topic Exchange to bind to
-         * @param customerQueue Queue used by consumer
+         * @param customerCreatedQueue Queue used by consumer
          * @return Topic Exchange object
          */
         @Bean
-        public Binding customerBinding(TopicExchange topic, Queue customerQueue) {
-            return BindingBuilder.bind(customerQueue).to(topic).with("customer.created");
+        public Binding customerCreatedBinding(TopicExchange topic, Queue customerCreatedQueue) {
+            return BindingBuilder.bind(customerCreatedQueue()).to(topic).with("customer.created");
+        }
 
+        @Bean
+        public Binding customerChangedBinding(TopicExchange topic, Queue customerChangedQueue) {
+            return BindingBuilder.bind(customerChangedQueue()).to(topic).with("customer.changed");
         }
 
         @Bean
         public Binding policyCreatedBinding(TopicExchange topic, Queue policyCreatedQueue) {
-            return BindingBuilder.bind(policyCreatedQueue).to(topic).with("policy.created");
+            return BindingBuilder.bind(policyCreatedQueue()).to(topic).with("policy.created");
         }
 
         @Bean
         public Binding policyChangedBinding(TopicExchange topic, Queue policyChangedQueue) {
-            return BindingBuilder.bind(policyChangedQueue).to(topic).with("policy.changed");
+            return BindingBuilder.bind(policyChangedQueue()).to(topic).with("policy.changed");
         }
 
         @Bean
