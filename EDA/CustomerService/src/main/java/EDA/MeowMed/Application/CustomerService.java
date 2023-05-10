@@ -38,15 +38,15 @@ public class CustomerService {
         Optional<Customer> request = customerRepository.findById(id);
         if (request.isEmpty()) {
             return null;
-        } else {
-            FilterProvider filters = new SimpleFilterProvider()
-                    .addFilter("customerFilter", SimpleBeanPropertyFilter.serializeAllExcept("id"))
-                    .addFilter("addressFilter", SimpleBeanPropertyFilter.serializeAllExcept("id"));
-            ObjectMapper mapper = new ObjectMapper();
-            mapper.registerModule(new JavaTimeModule());
-            mapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm a z"));
-            return mapper.writer(filters).writeValueAsString(request.get());
         }
+        FilterProvider filters = new SimpleFilterProvider()
+                .addFilter("customerFilter", SimpleBeanPropertyFilter.serializeAllExcept("id"))
+                .addFilter("addressFilter", SimpleBeanPropertyFilter.serializeAllExcept("id"));
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+        mapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm a z"));
+        return mapper.writer(filters).writeValueAsString(request.get());
+
     }
 
     /**
@@ -148,11 +148,47 @@ public class CustomerService {
 
         customerValidationService.validateCustomer(customer);
 
-        this.customerRepository.save(customer);
+        customerRepository.save(customer);
         eventSenderService.sendCustomerCreatedEvent(customer);
         FilterProvider filters = new SimpleFilterProvider()
                 .addFilter("customerFilter", SimpleBeanPropertyFilter.filterOutAllExcept("id"));
 
         return mapper.writer(filters).writeValueAsString(customer);
+    }
+
+    public String replaceCustomer(Long id, String jsonCustomer) throws JsonProcessingException, IllegalArgumentException, NoSuchElementException {
+        if (jsonCustomer.contains("\"id\":")) {
+            throw new IllegalArgumentException("Wrong Json Format");
+        }
+        Optional<Customer> request = customerRepository.findById(id);
+        if (request.isEmpty()) {
+            throw new NoSuchElementException("Customer doesn't exist");
+        }
+        Customer customerOld = request.get();
+
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+        mapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm a z"));
+        Customer customerNew = mapper.readValue(jsonCustomer, Customer.class);
+
+        customerValidationService.validateCustomer(customerNew);
+
+        customerOld.setFirstName(customerNew.getFirstName());
+        customerOld.setLastName(customerNew.getLastName());
+        customerOld.setFormOfAddress(customerNew.getFormOfAddress());
+        customerOld.setTitle(customerNew.getTitle());
+        customerOld.setMaritalStatus(customerNew.getMaritalStatus());
+        customerOld.setDateOfBirth(customerNew.getDateOfBirth());
+        customerOld.setEmploymentStatus(customerNew.getEmploymentStatus());
+        customerOld.setDogOwner(customerNew.getDogOwner());
+        customerOld.setAddress(customerNew.getAddress());
+        customerOld.setPhoneNumber(customerNew.getPhoneNumber());
+        customerOld.setEmail(customerNew.getEmail());
+        customerOld.setBankDetails(customerNew.getBankDetails());
+
+        customerRepository.save(customerOld);
+        eventSenderService.sendCustomerChangedEvent(customerOld);
+
+        return null;
     }
 }
