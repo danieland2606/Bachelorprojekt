@@ -45,9 +45,9 @@ public class EventSenderService {
         return true;
     }
 
-    public boolean sendCustomerChangedEvent(CustomerChangedEvent customerChangedEvent) {
+    public boolean sendCustomerChangedEvent(Customer customerNew, Customer customerOld) {
         try {
-            template.convertAndSend(topicExchange.getName(), CHANGED_ROUTING_KEY, customerChangedEvent);
+            template.convertAndSend(topicExchange.getName(), CHANGED_ROUTING_KEY, new CustomerChangedEvent(customerOld.toCustomerData(), customerNew.toCustomerData()));
             System.out.println(" [x] Sent");
         } catch (Exception e) {
             System.out.println("Fehler beim Senden");

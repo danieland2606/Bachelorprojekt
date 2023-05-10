@@ -202,7 +202,7 @@ public class Customer implements Serializable {
         );
     }
 
-    public CustomerData toCustomerChangedEventData() {
+    public CustomerData toCustomerData() {
         return new CustomerData(
                 id,
                 firstName,

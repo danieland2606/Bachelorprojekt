@@ -10,7 +10,6 @@ import com.fasterxml.jackson.databind.ser.FilterProvider;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import events.customer.CustomerChangedEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -165,8 +164,7 @@ public class CustomerService {
         if (request.isEmpty()) {
             throw new NoSuchElementException("Customer doesn't exist");
         }
-        Customer persistentCustomer = request.get();
-        Customer oldCustomer = request.get();
+        Customer customerOld = request.get();
 
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
@@ -175,26 +173,10 @@ public class CustomerService {
 
         customerValidationService.validateCustomer(customerNew);
 
-        persistentCustomer.setFirstName(customerNew.getFirstName());
-        persistentCustomer.setLastName(customerNew.getLastName());
-        persistentCustomer.setFormOfAddress(customerNew.getFormOfAddress());
-        persistentCustomer.setTitle(customerNew.getTitle());
-        persistentCustomer.setMaritalStatus(customerNew.getMaritalStatus());
-        persistentCustomer.setDateOfBirth(customerNew.getDateOfBirth());
-        persistentCustomer.setEmploymentStatus(customerNew.getEmploymentStatus());
-        persistentCustomer.setDogOwner(customerNew.getDogOwner());
-        persistentCustomer.setAddress(customerNew.getAddress());
-        persistentCustomer.setPhoneNumber(customerNew.getPhoneNumber());
-        persistentCustomer.setEmail(customerNew.getEmail());
-        persistentCustomer.setBankDetails(customerNew.getBankDetails());
-
-        customerRepository.save(persistentCustomer);
-        eventSenderService.sendCustomerChangedEvent(
-                new CustomerChangedEvent(
-                        oldCustomer.toCustomerChangedEventData(),
-                        persistentCustomer.toCustomerChangedEventData()
-                )
-        );
+        customerNew.setId(customerOld.getId());
+        customerRepository.save(customerNew);
+        
+        eventSenderService.sendCustomerChangedEvent(customerNew, customerOld);
 
         return null;
     }
