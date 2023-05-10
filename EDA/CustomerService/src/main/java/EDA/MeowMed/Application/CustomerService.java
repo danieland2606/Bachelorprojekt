@@ -10,6 +10,7 @@ import com.fasterxml.jackson.databind.ser.FilterProvider;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import events.customer.CustomerChangedEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -164,7 +165,8 @@ public class CustomerService {
         if (request.isEmpty()) {
             throw new NoSuchElementException("Customer doesn't exist");
         }
-        Customer customerOld = request.get();
+        Customer persistentCustomer = request.get();
+        Customer oldCustomer = request.get();
 
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
@@ -173,21 +175,26 @@ public class CustomerService {
 
         customerValidationService.validateCustomer(customerNew);
 
-        customerOld.setFirstName(customerNew.getFirstName());
-        customerOld.setLastName(customerNew.getLastName());
-        customerOld.setFormOfAddress(customerNew.getFormOfAddress());
-        customerOld.setTitle(customerNew.getTitle());
-        customerOld.setMaritalStatus(customerNew.getMaritalStatus());
-        customerOld.setDateOfBirth(customerNew.getDateOfBirth());
-        customerOld.setEmploymentStatus(customerNew.getEmploymentStatus());
-        customerOld.setDogOwner(customerNew.getDogOwner());
-        customerOld.setAddress(customerNew.getAddress());
-        customerOld.setPhoneNumber(customerNew.getPhoneNumber());
-        customerOld.setEmail(customerNew.getEmail());
-        customerOld.setBankDetails(customerNew.getBankDetails());
+        persistentCustomer.setFirstName(customerNew.getFirstName());
+        persistentCustomer.setLastName(customerNew.getLastName());
+        persistentCustomer.setFormOfAddress(customerNew.getFormOfAddress());
+        persistentCustomer.setTitle(customerNew.getTitle());
+        persistentCustomer.setMaritalStatus(customerNew.getMaritalStatus());
+        persistentCustomer.setDateOfBirth(customerNew.getDateOfBirth());
+        persistentCustomer.setEmploymentStatus(customerNew.getEmploymentStatus());
+        persistentCustomer.setDogOwner(customerNew.getDogOwner());
+        persistentCustomer.setAddress(customerNew.getAddress());
+        persistentCustomer.setPhoneNumber(customerNew.getPhoneNumber());
+        persistentCustomer.setEmail(customerNew.getEmail());
+        persistentCustomer.setBankDetails(customerNew.getBankDetails());
 
-        customerRepository.save(customerOld);
-        eventSenderService.sendCustomerChangedEvent(customerOld);
+        customerRepository.save(persistentCustomer);
+        eventSenderService.sendCustomerChangedEvent(
+                new CustomerChangedEvent(
+                        oldCustomer.toCustomerChangedEventData(),
+                        persistentCustomer.toCustomerChangedEventData()
+                )
+        );
 
         return null;
     }
