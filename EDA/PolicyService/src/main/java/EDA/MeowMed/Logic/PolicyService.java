@@ -327,7 +327,7 @@ public class PolicyService {
         if (p.isEmpty()) {
             throw new ObjectNotFoundException("The given Policy with PolicyID: " + policyID + " does not exist in the database.");
         }
-        Policy persistentPolicy = p.get();
+        Policy persistentPolicy = p.get(); //TODO: auch Änderung des Katzenwesens implementieren (Notification auch anpassen, ggfs. Policy kündigen: this.cancelPolicy Methode)
         int oldCoverage = persistentPolicy.getCoverage();
         double oldPremium = persistentPolicy.getPremium();
         persistentPolicy.setCoverage(policy.getCoverage());
@@ -359,6 +359,7 @@ public class PolicyService {
         customer.setEmail(newData.getEmail());
         customer.setEmploymentStatus(newData.getEmploymentStatus());
         this.customerRepository.flush();
+        this.recalculatePremium(newData.getId());
     }
 
     /**
@@ -369,15 +370,27 @@ public class PolicyService {
         for (Policy p : this.policyRepository.getPolicyList(customerID)) {
             this.cancelPolicy(p);
         }
+        this.policyRepository.flush();
+    }
+
+    public void cancelPolicy(Policy p) {
+        p.setCancelled(true);
+        //TODO: Notification für Kündigung
+        this.policyRepository.flush();
     }
 
     /**
      * TODO: comments
-     * @param p
+     * @param customerID
      */
-    public void cancelPolicy(Policy p) {
-        p.setCancelled(true);
+    public void recalculatePremium(Long customerID) {
+        for (Policy p : this.policyRepository.getPolicyList(customerID)) {
+            double newPremium = this.getPremium(this.getCustomer(customerID),p);
+            if (Math.abs(newPremium - p.getPremium()) < 0.0001) {
+                p.setPremium(newPremium);
+                //TODO: Notification für Premiumänderung
+            }
+        }
         this.policyRepository.flush();
-        //TODO: notification
     }
 }
