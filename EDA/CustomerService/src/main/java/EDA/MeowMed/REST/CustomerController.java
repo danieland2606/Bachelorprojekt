@@ -7,6 +7,9 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
+import java.util.NoSuchElementException;
+
 
 @RestController
 @RequestMapping
@@ -71,6 +74,21 @@ public class CustomerController {
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(errorJsonBody(e.getMessage()));
+        }
+    }
+
+    @PutMapping(value = "/customer/{c_id}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> putCustomer(@RequestBody String customer, @PathVariable Long c_id) {
+        try {
+            String responseBody = customerService.replaceCustomer(c_id, customer);
+
+            return ResponseEntity.noContent().build();
+        } catch (JsonProcessingException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(errorJsonBody(e.getMessage()));
+        } catch (NoSuchElementException e) {
+            return ResponseEntity.notFound().build();
         }
     }
 
