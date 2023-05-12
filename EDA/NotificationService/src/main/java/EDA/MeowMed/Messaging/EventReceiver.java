@@ -1,12 +1,11 @@
 package EDA.MeowMed.Messaging;
 
 import EDA.MeowMed.Application.NotificationService;
+import events.customer.CustomerChangedEvent;
 import events.customer.CustomerCreatedEvent;
 import events.policy.PolicyChangedEvent;
 import events.policy.PolicyCreatedEvent;
-import org.springframework.amqp.core.TopicExchange;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
@@ -23,11 +22,16 @@ public class EventReceiver {
         notificationService.sendCustomerCreatedMail(customerCreatedEvent);
     }
 
-    //FIXME Neuen Eventtyp anlegen?
     @RabbitListener(queues = "#{customerChangedQueue.name}")
-    public void receiveCustomerChanged(CustomerCreatedEvent customerCreatedEvent) throws InterruptedException {
+    public void receiveCustomerChanged(CustomerChangedEvent customerChangedEvent) throws InterruptedException {
         System.out.println("Received changed Customer Data");
-        notificationService.sendCustomerTerminatedMail(customerCreatedEvent);
+        notificationService.sendCustomerChangedMail(customerChangedEvent);
+    }
+
+    @RabbitListener(queues = "#{customerCancelledQueue.name}")
+    public void receiveCustomerCancelled(CustomerChangedEvent customerChangedEvent) throws InterruptedException {
+        System.out.println("Received cancel Customer Event");
+        notificationService.sendCustomerCancelledMail(customerChangedEvent);
     }
 
     @RabbitListener(queues = "#{policyCreatedQueue.name}")
@@ -42,7 +46,9 @@ public class EventReceiver {
         notificationService.sendPolicyChangedMail(policyChangedEvent);
     }
 
-    public void receive(String in, int receiver) throws InterruptedException {
-
+    @RabbitListener(queues = "#{policyCancelledQueue.name}")
+    public void receivePolicyCancelled(PolicyChangedEvent policyChangedEvent) throws InterruptedException {
+        System.out.println("Received cancel Policy Event");
+        notificationService.sendPolicyCancelledMail(policyChangedEvent);
     }
 }

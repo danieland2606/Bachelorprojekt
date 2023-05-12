@@ -1,5 +1,6 @@
 package EDA.MeowMed.Messaging;
 
+import EDA.MeowMed.Exceptions.ObjectNotFoundException;
 import events.customer.CustomerChangedEvent;
 import events.customer.CustomerCreatedEvent;
 import EDA.MeowMed.Logic.PolicyService;
@@ -24,7 +25,11 @@ public class CustomerReceiver {
 
     @RabbitListener(queues = "#{CustomerChangedQueue.name}")
     public void receiveChanged(CustomerChangedEvent customerChangedEvent) {
-        System.out.println("Newly created Customer received!");
-        this.policyService.updateCustomer(customerChangedEvent);
+        System.out.println("Changed Customer received!");
+        try {
+            this.policyService.updateCustomer(customerChangedEvent);
+        } catch ( ObjectNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 }

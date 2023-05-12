@@ -7,7 +7,6 @@ import EDA.MeowMed.Exceptions.InvalidPolicyDataException;
 import EDA.MeowMed.Exceptions.ObjectNotFoundException;
 import EDA.MeowMed.Module.PremiumCalculator;
 import EDA.MeowMed.Persistence.*;
-import EDA.MeowMed.Persistence.Entity.Address;
 import EDA.MeowMed.Persistence.Entity.CatRace;
 import events.customer.CustomerChangedEvent;
 import events.customer.CustomerCreatedEvent;
@@ -19,7 +18,7 @@ import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import events.customer.subclasses.CustomerData;
 import events.policy.PolicyChangedEvent;
-import events.policy.subclasses.CustomerPojo;
+import events.policy.PolicyCreatedEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.converter.json.MappingJacksonValue;
@@ -132,9 +131,17 @@ public class PolicyService {
             if (policy.getObjectOfInsurance().getPersonality().contains("sehr verspielt")) {
                 throw new InvalidPolicyDataException("It is not possible to create a Policy for 'sehr verspielte' cats.");
             }
+
             // Set the customer and premium for the policy
             policy.setCustomer(this.getCustomer(customerID));
+
+            /* No Policies for "arbeitslose" customer */
+            if (policy.getCustomer().getEmploymentStatus().equals("arbeitslos")) {
+                throw new InvalidPolicyDataException("It is not possible to create a Policy for 'arbeitlose' Customer.");
+            }
+
             policy.setPremium(this.getPremium(policy.getCustomer(), policy));
+            System.out.println("Premium: " + policy.getPremium());
 
             // Save the object of insurance and policy
             this.objectOfInsuranceRepository.save(policy.getObjectOfInsurance());
@@ -147,7 +154,7 @@ public class PolicyService {
                     .setFailOnUnknownId(false));
 
             // Send a message to notify that the policy was created
-            this.policySender.sendPolicyCreated(policy.createPolicyCreatedEvent());
+            this.policySender.sendPolicyCreated(new PolicyCreatedEvent(policy.toPojo()));
 
             return wrapper;
         } catch (DataAccessException ex) {
@@ -257,7 +264,10 @@ public class PolicyService {
         // Get the cat race from the catRaceRepository based on the policy's object of insurance race
         CatRace catRace = catRaceRepository.findByRace(policy.getObjectOfInsurance().getRace());
         // If the cat race is not found, return 0 as the premium
-        if (catRace == null) return 0;
+        if (catRace == null) {
+            System.out.println("Katzenrasse leer!");
+            return 0;
+        }
         // Calculate the base price for the policy using the PremiumCalculator
         double basePrice = PremiumCalculator.calculateBasePrice(policy);
         System.out.println("base Preise: " + basePrice);
@@ -323,25 +333,20 @@ public class PolicyService {
      @param policy the new policy data to update the policy with
      @throws ObjectNotFoundException if the policy with the given policyID doesn't exist in the database
      */
-    public void updatePolicy(Long policyID, Policy policy /* TODO: Was kommt hier an? Muss in der Rest-Schnittstelle noch implementiert werden */) throws ObjectNotFoundException {
+    public void updatePolicy(Long policyID, Policy policy) throws ObjectNotFoundException {
         Optional<Policy> p = this.policyRepository.findById(policyID);
         if (p.isEmpty()) {
             throw new ObjectNotFoundException("The given Policy with PolicyID: " + policyID + " does not exist in the database.");
         }
-        Policy persistentPolicy = p.get(); //TODO: auch Änderung des Katzenwesens implementieren (Notification auch anpassen, ggfs. Policy kündigen: this.cancelPolicy Methode)
-        int oldCoverage = persistentPolicy.getCoverage();
-        double oldPremium = persistentPolicy.getPremium();
+        Policy oldPolicy = p.get();
+        Policy persistentPolicy = p.get();
         persistentPolicy.setCoverage(policy.getCoverage());
+        persistentPolicy.getObjectOfInsurance().setPersonality(policy.getObjectOfInsurance().getPersonality());
+        boolean cancelPolicy = persistentPolicy.getObjectOfInsurance().getPersonality().equals("sehr verspielt");
         Customer customer = persistentPolicy.getCustomer();
         persistentPolicy.setPremium(this.getPremium(customer, persistentPolicy));
-        int newCoverage = persistentPolicy.getCoverage();
-        double newPremium = persistentPolicy.getPremium();
-        this.policyRepository.flush();
-        CustomerPojo c = new CustomerPojo(customer.getId(), customer.getFirstName(), customer.getLastName(), customer.getFormOfAddress(), customer.getEmail());
-        this.policySender.sendPolicyChanged(new PolicyChangedEvent(policyID, oldCoverage, newCoverage, oldPremium, newPremium, c));
+        this.updatePolicyDataBasedOnNewInformation(persistentPolicy, cancelPolicy);
     }
-
-
 
     /**
      Updates the customer data based on the provided event, including their personal information,
@@ -352,9 +357,6 @@ public class PolicyService {
      */
     public void updateCustomer(CustomerChangedEvent customerChangedEvent) {
         CustomerData newData = customerChangedEvent.getNewCustomer();
-        if (newData.getEmploymentStatus().equals("arbeitslos")) {
-            this.cancelPoliciesOfCustomer(newData.getId());
-        }
         Customer customer = this.getCustomer(newData.getId());
         customer.setFirstName(newData.getFirstName());
         customer.setLastName(newData.getLastName());
@@ -364,32 +366,10 @@ public class PolicyService {
         customer.getAddress().setPostalCode(newData.getAddress().getPostalCode());
         customer.setEmail(newData.getEmail());
         customer.setEmploymentStatus(newData.getEmploymentStatus());
-        this.customerRepository.flush();
-        this.recalculatePremium(newData.getId());
-    }
-
-    /**
-     Cancels all policies of a given customer.
-     @param customerID the ID of the customer whose policies will be cancelled
-     */
-    public void cancelPoliciesOfCustomer(Long customerID) {
-        for (Policy p : this.policyRepository.getPolicyList(customerID)) {
-            this.cancelPolicy(p);
-        }
-        this.policyRepository.flush();
-    }
-
-
-    /**
-     Sets the given policy as cancelled and flushes the changes to the policy repository.
-     @param p the policy to be cancelled
-     @return void
-     @throws Exception if an error occurs while cancelling the policy
-     */
-    public void cancelPolicy(Policy p) {
-        p.setCancelled(true);
-        //TODO: Notification für Kündigung
-        this.policyRepository.flush();
+        this.addressRepository.save(customer.getAddress());
+        this.customerRepository.save(customer);
+//        this.customerRepository.flush(); Speichert customer nicht
+        this.updateAllPoliciesOfCustomer(newData.getId(), customer.getEmploymentStatus().equals("arbeitslos"));
     }
 
     /**
@@ -397,15 +377,35 @@ public class PolicyService {
      Updates the premium for each policy if it has changed by more than 0.0001.
      Sends a notification for each policy with a changed premium.
      @param customerID The ID of the customer whose policies to recalculate.
+     @param cancelPolicies Determines if policies will be set to cancelled.
      */
-    public void recalculatePremium(Long customerID) {
+    public void updateAllPoliciesOfCustomer(Long customerID, boolean cancelPolicies) {
         for (Policy p : this.policyRepository.getPolicyList(customerID)) {
-            double newPremium = this.getPremium(this.getCustomer(customerID),p);
-            if (Math.abs(newPremium - p.getPremium()) < 0.0001) {
-                p.setPremium(newPremium);
-                //TODO: Notification für Premiumänderung
-            }
+            this.updatePolicyDataBasedOnNewInformation(p, cancelPolicies);
         }
         this.policyRepository.flush();
+    }
+    /**
+     * TODO: Kommentare
+     * @param newPolicy
+     * @param cancelPolicy
+     */
+    private void updatePolicyDataBasedOnNewInformation(Policy newPolicy, boolean cancelPolicy) {
+        Policy oldPolicy = new Policy(newPolicy);
+        System.out.println("Customer Postleitzahl: " + newPolicy.getCustomer().getAddress().getPostalCode());
+        double newPremium = this.getPremium(newPolicy.getCustomer(), newPolicy);
+        boolean premiumChanged = Math.abs(newPremium - newPolicy.getPremium()) > 0.0001;
+        newPolicy.setPremium(newPremium);
+        if (cancelPolicy) {
+            newPolicy.setCancelled(true);
+            //FIXME Art des Speicherns notwendig? Anders möglich?
+            policyRepository.save(newPolicy);
+            objectOfInsuranceRepository.save(newPolicy.getObjectOfInsurance());
+            this.policySender.sendPolicyCancelled(new PolicyChangedEvent(oldPolicy.toPojo(), newPolicy.toPojo()));
+        } else if(premiumChanged) {
+            policyRepository.save(newPolicy);
+            objectOfInsuranceRepository.save(newPolicy.getObjectOfInsurance());
+            this.policySender.sendPolicyChanged(new PolicyChangedEvent(oldPolicy.toPojo(), newPolicy.toPojo()));
+        }
     }
 }

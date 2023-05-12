@@ -55,8 +55,24 @@ public class ObjectOfInsurance implements Serializable {
         this.weight = weight;
     }
 
+    public ObjectOfInsurance(ObjectOfInsurance o) {
+        this.id = o.getId();
+        this.name = o.getName();
+        this.race = o.getRace();
+        this.color = o.getColor();
+        this.dateOfBirth = o.getDateOfBirth();
+        this.castrated = o.isCastrated();
+        this.personality = o.getPersonality();
+        this.environment = o.getEnvironment();
+        this.weight = o.getWeight();
+    }
+
     public ObjectOfInsurance() {
 
+    }
+
+    public long getId() {
+        return this.id;
     }
 
     public String getName() {

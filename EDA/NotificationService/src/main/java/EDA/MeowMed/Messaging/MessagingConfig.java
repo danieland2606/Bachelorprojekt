@@ -31,11 +31,19 @@ public class MessagingConfig {
         public Queue customerChangedQueue() { return new Queue("customerchanged");}
 
         @Bean
+        public Queue customerCancelledQueue() { return new Queue("customercancelled");}
+
+        @Bean
         public Queue policyCreatedQueue() { return new Queue("policycreated");}
 
         @Bean
         public Queue policyChangedQueue() {
             return new Queue("policychanged");
+        }
+
+        @Bean
+        public Queue policyCancelledQueue() {
+            return new Queue("policycancelled");
         }
 
         /**
@@ -56,6 +64,11 @@ public class MessagingConfig {
         }
 
         @Bean
+        public Binding cutomerCancelledBinding(TopicExchange topic, Queue customerChangedQueue) {
+            return BindingBuilder.bind(customerCancelledQueue()).to(topic).with("cancelled.customer.changed");
+        }
+
+        @Bean
         public Binding policyCreatedBinding(TopicExchange topic, Queue policyCreatedQueue) {
             return BindingBuilder.bind(policyCreatedQueue()).to(topic).with("policy.created");
         }
@@ -63,6 +76,11 @@ public class MessagingConfig {
         @Bean
         public Binding policyChangedBinding(TopicExchange topic, Queue policyChangedQueue) {
             return BindingBuilder.bind(policyChangedQueue()).to(topic).with("policy.changed");
+        }
+
+        @Bean
+        public Binding policyCancelledBinding(TopicExchange topic, Queue policyChangedQueue) {
+            return BindingBuilder.bind(policyCancelledQueue()).to(topic).with("cancelled.policy.changed");
         }
 
         @Bean

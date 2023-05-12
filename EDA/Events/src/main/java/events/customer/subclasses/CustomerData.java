@@ -3,9 +3,10 @@ package events.customer.subclasses;
 import events.customer.subclasses.Address;
 
 import java.io.Serial;
+import java.io.Serializable;
 import java.time.LocalDate;
 
-public class CustomerData {
+public class CustomerData implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 8L;

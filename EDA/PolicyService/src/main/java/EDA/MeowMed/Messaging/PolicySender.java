@@ -23,4 +23,9 @@ public class PolicySender {
         this.template.convertAndSend(topic.getName(), "policy.changed", policyChangedEvent);
         System.out.println("Sent Policy Changed Event");
     }
+
+    public void sendPolicyCancelled(PolicyChangedEvent policyChangedEvent) {
+        this.template.convertAndSend(topic.getName(), "cancelled.policy.changed", policyChangedEvent);
+        System.out.println("Sent Policy Cancelled Event");
+    }
 }
