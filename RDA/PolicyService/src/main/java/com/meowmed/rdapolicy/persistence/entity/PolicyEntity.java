@@ -1,4 +1,4 @@
-package com.meowmed.rdapolicy.entity;
+package com.meowmed.rdapolicy.persistence.entity;
 
 
 import java.time.LocalDate;
@@ -133,6 +133,24 @@ public class PolicyEntity {
         result = prime * result + (int) (temp ^ (temp >>> 32));
         result = prime * result + ((objectOfInsurance == null) ? 0 : objectOfInsurance.hashCode());
         return result;
+    }
+
+    public boolean equalsPolicyRequest(long c_id, PolicyRequest other){
+        if (cid != c_id)
+            return false;
+        if (startDate == null) {
+            if (other.getStartDate() != null)
+                return false;
+        } else if (!startDate.equals(other.getStartDate()))
+            return false;
+        if (endDate == null) {
+            if (other.getEndDate() != null)
+                return false;
+        } else if (!endDate.equals(other.getEndDate()))
+            return false;
+        if (coverage != other.getCoverage())
+            return false;
+        return true;
     }
 
     @Override

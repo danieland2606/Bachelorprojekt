@@ -14,36 +14,32 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.NestedRuntimeException;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
-import org.springframework.web.reactive.function.client.WebClientException;
-import org.springframework.web.reactive.function.client.WebClientResponseException;
 
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
-import com.meowmed.rdapolicy.database.CatRepository;
-import com.meowmed.rdapolicy.database.ObjectOfInsuranceRepository;
-import com.meowmed.rdapolicy.database.PolicyRepository;
-import com.meowmed.rdapolicy.entity.CatEntity;
-import com.meowmed.rdapolicy.entity.CustomerRequest;
-import com.meowmed.rdapolicy.entity.MailPolicyEntity;
-import com.meowmed.rdapolicy.entity.ObjectOfInsuranceEntity;
-import com.meowmed.rdapolicy.entity.PolicyEntity;
-import com.meowmed.rdapolicy.entity.PolicyRequest;
-import com.meowmed.rdapolicy.entity.PriceCalculationEntity;
 import com.meowmed.rdapolicy.exceptions.CatNotFoundException;
 import com.meowmed.rdapolicy.exceptions.CustomerNotFoundException;
 import com.meowmed.rdapolicy.exceptions.MailSendException;
 import com.meowmed.rdapolicy.exceptions.PolicyNotAllowed;
 import com.meowmed.rdapolicy.exceptions.PolicyNotFoundException;
-
-import jakarta.websocket.OnError;
-import reactor.core.publisher.Mono;
-
+import com.meowmed.rdapolicy.module.PolicyCustomer;
+import com.meowmed.rdapolicy.module.PolicyMail;
+import com.meowmed.rdapolicy.module.Policysetup;
+import com.meowmed.rdapolicy.persistence.CatRepository;
+import com.meowmed.rdapolicy.persistence.ObjectOfInsuranceRepository;
+import com.meowmed.rdapolicy.persistence.PolicyRepository;
+import com.meowmed.rdapolicy.persistence.entity.CatEntity;
+import com.meowmed.rdapolicy.persistence.entity.CustomerRequest;
+import com.meowmed.rdapolicy.persistence.entity.MailPolicyEntity;
+import com.meowmed.rdapolicy.persistence.entity.ObjectOfInsuranceEntity;
+import com.meowmed.rdapolicy.persistence.entity.PolicyEntity;
+import com.meowmed.rdapolicy.persistence.entity.PolicyRequest;
+import com.meowmed.rdapolicy.persistence.entity.PriceCalculationEntity;
 
 /**
  * Diese Klasse ist die Service-Klasse des REST-Controllers 
@@ -54,12 +50,7 @@ import reactor.core.publisher.Mono;
  */
 @Service
 public class PolicyService {
-	//Variable, initialisiert durch application.properties
-	@Value("${docker.customerurl}")
-	private String customerUrl;
-	//Variable, initialisiert durch application.properties
-	@Value("${docker.notificationurl}")
-	private String notificationUrl;
+
 
 	@Value("${docker.debugmode}")
 	private boolean debugmode;
@@ -75,7 +66,7 @@ public class PolicyService {
 		this.pRepository = policyRepository;
 		this.oRepository = objectOfInsuranceRepository;
 		this.cRepository = catRepository;
-		setUp();
+		Policysetup.setUp(policyRepository, objectOfInsuranceRepository, catRepository);
 	}
 
     /**
@@ -148,9 +139,8 @@ public class PolicyService {
 		.addFilter("policyFilter", SimpleBeanPropertyFilter.serializeAllExcept("id", "c_id"))
 		.addFilter("objectOfInsuranceFilter", SimpleBeanPropertyFilter.serializeAllExcept("id"))
 		.setFailOnUnknownId(false));
-		if(debugmode) System.out.println("getPolicy: wrapper: " + wrapper);
+		if(debugmode) System.out.println("getPolicy: wrapper: " + wrapper.getSerializationView());
 		return wrapper;
-		//return ResponseEntity.ok().body(wrapper);
 	}
 
 	/**
@@ -162,12 +152,8 @@ public class PolicyService {
     public MappingJacksonValue postPolicy(Long c_id, PolicyRequest pRequest) throws NestedRuntimeException{
 		if(debugmode) System.out.println("postPolicy: c_id: " + c_id + " pRequest: " + pRequest);
 		// Holen, des Customers
-		CustomerRequest customer = getCustomerRequest(c_id);
+		CustomerRequest customer = PolicyCustomer.getCustomerRequest(c_id);
 		if(customer == null) throw new CustomerNotFoundException();
-		/*{
-			MappingJacksonValue errWrapper = new MappingJacksonValue(Collections.singletonMap("error", "No Customer under this ID"));
-			return new ResponseEntity<MappingJacksonValue>(errWrapper,HttpStatusCode.valueOf(400));
-		}*/
 		if(debugmode) System.out.println("postPolicy: customer: " + customer);
 
 		// Erzeugen von Objekten für den Policy und speichern derer
@@ -179,12 +165,8 @@ public class PolicyService {
 
 		//Versenden von Mails
 		MailPolicyEntity mail = new MailPolicyEntity(policy, customer);
-		ResponseEntity<String> response = sendMail("policynotification", mail);
+		ResponseEntity<String> response = PolicyMail.sendMail("policynotification", mail);
 		//if (response.getStatusCode() != HttpStatus.OK) throw new MailSendException();
-		/*{
-			MappingJacksonValue errWrapper = new MappingJacksonValue(Collections.singletonMap("error", "Es gab Probleme, die Mail zu versenden, Daten wurden aber gespeichert"));
-			return new ResponseEntity<MappingJacksonValue>(errWrapper,HttpStatusCode.valueOf(400));
-		}*/
 		if(debugmode) System.out.println("postPolicy: mail: " + mail + " response: " + response);
 
 		// Verpacken der Ausgabe + Anwenden von Filtern auf derer
@@ -194,7 +176,6 @@ public class PolicyService {
 		.setFailOnUnknownId(false));
 		if(debugmode) System.out.println("postPolicy: wrapper: " + wrapper);
 		return wrapper;
-		//return new ResponseEntity<MappingJacksonValue>(wrapper,HttpStatusCode.valueOf(201));
 	}
 	/**
 	 * Diese Methode speichert ein PolicyEntity. PostalCode vom Customer wird beim CustomerService angefragt.
@@ -207,18 +188,12 @@ public class PolicyService {
 		if(debugmode) System.out.println("updatePolicy: c_id: " + c_id + " p_id: " + p_id + " pRequest: " + pRequest);
 
 		//Holen des Customers und der momentanen Policy anhand der Argumente
-		CustomerRequest customer = getCustomerRequest(c_id);
+		CustomerRequest customer = PolicyCustomer.getCustomerRequest(c_id);
 		if(customer == null) throw new CustomerNotFoundException();
-		/*{
-			MappingJacksonValue errWrapper = new MappingJacksonValue(Collections.singletonMap("error", "No Customer under this ID"));
-			return new ResponseEntity<MappingJacksonValue>(errWrapper,HttpStatusCode.valueOf(404));
-		}*/
+
 		Optional<PolicyEntity> currentPolicy = pRepository.findById(p_id);
 		if(currentPolicy.isEmpty()) throw new PolicyNotFoundException();
-		/*{
-			MappingJacksonValue errWrapper = new MappingJacksonValue(Collections.singletonMap("error", "No policy under this id"));
-			return new ResponseEntity<MappingJacksonValue>(errWrapper,HttpStatusCode.valueOf(404));
-		}*/
+
 		//Setzen der Validierung der momentanen Katze
 		ObjectOfInsuranceEntity currentOoBEntity = currentPolicy.get().getObjectOfInsurance();
 		if(!currentOoBEntity.equals(pRequest.getObjectOfInsurance())){
@@ -234,8 +209,12 @@ public class PolicyService {
 		double policyPrice = 0;
 		try {
 			policyPrice = getPolicyPrice(tempCalc);
-		} catch (Exception e) {
+		} catch (PolicyNotAllowed e) {
 			deletePolicy(c_id, currentPolicy.get().getId());
+			MailPolicyEntity mail = new MailPolicyEntity(currentPolicy.get(), customer);
+			ResponseEntity<String> response = PolicyMail.sendMail("policydeletenotification", mail);
+			if (response.getStatusCode() != HttpStatus.OK) throw new MailSendException();
+			if(debugmode) System.out.println("updatePolicy: mail: " + mail + " response: " + response);
 			throw new PolicyNotAllowed();
 		}
 		if(!currentPolicy.get().equalsPolicyRequest(c_id, pRequest)){
@@ -247,19 +226,16 @@ public class PolicyService {
 		currentPolicy.get().setPremium(policyPrice);
 
 		oRepository.save(currentOoBEntity);
-		//policy.setId(p_id);
 		PolicyEntity policy = pRepository.save(currentPolicy.get());
 		if(debugmode) System.out.println("updatePolicy: tempCalc: " + tempCalc + " policy: " + policy);
 
 		// Versand der Mail
-		MailPolicyEntity mail = new MailPolicyEntity(policy, customer);
-		ResponseEntity<String> response = sendMail("policychangenotification", mail);
-		if (response.getStatusCode() != HttpStatus.OK) throw new MailSendException();
-		/*{
-			MappingJacksonValue errWrapper = new MappingJacksonValue(Collections.singletonMap("error", "Es gab Probleme, die Mail zu versenden, Daten wurden aber gespeichert"));
-			return new ResponseEntity<MappingJacksonValue>(errWrapper,HttpStatusCode.valueOf(400));
-		}*/
-		if(debugmode) System.out.println("updatePolicy: mail: " + mail + " response: " + response);
+		if(!currentOoBEntity.equals(pRequest.getObjectOfInsurance()) || !currentPolicy.get().equalsPolicyRequest(c_id, pRequest)){
+			MailPolicyEntity mail = new MailPolicyEntity(policy, customer);
+			ResponseEntity<String> response = PolicyMail.sendMail("policychangenotification", mail);
+			if (response.getStatusCode() != HttpStatus.OK) throw new MailSendException();
+			if(debugmode) System.out.println("updatePolicy: mail: " + mail + " response: " + response);
+		}
 
 		// Verpacken und Filtern von der Ausgabe
 		MappingJacksonValue wrapper = new MappingJacksonValue(policy);
@@ -268,7 +244,6 @@ public class PolicyService {
 		.setFailOnUnknownId(false));
 		if(debugmode) System.out.println("postPolicy: wrapper: " + wrapper);
 		return wrapper;
-		//return new ResponseEntity<MappingJacksonValue>(wrapper,HttpStatusCode.valueOf(201));
 	}
 
 	/**
@@ -278,7 +253,7 @@ public class PolicyService {
 	 * @return Zurück kommt ein Wert als double für die monatlichen Kosten
 	 */
     public double getPolicyPrice(PriceCalculationEntity body) throws NestedRuntimeException{
-		CustomerRequest customer = getCustomerRequest(body.getCustomerId());
+		CustomerRequest customer = PolicyCustomer.getCustomerRequest(body.getCustomerId());
 		if(debugmode) System.out.println("getPolicyPrice: body: " + body + " customer: " + customer);
 		
 		// Prüfen, ob die Bedingungen für einen Vertrag erfüllt sind
@@ -286,7 +261,7 @@ public class PolicyService {
 			|| ChronoUnit.YEARS.between(customer.getDateOfBirth() , LocalDate.now())< 18 
 			|| customer.getEmploymentStatus().equalsIgnoreCase("arbeitslos")
 			;
-		if (policyNotAllowed) throw new ArithmeticException();
+		if (policyNotAllowed) throw new PolicyNotAllowed();
 		CatEntity cat = cRepository.findByRace(body.getPolicy().getObjectOfInsurance().getRace());
 		if (cat==null) throw new CatNotFoundException();
 		if(debugmode) System.out.println("getPolicyPrice: cat: " + cat);
@@ -375,24 +350,13 @@ public class PolicyService {
 		if(debugmode) System.out.println("getPolicyPriceRequest: details: " + details);
 		MappingJacksonValue wrapper = new MappingJacksonValue(Collections.singletonMap("premium", getPolicyPrice(details)));
 		return wrapper;
-		/*try{
-			MappingJacksonValue wrapper = new MappingJacksonValue(Collections.singletonMap("premium", getPolicyPrice(details)));
-			return new ResponseEntity<MappingJacksonValue>(wrapper,HttpStatusCode.valueOf(200));
-		} catch (ArithmeticException e){
-			MappingJacksonValue errWrapper = new MappingJacksonValue(Collections.singletonMap("error", e.getMessage()));
-			return new ResponseEntity<MappingJacksonValue>(errWrapper,HttpStatusCode.valueOf(400));
-		}*/
 	}
 
 	public int deletePolicyForUser(long c_id) {
-		MappingJacksonValue temp = getPolicyList(c_id, "id");
-		System.out.println(temp.getValue());
-		System.out.println(temp.getClass());
-		System.out.println(temp.getSerializationView());
 		if (debugmode)
 			System.out.println("deletePolicyForUser: c_id: " + c_id);
 
-		CustomerRequest customer = getCustomerRequest(c_id);
+		CustomerRequest customer = PolicyCustomer.getCustomerRequest(c_id);
 		if (customer == null)
 			throw new CustomerNotFoundException();
 
@@ -426,93 +390,5 @@ public class PolicyService {
 		pRepository.save(policy.get());
 
 		return 0;
-	}
-
-
-
-
-	/**
-	 * Setup Methode für das erzeugen von Testdaten
-	 */
-	void setUp(){
-			LocalDate startDate = LocalDate.of(2017, 1, 15);
-			LocalDate endDate1 = LocalDate.of(2099, 1, 1);
-			LocalDate birthDate1 = LocalDate.of(2015, 1, 1);
-			LocalDate birthDate2 = LocalDate.of(2015, 1, 2);
-			ObjectOfInsuranceEntity cat1 = new ObjectOfInsuranceEntity("Belly", "Bengal", "Braun", birthDate1, false, "anhänglich", "drinnen", 4);
-			ObjectOfInsuranceEntity cat2 = new ObjectOfInsuranceEntity("Rough", "Bengal", "Schwarz", birthDate2, false, "draufgängerisch", "drinnen", 4);
-			PolicyEntity policy1 = new PolicyEntity(1 , startDate, endDate1, 50000, 765,cat1);
-			PolicyEntity policy2 = new PolicyEntity(1 ,startDate, endDate1, 50000, 765 ,cat2);
-			oRepository.save(cat1);
-			oRepository.save(cat2);
-			pRepository.save(policy1);
-			pRepository.save(policy2);
-			ArrayList<CatEntity> entities = new ArrayList<>();
-			entities.add(new CatEntity("siamese", 12, 15, 4, 7, 2, new String[]{"seal","blau","lilac","creme"})) ;
-			entities.add(new CatEntity("perser", 12, 16, 4, 7, 3, new String[]{"weiß", "schildpatt","schwarz"}));
-			entities.add(new CatEntity("bengal", 12, 16, 4, 6, 4, new String[]{"braun", "schildpatt","marmor"}));
-			entities.add(new CatEntity("maine-cone", 12, 15, 5, 10, 2, new String[]{"grau","braun","weiß"}));
-			entities.add(new CatEntity("sphynx", 12, 15, 4, 6, 5, new String[]{}));
-			entities.add(new CatEntity("scottish Fold", 12, 15, 4, 6, 6, new String[]{}));
-			entities.add(new CatEntity("british-shorthair", 12, 15, 4, 6, 0, new String[]{}));
-			entities.add(new CatEntity("abyssinian", 12, 15, 3, 5, 4, new String[]{"rot", "schildpatt", "zimt"}));
-			entities.add(new CatEntity("ragdoll", 12, 15, 4, 7, 3, new String[]{"blau", "seal", "lilac", "schildpatt"}));
-			cRepository.saveAll(entities);
-	}
-	/**
-	 * Diese Methode fragt den Customer beim Customer-Service ab
-	 * @param c_id Customer-ID, des anzufragenden Customers
-	 * @return CustomerRequest-Objekt, der die meisten Daten des Kunden enthält
-	 */
-	CustomerRequest getCustomerRequest(Long c_id) throws NestedRuntimeException{
-		if(c_id == null) throw new IllegalArgumentException();
-		if(debugmode) System.out.println("getCustomerRequest: c_id: " + c_id);
-		String customerURL = "http://" + customerUrl + ":8080/customer/{c_id}";
-		if(debugmode) System.out.println("getCustomerRequest: customerURL: " + customerURL);
-		WebClient customerClient = WebClient.create();
-		WebClient.ResponseSpec responseSpec = customerClient.get().uri(customerURL,c_id).retrieve();
-		CustomerRequest customer = responseSpec
-			.onStatus(RetStatus -> HttpStatus.NOT_FOUND.equals(RetStatus), ex -> {throw new CustomerNotFoundException();})
-			//.onStatus(RetStatus -> HttpStatus.NOT_FOUND.equals(RetStatus), ex -> Mono.empty())
-			.bodyToMono(CustomerRequest.class)
-			.block();
-		if(debugmode) System.out.println("getCustomerRequest: customer: " + customer);
-		return customer;
-	}
-
-	/**
-	 * Diese Methode sendet eine Anfrage an den Mail
-	 * @param mailUrl
-	 * @param mail
-	 * @return
-	 */
-	ResponseEntity<String> sendMail(String mailUrl, MailPolicyEntity mail) throws MailSendException{
-		if(debugmode) System.out.println("sendMail: mailUrl: " + mailUrl + " mail: " + mail);
-		String url = "http://" + notificationUrl + ":8080/"+ mailUrl;
-		RestTemplate restTemplate = new RestTemplate();
-		ResponseEntity<String> response = restTemplate.postForEntity(url, mail, String.class);
-		if(response.getStatusCode() != HttpStatus.OK) throw new MailSendException();
-		if(debugmode) System.out.println("sendMail: url: " + url + " response: " + response);
-
-		/*
-		if (response.getStatusCode() == HttpStatus.OK) {
-			System.out.println("Request Successful");
-		} else {
-			System.out.println("Request Failed");
-		}
-		*/
-		if(debugmode) System.out.println("sendMail: response: " + response);
-		return response;
-		/* 
-		// Alter Versuch mit Webclient, der nichts gesendet hat.....
-		Mono<ResponseEntity<String>> result = WebClient.create().post().uri("http://notification:8080/policynotification")
-											//.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-											.contentType(MediaType.APPLICATION_JSON)
-											.bodyValue(mail)
-											.retrieve()
-											.toEntity(String.class);
-		System.out.println(result.cast(ResponseEntity.class).toString());
-		System.out.println(mail);
-		*/
 	}
 }

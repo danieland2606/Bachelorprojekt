@@ -18,11 +18,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.meowmed.rdapolicy.entity.PolicyRequest;
-import com.meowmed.rdapolicy.entity.PriceCalculationEntity;
+import com.meowmed.rdapolicy.exceptions.CatNotFoundException;
 import com.meowmed.rdapolicy.exceptions.CustomerNotFoundException;
 import com.meowmed.rdapolicy.exceptions.MailSendException;
+import com.meowmed.rdapolicy.exceptions.PolicyNotAllowed;
 import com.meowmed.rdapolicy.exceptions.PolicyNotFoundException;
+import com.meowmed.rdapolicy.persistence.entity.PolicyRequest;
+import com.meowmed.rdapolicy.persistence.entity.PriceCalculationEntity;
 
 /**
  * Diese Klasse ist der REST-Controller
@@ -212,12 +214,17 @@ public class PolicyController {
 			return ResponseEntity.status(500).body(errWrapper);
 		} catch (PolicyNotFoundException e) {
 			MappingJacksonValue errWrapper = new MappingJacksonValue(Collections.singletonMap("error", "Unter der angegebenen Policy-ID wurde keine Policy gefunden"));
-			return ResponseEntity.status(400).body(errWrapper);
+			return ResponseEntity.status(404).body(errWrapper);
 		} catch (IllegalArgumentException e) {
 			MappingJacksonValue errWrapper = new MappingJacksonValue(Collections.singletonMap("error", "Einer der Argumente ist null"));
 			return ResponseEntity.status(400).body(errWrapper);
+		} catch (CatNotFoundException e) {
+			MappingJacksonValue errWrapper = new MappingJacksonValue(Collections.singletonMap("error", "Es gibt den angegebenen Katzentyp nicht"));
+			return ResponseEntity.status(500).body(errWrapper);
+		} catch (PolicyNotAllowed e ) {
+			MappingJacksonValue errWrapper = new MappingJacksonValue(Collections.singletonMap("error", "Vertrag kommt wegen desilliuminierungetion nicht zu stande"));
+			return ResponseEntity.status(500).body(errWrapper);
 		}
-		
 		//return pService.updatePolicy(c_id, p_id, pRequest);
 	}
 	//CustomerNotFoundException, MailSendException, PolicyNotFoundException, IllegalArgumentException
@@ -246,12 +253,12 @@ public class PolicyController {
 			return new ResponseEntity<MappingJacksonValue>(pService.getPolicyPriceRequest(details),HttpStatusCode.valueOf(200));
 		} catch (ArithmeticException e) {
 			MappingJacksonValue errWrapper = new MappingJacksonValue(Collections.singletonMap("error", "Bei der Berechnung ist ein Fehler aufgetreten."));
-			return ResponseEntity.status(500).body(errWrapper);
+			return ResponseEntity.status(400).body(errWrapper);
 		} catch (CustomerNotFoundException e) {
 			MappingJacksonValue errWrapper = new MappingJacksonValue(Collections.singletonMap("error", "Unter der angegebenen Customer-ID wurde kein Customer gefunden"));
 			return ResponseEntity.status(400).body(errWrapper);		
 		} catch (WebClientException e) {
-			MappingJacksonValue errWrapper = new MappingJacksonValue(Collections.singletonMap("error", "Mail-Service erzeugt unerwarteten Fehler, Daten sind aber gespeichert."));
+			MappingJacksonValue errWrapper = new MappingJacksonValue(Collections.singletonMap("error", "Verbindung zum Customer-Service möglich"));
 			return ResponseEntity.status(500).body(errWrapper);
 		} 
 		//return pService.getPolicyPriceRequest(details);
