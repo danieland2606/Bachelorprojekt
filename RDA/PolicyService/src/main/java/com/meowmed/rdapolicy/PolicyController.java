@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.MappingJacksonValue;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -255,4 +256,17 @@ public class PolicyController {
 		} 
 		//return pService.getPolicyPriceRequest(details);
 	}
+
+	@DeleteMapping("/customer/{c_id}/policy")
+	public ResponseEntity<MappingJacksonValue> deletePolicyForUser(@PathVariable("c_id") Long c_id){
+		MappingJacksonValue errWrapper = new MappingJacksonValue(Collections.singletonMap("Angepasste Verträge", pService.deletePolicyForUser(c_id)));
+		return ResponseEntity.status(200).body(errWrapper);
+	}
+
+	@DeleteMapping("customer/{c_id}/policy/{p_id}")
+	public ResponseEntity<MappingJacksonValue> deletePolicy(@PathVariable("c_id") Long c_id, @PathVariable("p_id") Long p_id){
+		MappingJacksonValue errWrapper = new MappingJacksonValue(Collections.singletonMap("error", pService.deletePolicy(c_id, p_id)));
+		return ResponseEntity.status(200).body(errWrapper);
+	}
+	///customer/{c_id}/policy/{p_id}
 }

@@ -39,6 +39,8 @@ public class PolicyEntity {
 
     @OneToOne
     private ObjectOfInsuranceEntity objectOfInsurance;
+
+    private boolean active;
     
     public PolicyEntity() {
     }
@@ -51,6 +53,7 @@ public class PolicyEntity {
         this.coverage = coverage;
         this.premium = premium;
         this.objectOfInsurance = objectOfInsurance;
+        this.active = true;
     }
 
     public long getId() {
@@ -109,16 +112,25 @@ public class PolicyEntity {
         this.objectOfInsurance = objectOfInsurance;
     }
 
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + (int) (id ^ (id >>> 32));
         result = prime * result + (int) (cid ^ (cid >>> 32));
         result = prime * result + ((startDate == null) ? 0 : startDate.hashCode());
         result = prime * result + ((endDate == null) ? 0 : endDate.hashCode());
         result = prime * result + coverage;
-        result = prime * result + (int)premium;
+        long temp;
+        temp = Double.doubleToLongBits(premium);
+        result = prime * result + (int) (temp ^ (temp >>> 32));
         result = prime * result + ((objectOfInsurance == null) ? 0 : objectOfInsurance.hashCode());
         return result;
     }
@@ -132,8 +144,6 @@ public class PolicyEntity {
         if (getClass() != obj.getClass())
             return false;
         PolicyEntity other = (PolicyEntity) obj;
-        if (id != other.id)
-            return false;
         if (cid != other.cid)
             return false;
         if (startDate == null) {
@@ -148,7 +158,7 @@ public class PolicyEntity {
             return false;
         if (coverage != other.coverage)
             return false;
-        if (premium != other.premium)
+        if (Double.doubleToLongBits(premium) != Double.doubleToLongBits(other.premium))
             return false;
         if (objectOfInsurance == null) {
             if (other.objectOfInsurance != null)
@@ -161,9 +171,10 @@ public class PolicyEntity {
     @Override
     public String toString() {
         return "PolicyEntity [id=" + id + ", cid=" + cid + ", startDate=" + startDate + ", endDate=" + endDate
-                + ", coverage=" + coverage + ", premium=" + premium + ", objectOfInsurance=" + objectOfInsurance + "]";
+                + ", coverage=" + coverage + ", premium=" + premium + ", objectOfInsurance=" + objectOfInsurance
+                + ", active=" + active + "]";
     }
-    
+
     
     
 }

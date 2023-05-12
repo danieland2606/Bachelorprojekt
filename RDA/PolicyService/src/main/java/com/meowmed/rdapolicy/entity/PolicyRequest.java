@@ -8,7 +8,6 @@ public class PolicyRequest {
     private int coverage;
     private ObjectOfInsuranceEntity objectOfInsurance;
     
-    
     public PolicyRequest() {
     }
     public PolicyRequest(LocalDate startDate, LocalDate endDate, int coverage,ObjectOfInsuranceEntity objectOfInsurance) {

@@ -357,6 +357,23 @@ public class PolicyService {
 			return new ResponseEntity<MappingJacksonValue>(errWrapper,HttpStatusCode.valueOf(400));
 		}*/
 	}
+
+	
+	public int deletePolicyForUser(long c_id){
+		MappingJacksonValue temp = getPolicyList(c_id, "id");
+		System.out.println(temp.getValue());
+		System.out.println(temp.getClass());
+		System.out.println(temp.getSerializationView());
+		
+		return 0;
+	}
+
+	public int deletePolicy(long c_id, long p_id){
+		return 0;
+	}
+
+
+
 	/**
 	 * Setup Methode für das erzeugen von Testdaten
 	 */
@@ -385,7 +402,6 @@ public class PolicyService {
 			entities.add(new CatEntity("ragdoll", 12, 15, 4, 7, 3, new String[]{"blau", "seal", "lilac", "schildpatt"}));
 			cRepository.saveAll(entities);
 	}
-
 	/**
 	 * Diese Methode fragt den Customer beim Customer-Service ab
 	 * @param c_id Customer-ID, des anzufragenden Customers
