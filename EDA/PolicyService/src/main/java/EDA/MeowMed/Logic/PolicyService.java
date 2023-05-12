@@ -317,10 +317,11 @@ public class PolicyService {
     }
 
     /**
-     * Updates a Policy //TODO: Kommentar fertig schreiben
-     *
-     * @param policyID
-     * @param policy
+
+     Updates an existing Policy with the given policyID and new policy data.
+     @param policyID the ID of the policy to update
+     @param policy the new policy data to update the policy with
+     @throws ObjectNotFoundException if the policy with the given policyID doesn't exist in the database
      */
     public void updatePolicy(Long policyID, Policy policy /* TODO: Was kommt hier an? Muss in der Rest-Schnittstelle noch implementiert werden */) throws ObjectNotFoundException {
         Optional<Policy> p = this.policyRepository.findById(policyID);
@@ -340,9 +341,14 @@ public class PolicyService {
         this.policySender.sendPolicyChanged(new PolicyChangedEvent(policyID, oldCoverage, newCoverage, oldPremium, newPremium, c));
     }
 
+
+
     /**
-     * TODO: comments
-     * @param customerChangedEvent
+     Updates the customer data based on the provided event, including their personal information,
+     address, and employment status. If the customer's employment status changes to "arbeitslos",
+     all their policies will be canceled. Then, it flushes the changes to the customer repository and
+     recalculates the premium for all the customer's policies.
+     @param customerChangedEvent The event that contains the new customer data
      */
     public void updateCustomer(CustomerChangedEvent customerChangedEvent) {
         CustomerData newData = customerChangedEvent.getNewCustomer();
@@ -363,8 +369,8 @@ public class PolicyService {
     }
 
     /**
-     * TODO: comments
-     * @param customerID
+     Cancels all policies of a given customer.
+     @param customerID the ID of the customer whose policies will be cancelled
      */
     public void cancelPoliciesOfCustomer(Long customerID) {
         for (Policy p : this.policyRepository.getPolicyList(customerID)) {
@@ -373,6 +379,13 @@ public class PolicyService {
         this.policyRepository.flush();
     }
 
+
+    /**
+     Sets the given policy as cancelled and flushes the changes to the policy repository.
+     @param p the policy to be cancelled
+     @return void
+     @throws Exception if an error occurs while cancelling the policy
+     */
     public void cancelPolicy(Policy p) {
         p.setCancelled(true);
         //TODO: Notification für Kündigung
@@ -380,8 +393,10 @@ public class PolicyService {
     }
 
     /**
-     * TODO: comments
-     * @param customerID
+     Recalculates the premium for all policies associated with the given customer ID.
+     Updates the premium for each policy if it has changed by more than 0.0001.
+     Sends a notification for each policy with a changed premium.
+     @param customerID The ID of the customer whose policies to recalculate.
      */
     public void recalculatePremium(Long customerID) {
         for (Policy p : this.policyRepository.getPolicyList(customerID)) {
