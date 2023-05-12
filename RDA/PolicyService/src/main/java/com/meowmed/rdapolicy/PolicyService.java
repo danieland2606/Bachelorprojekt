@@ -369,6 +369,7 @@ public class PolicyService {
 	}
 
 	public int deletePolicy(long c_id, long p_id){
+		System.out.println();
 		return 0;
 	}
 
