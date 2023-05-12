@@ -68,6 +68,16 @@ export class PromiseCustomerApi {
         return result.toPromise();
     }
 
+    /**
+     * replace a customer
+     * @param customerId 
+     * @param customerAllRequired 
+     */
+    public updateCustomer(customerId: number, customerAllRequired: CustomerAllRequired, _options?: Configuration): Promise<void> {
+        const result = this.api.updateCustomer(customerId, customerAllRequired, _options);
+        return result.toPromise();
+    }
+
 
 }
 

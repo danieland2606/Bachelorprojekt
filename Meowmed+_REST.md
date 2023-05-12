@@ -411,6 +411,130 @@ fetch("http://localhost:8081/customer/0", {
 This operation does not require authentication
 </aside>
 
+## updateCustomer
+
+<a id="opIdupdateCustomer"></a>
+
+> Code samples
+
+<details>
+<summary>http</summary>
+
+```http
+PUT /customer/0 HTTP/1.1
+Content-Type: application/json
+Accept: application/json
+Host: localhost:8081
+Content-Length: 324
+
+{"firstName":"string","lastName":"string","formOfAddress":"herr","title":"none","maritalStatus":"ledig","dateOfBirth":"2019-08-24","employmentStatus":"selbststaendig","dogOwner":true,"address":{"city":"string","street":"string","postalCode":"string"},"phoneNumber":"string","email":"user@example.com","bankDetails":"string"}
+```
+
+</details>
+
+<details>
+<summary>shell</summary>
+
+```shell
+curl --request PUT \
+  --url http://localhost:8081/customer/0 \
+  --header 'Accept: application/json' \
+  --header 'Content-Type: application/json' \
+  --data '{"firstName":"string","lastName":"string","formOfAddress":"herr","title":"none","maritalStatus":"ledig","dateOfBirth":"2019-08-24","employmentStatus":"selbststaendig","dogOwner":true,"address":{"city":"string","street":"string","postalCode":"string"},"phoneNumber":"string","email":"user@example.com","bankDetails":"string"}'
+```
+
+</details>
+
+<details>
+<summary>javascript</summary>
+
+```javascript
+fetch("http://localhost:8081/customer/0", {
+  "method": "PUT",
+  "headers": {
+    "Content-Type": "application/json",
+    "Accept": "application/json"
+  },
+  "body": "{\"firstName\":\"string\",\"lastName\":\"string\",\"formOfAddress\":\"herr\",\"title\":\"none\",\"maritalStatus\":\"ledig\",\"dateOfBirth\":\"2019-08-24\",\"employmentStatus\":\"selbststaendig\",\"dogOwner\":true,\"address\":{\"city\":\"string\",\"street\":\"string\",\"postalCode\":\"string\"},\"phoneNumber\":\"string\",\"email\":\"user@example.com\",\"bankDetails\":\"string\"}"
+})
+.then(response => {
+  console.log(response);
+})
+.catch(err => {
+  console.error(err);
+});
+```
+
+</details>
+
+`PUT /customer/{customerId}`
+
+*replace a customer*
+
+> Body parameter
+
+```json
+{
+  "firstName": "string",
+  "lastName": "string",
+  "formOfAddress": "herr",
+  "title": "none",
+  "maritalStatus": "ledig",
+  "dateOfBirth": "2019-08-24",
+  "employmentStatus": "selbststaendig",
+  "dogOwner": true,
+  "address": {
+    "city": "string",
+    "street": "string",
+    "postalCode": "string"
+  },
+  "phoneNumber": "string",
+  "email": "user@example.com",
+  "bankDetails": "string"
+}
+```
+
+<h3 id="updatecustomer-parameters">Parameters</h3>
+
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|body|body|[CustomerAllRequired](#schemacustomerallrequired)|true|none|
+|customerId|path|integer|true|none|
+
+> Example responses
+
+> 400 Response
+
+```json
+{
+  "error": "string"
+}
+```
+
+> default Response
+
+```xml
+<?xml version="1.0" encoding="UTF-8" ?>
+<Error/>
+```
+
+```
+"string"
+```
+
+<h3 id="updatecustomer-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|204|[No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5)|customer updated|None|
+|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|invalid customer data|[Error](#schemaerror)|
+|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|no customer at this location|[Error](#schemaerror)|
+|default|Default|unexpected error|string|
+
+<aside class="success">
+This operation does not require authentication
+</aside>
+
 <h1 id="meowmed--policy">policy</h1>
 
 ## getPolicyList
@@ -481,6 +605,7 @@ fetch("http://localhost:8081/customer/0/policy", {
 |fields|endDate|
 |fields|coverage|
 |fields|premium|
+|fields|active|
 |fields|objectOfInsurance|
 |fields|objectOfInsurance.name|
 |fields|objectOfInsurance.race|
@@ -503,6 +628,7 @@ fetch("http://localhost:8081/customer/0/policy", {
     "endDate": "2019-08-24",
     "coverage": 0,
     "premium": 0,
+    "active": true,
     "objectOfInsurance": {
       "name": "string",
       "race": "siamese",
@@ -778,6 +904,7 @@ fetch("http://localhost:8081/customer/0/policy/0", {
   "endDate": "2019-08-24",
   "coverage": 0,
   "premium": 0,
+  "active": true,
   "objectOfInsurance": {
     "name": "string",
     "race": "siamese",
@@ -1296,6 +1423,7 @@ This operation does not require authentication
   "endDate": "2019-08-24",
   "coverage": 0,
   "premium": 0,
+  "active": true,
   "objectOfInsurance": {
     "name": "string",
     "race": "siamese",
@@ -1319,6 +1447,7 @@ This operation does not require authentication
 |endDate|string(date)|false|none|none|
 |coverage|number|false|none|none|
 |premium|number|false|read-only|none|
+|active|boolean|false|read-only|none|
 |objectOfInsurance|[ObjectOfInsurance](#schemaobjectofinsurance)|false|none|none|
 
 <h2 id="tocS_ObjectOfInsurance">ObjectOfInsurance</h2>
@@ -1369,6 +1498,7 @@ This operation does not require authentication
   "endDate": "2019-08-24",
   "coverage": 0,
   "premium": 0,
+  "active": true,
   "objectOfInsurance": {
     "name": "string",
     "race": "siamese",
@@ -1392,6 +1522,7 @@ This operation does not require authentication
 |endDate|string(date)|true|none|none|
 |coverage|number|true|none|none|
 |premium|number|true|read-only|none|
+|active|boolean|true|read-only|none|
 |objectOfInsurance|[ObjectOfInsurance](#schemaobjectofinsurance)|true|none|none|
 
 <h2 id="tocS_PolicyPropertyNames">PolicyPropertyNames</h2>
@@ -1420,6 +1551,7 @@ This operation does not require authentication
 |*anonymous*|endDate|
 |*anonymous*|coverage|
 |*anonymous*|premium|
+|*anonymous*|active|
 |*anonymous*|objectOfInsurance|
 |*anonymous*|objectOfInsurance.name|
 |*anonymous*|objectOfInsurance.race|
@@ -1446,6 +1578,7 @@ This operation does not require authentication
     "endDate": "2019-08-24",
     "coverage": 0,
     "premium": 0,
+    "active": true,
     "objectOfInsurance": {
       "name": "string",
       "race": "siamese",

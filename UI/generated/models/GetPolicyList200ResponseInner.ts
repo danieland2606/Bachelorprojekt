@@ -19,6 +19,7 @@ export class GetPolicyList200ResponseInner {
     'endDate'?: string;
     'coverage'?: number;
     'premium'?: number;
+    'active'?: boolean;
     'objectOfInsurance'?: ObjectOfInsurance;
 
     static readonly discriminator: string | undefined = undefined;
@@ -52,6 +53,12 @@ export class GetPolicyList200ResponseInner {
             "name": "premium",
             "baseName": "premium",
             "type": "number",
+            "format": ""
+        },
+        {
+            "name": "active",
+            "baseName": "active",
+            "type": "boolean",
             "format": ""
         },
         {

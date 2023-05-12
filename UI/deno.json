@@ -10,5 +10,10 @@
   "compilerOptions": {
     "jsx": "react-jsx",
     "jsxImportSource": "preact"
+  },
+  "lint": {
+    "exclude": [
+      "generated/"
+    ]
   }
 }

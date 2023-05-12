@@ -435,19 +435,19 @@ export class PolicyApiResponseProcessor {
         if (isCodeInRange("204", response.httpStatusCode)) {
             return;
         }
-        if (isCodeInRange("404", response.httpStatusCode)) {
-            const body: Error = ObjectSerializer.deserialize(
-                ObjectSerializer.parse(await response.body.text(), contentType),
-                "Error", ""
-            ) as Error;
-            throw new ApiException<Error>(response.httpStatusCode, "no policy at this location", body, response.headers);
-        }
         if (isCodeInRange("400", response.httpStatusCode)) {
             const body: Error = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
                 "Error", ""
             ) as Error;
             throw new ApiException<Error>(response.httpStatusCode, "invalid policy data", body, response.headers);
+        }
+        if (isCodeInRange("404", response.httpStatusCode)) {
+            const body: Error = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                "Error", ""
+            ) as Error;
+            throw new ApiException<Error>(response.httpStatusCode, "no policy at this location", body, response.headers);
         }
         if (isCodeInRange("0", response.httpStatusCode)) {
             const body: { [key: string]: any; } = ObjectSerializer.deserialize(

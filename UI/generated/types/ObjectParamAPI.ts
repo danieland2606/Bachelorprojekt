@@ -58,6 +58,21 @@ export interface CustomerApiGetCustomerListRequest {
     fields?: Set<CustomerPropertyNames>
 }
 
+export interface CustomerApiUpdateCustomerRequest {
+    /**
+     * 
+     * @type number
+     * @memberof CustomerApiupdateCustomer
+     */
+    customerId: number
+    /**
+     * 
+     * @type CustomerAllRequired
+     * @memberof CustomerApiupdateCustomer
+     */
+    customerAllRequired: CustomerAllRequired
+}
+
 export class ObjectCustomerApi {
     private api: ObservableCustomerApi
 
@@ -87,6 +102,14 @@ export class ObjectCustomerApi {
      */
     public getCustomerList(param: CustomerApiGetCustomerListRequest = {}, options?: Configuration): Promise<void | Array<GetCustomerList200ResponseInner>> {
         return this.api.getCustomerList(param.fields,  options).toPromise();
+    }
+
+    /**
+     * replace a customer
+     * @param param the request object
+     */
+    public updateCustomer(param: CustomerApiUpdateCustomerRequest, options?: Configuration): Promise<void> {
+        return this.api.updateCustomer(param.customerId, param.customerAllRequired,  options).toPromise();
     }
 
 }

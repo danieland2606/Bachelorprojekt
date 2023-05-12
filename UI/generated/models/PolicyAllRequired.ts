@@ -19,6 +19,7 @@ export class PolicyAllRequired {
     'endDate': string;
     'coverage': number;
     'premium': number;
+    'active': boolean;
     'objectOfInsurance': PolicyAllRequiredAllOfObjectOfInsurance;
 
     static readonly discriminator: string | undefined = undefined;
@@ -52,6 +53,12 @@ export class PolicyAllRequired {
             "name": "premium",
             "baseName": "premium",
             "type": "number",
+            "format": ""
+        },
+        {
+            "name": "active",
+            "baseName": "active",
+            "type": "boolean",
             "format": ""
         },
         {

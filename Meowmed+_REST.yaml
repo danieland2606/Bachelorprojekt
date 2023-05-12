@@ -2,7 +2,7 @@ openapi: 3.0.3
 info:
   title: Meowmed+
   version: 0.0.1
-servers: 
+servers:
   - url: http://localhost:8081
     description: rda customer testserver
   - url: http://localhost:8082
@@ -21,7 +21,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/CustomerFields'
       responses:
-        200:
+        '200':
           description: success
           content:
             application/json:
@@ -38,9 +38,9 @@ paths:
               $ref: '#/components/links/getCustomer'
             put:
               $ref: '#/components/links/updateCustomer'
-        204:
+        '204':
           description: no customers
-        400:
+        '400':
           $ref: '#/components/responses/InvalidFields'
         default:
           $ref: '#/components/responses/UnknownError'
@@ -52,7 +52,7 @@ paths:
       requestBody:
         $ref: '#/components/requestBodies/FullCustomer'
       responses:
-        201:
+        '201':
           description: customer created
           content:
             application/json:
@@ -63,7 +63,7 @@ paths:
               $ref: '#/components/links/getCustomer'
             put:
               $ref: '#/components/links/updateCustomer'
-        400:
+        '400':
           $ref: '#/components/responses/InvalidCustomer'
         default:
           $ref: '#/components/responses/UnknownError'
@@ -76,13 +76,13 @@ paths:
       tags:
         - customer
       responses:
-        200:
+        '200':
           description: customer found
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/CustomerAllRequired'
-        404:
+        '404':
           $ref: '#/components/responses/NoCustomerFound'
         default:
           $ref: '#/components/responses/UnknownError'
@@ -94,12 +94,12 @@ paths:
       requestBody:
         $ref: '#/components/requestBodies/FullCustomer'
       responses:
-        204:
+        '204':
           description: customer updated
-        404:
-          $ref: '#/components/responses/NoCustomerFound'
-        400:
+        '400':
           $ref: '#/components/responses/InvalidCustomer'
+        '404':
+          $ref: '#/components/responses/NoCustomerFound'
         default:
           $ref: '#/components/responses/UnknownError'
   /customer/{customerId}/policy:
@@ -113,7 +113,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/PolicyFields'
       responses:
-        200:
+        '200':
           description: success
           content:
             application/json:
@@ -130,9 +130,9 @@ paths:
               $ref: '#/components/links/getPolicy'
             put:
               $ref: '#/components/links/updatePolicy'
-        204:
+        '204':
           description: no policies for selected customer
-        400:
+        '400':
           $ref: '#/components/responses/InvalidFields'
         default:
           $ref: '#/components/responses/UnknownError'
@@ -144,7 +144,7 @@ paths:
       requestBody:
         $ref: '#/components/requestBodies/FullPolicy'
       responses:
-        201:
+        '201':
           description: policy created
           content:
             application/json:
@@ -155,7 +155,7 @@ paths:
               $ref: '#/components/links/getPolicy'
             put:
               $ref: '#/components/links/updatePolicy'
-        400:
+        '400':
           $ref: '#/components/responses/InvalidPolicy'
         default:
           $ref: '#/components/responses/UnknownError'
@@ -173,13 +173,13 @@ paths:
       tags:
         - policy
       responses:
-        200:
+        '200':
           description: policy found
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/PolicyAllRequired'
-        404:
+        '404':
           $ref: '#/components/responses/NoPolicyFound'
         default:
           $ref: '#/components/responses/UnknownError'
@@ -191,12 +191,12 @@ paths:
       requestBody:
         $ref: '#/components/requestBodies/FullPolicy'
       responses:
-        204:
+        '204':
           description: policy updated
-        404:
-          $ref: '#/components/responses/NoPolicyFound'
-        400:
+        '400':
           $ref: '#/components/responses/InvalidPolicy'
+        '404':
+          $ref: '#/components/responses/NoPolicyFound'
         default:
           $ref: '#/components/responses/UnknownError'
   /policyprice:
@@ -210,9 +210,9 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PolicyCalc'      
+              $ref: '#/components/schemas/PolicyCalc'
       responses:
-        200:
+        '200':
           description: price calculated
           content:
             application/json:
@@ -223,7 +223,7 @@ paths:
                     type: number
                 required:
                   - premium
-        400:
+        '400':
           description: invalid customerId or policy data
           content:
             application/json:
@@ -334,19 +334,19 @@ components:
     getCustomer:
       operationId: getCustomer
       parameters:
-        customerId: '$response.body#/id'
+        customerId: $response.body#/id
     updateCustomer:
       operationId: updateCustomer
       parameters:
-        customerId: '$response.body#/id'
+        customerId: $response.body#/id
     getPolicy:
       operationId: getPolicy
       parameters:
-        policyId: '$response.body#/id'
+        policyId: $response.body#/id
     updatePolicy:
       operationId: updatePolicy
       parameters:
-        policyId: '$response.body#/id'
+        policyId: $response.body#/id
   schemas:
     ID:
       type: object
@@ -372,7 +372,7 @@ components:
       type: object
       properties:
         id:
-          type: integer 
+          type: integer
           readOnly: true
         firstName:
           type: string
@@ -431,8 +431,8 @@ components:
             - address
           properties:
             address:
-              allOf: 
-                - $ref: "#/components/schemas/Address"
+              allOf:
+                - $ref: '#/components/schemas/Address'
                 - required:
                     - city
                     - street
@@ -510,8 +510,8 @@ components:
             - objectOfInsurance
           properties:
             objectOfInsurance:
-              allOf: 
-                - $ref: "#/components/schemas/ObjectOfInsurance"
+              allOf:
+                - $ref: '#/components/schemas/ObjectOfInsurance'
                 - required:
                     - name
                     - race
