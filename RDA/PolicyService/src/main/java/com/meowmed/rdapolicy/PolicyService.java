@@ -384,18 +384,50 @@ public class PolicyService {
 		}*/
 	}
 
-	
-	public int deletePolicyForUser(long c_id){
-		List<PolicyEntity> policyList = pRepository.findByCid(c_id);
-		if(policyList.isEmpty()) throw new PolicyNotFoundException();
+	public int deletePolicyForUser(long c_id) {
+		MappingJacksonValue temp = getPolicyList(c_id, "id");
+		System.out.println(temp.getValue());
+		System.out.println(temp.getClass());
+		System.out.println(temp.getSerializationView());
+		if (debugmode)
+			System.out.println("deletePolicyForUser: c_id: " + c_id);
+
 		CustomerRequest customer = getCustomerRequest(c_id);
+		if (customer == null)
+			throw new CustomerNotFoundException();
+
+		List<PolicyEntity> policies = pRepository.findByCid(c_id);
+		if (policies.isEmpty())
+			throw new PolicyNotFoundException();
+		
+		for (PolicyEntity policy : policies) {
+			PolicyRequest pRequest = new PolicyRequest();
+			pRequest.setStartDate(policy.getStartDate());
+			pRequest.setEndDate(policy.getEndDate());
+			pRequest.setCoverage(policy.getCoverage());
+			pRequest.setObjectOfInsurance(policy.getObjectOfInsurance());
+			updatePolicy(c_id, policy.getId(), pRequest);
+		
+		}
+		if (debugmode)
+			System.out.println("deletePolicyForUser: customer: " + customer + " policies: " + policies);
+
 		return 0;
 	}
 
-	public int deletePolicy(long c_id, long p_id){
-		
+	public int deletePolicy(long c_id, long p_id) {
+		Optional<PolicyEntity> policy = pRepository.findById(p_id);
+		if (policy.isEmpty()) {
+			throw new PolicyNotFoundException();
+		}
+
+		policy.get().setActive(false);
+
+		pRepository.save(policy.get());
+
 		return 0;
 	}
+
 
 
 
