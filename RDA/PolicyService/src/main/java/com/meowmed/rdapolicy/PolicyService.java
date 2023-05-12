@@ -364,7 +364,7 @@ public class PolicyService {
 		System.out.println(temp.getValue());
 		System.out.println(temp.getClass());
 		System.out.println(temp.getSerializationView());
-		
+		System.out.println();
 		return 0;
 	}
 
