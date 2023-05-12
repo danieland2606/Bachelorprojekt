@@ -1,14 +1,11 @@
 package com.meowmed.rdapolicy.exceptions;
+
+import org.springframework.core.NestedRuntimeException;
+
 /**
  * Die PolicyNotAllowed wird ausgelöst, wenn keine Policy gefunden wird.
  */
-public class PolicyNotAllowed extends RuntimeException{
-    /**
-    * Konstruiert eine neue PolicyNotAllowed ohne Fehlermeldung.
-    */
-    public PolicyNotAllowed(){
-    }
-
+public class PolicyNotAllowed extends NestedRuntimeException{
     /**
     * Konstruiert eine neue PolicyNotAllowed mit der angegebenen Fehlermeldung
     * @param message die Fehlermeldung 

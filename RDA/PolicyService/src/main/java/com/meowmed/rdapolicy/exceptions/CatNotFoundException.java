@@ -1,13 +1,8 @@
 package com.meowmed.rdapolicy.exceptions;
 
-public class CatNotFoundException extends RuntimeException{
-    
-    /*+
-     * konstruiert eine CustomerNotFoundException ohne Fehlermeldung
-     */
-    public CatNotFoundException(){
-    }
+import org.springframework.core.NestedRuntimeException;
 
+public class CatNotFoundException extends NestedRuntimeException{
     /**
      * konstruiert eine CustomerNotFoundException und übergibt eine Fehlermeldung als Parameter
      * @param message die Fehlermeldung

@@ -5,7 +5,6 @@ import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -27,8 +26,7 @@ import com.meowmed.rdapolicy.exceptions.CustomerNotFoundException;
 import com.meowmed.rdapolicy.exceptions.MailSendException;
 import com.meowmed.rdapolicy.exceptions.PolicyNotAllowed;
 import com.meowmed.rdapolicy.exceptions.PolicyNotFoundException;
-import com.meowmed.rdapolicy.module.PolicyCustomer;
-import com.meowmed.rdapolicy.module.PolicyMail;
+
 import com.meowmed.rdapolicy.module.Policysetup;
 import com.meowmed.rdapolicy.persistence.CatRepository;
 import com.meowmed.rdapolicy.persistence.ObjectOfInsuranceRepository;
@@ -50,12 +48,17 @@ import com.meowmed.rdapolicy.persistence.entity.PriceCalculationEntity;
  */
 @Service
 public class PolicyService {
+	    
+	//Variable, initialisiert durch application.properties
+	@Value("${docker.notificationurl}")
+	private String notificationUrl;
 
-
+	//Variable, initialisiert durch application.properties
+	@Value("${docker.customerurl}")
+	private String customerUrl;
+	
 	@Value("${docker.debugmode}")
 	private boolean debugmode;
-	//if(debugmode) System.out.println("getPolicyList:");
-
 
 	private final PolicyRepository pRepository;
 	private final ObjectOfInsuranceRepository oRepository;
@@ -74,12 +77,14 @@ public class PolicyService {
 	 * @param c_id ID des Customers dessen Policys angefragt werden. 
 	 * @param fields Eine Liste an Komma-separierten an benötigten Feldern (z.B. startDate,endDate,coverage,objectOfInsurance.name)
 	 * @return Zurück kommt eine gefilterte Liste an PolicyEntitys, die ähnlich dem Beispiel aussieht:
+	 * @exception NestedRuntimeException Für alle unten aufgeführten Exceptions
+	 * @exception PolicyNotFoundException Für den Benutzer existierern keine Verträge
 	 */
     public MappingJacksonValue getPolicyList(Long c_id, String fields) throws NestedRuntimeException{
 		if(debugmode) System.out.println("getPolicyList: String:" + fields);
 		//Holen der benötigten Objekte
 		List<PolicyEntity> policyList = pRepository.findByCid(c_id);
-		if(policyList.isEmpty()) throw new PolicyNotFoundException();
+		if(policyList.isEmpty()) throw new PolicyNotFoundException("Für diesen Kunden gibt es keine Verträge");
 		
 		// Filtern der fields in 2 Arrays
 		List<String> policyArgList = new ArrayList<String>();
@@ -122,6 +127,10 @@ public class PolicyService {
 	 * @param c_id ID des Customers dessen Policys angefragt werden.
 	 * @param p_id ID der Policy des Kunden.
 	 * @return Zurückkommt ein PolicyEntity, bei der die Policy- und Customer-ID herausgefiltert wird
+	 * @exception NestedRuntimeException Für alle unten aufgeführten Exceptions
+	 * @exception IllegalArgumentException Wenn einer der Argumente null ist
+	 * @exception PolicyNotFoundException Wenn dieser Vertrag nicht existiert
+	 * @exception CustomerNotFoundException Wenn die Customer-ID nicht mit der aus Policy übereinstimmen
 	 */
     public MappingJacksonValue getPolicy(Long c_id, Long p_id) throws NestedRuntimeException {
 		if(debugmode) System.out.println("getPolicy: c_id: " + c_id + " p_id: " + p_id);
@@ -129,12 +138,12 @@ public class PolicyService {
 		if(c_id == null || p_id == null) throw new IllegalArgumentException();
 
 		Optional<PolicyEntity> policy = pRepository.findById(p_id);
-		if(policy.isEmpty()) throw new PolicyNotFoundException();
+		if(policy.isEmpty()) throw new PolicyNotFoundException("Policy wurde nicht gefunden");
+		if(policy.get().getC_id() != c_id) throw new CustomerNotFoundException("Der angegebene Customer gehört nicht zur angegebenen Policy");
 		if(debugmode) System.out.println("getPolicy: policy: " + policy);
 		
 		// Verpacken der Ausgabe + Anwenden von Filtern auf derer
 		MappingJacksonValue wrapper = new MappingJacksonValue(policy);
-		//System.out.println(wrapper.getValue().getClass());
 		wrapper.setFilters(new SimpleFilterProvider()
 		.addFilter("policyFilter", SimpleBeanPropertyFilter.serializeAllExcept("id", "c_id"))
 		.addFilter("objectOfInsuranceFilter", SimpleBeanPropertyFilter.serializeAllExcept("id"))
@@ -148,12 +157,19 @@ public class PolicyService {
 	 * @param c_id ID des Customers bei dem die Policys gespeichert wird.
 	 * @param pRequest Das zu speichernde Objekt
 	 * @return Die ID der gerade erstellten Objekts
+	 * @exception NestedRuntimeException Für alle unten aufgeführten Exceptions
+	 * @exception CustomerNotFoundException Wenn unter der angegebenen CustomerID kein Customer zu finden ist
+	 * @exception IllegalArgumentException Nested aus dem getCustomerRequest
+	 * @exception WebClientResponseException Nested aus dem getCustomerRequest
+	 * @exception PolicyNotAllowed Falls das erstellen einer Policy nicht erlaubt ist - Nested aus getPolicyPrice
+	 * @exception CatNotFoundException Die angegebene Katzenrasse existiert nicht in der Datenbank - Nested aus getPolicyPrice
+	 * @exception RestClientException Nested aus dem sendMail
 	 */
+
     public MappingJacksonValue postPolicy(Long c_id, PolicyRequest pRequest) throws NestedRuntimeException{
 		if(debugmode) System.out.println("postPolicy: c_id: " + c_id + " pRequest: " + pRequest);
-		// Holen, des Customers
-		CustomerRequest customer = PolicyCustomer.getCustomerRequest(c_id);
-		if(customer == null) throw new CustomerNotFoundException();
+		// Holen, des Customers, für den Mail Versand
+		CustomerRequest customer = getCustomerRequest(c_id);
 		if(debugmode) System.out.println("postPolicy: customer: " + customer);
 
 		// Erzeugen von Objekten für den Policy und speichern derer
@@ -165,7 +181,7 @@ public class PolicyService {
 
 		//Versenden von Mails
 		MailPolicyEntity mail = new MailPolicyEntity(policy, customer);
-		ResponseEntity<String> response = PolicyMail.sendMail("policynotification", mail);
+		ResponseEntity<String> response = sendMail("policynotification", mail);
 		//if (response.getStatusCode() != HttpStatus.OK) throw new MailSendException();
 		if(debugmode) System.out.println("postPolicy: mail: " + mail + " response: " + response);
 
@@ -182,19 +198,26 @@ public class PolicyService {
 	 * @param c_id ID des Customers bei dem die Policys gespeichert wird.
 	 * @param pRequest Das zu speichernde Objekt
 	 * @return Die ID der gerade erstellten Objekts
-	 * 
+	 * @exception NestedRuntimeException Für alle unten aufgeführten Exceptions
+	 * @exception IllegalArgumentException Nested aus getCustomerRequest
+	 * @exception WebClientResponseException Nested aus getCustomerRequest
+	 * @exception CustomerNotFoundException Nested aus getCustomerRequest
+	 * @exception CatNotFoundException Nested aus getPolicyPrice
+	 * @exception MailSendException Falls die Mail nicht erfolgreich versandt wurde
+	 * @exception PolicyNotAllowed Falls aus der Berechnung ergibt, das der Policy nicht erlaubt ist
+	 * @exception PolicyNotFoundException Falls keine Policy vorhanden ist, auf der p_id und c_id Kombination
+	 * @exception RestClientException Nested aus sendMail
 	 */
     public MappingJacksonValue updatePolicy(Long c_id, Long p_id, PolicyRequest pRequest) throws NestedRuntimeException{
 		if(debugmode) System.out.println("updatePolicy: c_id: " + c_id + " p_id: " + p_id + " pRequest: " + pRequest);
 
 		//Holen des Customers und der momentanen Policy anhand der Argumente
-		CustomerRequest customer = PolicyCustomer.getCustomerRequest(c_id);
-		if(customer == null) throw new CustomerNotFoundException();
+		CustomerRequest customer = getCustomerRequest(c_id);
 
 		Optional<PolicyEntity> currentPolicy = pRepository.findById(p_id);
-		if(currentPolicy.isEmpty()) throw new PolicyNotFoundException();
+		if(currentPolicy.isEmpty()) throw new PolicyNotFoundException("Policy wurde nicht gefunden");
 
-		//Setzen der Validierung der momentanen Katze
+		//Validierung der momentanen Katze
 		ObjectOfInsuranceEntity currentOoBEntity = currentPolicy.get().getObjectOfInsurance();
 		if(!currentOoBEntity.equals(pRequest.getObjectOfInsurance())){
 			currentOoBEntity.setCastrated(pRequest.getObjectOfInsurance().isCastrated());
@@ -212,10 +235,10 @@ public class PolicyService {
 		} catch (PolicyNotAllowed e) {
 			deletePolicy(c_id, currentPolicy.get().getId());
 			MailPolicyEntity mail = new MailPolicyEntity(currentPolicy.get(), customer);
-			ResponseEntity<String> response = PolicyMail.sendMail("policydeletenotification", mail);
-			if (response.getStatusCode() != HttpStatus.OK) throw new MailSendException();
+			ResponseEntity<String> response = sendMail("policydeletenotification", mail);
+			if (response.getStatusCode() != HttpStatus.OK) throw new MailSendException("Mail konnte nicht versendet werden");
 			if(debugmode) System.out.println("updatePolicy: mail: " + mail + " response: " + response);
-			throw new PolicyNotAllowed();
+			throw new PolicyNotAllowed("Policy ist nicht erlaubt");
 		}
 		if(!currentPolicy.get().equalsPolicyRequest(c_id, pRequest)){
 			// Wird nicht vorkommen
@@ -232,8 +255,8 @@ public class PolicyService {
 		// Versand der Mail
 		if(!currentOoBEntity.equals(pRequest.getObjectOfInsurance()) || !currentPolicy.get().equalsPolicyRequest(c_id, pRequest)){
 			MailPolicyEntity mail = new MailPolicyEntity(policy, customer);
-			ResponseEntity<String> response = PolicyMail.sendMail("policychangenotification", mail);
-			if (response.getStatusCode() != HttpStatus.OK) throw new MailSendException();
+			ResponseEntity<String> response = sendMail("policychangenotification", mail);
+			if (response.getStatusCode() != HttpStatus.OK) throw new MailSendException("Mail konnte nicht versendet werden");
 			if(debugmode) System.out.println("updatePolicy: mail: " + mail + " response: " + response);
 		}
 
@@ -242,7 +265,7 @@ public class PolicyService {
 		wrapper.setFilters(new SimpleFilterProvider()
 		.addFilter("policyFilter", SimpleBeanPropertyFilter.filterOutAllExcept("id"))
 		.setFailOnUnknownId(false));
-		if(debugmode) System.out.println("postPolicy: wrapper: " + wrapper);
+		if(debugmode) System.out.println("postPolicy: wrapper: " + wrapper.getSerializationView());
 		return wrapper;
 	}
 
@@ -251,9 +274,14 @@ public class PolicyService {
 	 * Die Berechnung kommt aus der Katzenpreisberechnungstabelle von CapGemini, die im Git liegt
 	 * @param body Übergeben werden die Parameter als PriceCalculationEntity
 	 * @return Zurück kommt ein Wert als double für die monatlichen Kosten
+	 * @exception NestedRuntimeException Für alle unten aufgeführten Exceptions
+	 * @exception WebClientResponseException Nested aus getCustomerRequest
+	 * @exception CustomerNotFoundException Nested aus getCustomerRequest
+ 	 * @exception PolicyNotAllowed Falls das erstellen einer Policy nicht erlaubt ist
+	 * @exception CatNotFoundException Die angegebene Katzenrasse existiert nicht in der Datenbank
 	 */
     public double getPolicyPrice(PriceCalculationEntity body) throws NestedRuntimeException{
-		CustomerRequest customer = PolicyCustomer.getCustomerRequest(body.getCustomerId());
+		CustomerRequest customer = getCustomerRequest(body.getCustomerId());
 		if(debugmode) System.out.println("getPolicyPrice: body: " + body + " customer: " + customer);
 		
 		// Prüfen, ob die Bedingungen für einen Vertrag erfüllt sind
@@ -261,9 +289,9 @@ public class PolicyService {
 			|| ChronoUnit.YEARS.between(customer.getDateOfBirth() , LocalDate.now())< 18 
 			|| customer.getEmploymentStatus().equalsIgnoreCase("arbeitslos")
 			;
-		if (policyNotAllowed) throw new PolicyNotAllowed();
+		if (policyNotAllowed) throw new PolicyNotAllowed("Policy wurde nicht gefunden");
 		CatEntity cat = cRepository.findByRace(body.getPolicy().getObjectOfInsurance().getRace());
-		if (cat==null) throw new CatNotFoundException();
+		if (cat==null) throw new CatNotFoundException("Cat wurde nicht gefunden");
 		if(debugmode) System.out.println("getPolicyPrice: cat: " + cat);
 
 
@@ -342,27 +370,32 @@ public class PolicyService {
 	}
 
 	/**
-	 * Die Wert für die monatliche Kosten werden in ein JSONObjekt umgewandelt
-	 * @param body Übergeben werden die Parameter als PriceCalculationEntity
-	 * @return Ein zu JSON umwandelbarer Wert
-	*/
-	public MappingJacksonValue getPolicyPriceRequest(PriceCalculationEntity details) throws NestedRuntimeException{
-		if(debugmode) System.out.println("getPolicyPriceRequest: details: " + details);
-		MappingJacksonValue wrapper = new MappingJacksonValue(Collections.singletonMap("premium", getPolicyPrice(details)));
-		return wrapper;
-	}
-
-	public int deletePolicyForUser(long c_id) {
+	 * Diese Methode wird für Update anstoße von Verträgen von einem Customer genutzt
+	 * @param c_id CustomerID
+	 * @return Anzahl der veränderten Verträge
+	 * @exception NestedRuntimeException Für alle unten aufgeführten Exceptions
+	 * @exception IllegalArgumentException Falls der übergebene Wert null ist
+	 * @exception WebClientResponseException Nested aus updatePolicy
+	 * @exception CustomerNotFoundException Nested aus updatePolicy
+	 * @exception CatNotFoundException Nested aus updatePolicy
+	 * @exception MailSendException Nested aus updatePolicy
+	 * @exception PolicyNotAllowed Nested aus updatePolicy
+	 * @exception PolicyNotFoundException Nested aus updatePolicy
+	 * @exception RestClientException Nested aus updatePolicy
+	 */
+	public int deletePolicyForUser(long c_id) throws NestedRuntimeException{
 		if (debugmode)
 			System.out.println("deletePolicyForUser: c_id: " + c_id);
 
-		CustomerRequest customer = PolicyCustomer.getCustomerRequest(c_id);
-		if (customer == null)
-			throw new CustomerNotFoundException();
-
+		// Das Kunden Objekt wird hier nicht benötigt
+		//CustomerRequest customer = getCustomerRequest(c_id);
+		//if (customer == null)
+		//	throw new CustomerNotFoundException("Customer wurde nicht gefunden");
 		List<PolicyEntity> policies = pRepository.findByCid(c_id);
-		if (policies.isEmpty())
-			throw new PolicyNotFoundException();
+		
+		// Wird nicht unbedingt benötigt, da wir mit der Vorschleife sowieso auf empty prüfen
+		//if (policies.isEmpty())
+		//	throw new PolicyNotFoundException("Policy wurde nicht gefunden");
 		
 		for (PolicyEntity policy : policies) {
 			PolicyRequest pRequest = new PolicyRequest();
@@ -373,22 +406,81 @@ public class PolicyService {
 			updatePolicy(c_id, policy.getId(), pRequest);
 		
 		}
-		if (debugmode)
-			System.out.println("deletePolicyForUser: customer: " + customer + " policies: " + policies);
-
-		return 0;
+		if (debugmode) System.out.println("deletePolicyForUser: policies: " + policies);
+		//if (debugmode) System.out.println("deletePolicyForUser: customer: " + customer + " policies: " + policies);
+		return policies.size();
 	}
 
-	public int deletePolicy(long c_id, long p_id) {
+	/**
+	 * Diese Methode löscht/deaktiviert einen Vertrag
+	 * @param c_id CustomerID
+	 * @param p_id VertragsID
+	 * @exception IllegalArgumentException Falls einer der übergebenen Werte null ist
+	 * @exception PolicyNotFoundException Falls es keinen Vertrag zu der Vertragsnummer gibt
+	 * @exception CustomerNotFoundException Falls der Vertrag nicht zum Customer gehört
+	 */
+	public void deletePolicy(long c_id, long p_id) throws IllegalArgumentException, PolicyNotFoundException, CustomerNotFoundException{
 		Optional<PolicyEntity> policy = pRepository.findById(p_id);
 		if (policy.isEmpty()) {
-			throw new PolicyNotFoundException();
+			throw new PolicyNotFoundException("Policy wurde nicht gefunden");
 		}
+		if(policy.get().getC_id() != c_id) throw new CustomerNotFoundException("Der angegebene Customer gehört nicht zur angegebenen Policy");
 
 		policy.get().setActive(false);
-
 		pRepository.save(policy.get());
+	}
 
-		return 0;
+	/**
+	 * Diese Methode sendet eine Anfrage an den Mail
+	 * @param mailUrl Das ist der Suffix, anhand derer entschieden wird, welches template benutzt wird.
+	 * @param mail Hier sind die Informationen drin, die dem Notifikationservice gegeben werden
+	 * @return Die Antwort vom Notifikationservice
+	 * @exception NestedRuntimeException Für alle unten aufgeführten Exceptions
+	 * @exception RestClientException Falls der Post-Aufruf zum Notifikationservice fehlschlägt
+	 */
+	private ResponseEntity<String> sendMail(String mailUrl, MailPolicyEntity mail) throws NestedRuntimeException{
+		if(debugmode) System.out.println("sendMail: mailUrl: " + mailUrl + " mail: " + mail);
+		String url = "http://" + notificationUrl + ":8080/"+ mailUrl;
+		RestTemplate restTemplate = new RestTemplate();
+		ResponseEntity<String> response = restTemplate.postForEntity(url, mail, String.class);
+		if(debugmode) System.out.println("sendMail: url: " + url + " response: " + response);
+		return response;
+		/* 
+		// Alter Versuch mit Webclient, der nichts gesendet hat.....
+		Mono<ResponseEntity<String>> result = WebClient.create().post().uri("http://notification:8080/policynotification")
+											//.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+											.contentType(MediaType.APPLICATION_JSON)
+											.bodyValue(mail)
+											.retrieve()
+											.toEntity(String.class);
+		System.out.println(result.cast(ResponseEntity.class).toString());
+		System.out.println(mail);
+		*/
+	}
+
+	/**
+	 * Diese Methode fragt den Customer beim Customer-Service ab
+	 * @param c_id Customer-ID, des anzufragenden Customers
+	 * @return CustomerRequest-Objekt, der die meisten Daten des Kunden enthält
+	 * @exception NestedRuntimeException Für alle unten aufgeführten Exceptions
+	 * @exception IllegalArgumentException Wenn die Customer-ID null ist
+	 * @exception WebClientResponseException Wenn ein Status-Code >400, außer 404, zurück gegeben wird
+	 * @exception CustomerNotFoundException Wenn StatusCode 404 zurück kommt und kein Customer gefunden wurde
+	 */
+	public CustomerRequest getCustomerRequest(Long c_id) throws NestedRuntimeException{
+		if(c_id == null) throw new IllegalArgumentException();
+		if(debugmode) System.out.println("getCustomerRequest: c_id: " + c_id);
+		String customerURL = "http://" + customerUrl + ":8080/customer/{c_id}";
+		if(debugmode) System.out.println("getCustomerRequest: customerURL: " + customerURL);
+		WebClient customerClient = WebClient.create();
+		WebClient.ResponseSpec responseSpec = customerClient.get().uri(customerURL,c_id).retrieve();
+		CustomerRequest customer = responseSpec
+			.onStatus(RetStatus -> HttpStatus.NOT_FOUND.equals(RetStatus), ex -> {throw new CustomerNotFoundException("Es wurden keine Customer gefunden");})
+			//.onStatus(RetStatus -> HttpStatus.NOT_FOUND.equals(Ret Status), ex -> Mono.empty())
+			.bodyToMono(CustomerRequest.class)
+			.block();
+		if(customer == null) throw new CustomerNotFoundException("Customer wurde nicht gefunden");
+		if(debugmode) System.out.println("getCustomerRequest: customer: " + customer);
+		return customer;
 	}
 }
