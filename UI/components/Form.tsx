@@ -5,7 +5,7 @@ import {
   ComponentChildren,
   VNode,
 } from "preact/src/index.js";
-import { Obj, resolve } from "../util/util.ts";
+import { Obj, resolve } from "$this/util/util.ts";
 
 export type FormProps = JSX.HTMLAttributes<HTMLFormElement> & Data;
 export type managed =

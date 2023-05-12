@@ -1,5 +1,5 @@
 import { JSX } from "preact/jsx-runtime";
-import { capitalize } from "../util/util.ts";
+import { capitalize } from "$this/util/util.ts";
 
 export interface InputProps extends JSX.HTMLAttributes<HTMLInputElement> {
   labeltext: string;

@@ -8,7 +8,7 @@ import {
   PolicyCalc,
   PolicyPropertyNames,
   ServerConfiguration,
-} from "../generated/index.ts";
+} from "$this/generated/index.ts";
 
 const customerServer = new ServerConfiguration("${customerService}", {});
 const customerApi = new CustomerApi(

@@ -1,10 +1,10 @@
 import { HandlerContext, PageProps } from "$fresh/server.ts";
 import { asset } from "$fresh/runtime.ts";
-import { EditCustomer } from "../../components/EditCustomer.tsx";
-import { Table } from "../../components/Table.tsx";
-import { Policy } from "../../generated/models/all.ts";
-import { compareId } from "../../util/util.ts";
-import { customerClient, policyClient } from "../../util/client.ts";
+import { EditCustomer } from "$this/components/EditCustomer.tsx";
+import { Table } from "$this/components/Table.tsx";
+import { Policy } from "$this/generated/models/all.ts";
+import { compareId } from "$this/util/util.ts";
+import { customerClient, policyClient } from "$this/util/client.ts";
 
 export const handler = {
   async GET(_: Request, ctx: HandlerContext) {

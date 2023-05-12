@@ -1,3 +1,5 @@
+import { ObjectSerializer } from "$this/generated/models/ObjectSerializer.ts";
+
 export function capitalize(str: string) {
   return (str.charAt(0).toUpperCase() + str.slice(1)) ?? "";
 }
@@ -22,6 +24,21 @@ export function resolve(path: string, obj?: Obj) {
   );
 }
 
-export function identity<T>(a: T) {
-  return a;
+export function deserialize<T>(form: FormData, type: string) {
+  const entries = Array.from(form) as Array<[string, string]>;
+  const result = entries.reduce(nestProperty, {});
+  return ObjectSerializer.deserialize(result, type, "") as T;
+}
+
+export function nestProperty(
+  target: Record<string, unknown>,
+  [key, val]: [string, string],
+) {
+  const keys = key.split(".");
+  const last = keys.pop()!; //keys cannot be empty
+  keys.reduce(
+    (prev, cur) => (prev[cur] ??= {}) as Record<string, unknown>,
+    target,
+  )[last] = val;
+  return target;
 }

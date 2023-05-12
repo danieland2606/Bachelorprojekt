@@ -1,7 +1,7 @@
 import { HandlerContext, PageProps } from "$fresh/server.ts";
-import { deserializePolicy } from "../customer/[customerId]/policy.tsx";
-import { policyClient } from "../../util/client.ts";
-import { PolicyCalc } from "../../generated/index.ts";
+import { deserialize } from "$this/util/util.ts";
+import { policyClient } from "$this/util/client.ts";
+import { PolicyAllRequired, PolicyCalc } from "$this/generated/index.ts";
 
 export const handler = {
   GET(_: Request, ctx: HandlerContext) {
@@ -24,9 +24,13 @@ export default function PremiumDisplay({ data }: PageProps) {
 }
 
 function deserializePolicyCalc(form: FormData) {
-  const policyCalc: Record<string, any> = {
-    customerId: form.get("customerId"),
-    policy: deserializePolicy(form),
+  const id = (form.get("customerId") ?? NaN) as number;
+  if (isNaN(id)) { //intentionally not using Number.isNaN()
+    throw new Error("customerId missing for premium calculation");
+  }
+  const policyCalc = {
+    customerId: id,
+    policy: deserialize<PolicyAllRequired>(form, "PolicyAllRequired"),
   };
   return policyCalc as PolicyCalc;
 }

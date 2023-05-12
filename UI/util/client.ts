@@ -6,8 +6,8 @@ import {
   ID,
   PolicyAllRequired,
   PolicyCalc,
-} from "../generated/index.ts";
-import { ObjectSerializer } from "../generated/models/ObjectSerializer.ts";
+} from "$this/generated/index.ts";
+import { ObjectSerializer } from "$this/generated/models/ObjectSerializer.ts";
 
 export const customerClient = {
   getCustomerList: async () =>

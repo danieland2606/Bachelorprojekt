@@ -1,5 +1,5 @@
-import { Input, Select } from "./Input.tsx";
-import { Form, FormProps } from "./Form.tsx";
+import { Input, Select } from "$this/components/Input.tsx";
+import { Form, FormProps } from "$this/components/Form.tsx";
 import {
   CatRaceValues,
   EnvironmentValues,

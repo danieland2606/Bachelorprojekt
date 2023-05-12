@@ -1,7 +1,8 @@
 import { HandlerContext, PageProps } from "$fresh/server.ts";
-import { EditPolicy } from "../../../../components/EditPolicy.tsx";
-import { policyClient } from "../../../../util/client.ts";
-import { deserializePolicy } from "../policy.tsx";
+import { EditPolicy } from "$this/components/EditPolicy.tsx";
+import { policyClient } from "$this/util/client.ts";
+import { deserialize } from "$this/util/util.ts";
+import { PolicyAllRequired } from "$this/generated/index.ts";
 
 export const handler = {
   async GET(_: Request, ctx: HandlerContext) {
@@ -14,7 +15,7 @@ export const handler = {
     const customerId = Number.parseInt(ctx.params.customerId);
     const policyId = Number.parseInt(ctx.params.policyId);
     const form = await req.formData();
-    const policy = deserializePolicy(form);
+    const policy = deserialize<PolicyAllRequired>(form, "PolicyAllRequired");
     await policyClient.updatePolicy(customerId, policyId, policy);
     const base = new URL(req.url).origin;
     return Response.redirect(
