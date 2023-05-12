@@ -12,6 +12,7 @@ import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.NestedRuntimeException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -34,8 +35,10 @@ import com.meowmed.rdapolicy.entity.ObjectOfInsuranceEntity;
 import com.meowmed.rdapolicy.entity.PolicyEntity;
 import com.meowmed.rdapolicy.entity.PolicyRequest;
 import com.meowmed.rdapolicy.entity.PriceCalculationEntity;
+import com.meowmed.rdapolicy.exceptions.CatNotFoundException;
 import com.meowmed.rdapolicy.exceptions.CustomerNotFoundException;
 import com.meowmed.rdapolicy.exceptions.MailSendException;
+import com.meowmed.rdapolicy.exceptions.PolicyNotAllowed;
 import com.meowmed.rdapolicy.exceptions.PolicyNotFoundException;
 
 import jakarta.websocket.OnError;
@@ -81,7 +84,7 @@ public class PolicyService {
 	 * @param fields Eine Liste an Komma-separierten an benötigten Feldern (z.B. startDate,endDate,coverage,objectOfInsurance.name)
 	 * @return Zurück kommt eine gefilterte Liste an PolicyEntitys, die ähnlich dem Beispiel aussieht:
 	 */
-    public MappingJacksonValue getPolicyList(Long c_id, String fields) throws IllegalArgumentException, PolicyNotFoundException{
+    public MappingJacksonValue getPolicyList(Long c_id, String fields) throws NestedRuntimeException{
 		if(debugmode) System.out.println("getPolicyList: String:" + fields);
 		//Holen der benötigten Objekte
 		List<PolicyEntity> policyList = pRepository.findByCid(c_id);
@@ -129,7 +132,7 @@ public class PolicyService {
 	 * @param p_id ID der Policy des Kunden.
 	 * @return Zurückkommt ein PolicyEntity, bei der die Policy- und Customer-ID herausgefiltert wird
 	 */
-    public MappingJacksonValue getPolicy(Long c_id, Long p_id) throws IllegalArgumentException, PolicyNotFoundException {
+    public MappingJacksonValue getPolicy(Long c_id, Long p_id) throws NestedRuntimeException {
 		if(debugmode) System.out.println("getPolicy: c_id: " + c_id + " p_id: " + p_id);
 		//Check, ob Kunde und Policy existieren und holen dieser Objekte
 		if(c_id == null || p_id == null) throw new IllegalArgumentException();
@@ -156,7 +159,7 @@ public class PolicyService {
 	 * @param pRequest Das zu speichernde Objekt
 	 * @return Die ID der gerade erstellten Objekts
 	 */
-    public MappingJacksonValue postPolicy(Long c_id, PolicyRequest pRequest) throws IllegalArgumentException, WebClientException, CustomerNotFoundException, MailSendException, ArithmeticException{
+    public MappingJacksonValue postPolicy(Long c_id, PolicyRequest pRequest) throws NestedRuntimeException{
 		if(debugmode) System.out.println("postPolicy: c_id: " + c_id + " pRequest: " + pRequest);
 		// Holen, des Customers
 		CustomerRequest customer = getCustomerRequest(c_id);
@@ -200,7 +203,7 @@ public class PolicyService {
 	 * @return Die ID der gerade erstellten Objekts
 	 * 
 	 */
-    public MappingJacksonValue updatePolicy(Long c_id, Long p_id, PolicyRequest pRequest) throws WebClientException, CustomerNotFoundException, MailSendException, PolicyNotFoundException, IllegalArgumentException{
+    public MappingJacksonValue updatePolicy(Long c_id, Long p_id, PolicyRequest pRequest) throws NestedRuntimeException{
 		if(debugmode) System.out.println("updatePolicy: c_id: " + c_id + " p_id: " + p_id + " pRequest: " + pRequest);
 
 		//Holen des Customers und der momentanen Policy anhand der Argumente
@@ -216,16 +219,36 @@ public class PolicyService {
 			MappingJacksonValue errWrapper = new MappingJacksonValue(Collections.singletonMap("error", "No policy under this id"));
 			return new ResponseEntity<MappingJacksonValue>(errWrapper,HttpStatusCode.valueOf(404));
 		}*/
-		//Setzen der ID der momentanen Katze
-		pRequest.getObjectOfInsurance().setId(currentPolicy.get().getObjectOfInsurance().getId());
+		//Setzen der Validierung der momentanen Katze
+		ObjectOfInsuranceEntity currentOoBEntity = currentPolicy.get().getObjectOfInsurance();
+		if(!currentOoBEntity.equals(pRequest.getObjectOfInsurance())){
+			currentOoBEntity.setCastrated(pRequest.getObjectOfInsurance().isCastrated());
+			currentOoBEntity.setPersonality(pRequest.getObjectOfInsurance().getPersonality());
+			currentOoBEntity.setEnvironment(pRequest.getObjectOfInsurance().getEnvironment());
+			currentOoBEntity.setWeight(pRequest.getObjectOfInsurance().getWeight());
+		}
 		if(debugmode) System.out.println("updatePolicy: customer: " + customer + " currentPolicy: " + currentPolicy + " pRequest: " + pRequest);
 
 		// Erzeugen und ersetzen der Policy
 		PriceCalculationEntity tempCalc = new PriceCalculationEntity(c_id, pRequest);
-		PolicyEntity policy = new PolicyEntity(c_id, pRequest.getStartDate(), pRequest.getEndDate(), pRequest.getCoverage(), getPolicyPrice(tempCalc), pRequest.getObjectOfInsurance());
-		oRepository.save(pRequest.getObjectOfInsurance());
-		policy.setId(p_id);
-		policy = pRepository.save(policy);
+		double policyPrice = 0;
+		try {
+			policyPrice = getPolicyPrice(tempCalc);
+		} catch (Exception e) {
+			deletePolicy(c_id, currentPolicy.get().getId());
+			throw new PolicyNotAllowed();
+		}
+		if(!currentPolicy.get().equalsPolicyRequest(c_id, pRequest)){
+			// Wird nicht vorkommen
+			//currentPolicy.get().setC_id(c_id);
+			currentPolicy.get().setEndDate(pRequest.getEndDate());
+			currentPolicy.get().setCoverage(pRequest.getCoverage());
+		}
+		currentPolicy.get().setPremium(policyPrice);
+
+		oRepository.save(currentOoBEntity);
+		//policy.setId(p_id);
+		PolicyEntity policy = pRepository.save(currentPolicy.get());
 		if(debugmode) System.out.println("updatePolicy: tempCalc: " + tempCalc + " policy: " + policy);
 
 		// Versand der Mail
@@ -254,14 +277,18 @@ public class PolicyService {
 	 * @param body Übergeben werden die Parameter als PriceCalculationEntity
 	 * @return Zurück kommt ein Wert als double für die monatlichen Kosten
 	 */
-    public double getPolicyPrice(PriceCalculationEntity body) throws WebClientException, CustomerNotFoundException, ArithmeticException{
+    public double getPolicyPrice(PriceCalculationEntity body) throws NestedRuntimeException{
 		CustomerRequest customer = getCustomerRequest(body.getCustomerId());
 		if(debugmode) System.out.println("getPolicyPrice: body: " + body + " customer: " + customer);
 		
-		// Prüfen, ob die Katze sehr verspielt ist, und Besitzer älter als 18 Jahre
-		if (body.getPolicy().getObjectOfInsurance().getPersonality().contains("sehr verspielt") || ChronoUnit.YEARS.between(customer.getDateOfBirth(), LocalDate.now())<18) return 0;
+		// Prüfen, ob die Bedingungen für einen Vertrag erfüllt sind
+		boolean policyNotAllowed = body.getPolicy().getObjectOfInsurance().getPersonality().contains("sehr verspielt") 
+			|| ChronoUnit.YEARS.between(customer.getDateOfBirth() , LocalDate.now())< 18 
+			|| customer.getEmploymentStatus().equalsIgnoreCase("arbeitslos")
+			;
+		if (policyNotAllowed) throw new ArithmeticException();
 		CatEntity cat = cRepository.findByRace(body.getPolicy().getObjectOfInsurance().getRace());
-		if (cat==null) return 0;
+		if (cat==null) throw new CatNotFoundException();
 		if(debugmode) System.out.println("getPolicyPrice: cat: " + cat);
 
 
@@ -328,7 +355,6 @@ public class PolicyService {
 		debugprice = totalprice;
 
 		// Hat der Besitzer noch einen Hund, muss 30% des basepricees noch auf den Betrag drauf gerechnet werden
-		// TODO: hasDog auf dogOwner ändern
 		if(customer.isdogOwner()) totalprice += 0.3*baseprice;
 		if(debugmode) System.out.println("getPolicyPrice: Nach Hundebesitzerberechnung: totalprice: " + totalprice + " Differenz: " + (totalprice - debugprice));
 		debugprice = totalprice;
@@ -345,7 +371,7 @@ public class PolicyService {
 	 * @param body Übergeben werden die Parameter als PriceCalculationEntity
 	 * @return Ein zu JSON umwandelbarer Wert
 	*/
-	public MappingJacksonValue getPolicyPriceRequest(PriceCalculationEntity details) throws WebClientException, CustomerNotFoundException, ArithmeticException{
+	public MappingJacksonValue getPolicyPriceRequest(PriceCalculationEntity details) throws NestedRuntimeException{
 		if(debugmode) System.out.println("getPolicyPriceRequest: details: " + details);
 		MappingJacksonValue wrapper = new MappingJacksonValue(Collections.singletonMap("premium", getPolicyPrice(details)));
 		return wrapper;
@@ -360,16 +386,14 @@ public class PolicyService {
 
 	
 	public int deletePolicyForUser(long c_id){
-		MappingJacksonValue temp = getPolicyList(c_id, "id");
-		System.out.println(temp.getValue());
-		System.out.println(temp.getClass());
-		System.out.println(temp.getSerializationView());
-		System.out.println();
+		List<PolicyEntity> policyList = pRepository.findByCid(c_id);
+		if(policyList.isEmpty()) throw new PolicyNotFoundException();
+		CustomerRequest customer = getCustomerRequest(c_id);
 		return 0;
 	}
 
 	public int deletePolicy(long c_id, long p_id){
-		System.out.println();
+		
 		return 0;
 	}
 
@@ -408,7 +432,7 @@ public class PolicyService {
 	 * @param c_id Customer-ID, des anzufragenden Customers
 	 * @return CustomerRequest-Objekt, der die meisten Daten des Kunden enthält
 	 */
-	CustomerRequest getCustomerRequest(Long c_id) throws WebClientException, CustomerNotFoundException, IllegalArgumentException{
+	CustomerRequest getCustomerRequest(Long c_id) throws NestedRuntimeException{
 		if(c_id == null) throw new IllegalArgumentException();
 		if(debugmode) System.out.println("getCustomerRequest: c_id: " + c_id);
 		String customerURL = "http://" + customerUrl + ":8080/customer/{c_id}";
