@@ -192,7 +192,7 @@ public class NotificationService {
             }
             Context context = new Context();
             context.setVariables(properties);
-            String html = templateEngine.process("customernotification.html", context);
+            String html = templateEngine.process("customerchangenotification.html", context);
             mimeMessageHelper.setText(html, true);
             emailSender.send(mimeMessage);
             return new ResponseEntity<String>("Mail wurde erfolgreich versendet",HttpStatusCode.valueOf(200));
