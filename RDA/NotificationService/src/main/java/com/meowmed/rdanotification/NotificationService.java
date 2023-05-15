@@ -72,17 +72,6 @@ public class NotificationService {
             context.setVariables(properties);
             String html = templateEngine.process("customernotification.html", context);
             mimeMessageHelper.setText(html, true);
-            //mimeMessageHelper.addInline("myLogo", new File("/images/logo.png"));
-
-            /*
-            FileSystemResource file
-                    = new FileSystemResource(
-                    new File(details.getAttachment()));
-
-
-            mimeMessageHelper.addAttachment(
-                    file.getFilename(), file);
-            */
             emailSender.send(mimeMessage);
             return new ResponseEntity<String>("Mail wurde erfolgreich versendet",HttpStatusCode.valueOf(200));
         }
@@ -126,20 +115,12 @@ public class NotificationService {
             context.setVariables(properties);
             String html = templateEngine.process("policynotification.html", context);
             mimeMessageHelper.setText(html, true);  //Der schreibt das in mimeMessage?????
-            /*
-            FileSystemResource file
-                    = new FileSystemResource(
-                    new File(details.getAttachment()));
 
-            mimeMessageHelper.addAttachment(
-                    file.getFilename(), file);
-            */
             emailSender.send(mimeMessage);
             return new ResponseEntity<String>("Mail wurde erfolgreich versendet",HttpStatusCode.valueOf(200));
         }catch(MessagingException e){
             return new ResponseEntity<String>("Fehler beim Versand",HttpStatusCode.valueOf(500));
-        }        
-        //return new ResponseEntity<String>("Fehler beim Versand",HttpStatusCode.valueOf(500));
+        }
        
     }
     public ResponseEntity<String> changePolicyNotification(MailPolicyEntity details){
@@ -170,14 +151,6 @@ public class NotificationService {
             context.setVariables(properties);
             String html = templateEngine.process("policychangenotification.html", context);
             mimeMessageHelper.setText(html, true);  //Der schreibt das in mimeMessage?????
-            /*
-            FileSystemResource file
-                    = new FileSystemResource(
-                    new File(details.getAttachment()));
-
-            mimeMessageHelper.addAttachment(
-                    file.getFilename(), file);
-            */
             emailSender.send(mimeMessage);
             return new ResponseEntity<String>("Mail wurde erfolgreich versendet",HttpStatusCode.valueOf(200));
         }catch(MessagingException e){
@@ -185,5 +158,48 @@ public class NotificationService {
         }
         return new ResponseEntity<String>("Fehler beim Versand",HttpStatusCode.valueOf(500));
 
+    }
+    /**
+     * Diese Methode nimmt die Anfrage des REST-Controllers für den Customer-Emailversand und versendet diese
+     * @param details Ein Customer-Objekt, dessen Inhalt in der EMail verwendet wird
+     * @return Zurück kommt ein HTTP-Statuscode, der aussagt, ob die Mail versendet wurde
+     */
+
+    public ResponseEntity<String> changeCustomerNotification(MailCustomerEntity details) {
+        //System.out.println(details);
+        try {
+            MimeMessage mimeMessage = emailSender.createMimeMessage();
+            MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED, StandardCharsets.UTF_8.name());
+            mimeMessageHelper.setFrom(sender);
+            mimeMessageHelper.setTo(details.getEmail());
+            mimeMessageHelper.setSubject("Vielen Dank für ihr Vertrauen in MeowMed+");
+            Map<String,Object> properties = new HashMap<>();
+            properties.put("formOfAddress", details.getFormOfAddress());
+            properties.put("firstName", details.getFirstName());
+            properties.put("lastName", details.getLastName());
+
+            //properties.put("cid", details.getId());
+            properties.put("martialStatus", details.getMaritalStatus());
+            properties.put("dateOfBirth", details.getDateOfBirth());
+            properties.put("employmentStatus", details.getEmploymentStatus());
+            properties.put("phoneNumber", details.getPhoneNumber());
+            properties.put("bankDetails", details.getBankDetails());
+            properties.put("address", details.getStreet() + ", " + details.getPostalCode() + " " + details.getCity());
+            if(details.isDogOwner()){
+                properties.put("dogOwner", "Ja");
+            }else{
+                properties.put("dogOwner", "Nein");
+            }
+            Context context = new Context();
+            context.setVariables(properties);
+            String html = templateEngine.process("customernotification.html", context);
+            mimeMessageHelper.setText(html, true);
+            emailSender.send(mimeMessage);
+            return new ResponseEntity<String>("Mail wurde erfolgreich versendet",HttpStatusCode.valueOf(200));
+        }
+        catch (MessagingException e) {
+            System.out.println(e);
+        }
+        return new ResponseEntity<String>("Fehler beim Versand",HttpStatusCode.valueOf(500));
     }
 }
