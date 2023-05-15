@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.*;
 import java.time.LocalDate;
@@ -30,6 +31,9 @@ public class CustomerService {
 
     @Value("${docker.notificationurl}")
     private String notificationUrl;
+
+    @Value("policy")
+    private String policyUrl;
 
 
     private final CustomerRepository cRepository;
@@ -66,20 +70,6 @@ public class CustomerService {
         MappingJacksonValue wrapper = new MappingJacksonValue(cRepository.findAll());
         List<String> customerList = new ArrayList<String>();
 
-        /*  Warum ist das hier????
-        MailCustomerEntity mail = new MailCustomerEntity();
-        String notificationURL = "http://" + notificationUrl + ":8080";
-        WebClient notificationClient = WebClient.create(notificationURL);
-        WebClient.UriSpec<WebClient.RequestBodySpec> uriSpec = notificationClient.method(HttpMethod.POST);
-        //WebClient.ResponseSpec responseSpec = notificationClient.get().uri(customerURL,c_id).retrieve();
-
-        Mono<String> result = notificationClient.post()
-                .uri("/policynotification")
-                .contentType(MediaType.APPLICATION_JSON)
-                .bodyValue(mail)
-                .retrieve()
-                .bodyToMono(String.class);
-        */
 
         customerList.addAll(Arrays.asList(fields.split(",")));
         customerList.add("id");
@@ -102,7 +92,6 @@ public class CustomerService {
         cRepository.save(customer);
         MailCustomerEntity mail = new MailCustomerEntity(cRequest);
 		System.out.println(mail);
-		//WebClient notificationClient = WebClient.create("http://" + notificationUrl + ":8080");
 		String url = "http://" + notificationUrl + ":8080/customernotification";
 		RestTemplate restTemplate = new RestTemplate();
 		ResponseEntity<String> response = restTemplate.postForEntity(url, mail, String.class);
@@ -120,6 +109,12 @@ public class CustomerService {
         return wrapper;
     }
 
+    /**
+     * Diese Methode aktualisiert eine CustomerEntity.
+     * @param cRequest ist das zu aktualierednde Customer Objekt.
+     * @param c_id ist die Id des Objekts.
+     * @return Die ID des erstellten Objekts.
+     */
     public MappingJacksonValue customerUpdate(Long c_id, CustomerRequest cRequest) {
 
         Optional<CustomerEntity> currentCustomer = cRepository.findById(c_id);
@@ -134,15 +129,20 @@ public class CustomerService {
         customer.setId(c_id);
         customer = cRepository.save(customer);
 
-        /*// Versand der Mail TEST
-        MailPolicyEntity mail = new MailPolicyEntity(policy, customer);
-        ResponseEntity<String> response = sendMail("policychangenotification", mail);
-        if (response.getStatusCode() != HttpStatus.OK) throw new MailSendException();
-		{
-			MappingJacksonValue errWrapper = new MappingJacksonValue(Collections.singletonMap("error", "Es gab Probleme, die Mail zu versenden, Daten wurden aber gespeichert"));
-			return new ResponseEntity<MappingJacksonValue>(errWrapper,HttpStatusCode.valueOf(400));
-		}
-        */
+        String policyURL = "http://" + policyUrl + ":8080/customer/{c_id}/policy";
+        WebClient customerClient = WebClient.create();
+        WebClient.ResponseSpec responseSpec = customerClient.delete().uri(policyURL,c_id).retrieve();
+
+        MailCustomerEntity mail = new MailCustomerEntity(cRequest);
+        String url = "http://" + notificationUrl + ":8080/customernotification";
+        RestTemplate restTemplate = new RestTemplate();
+        ResponseEntity<String> response = restTemplate.postForEntity(url, mail, String.class);
+        if (response.getStatusCode() == HttpStatus.OK) {
+            System.out.println("Request Successful");
+        } else {
+            System.out.println("Request Failed");
+        }
+
         // Verpacken und Filtern von der Ausgabe
         MappingJacksonValue wrapper = new MappingJacksonValue(customer);
         wrapper.setFilters(new SimpleFilterProvider()
@@ -150,10 +150,11 @@ public class CustomerService {
                 .setFailOnUnknownId(false));
 
         return wrapper;
-        //return new ResponseEntity<MappingJacksonValue>(wrapper,HttpStatusCode.valueOf(201));
 
     }
-
+    /**
+     * Diese Methode ist zum befüllen der Datenbank.
+     */
     void setUp(){
         LocalDate birthdayOfJan= LocalDate.of(1999,11,03);
         AddressEntity adressJan= new AddressEntity("Hildesheim","Burgerking Hbf","31137");

@@ -112,7 +112,7 @@ public class CustomerController{
     }
 
     @PutMapping("/customer/{c_id}")
-    public MappingJacksonValue postPolicy(@PathVariable Long c_id, @RequestBody CustomerRequest cRequest) {
+    public MappingJacksonValue putPolicy(@PathVariable Long c_id, @RequestBody CustomerRequest cRequest) {
         return cService.customerUpdate(c_id, cRequest);
     }
 }
