@@ -173,10 +173,10 @@ public class PolicyController {
 	 * @return Anzahl der veränderten Verträge
 	 */
 
-	@DeleteMapping("/customer/{c_id}/policy")
-	public ResponseEntity<MappingJacksonValue> deletePolicyForUser(@PathVariable("c_id") Long c_id){
+	@PutMapping("/customer/{c_id}/policy")
+	public ResponseEntity<MappingJacksonValue> changePolicyForUser(@PathVariable("c_id") Long c_id){
 		try {
-			return ResponseEntity.status(200).body(new MappingJacksonValue(Collections.singletonMap("Changed Policies", pService.deletePolicyForUser(c_id))));
+			return ResponseEntity.status(200).body(new MappingJacksonValue(Collections.singletonMap("Changed Policies", pService.changePolicyForUser(c_id))));
 		} catch (CustomerNotFoundException e) {
 			return ResponseEntity.status(404).body(new MappingJacksonValue(Collections.singletonMap("error", e.getMessage())));
 		} catch (IllegalArgumentException e) {

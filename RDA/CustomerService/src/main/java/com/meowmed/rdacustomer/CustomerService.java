@@ -131,7 +131,7 @@ public class CustomerService {
 
         String policyURL = "http://" + policyUrl + ":8080/customer/{c_id}/policy";
         WebClient customerClient = WebClient.create();
-        customerClient.delete().uri(policyURL,c_id).retrieve();
+        customerClient.put().uri(policyURL,c_id).retrieve();
 
         MailCustomerEntity mail = new MailCustomerEntity(cRequest);
         String url = "http://" + notificationUrl + ":8080/customernotification";

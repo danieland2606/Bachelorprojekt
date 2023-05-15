@@ -383,7 +383,7 @@ public class PolicyService {
 	 * @exception PolicyNotFoundException Nested aus updatePolicy
 	 * @exception RestClientException Nested aus updatePolicy
 	 */
-	public int deletePolicyForUser(long c_id) throws NestedRuntimeException{
+	public int changePolicyForUser(long c_id) throws NestedRuntimeException{
 		if (debugmode)
 			System.out.println("deletePolicyForUser: c_id: " + c_id);
 
