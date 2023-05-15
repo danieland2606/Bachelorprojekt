@@ -202,4 +202,40 @@ public class NotificationService {
         }
         return new ResponseEntity<String>("Fehler beim Versand",HttpStatusCode.valueOf(500));
     }
+    public ResponseEntity<String> deleteNotificationPolicy(MailPolicyEntity details){
+        //System.out.println(details.toString());
+        try {
+            MimeMessage mimeMessage = emailSender.createMimeMessage();
+            MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED, StandardCharsets.UTF_8.name());
+            mimeMessageHelper.setFrom(sender);
+            mimeMessageHelper.setTo(details.getEmail());
+            mimeMessageHelper.setSubject("Änderung ihres Vertrages bei MeowMed+");
+            Map<String,Object> properties = new HashMap<>();
+            properties.put("formOfAddress", details.getFormOfAddress());
+            properties.put("firstName", details.getFirstName());
+            properties.put("lastName", details.getLastName());
+            properties.put("pid", details.getPid());
+            properties.put("startDate", details.getStartDate());
+            properties.put("endDate", details.getEndDate());
+            properties.put("coverage", details.getCoverage());
+            if(details.isCastrated()){
+                properties.put("castrated", "Ja");
+            }else{
+                properties.put("castrated", "Nein");
+            }
+            properties.put("personality", details.getPersonality());
+            properties.put("environment", details.getEnvironment());
+            properties.put("weight", details.getWeight());
+            Context context = new Context();
+            context.setVariables(properties);
+            String html = templateEngine.process("policychangenotification.html", context);
+            mimeMessageHelper.setText(html, true);  //Der schreibt das in mimeMessage?????
+            emailSender.send(mimeMessage);
+            return new ResponseEntity<String>("Mail wurde erfolgreich versendet",HttpStatusCode.valueOf(200));
+        }catch(MessagingException e){
+            System.out.println(e);
+        }
+        return new ResponseEntity<String>("Fehler beim Versand",HttpStatusCode.valueOf(500));
+
+    }
 }

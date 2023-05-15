@@ -106,4 +106,9 @@ public class NotificationController {
     public ResponseEntity<String> putNotificationChangeCustomer(@RequestBody MailCustomerEntity details) {
         return  nService.changeCustomerNotification(details);
     }
+    @PostMapping("/policydeletenotification")
+    public ResponseEntity<String> deleteNotificationPolicy(@RequestBody MailPolicyEntity details) {
+        return nService.deleteNotificationPolicy(details);
+    }
+
 }
