@@ -134,7 +134,7 @@ public class CustomerService {
         customerClient.put().uri(policyURL,c_id).retrieve();
 
         MailCustomerEntity mail = new MailCustomerEntity(cRequest);
-        String url = "http://" + notificationUrl + ":8080/customernotification";
+        String url = "http://" + notificationUrl + ":8080/customerchangenotification";
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<String> response = restTemplate.postForEntity(url, mail, String.class);
         if (response.getStatusCode() == HttpStatus.OK) {
