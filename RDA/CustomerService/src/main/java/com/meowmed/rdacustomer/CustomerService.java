@@ -8,6 +8,8 @@ import com.meowmed.rdacustomer.entity.CustomerEntity;
 import com.meowmed.rdacustomer.entity.CustomerRequest;
 import com.meowmed.rdacustomer.entity.MailCustomerEntity;
 
+import reactor.core.publisher.Mono;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -15,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.ClientResponse;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.*;
@@ -32,7 +35,7 @@ public class CustomerService {
     @Value("${docker.notificationurl}")
     private String notificationUrl;
 
-    @Value("policy")
+    @Value("${docker.policyurl}")
     private String policyUrl;
 
 
@@ -130,13 +133,16 @@ public class CustomerService {
         customer = cRepository.save(customer);
 
         String policyURL = "http://" + policyUrl + ":8080/customer/{c_id}/policy";
-        WebClient customerClient = WebClient.create();
-        customerClient.put().uri(policyURL,c_id).retrieve();
+        //WebClient customerClient = WebClient.create();
+        //Mono<ResponseEntity<MappingJacksonValue>> responseSpec =  customerClient.put().uri(policyURL,c_id).retrieve().toEntity(MappingJacksonValue.class);
+        RestTemplate restTemplate = new RestTemplate();
+		restTemplate.put(policyURL, null,Map.of("c_id", c_id));
+        //System.out.println("customerUpdate: responseSpec: " + response);
 
         MailCustomerEntity mail = new MailCustomerEntity(cRequest);
         String url = "http://" + notificationUrl + ":8080/customerchangenotification";
-        RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<String> response = restTemplate.postForEntity(url, mail, String.class);
+        RestTemplate restTemplate2 = new RestTemplate();
+        ResponseEntity<String> response = restTemplate2.postForEntity(url, mail, String.class);
         if (response.getStatusCode() == HttpStatus.OK) {
             System.out.println("Request Successful");
         } else {

@@ -83,7 +83,8 @@ services:
       - spring.datasource.url=jdbc:mariadb://customerdb.rda:3306/Customer
       - spring.datasource.username=user
       - spring.datasource.password=123456789
-      - docker_notificationurl=notification.rda
+      - docker.notificationurl=notification.rda
+      - docker.policyurl=policy.rda
   customerdb.rda:
     image: mariadb:latest
     container_name: customerdb-rda

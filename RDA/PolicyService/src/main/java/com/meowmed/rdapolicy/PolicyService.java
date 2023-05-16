@@ -372,7 +372,7 @@ public class PolicyService {
 	/**
 	 * Diese Methode wird für Update anstoße von Verträgen von einem Customer genutzt
 	 * @param c_id CustomerID
-	 * @return Anzahl der veränderten Verträge
+	 * @return Anzahl der geprüften Verträge
 	 * @exception NestedRuntimeException Für alle unten aufgeführten Exceptions
 	 * @exception IllegalArgumentException Falls der übergebene Wert null ist
 	 * @exception WebClientResponseException Nested aus updatePolicy
@@ -403,8 +403,11 @@ public class PolicyService {
 			pRequest.setEndDate(policy.getEndDate());
 			pRequest.setCoverage(policy.getCoverage());
 			pRequest.setObjectOfInsurance(policy.getObjectOfInsurance());
-			updatePolicy(c_id, policy.getId(), pRequest);
-		
+			try {
+				updatePolicy(c_id, policy.getId(), pRequest);
+			} catch (PolicyNotAllowed e) {
+				System.out.println(e.getMessage());
+			}
 		}
 		if (debugmode) System.out.println("deletePolicyForUser: policies: " + policies);
 		//if (debugmode) System.out.println("deletePolicyForUser: customer: " + customer + " policies: " + policies);
