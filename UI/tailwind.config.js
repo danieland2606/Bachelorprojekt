@@ -7,7 +7,11 @@ export default {
     "./islands/**/*.{jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      backgroundImage: {
+        "search": "url('/search.svg')",
+      },
+    },
   },
   plugins: [daisyui],
 };

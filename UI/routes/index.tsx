@@ -1,15 +1,16 @@
 import { HandlerContext, PageProps } from "$fresh/server.ts";
-import { asset } from "$fresh/runtime.ts";
 import { Item, Table, TableItems } from "$this/components/Table.tsx";
+import { Search } from "$this/components/Search.tsx";
 import { Address, Customer } from "$this/generated/models/all.ts";
 import { compareId } from "$this/util/util.ts";
 import { customerClient } from "$this/util/client.ts";
 
 export const handler = {
-  async GET(_: Request, ctx: HandlerContext) {
+  async GET(req: Request, ctx: HandlerContext) {
+    const search = new URL(req.url).searchParams.get("search") ?? "";
     const customers = await customerClient.getCustomerList();
-    const tableData = formatCustomerList(customers);
-    return ctx.render(tableData);
+    const tableData = formatCustomerList(customers, search);
+    return ctx.render({ tableData, search });
   },
 };
 
@@ -18,27 +19,27 @@ export default function Dashboard({ data }: PageProps) {
     <>
       <h1 class="text-4xl font-medium">Dashboard</h1>
       <div class="sm:flex py-5 justify-between block">
-        <div class="relative sm:inline-block block mb-4 sm:mb-0">
-          <input type="text" placeholder="Suche..." class="input" />
-          <img
-            src={asset("/search.svg")}
-            alt="lupe"
-            class="absolute right-4 top-1/2 -translate-y-1/2"
-          />
-        </div>
+        <Search
+          value={data.search}
+          class="relative sm:inline-block block mb-4 sm:mb-0"
+        >
+        </Search>
         <a class="btn btn-normal flex sm:inline-flex" href="/customer">
           Neuer Kunde
         </a>
       </div>
-      <Table tabledata={data}></Table>
+      <Table tabledata={data.tableData}></Table>
     </>
   );
 }
 
-function formatCustomerList(customerList: Array<Customer>): TableItems {
+function formatCustomerList(customerList: Customer[], search: string) {
   return {
     headers: ["ID", "Vorname", "Nachname", "Adresse"],
-    items: customerList.sort(compareId).map(customerToTableRow),
+    items: customerList
+      .filter(customerSearch(search))
+      .sort(compareId)
+      .map(customerToTableRow),
   };
 }
 
@@ -66,4 +67,19 @@ function customerToTableRow(customer: Customer): Item {
 
 function formatAddress(address: Address): string {
   return `${address.street}, ${address.postalCode} ${address.city}`;
+}
+
+function customerSearch(search: string) {
+  if (!search) {
+    return function () {
+      return true;
+    };
+  }
+  return (customer: Customer) => {
+    const searchTarget =
+      `${customer.id} ${customer.firstName} ${customer.lastName} ${
+        customer?.address && formatAddress(customer.address)
+      }`;
+    return searchTarget.toLowerCase().includes(search.toLowerCase());
+  };
 }

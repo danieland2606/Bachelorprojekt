@@ -2791,12 +2791,20 @@ html {
   position: relative;
 }
 
+.inset-0 {
+  inset: 0px;
+}
+
 .right-4 {
   right: 1rem;
 }
 
 .top-1\/2 {
   top: 50%;
+}
+
+.right-2 {
+  right: 0.5rem;
 }
 
 .mx-auto {
@@ -2824,8 +2832,32 @@ html {
   display: none;
 }
 
+.h-10 {
+  height: 2.5rem;
+}
+
+.h-6 {
+  height: 1.5rem;
+}
+
+.h-8 {
+  height: 2rem;
+}
+
 .w-full {
   width: 100%;
+}
+
+.w-10 {
+  width: 2.5rem;
+}
+
+.w-6 {
+  width: 1.5rem;
+}
+
+.w-8 {
+  width: 2rem;
 }
 
 .max-w-screen-xl {
@@ -2835,6 +2867,10 @@ html {
 .-translate-y-1\/2 {
   --tw-translate-y: -50%;
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+}
+
+.place-content-stretch {
+  place-content: stretch;
 }
 
 .justify-between {
@@ -2847,6 +2883,23 @@ html {
 
 .rounded-none {
   border-radius: 0px;
+}
+
+.bg-search {
+  background-image: url('/search.svg');
+}
+
+.bg-cover {
+  background-size: cover;
+}
+
+.bg-no-repeat {
+  background-repeat: no-repeat;
+}
+
+.object-cover {
+  -o-object-fit: cover;
+     object-fit: cover;
 }
 
 .p-5 {
@@ -2869,6 +2922,10 @@ html {
 
 .capitalize {
   text-transform: capitalize;
+}
+
+.filter {
+  filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
 }
 
 .table :where(thead, tfoot) :where(th, td) {
