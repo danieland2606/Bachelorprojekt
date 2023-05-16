@@ -58,7 +58,7 @@ function customerToTableRow(customer: Customer): Item {
     ],
     actions: {
       details: `/customer/${customer.id}`,
-      edit: "",
+      edit: `/customer/${customer.id}?edit`,
       delete: "",
     },
   };

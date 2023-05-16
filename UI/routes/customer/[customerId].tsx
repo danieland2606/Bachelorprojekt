@@ -2,25 +2,43 @@ import { HandlerContext, PageProps } from "$fresh/server.ts";
 import { asset } from "$fresh/runtime.ts";
 import { EditCustomer } from "$this/components/EditCustomer.tsx";
 import { Table } from "$this/components/Table.tsx";
-import { Policy } from "$this/generated/models/all.ts";
-import { compareId } from "$this/util/util.ts";
+import { CustomerAllRequired, Policy } from "$this/generated/models/all.ts";
+import { compareId, deserialize } from "$this/util/util.ts";
 import { customerClient, policyClient } from "$this/util/client.ts";
 
 export const handler = {
-  async GET(_: Request, ctx: HandlerContext) {
+  async GET(req: Request, ctx: HandlerContext) {
+    const edit = new URL(req.url).searchParams.get("edit") != null;
     const customerId = Number.parseInt(ctx.params.customerId);
     const policyList = await policyClient.getPolicyList(customerId);
     const tableData = formatPolicyList(policyList, ctx.params.customerId);
     const customer = await customerClient.getCustomer(customerId);
-    return ctx.render({ tableData, customer });
+    return ctx.render({ tableData, customer, edit });
+  },
+  async POST(req: Request, ctx: HandlerContext) {
+    const customerId = Number.parseInt(ctx.params.customerId);
+    const form = await req.formData();
+    const customer = deserialize<CustomerAllRequired>(
+      form,
+      "CustomerAllRequired",
+    );
+    await customerClient.updateCustomer(customerId, customer);
+    const base = new URL(req.url).origin;
+    return Response.redirect(new URL("/", base), 303);
   },
 };
 
 export default function ShowCustomer({ data, params }: PageProps) {
+  const id = "edit-customer";
   return (
     <>
       <h1>Kundendetails</h1>
-      <EditCustomer readonly values={data.customer}>
+      <EditCustomer
+        id={id}
+        mode={data.edit ? "edit" : "display"}
+        values={data.customer}
+        allrequired
+      >
       </EditCustomer>
       <div class="box-row">
         <div class="search-container">
@@ -37,6 +55,18 @@ export default function ShowCustomer({ data, params }: PageProps) {
       <Table tabledata={data.tableData}></Table>
       <div class="box-row buttons">
         <a class="button" href="/">Zurück</a>
+        {data.edit &&
+          (
+            <input
+              form={id}
+              type="submit"
+              formAction={`/customer/${params.customerId}`}
+              formMethod="post"
+              class="button"
+              value="Änderungen bestätigen"
+            >
+            </input>
+          )}
       </div>
     </>
   );
@@ -69,8 +99,8 @@ function policyToTableRow(policy: Policy, customerId: number) {
       policy.coverage,
     ],
     actions: {
-      details: "",
-      edit: `/customer/${customerId}/policy/${policy.id}`,
+      details: `/customer/${customerId}/policy/${policy.id}`,
+      edit: `/customer/${customerId}/policy/${policy.id}?edit`,
       delete: "",
     },
   };

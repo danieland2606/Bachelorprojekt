@@ -5,11 +5,12 @@ import { deserialize } from "$this/util/util.ts";
 import { PolicyAllRequired } from "$this/generated/index.ts";
 
 export const handler = {
-  async GET(_: Request, ctx: HandlerContext) {
+  async GET(req: Request, ctx: HandlerContext) {
     const customerId = Number.parseInt(ctx.params.customerId);
     const policyId = Number.parseInt(ctx.params.policyId);
+    const edit = new URL(req.url).searchParams.get("edit") != null;
     const data = await policyClient.getPolicy(customerId, policyId);
-    return await ctx.render(data);
+    return await ctx.render({ policy: data, edit });
   },
   async POST(req: Request, ctx: HandlerContext) {
     const customerId = Number.parseInt(ctx.params.customerId);
@@ -26,27 +27,32 @@ export const handler = {
 };
 
 export default function ShowPolicy({ params, data }: PageProps) {
+  const id = "edit-policy";
   return (
     <>
       <h1>Vertragsdetails</h1>
       <EditPolicy
-        id="edit-policy"
-        action={`/customer/${params.customerId}/policy/${params.policyId}`}
-        method="post"
-        values={data}
+        id={id}
+        values={data.policy}
         customerId={params.customerId}
         allrequired
+        mode={data.edit ? "edit" : "display"}
       >
       </EditPolicy>
       <div class="box-row buttons">
         <a class="button" href={`/customer/${params.customerId}`}>Zurück</a>
-        <input
-          form="edit-policy"
-          type="submit"
-          class="button"
-          value="Änderungen bestätigen"
-        >
-        </input>
+        {data.edit &&
+          (
+            <input
+              form={id}
+              type="submit"
+              formAction={`/customer/${params.customerId}/policy/${params.policyId}`}
+              formMethod="post"
+              class="button"
+              value="Änderungen bestätigen"
+            >
+            </input>
+          )}
       </div>
     </>
   );

@@ -1,16 +1,36 @@
 import { JSX } from "preact/jsx-runtime";
 import { capitalize } from "$this/util/util.ts";
 
+export const notRequirable = [
+  "button",
+  "submit",
+  "hidden",
+  "range",
+  "color",
+];
+export const disabledTypes = [
+  "range",
+  "color",
+  "checkbox",
+  "radio",
+  "button",
+];
+
 export interface InputProps extends JSX.HTMLAttributes<HTMLInputElement> {
   labeltext: string;
 }
 
 export interface SelectProps extends JSX.HTMLAttributes<HTMLSelectElement> {
   labeltext: string;
+  readonly?: boolean;
   options?: readonly string[];
 }
 
 export function Select(props: SelectProps) {
+  if (props.readonly) {
+    delete props.readonly;
+    props.disabled = true;
+  }
   return (
     <div class="cell">
       <label id={props.name}>{props.labeltext}</label>
@@ -36,10 +56,30 @@ function pretty(val: string) {
 }
 
 export function Input(props: InputProps) {
+  if (isDisabled(props)) {
+    delete props.readonly;
+    props.disabled = true;
+  }
+  if (notRequirable.includes(type(props))) {
+    delete props.required;
+  }
   return (
     <div class="cell">
       <label id={props.name}>{props.labeltext}</label>
       <input {...props} label={props.name}></input>
     </div>
   );
+}
+
+function isDisabled(props: InputProps) {
+  return props.readonly && disabledTypes.includes(type(props));
+}
+
+function type(props: InputProps) {
+  if (!props.type) {
+    throw new Error(
+      `type of input ${props.name} is set incorrectly: ${props.type}`,
+    );
+  }
+  return props.type as string;
 }

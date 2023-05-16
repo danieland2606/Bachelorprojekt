@@ -21,20 +21,22 @@ export const handler = {
 };
 
 export default function CreateCustomer() {
+  const id = "new-customer";
   return (
     <>
       <h1>Neuen Kunden anlegen</h1>
       <EditCustomer
-        id="new-customer"
+        id={id}
         action="/customer"
         method="post"
         allrequired
+        mode="create"
       >
       </EditCustomer>
       <div class="box-row buttons">
         <a class="button" href="/">Abbrechen</a>
         <input
-          form="new-customer"
+          form={id}
           type="submit"
           class="button"
           value="Anlegen"

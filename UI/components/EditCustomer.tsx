@@ -1,91 +1,127 @@
+import { JSX } from "preact/jsx-runtime";
 import { Input, Select } from "$this/components/Input.tsx";
-import { Form, FormProps } from "$this/components/Form.tsx";
+import { Form } from "$this/components/Form.tsx";
 import {
+  Address,
   Customer,
   EmploymentStatusValues,
   FormOfAddressValues,
   MaritalStatusValues,
   TitleValues,
-} from "../generated/index.ts";
+} from "$this/generated/index.ts";
+import { Obj, propMap } from "$this/util/util.ts";
 
-type proptype = {
-  name: string;
-  baseName: string;
-  type: string;
-  format: string;
-};
+const customer = propMap(new Customer());
+const address = propMap(new Address(), "address.");
 
-const customerProps = function () {
-  const props = new Map<string, proptype>();
-  //TODO
-  return props;
-}();
+type Mode = "create" | "display" | "edit";
 
-export function EditCustomer(props: FormProps) {
+interface EditCustomerProps extends JSX.HTMLAttributes<HTMLFormElement> {
+  mode: Mode;
+  allrequired?: boolean;
+  values?: Obj;
+}
+
+function getEditable(mode: Mode) {
+  switch (mode) {
+    case "create":
+      return undefined;
+    case "display":
+      return [];
+    case "edit":
+      return [customer.employmentStatus];
+  }
+}
+
+export function EditCustomer(props: EditCustomerProps) {
   return (
-    <Form {...props}>
+    <Form {...props} editable={getEditable(props.mode)}>
       <Select
-        name="formOfAddress"
+        name={customer.formOfAddress}
         labeltext="Anrede"
         options={FormOfAddressValues}
       >
       </Select>
-      <Select name="title" labeltext="Titel" options={TitleValues}>
+      <Select
+        name={customer.title}
+        labeltext="Titel"
+        options={TitleValues}
+      >
       </Select>
-      <Input type="text" name="firstName" labeltext="Vorname">
-      </Input>
-      <Input type="text" name="lastName" labeltext="Nachname">
-      </Input>
       <Input
-        type="tel"
-        name="phoneNumber"
-        labeltext="Rufnummer"
+        name={customer.firstName}
+        labeltext="Vorname"
+        type="text"
       >
       </Input>
-      <Input type="email" name="email" labeltext="E-mail">
+      <Input
+        name={customer.lastName}
+        labeltext="Nachname"
+        type="text"
+      >
       </Input>
       <Input
-        type="date"
-        name="dateOfBirth"
+        name={customer.phoneNumber}
+        labeltext="Rufnummer"
+        type="tel"
+      >
+      </Input>
+      <Input
+        name={customer.email}
+        labeltext="E-mail"
+        type="email"
+      >
+      </Input>
+      <Input
+        name={customer.dateOfBirth}
         labeltext="Geburtsdatum"
+        type="date"
       >
       </Input>
       <Select
-        name="maritalStatus"
+        name={customer.maritalStatus}
         labeltext="Familienstatus"
         options={MaritalStatusValues}
       >
       </Select>
-      <Select name="dogOwner" labeltext="Hundebesitzer">
+      <Select
+        name={customer.dogOwner}
+        labeltext="Hundebesitzer"
+      >
         <option value={true.toString()}>Besitzt einen Hund</option>
         <option value={false.toString()}>Besitzt keinen Hund</option>
       </Select>
       <Select
-        name="employmentStatus"
+        name={customer.employmentStatus}
         labeltext="Berufsstand"
         options={EmploymentStatusValues}
       >
       </Select>
       <Input
-        type="text"
-        name="address.city"
+        name={address.city}
         labeltext="Wohnort"
+        type="text"
       >
       </Input>
       <Input
-        type="text"
-        name="address.street"
+        name={address.street}
         labeltext="Straße"
+        type="text"
       >
       </Input>
       <Input
-        type="text"
-        pattern="\d*"
-        name="address.postalCode"
+        name={address.postalCode}
         labeltext="Postleitzahl"
+        type="text"
+        pattern={/\d{5}/.source}
       >
       </Input>
-      <Input type="text" name="bankDetails" labeltext="IBAN">
+      <Input
+        name={customer.bankDetails}
+        labeltext="IBAN"
+        type="text"
+        pattern={/^[a-zA-Z]{2}\d{13,32}$/.source}
+      >
       </Input>
     </Form>
   );

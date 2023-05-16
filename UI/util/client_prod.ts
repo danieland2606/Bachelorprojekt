@@ -26,6 +26,8 @@ export const customerClient = {
   getCustomer: (id: number) => customerApi.getCustomer(id),
   createCustomer: (customer: CustomerAllRequired) =>
     customerApi.createCustomer(customer),
+  updateCustomer: (customerId: number, customer: CustomerAllRequired) =>
+    customerApi.updateCustomer(customerId, customer),
 };
 
 const policyServer = new ServerConfiguration("${policyService}", {});

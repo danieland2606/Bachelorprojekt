@@ -1,72 +1,101 @@
+import { JSX } from "preact/jsx-runtime";
 import { Input, Select } from "$this/components/Input.tsx";
-import { Form, FormProps } from "$this/components/Form.tsx";
+import { Form } from "$this/components/Form.tsx";
 import {
   CatRaceValues,
   EnvironmentValues,
   FurColorValues,
+  ObjectOfInsurance,
   PersonalityValues,
-} from "../generated/index.ts";
+  Policy,
+} from "$this/generated/index.ts";
+import { Obj, propMap } from "$this/util/util.ts";
 
-export interface EditPolicyProps extends FormProps {
+const policy = propMap(new Policy());
+const cat = propMap(new ObjectOfInsurance(), "objectOfInsurance.");
+
+type Mode = "create" | "display" | "edit";
+
+export interface EditPolicyProps extends JSX.HTMLAttributes<HTMLFormElement> {
+  mode: Mode;
+  allrequired?: boolean;
+  values?: Obj;
   customerId: string;
+}
+
+function getEditable(mode: Mode) {
+  switch (mode) {
+    case "create":
+      return undefined;
+    case "display":
+      return [];
+    case "edit":
+      return [
+        cat.castrated,
+        cat.personality,
+        cat.environment,
+        cat.weight,
+        policy.coverage,
+      ]; //TODO check Capgemini requirements
+  }
 }
 
 export function EditPolicy(props: EditPolicyProps) {
   return (
-    <Form {...props}>
-      <input type="hidden" name="customerId" value={props.customerId}></input>
-      <Input type="date" name="startDate" labeltext="Begin"></Input>
-      <Input type="date" name="endDate" labeltext="Ende"></Input>
-      <Input type="number" name="coverage" labeltext="Deckung"></Input>
-      {props.readonly && (
-        <Input type="number" name="premium" labeltext="Rate"></Input>
+    <Form {...props} editable={getEditable(props.mode)}>
+      <input name="customerId" type="hidden" value={props.customerId}></input>
+      <Input name={policy.startDate} labeltext="Begin" type="date"></Input>
+      <Input name={policy.endDate} labeltext="Ende" type="date"></Input>
+      <Input name={policy.coverage} labeltext="Deckung" type="number"></Input>
+      {props.mode !== "create" && (
+        <Input name={policy.premium} labeltext="Rate" type="number"></Input>
       )}
       <div class="box-column">
         <h2>Katze</h2>
         <Input
-          type="text"
-          name="objectOfInsurance.name"
+          name={cat.name}
           labeltext="Name"
+          type="text"
         >
         </Input>
         <Select
-          name="objectOfInsurance.race"
+          name={cat.race}
           labeltext="Rasse"
           options={CatRaceValues}
         >
         </Select>
         <Select
-          name="objectOfInsurance.color"
+          name={cat.color}
           labeltext="Farbe"
           options={FurColorValues}
         >
         </Select>
         <Input
-          type="date"
-          name="objectOfInsurance.dateOfBirth"
+          name={cat.dateOfBirth}
           labeltext="Geburtsdatum"
+          type="date"
         >
         </Input>
-        <Select name="objectOfInsurance.castrated" labeltext="Kastriert">
+        <Select name={cat.castrated} labeltext="Kastriert">
           <option value={true.toString()}>Kastriert</option>
           <option value={false.toString()}>Nicht Kastriert</option>
         </Select>
         <Select
-          name="objectOfInsurance.personality"
+          name={cat.personality}
           labeltext="Persönlichkeit"
           options={PersonalityValues}
         >
         </Select>
         <Select
-          name="objectOfInsurance.environment"
+          name={cat.environment}
           labeltext="Umgebung"
           options={EnvironmentValues}
         >
         </Select>
         <Input
-          type="number"
-          name="objectOfInsurance.weight"
+          name={cat.weight}
           labeltext="Gewicht"
+          type="number"
         >
         </Input>
       </div>

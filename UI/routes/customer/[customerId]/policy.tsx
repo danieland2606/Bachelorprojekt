@@ -22,15 +22,17 @@ export const handler = {
 };
 
 export default function CreatePolicy({ params }: PageProps) {
+  const id = "new-policy";
   return (
     <>
       <h1>Neuen Vertrag anlegen</h1>
       <EditPolicy
-        id="new-policy"
+        id={id}
         action={`/customer/${params.customerId}/policy`}
         method="post"
         customerId={params.customerId}
         allrequired
+        mode="create"
       >
         <iframe
           name="premium-calc"
@@ -39,7 +41,7 @@ export default function CreatePolicy({ params }: PageProps) {
         </iframe>
         <input
           type="submit"
-          form="new-policy"
+          form={id}
           class="button"
           formTarget="premium-calc"
           formAction="/api/premium"
@@ -50,7 +52,7 @@ export default function CreatePolicy({ params }: PageProps) {
       <div class="box-row buttons">
         <a class="button" href={`/customer/${params.customerId}`}>Abbrechen</a>
         <input
-          form="new-policy"
+          form={id}
           type="submit"
           class="button"
           value="Vertrag abschließen"

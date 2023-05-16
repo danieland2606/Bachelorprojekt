@@ -30,6 +30,10 @@ export const customerClient = {
       "",
     ) as ID;
   },
+  updateCustomer: (_: number, customer: CustomerAllRequired) => {
+    console.debug(JSON.stringify(customer));
+    return Promise.resolve();
+  },
 };
 
 export const policyClient = {

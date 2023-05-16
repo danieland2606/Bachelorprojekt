@@ -35,10 +35,18 @@ export function nestProperty(
   [key, val]: [string, string],
 ) {
   const keys = key.split(".");
-  const last = keys.pop()!; //keys cannot be empty
+  const last = keys.pop()!; //keys cannot be empty because of split
   keys.reduce(
     (prev, cur) => (prev[cur] ??= {}) as Record<string, unknown>,
     target,
   )[last] = val;
   return target;
+}
+
+// deno-lint-ignore ban-types
+export function propMap<T extends object>(object: T, prefix = "") {
+  const props = Object.entries(object)
+    .map(([key, _]) => [key, `${prefix}${key}`]);
+  const propMap = Object.fromEntries(props);
+  return propMap as Record<keyof T, string>;
 }
