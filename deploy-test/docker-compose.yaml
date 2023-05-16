@@ -1,0 +1,78 @@
+version: '3.7'
+services:
+  ui.rda:
+    image: ui-service
+    container_name: ui-service
+    networks:
+      - rda
+    ports:
+      - 80:8000
+    environment:
+      - DENO_DEPLOYMENT_ID=1c465bb9a002dc3bb14d353b1535889543e59a65
+    depends_on:
+      - policy.rda
+      - customer.rda
+  policy.rda:
+    image: policy-service-rda
+    container_name: policy-service-rda
+    networks:
+      - rda
+    depends_on:
+      - policydb.rda
+    environment:
+      - spring.datasource.url=jdbc:mariadb://policydb.rda:3306/Policy
+      - spring.datasource.username=user
+      - spring.datasource.password=123456789
+      - docker_customerurl=customer.rda
+      - docker_notificationurl=notification.rda
+      - docker_debugmode=true
+  policydb.rda:
+    image: policydb-rda
+    container_name: policydb-rda
+    networks:
+      - rda
+    environment:
+      MARIADB_ROOT_PASSWORD: test
+      MYSQL_DATABASE: Policy
+      MYSQL_USER: user
+      MYSQL_PASSWORD: 123456789
+  customer.rda:
+    image: customer-service-rda
+    container_name: customer-service-rda
+    depends_on:
+      - customerdb.rda
+    networks:
+      - rda
+    environment:
+      - spring.datasource.url=jdbc:mariadb://customerdb.rda:3306/Customer
+      - spring.datasource.username=user
+      - spring.datasource.password=123456789
+      - docker_notificationurl=notification.rda
+  customerdb.rda:
+    image: customerdb-rda
+    container_name: customerdb-rda
+    networks:
+      - rda
+    environment:
+      MARIADB_ROOT_PASSWORD: test
+      MYSQL_DATABASE: Customer
+      MYSQL_USER: user
+      MYSQL_PASSWORD: 123456789
+    #ports:
+    #  - "3306:3306"
+  notification.rda:
+    image: notification-service-rda
+    container_name: notification-service-rda
+    networks:
+      - rda
+    environment:
+      - spring_mail_host=smtp.gmail.com
+      - spring_mail_port=587
+      - spring_mail_username=meowmedservice@gmail.com
+      - spring_mail_password=yqanpbjhupnllbcz
+      - spring_mail_properties.mail.smtp.auth=true
+      - spring_mail_properties.mail.smtp.starttls.enable=true
+
+networks:
+  rda:
+  

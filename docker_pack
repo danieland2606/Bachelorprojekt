@@ -1,0 +1,8 @@
+#! /bin/sh
+docker compose --profile rda up --build -d
+
+docker stop swagger_ui_container
+
+docker container ls --format '{{.ID}} {{.Names}}' | xargs -l docker commit
+
+docker container ls --format '{{.Names}}' | tr '\n' ' ' | xargs docker save > meowmed.tar
