@@ -330,22 +330,30 @@ public class PolicyService {
 
      Updates an existing Policy with the given policyID and new policy data.
      @param policyID the ID of the policy to update
-     @param policy the new policy data to update the policy with
+     @param newPolicy the new policy data to update the policy with
      @throws ObjectNotFoundException if the policy with the given policyID doesn't exist in the database
      */
-    public void updatePolicy(Long policyID, Policy policy) throws ObjectNotFoundException {
+    public void updatePolicy(Long policyID, Policy newPolicy) throws ObjectNotFoundException {
         Optional<Policy> p = this.policyRepository.findById(policyID);
         if (p.isEmpty()) {
             throw new ObjectNotFoundException("The given Policy with PolicyID: " + policyID + " does not exist in the database.");
         }
-        Policy oldPolicy = p.get();
+        Policy oldPolicy = new Policy(p.get());
         Policy persistentPolicy = p.get();
-        persistentPolicy.setCoverage(policy.getCoverage());
-        persistentPolicy.getObjectOfInsurance().setPersonality(policy.getObjectOfInsurance().getPersonality());
-        boolean cancelPolicy = persistentPolicy.getObjectOfInsurance().getPersonality().equals("sehr verspielt");
+        persistentPolicy.setCoverage(newPolicy.getCoverage());
+        persistentPolicy.getObjectOfInsurance().setPersonality(newPolicy.getObjectOfInsurance().getPersonality());
         Customer customer = persistentPolicy.getCustomer();
         persistentPolicy.setPremium(this.getPremium(customer, persistentPolicy));
-        this.updatePolicyDataBasedOnNewInformation(persistentPolicy, cancelPolicy);
+        boolean premiumChanged = Math.abs(persistentPolicy.getPremium() - oldPolicy.getPremium()) > 0.0001;
+        if (persistentPolicy.getObjectOfInsurance().getPersonality().equals("sehr verspielt")) {
+            persistentPolicy.setCancelled(true);
+            this.policySender.sendPolicyCancelled(new PolicyChangedEvent(oldPolicy.toPojo(), persistentPolicy.toPojo()));
+        } else if (premiumChanged) {
+            this.policySender.sendPolicyChanged(new PolicyChangedEvent(oldPolicy.toPojo(), persistentPolicy.toPojo()));
+        }
+        policyRepository.save(persistentPolicy);
+        objectOfInsuranceRepository.save(persistentPolicy.getObjectOfInsurance());
+//        this.updatePolicyDataBasedOnNewInformation(persistentPolicy, cancelPolicy);
     }
 
     /**

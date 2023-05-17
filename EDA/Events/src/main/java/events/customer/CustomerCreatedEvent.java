@@ -1,6 +1,8 @@
 package events.customer;
 
 import events.customer.subclasses.Address;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -10,6 +12,8 @@ import java.time.LocalDate;
 /**
  * event
  */
+@Getter
+@Setter
 public class CustomerCreatedEvent implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;

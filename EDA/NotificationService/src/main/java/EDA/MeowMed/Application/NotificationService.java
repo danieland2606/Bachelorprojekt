@@ -8,6 +8,8 @@ import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -34,8 +36,8 @@ public class NotificationService {
     private final String templatePolicyChanged = "policychangednotification";
     private final String subjectPolicyChanged = "Ihre Vertragsänderungen";
 
-    private final String templatePolicyCancelled = "policychangednotification";
-    private final String subjectPolicyCancelled = "Ihre Vertragsänderungen";
+    private final String templatePolicyCancelled = "policycancellednotification";
+    private final String subjectPolicyCancelled = "Kündigung Ihres Vertrages";
 
     /**
      * This method sends a customer created email using the provided CustomerCreatedEvent object.
@@ -63,7 +65,8 @@ public class NotificationService {
         properties.put("lastName", customerCreated.getLastName());
         properties.put("cid", customerCreated.getId());
         properties.put("maritalStatus", customerCreated.getMaritalStatus());
-        properties.put("dateOfBirth", customerCreated.getDateOfBirth());
+        properties.put("dateOfBirth", formatDate(customerCreated.getDateOfBirth()));
+        properties.put("dogOwner", boolToString(customerCreated.isDogOwner()));
         properties.put("employmentStatus", customerCreated.getEmploymentStatus());
         properties.put("phoneNumber", customerCreated.getPhoneNumber());
         properties.put("bankDetails", customerCreated.getBankDetails());
@@ -73,6 +76,7 @@ public class NotificationService {
         try {
             emailSenderService.sendHtmlMessage(email);
         } catch (MessagingException e) {
+            System.out.println("Fehler beim Senden der CustomerCreated Mail");
             e.printStackTrace();
         }
         System.out.println("CustomerCreated Mail gesendet!");
@@ -90,7 +94,8 @@ public class NotificationService {
         properties.put("lastName", customerChanged.getNewCustomer().getLastName());
         properties.put("cid", customerChanged.getNewCustomer().getId());
         properties.put("maritalStatus", customerChanged.getNewCustomer().getMaritalStatus());
-        properties.put("dateOfBirth", customerChanged.getNewCustomer().getDateOfBirth());
+        properties.put("dateOfBirth", formatDate(customerChanged.getNewCustomer().getDateOfBirth()));
+        properties.put("dogOwner", boolToString(customerChanged.getNewCustomer().getDogOwner()));
         properties.put("employmentStatus", customerChanged.getNewCustomer().getEmploymentStatus());
         properties.put("phoneNumber", customerChanged.getNewCustomer().getPhoneNumber());
         properties.put("bankDetails", customerChanged.getNewCustomer().getBankDetails());
@@ -100,6 +105,7 @@ public class NotificationService {
         try {
             emailSenderService.sendHtmlMessage(email);
         } catch (MessagingException e) {
+            System.out.println("Fehler beim Senden der CustomerChanged Mail");
             e.printStackTrace();
         }
         System.out.println("CustomerChanged Mail gesendet!");
@@ -124,6 +130,7 @@ public class NotificationService {
         try {
             emailSenderService.sendHtmlMessage(email);
         } catch (MessagingException e) {
+            System.out.println("Fehler beim Senden der CustomerCancelled Mail");
             e.printStackTrace();
         }
         System.out.println("CustomerCancelled Mail gesendet!");
@@ -155,17 +162,19 @@ public class NotificationService {
         properties.put("firstName", policyCreated.getPolicy().getCustomer().getFirstName());
         properties.put("lastName", policyCreated.getPolicy().getCustomer().getLastName());
         properties.put("pid", policyCreated.getPolicy().getId());
-        properties.put("startDate", policyCreated.getPolicy().getStartDate());
-        properties.put("endDate", policyCreated.getPolicy().getEndDate());
+        properties.put("startDate", formatDate(policyCreated.getPolicy().getStartDate()));
+        properties.put("endDate", formatDate(policyCreated.getPolicy().getEndDate()));
         properties.put("coverage", policyCreated.getPolicy().getCoverage());
-        properties.put("castrated", policyCreated.getPolicy().getObjectOfInsurance().isCastrated());
+        properties.put("castrated", boolToString(policyCreated.getPolicy().getObjectOfInsurance().isCastrated()));
         properties.put("personality", policyCreated.getPolicy().getObjectOfInsurance().getPersonality());
         properties.put("environment", policyCreated.getPolicy().getObjectOfInsurance().getEnvironment());
         properties.put("weight", policyCreated.getPolicy().getObjectOfInsurance().getWeight());
+        properties.put("premium", policyCreated.getPolicy().getPremium());
         email.setProperties(properties);
         try {
             emailSenderService.sendHtmlMessage(email);
         } catch (MessagingException e) {
+            System.out.println("Fehler beim Senden der PolicyCreated Mail");
             e.printStackTrace();
         }
         System.out.println("PolicyCreated Mail gesendet!");
@@ -190,6 +199,7 @@ public class NotificationService {
         try {
             emailSenderService.sendHtmlMessage(email);
         } catch (MessagingException e) {
+            System.out.println("Fehler beim Senden der PolicyChanged Mail");
             e.printStackTrace();
         }
         System.out.println("PolicyChanged Mail gesendet!");
@@ -206,16 +216,33 @@ public class NotificationService {
         properties.put("firstName", policyChangedEvent.getNewPolicy().getCustomer().getFirstName());
         properties.put("lastName", policyChangedEvent.getNewPolicy().getCustomer().getLastName());
         properties.put("pid", policyChangedEvent.getNewPolicy().getId());
-        properties.put("oldCoverage", policyChangedEvent.getOldPolicy().getCoverage());
-        properties.put("newCoverage", policyChangedEvent.getNewPolicy().getCoverage());
-        properties.put("oldPremium", policyChangedEvent.getOldPolicy().getPremium());
-        properties.put("newPremium", policyChangedEvent.getNewPolicy().getPremium());
+        properties.put("startDate", formatDate(policyChangedEvent.getNewPolicy().getStartDate()));
+        properties.put("endDate", formatDate(policyChangedEvent.getNewPolicy().getEndDate()));
+        properties.put("coverage", policyChangedEvent.getNewPolicy().getCoverage());
+        properties.put("castrated", boolToString(policyChangedEvent.getNewPolicy().getObjectOfInsurance().isCastrated()));
+        properties.put("personality", policyChangedEvent.getNewPolicy().getObjectOfInsurance().getPersonality());
+        properties.put("environment", policyChangedEvent.getNewPolicy().getObjectOfInsurance().getEnvironment());
+        properties.put("weight", policyChangedEvent.getNewPolicy().getObjectOfInsurance().getWeight());
+        properties.put("premium", policyChangedEvent.getNewPolicy().getPremium());
         email.setProperties(properties);
         try {
             emailSenderService.sendHtmlMessage(email);
         } catch (MessagingException e) {
+            System.out.println("Fehler beim Senden der PolicyCancelled Mail");
             e.printStackTrace();
         }
         System.out.println("PolicyCancelled Mail gesendet!");
+    }
+
+    //FIXME Bereits in Eventklassen machen?
+    private String boolToString (boolean bool) {
+        if (bool)
+            return "Ja";
+        return "Nein";
+    }
+
+    private String formatDate(LocalDate date) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+        return date.format(formatter);
     }
 }
