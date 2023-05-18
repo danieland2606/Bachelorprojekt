@@ -1,4 +1,3 @@
-import { asset } from "$fresh/runtime.ts";
 import { JSX } from "preact/jsx-runtime";
 
 export function Search(
