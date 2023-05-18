@@ -92,7 +92,7 @@ public class CustomerController {
             // Add the customer using the customer service and return the customer id
             String responseBody = customerService.addCustomer(customer);
             // Return the customer id as a JSON
-            return ResponseEntity.ok(responseBody);
+            return ResponseEntity.created(URI.create("/customer")).body(responseBody);
         } catch (JsonProcessingException e) {
             // If an JsonProcessingException occurs, return a HTTP 400 Bad Request response
             // with the exception message in the response body

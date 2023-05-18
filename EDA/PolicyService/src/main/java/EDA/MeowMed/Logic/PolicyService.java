@@ -363,7 +363,7 @@ public class PolicyService {
      recalculates the premium for all the customer's policies.
      @param customerChangedEvent The event that contains the new customer data
      */
-    public void updateCustomer(CustomerChangedEvent customerChangedEvent) {
+    public void updateCustomer(CustomerChangedEvent customerChangedEvent) throws ObjectNotFoundException{
         CustomerData newData = customerChangedEvent.getNewCustomer();
         Customer customer = this.getCustomer(newData.getId());
         customer.setFirstName(newData.getFirstName());
@@ -387,7 +387,7 @@ public class PolicyService {
      @param customerID The ID of the customer whose policies to recalculate.
      @param cancelPolicies Determines if policies will be set to cancelled.
      */
-    public void updateAllPoliciesOfCustomer(Long customerID, boolean cancelPolicies) {
+    public void updateAllPoliciesOfCustomer(Long customerID, boolean cancelPolicies) throws ObjectNotFoundException{
         for (Policy p : this.policyRepository.getPolicyList(customerID)) {
             if (!p.isCancelled())
             this.updatePolicyDataBasedOnNewInformation(p, cancelPolicies);
@@ -399,7 +399,7 @@ public class PolicyService {
      * @param newPolicy
      * @param cancelPolicy
      */
-    private void updatePolicyDataBasedOnNewInformation(Policy newPolicy, boolean cancelPolicy) {
+    private void updatePolicyDataBasedOnNewInformation(Policy newPolicy, boolean cancelPolicy) throws ObjectNotFoundException{
         Policy oldPolicy = new Policy(newPolicy);
         System.out.println("Customer Postleitzahl: " + newPolicy.getCustomer().getAddress().getPostalCode());
         double newPremium = this.getPremium(newPolicy.getCustomer(), newPolicy);

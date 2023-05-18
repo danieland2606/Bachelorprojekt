@@ -47,12 +47,15 @@ public class PolicyController {
             MappingJacksonValue policy = this.policyService.findPolicyByCustomerIDAndPolicyID(c_id, p_id);
             return ResponseEntity.ok(policy);
         } catch (ObjectNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Sorry, the requested policy with Customer ID " + c_id + " and Policy ID " + p_id + " could not be found.\nMore info: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Sorry, the requested policy with Customer ID "
+                    + c_id + " and Policy ID " + p_id + " could not be found.\nMore info: " + e.getMessage());
         } catch (DatabaseAccessException e) {
-            String errorMessage = "Error while finding the policy with the id " + p_id + " for customer " + c_id +". Please check if  both, policy and customer exists and try again.\nMore info: " + e.getMessage();
+            String errorMessage = "Error while finding the policy with the id " + p_id + " for customer " + c_id +
+                    ". Please check if  both, policy and customer exists and try again.\nMore info: " + e.getMessage();
             return  ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorMessage);
         } catch (Exception e) {
-            String errorMessage = "An unexpected error occurred while finding the policy with the id " + p_id + " for customer " + c_id +"\nMore info: " + e.getMessage();
+            String errorMessage = "An unexpected error occurred while finding the policy with the id " + p_id +
+                    " for customer " + c_id +"\nMore info: " + e.getMessage();
             return  ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorMessage);
         }
     }
@@ -122,7 +125,8 @@ public class PolicyController {
     public ResponseEntity<?> getPremium(@RequestBody PremiumCalculationData premiumCalculationData) {
         try {
             ObjectMapper mapper = new ObjectMapper();
-            return new ResponseEntity<String>(mapper.writeValueAsString(Collections.singletonMap("premium", this.policyService.getPremium(premiumCalculationData))), HttpStatusCode.valueOf(200));
+            return new ResponseEntity<String>(mapper.writeValueAsString(Collections.singletonMap("premium",
+                    this.policyService.getPremium(premiumCalculationData))), HttpStatusCode.valueOf(200));
         } catch (ObjectNotFoundException e) {
             String errorMessage = "Error calculating premium because the customer does not exist\nMore infos: " + e.getMessage();
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorMessage);

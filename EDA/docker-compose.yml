@@ -101,6 +101,13 @@ services:
       - spring.datasource.url=jdbc:mariadb://policydb:3306/Policy
       - spring.datasource.username=user
       - spring.datasource.password=123456789
+      - spring.rabbitmq.host=rabbitmq
+      - spring.datasource.username=root
+      - spring.datasource.password=test
+      - spring.datasource.driver-class-name=org.mariadb.jdbc.Driver
+      - server.port=8080
+        #    - spring.jpa.database-platform=org.hibernate.dialect.MariaDBDialect
+      - spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MariaDBDialect
 
   policydb:
     image: mariadb:latest

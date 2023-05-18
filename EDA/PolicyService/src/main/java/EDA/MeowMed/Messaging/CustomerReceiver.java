@@ -29,6 +29,8 @@ public class CustomerReceiver {
         try {
             this.policyService.updateCustomer(customerChangedEvent);
         } catch ( ObjectNotFoundException e) {
+            System.out.println("Kunde mit der id " + customerChangedEvent.getNewCustomer().getId()
+                    + " existiert nicht");
             e.printStackTrace();
         }
     }
