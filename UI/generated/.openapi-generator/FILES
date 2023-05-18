@@ -1,4 +1,5 @@
 .gitignore
+.openapi-generator-ignore
 CustomerApi.md
 PolicyApi.md
 apis/CustomerApi.ts

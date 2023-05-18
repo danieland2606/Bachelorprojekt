@@ -1,17 +1,19 @@
 import { HandlerContext, PageProps } from "$fresh/server.ts";
-import { asset } from "$fresh/runtime.ts";
 import { EditCustomer } from "$this/components/EditCustomer.tsx";
 import { Table } from "$this/components/Table.tsx";
+import { Search } from "$this/components/Search.tsx";
 import { CustomerAllRequired, Policy } from "$this/generated/models/all.ts";
 import { compareId, deserialize } from "$this/util/util.ts";
 import { customerClient, policyClient } from "$this/util/client.ts";
 
 export const handler = {
   async GET(req: Request, ctx: HandlerContext) {
-    const edit = new URL(req.url).searchParams.get("edit") != null;
+    const queryParams = new URL(req.url).searchParams;
+    const edit = queryParams.get("edit") != null;
+    const search = queryParams.get("search") ?? "";
     const customerId = Number.parseInt(ctx.params.customerId);
     const policyList = await policyClient.getPolicyList(customerId);
-    const tableData = formatPolicyList(policyList, ctx.params.customerId);
+    const tableData = formatPolicyList(policyList, customerId, search);
     const customer = await customerClient.getCustomer(customerId);
     return ctx.render({ tableData, customer, edit });
   },
@@ -41,10 +43,11 @@ export default function ShowCustomer({ data, params }: PageProps) {
       >
       </EditCustomer>
       <div class="box-row">
-        <div class="search-container">
-          <input type="text" placeholder="Suche.." />
-          <img src={asset("/search.svg")} alt="lupe" />
-        </div>
+        <Search
+          value={data.search}
+          class="relative sm:inline-block block mb-4 sm:mb-0"
+        >
+        </Search>
         <a
           class="button create-new"
           href={`/customer/${params.customerId}/policy`}
@@ -72,13 +75,17 @@ export default function ShowCustomer({ data, params }: PageProps) {
   );
 }
 
-function formatPolicyList(policyList: Array<Policy>, customerId: string) {
-  const id = Number.parseInt(customerId);
+function formatPolicyList(
+  policyList: Policy[],
+  customerId: number,
+  search = "",
+) {
   return {
     headers: ["ID", "Katze", "Beginn", "Ende", "Jahresdeckung"],
-    items: policyList.sort(compareId).map((policy) =>
-      policyToTableRow(policy, id)
-    ),
+    items: policyList
+      .filter(policySearch(search))
+      .sort(compareId)
+      .map((policy) => policyToTableRow(policy, customerId)),
   };
 }
 
@@ -103,5 +110,18 @@ function policyToTableRow(policy: Policy, customerId: number) {
       edit: `/customer/${customerId}/policy/${policy.id}?edit`,
       delete: "",
     },
+  };
+}
+
+function policySearch(search: string) {
+  if (!search) {
+    return function () {
+      return true;
+    };
+  }
+  return (policy: Policy) => {
+    const searchTarget =
+      `${policy.id} ${policy.objectOfInsurance?.name} ${policy.startDate} ${policy.endDate} ${policy.coverage}`;
+    return searchTarget.toLowerCase().includes(search.toLowerCase());
   };
 }
