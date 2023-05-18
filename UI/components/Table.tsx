@@ -1,4 +1,6 @@
 import { JSX } from "preact/jsx-runtime";
+import { asset } from "$fresh/runtime.ts";
+import { TableButton } from "$this/components/TableButton.tsx";
 
 export interface Item {
   item: Array<number | string | boolean>;
@@ -40,9 +42,27 @@ export function Table(props: TableProps) {
               {item.map((field) => <td>{field}</td>)}
               {hasActions && (
                 <td>
-                  {actions.details && <a class="btn btn-outline btn-sm capitalize rounded-none" href={actions.details}>details</a>}
-                  {actions.edit && <a href={actions.edit}>edit</a>}
-                  {actions.delete && <a href={actions.delete}>delete</a>}
+                  {actions.details && (
+                    <TableButton
+                      href={actions.details}
+                      src={asset("/article.svg")}
+                      alt="details"
+                    />
+                  )}
+                  {actions.edit && (
+                    <TableButton
+                      href={actions.edit}
+                      src={asset("/edit.svg")}
+                      alt="edit"
+                    />
+                  )}
+                  {actions.delete && (
+                    <TableButton
+                      href={actions.delete}
+                      src={asset("/trash.svg")}
+                      alt="delete"
+                    />
+                  )}
                 </td>
               )}
             </tr>

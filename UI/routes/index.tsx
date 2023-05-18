@@ -1,5 +1,5 @@
 import { HandlerContext, PageProps } from "$fresh/server.ts";
-import { Item, Table, TableItems } from "$this/components/Table.tsx";
+import { Item, Table } from "$this/components/Table.tsx";
 import { Search } from "$this/components/Search.tsx";
 import { Address, Customer } from "$this/generated/models/all.ts";
 import { compareId } from "$this/util/util.ts";

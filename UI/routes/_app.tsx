@@ -15,6 +15,8 @@ export default function App({ Component }: AppProps) {
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         </meta>
         <link rel="stylesheet" href={asset("/meowmed.css")}></link>
+        <link rel="icon" type="image/svg+xml" href={asset("/favicon.svg")}>
+        </link>
       </Head>
       <div class="p-5 max-w-screen-xl mx-auto">
         <Component></Component>
