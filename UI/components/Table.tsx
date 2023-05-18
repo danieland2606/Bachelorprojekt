@@ -21,7 +21,7 @@ export interface TableProps extends JSX.HTMLAttributes<HTMLTableElement> {
 }
 
 function hasAnyActions(items: Array<Item>) {
-  return !!(items?.some(({ actions }) => actions !== undefined));
+  return !!(items?.some(({ actions }) => actions != null));
 }
 
 export function Table(props: TableProps) {
@@ -45,22 +45,19 @@ export function Table(props: TableProps) {
                   {actions.details && (
                     <TableButton
                       href={actions.details}
-                      src={asset("/article.svg")}
-                      alt="details"
+                      kind="details"
                     />
                   )}
                   {actions.edit && (
                     <TableButton
                       href={actions.edit}
-                      src={asset("/edit.svg")}
-                      alt="edit"
+                      kind="edit"
                     />
                   )}
                   {actions.delete && (
                     <TableButton
                       href={actions.delete}
-                      src={asset("/trash.svg")}
-                      alt="delete"
+                      kind="delete"
                     />
                   )}
                 </td>
