@@ -2,8 +2,11 @@ package EDA.MeowMed.Application;
 
 import events.customer.CustomerChangedEvent;
 import events.customer.CustomerCreatedEvent;
+import events.customer.subclasses.CustomerData;
 import events.policy.PolicyChangedEvent;
 import events.policy.PolicyCreatedEvent;
+import events.policy.subclasses.CustomerPojo;
+import events.policy.subclasses.PolicyPojo;
 import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -54,13 +57,9 @@ public class NotificationService {
      * @param customerCreated the CustomerCreatedEvent containing all valuable data concerning the CustomerCreatedMail
      */
     public void sendCustomerCreatedMail(CustomerCreatedEvent customerCreated) {
-        Email email = new Email();
-        email.setTo(customerCreated.getEmail());
-        email.setFrom(sender);
-        email.setSubject(subjectCustomerCreated);
-        email.setTemplate(templateCustomerCreated);
+        Email email = setupMail(customerCreated.getEmail(), sender, subjectCustomerCreated, templateCustomerCreated);
         Map<String, Object> properties = new HashMap<>();
-        properties.put("formOfAddress", customerCreated.getFormOfAddress());
+        properties.put("formOfAddress", formatFormOfAddress(customerCreated.getFormOfAddress()));
         properties.put("firstName", customerCreated.getFirstName());
         properties.put("lastName", customerCreated.getLastName());
         properties.put("cid", customerCreated.getId());
@@ -83,13 +82,10 @@ public class NotificationService {
     }
 
     public void sendCustomerChangedMail(CustomerChangedEvent customerChanged) {
-        Email email = new Email();
-        email.setTo(customerChanged.getNewCustomer().getEmail());
-        email.setFrom(sender);
-        email.setSubject(subjectCustomerChanged);
-        email.setTemplate(templateCustomerChanged);
+        CustomerData customerData = customerChanged.getNewCustomer();
+        Email email = setupMail(customerData.getEmail(), sender, subjectCustomerChanged, templateCustomerChanged);
         Map<String, Object> properties = new HashMap<>();
-        properties.put("formOfAddress", customerChanged.getNewCustomer().getFormOfAddress());
+        properties.put("formOfAddress", formatFormOfAddress(customerChanged.getNewCustomer().getFormOfAddress()));
         properties.put("firstName", customerChanged.getNewCustomer().getFirstName());
         properties.put("lastName", customerChanged.getNewCustomer().getLastName());
         properties.put("cid", customerChanged.getNewCustomer().getId());
@@ -116,13 +112,10 @@ public class NotificationService {
      * @param customerChanged
      */
     public void sendCustomerCancelledMail(CustomerChangedEvent customerChanged) {
-        Email email = new Email();
-        email.setTo(customerChanged.getNewCustomer().getEmail());
-        email.setFrom(sender);
-        email.setSubject(subjectCustomerCancelled);
-        email.setTemplate(templateCustomerCancelled);
+        CustomerData customerData = customerChanged.getNewCustomer();
+        Email email = setupMail(customerData.getEmail(), sender, subjectCustomerCancelled, templateCustomerCancelled);
         Map<String, Object> properties = new HashMap<>();
-        properties.put("formOfAddress", customerChanged.getNewCustomer().getFormOfAddress());
+        properties.put("formOfAddress", formatFormOfAddress(customerChanged.getNewCustomer().getFormOfAddress()));
         properties.put("firstName", customerChanged.getNewCustomer().getFirstName());
         properties.put("lastName", customerChanged.getNewCustomer().getLastName());
         email.setProperties(properties);
@@ -152,24 +145,22 @@ public class NotificationService {
      * @param policyCreated the PolicyCreatedEvent containing all valuable data concerning the PolicyCreatedMail
      */
     public void sendPolicyCreatedMail(PolicyCreatedEvent policyCreated) {
-        Email email = new Email();
-        email.setTo(policyCreated.getPolicy().getCustomer().getEmail());
-        email.setFrom(sender);
-        email.setSubject(subjectPolicy);
-        email.setTemplate(templatePolicyCreated);
+        PolicyPojo policyData = policyCreated.getPolicy();
+        CustomerPojo customerData = policyData.getCustomer();
+        Email email = setupMail(customerData.getEmail(), sender, subjectPolicy, templatePolicyCreated);
         Map<String, Object> properties = new HashMap<>();
-        properties.put("formOfAddress", policyCreated.getPolicy().getCustomer().getFormOfAddress());
-        properties.put("firstName", policyCreated.getPolicy().getCustomer().getFirstName());
-        properties.put("lastName", policyCreated.getPolicy().getCustomer().getLastName());
-        properties.put("pid", policyCreated.getPolicy().getId());
-        properties.put("startDate", formatDate(policyCreated.getPolicy().getStartDate()));
-        properties.put("endDate", formatDate(policyCreated.getPolicy().getEndDate()));
-        properties.put("coverage", policyCreated.getPolicy().getCoverage());
-        properties.put("castrated", boolToString(policyCreated.getPolicy().getObjectOfInsurance().isCastrated()));
-        properties.put("personality", policyCreated.getPolicy().getObjectOfInsurance().getPersonality());
-        properties.put("environment", policyCreated.getPolicy().getObjectOfInsurance().getEnvironment());
-        properties.put("weight", policyCreated.getPolicy().getObjectOfInsurance().getWeight());
-        properties.put("premium", policyCreated.getPolicy().getPremium());
+        properties.put("formOfAddress", formatFormOfAddress(customerData.getFormOfAddress()));
+        properties.put("firstName", customerData.getFirstName());
+        properties.put("lastName", customerData.getLastName());
+        properties.put("pid", policyData.getId());
+        properties.put("startDate", formatDate(policyData.getStartDate()));
+        properties.put("endDate", formatDate(policyData.getEndDate()));
+        properties.put("coverage", policyData.getCoverage());
+        properties.put("castrated", boolToString(policyData.getObjectOfInsurance().isCastrated()));
+        properties.put("personality", policyData.getObjectOfInsurance().getPersonality());
+        properties.put("environment", policyData.getObjectOfInsurance().getEnvironment());
+        properties.put("weight", policyData.getObjectOfInsurance().getWeight());
+        properties.put("premium", policyData.getPremium());
         email.setProperties(properties);
         try {
             emailSenderService.sendHtmlMessage(email);
@@ -181,20 +172,19 @@ public class NotificationService {
     }
 
     public void sendPolicyChangedMail(PolicyChangedEvent policyChangedEvent) {
-        Email email = new Email();
-        email.setTo(policyChangedEvent.getNewPolicy().getCustomer().getEmail());
-        email.setFrom(sender);
-        email.setSubject(subjectPolicyChanged);
-        email.setTemplate(templatePolicyChanged);
+        PolicyPojo newPolicy = policyChangedEvent.getNewPolicy();
+        PolicyPojo odlPolicy = policyChangedEvent.getOldPolicy();
+        Email email = setupMail(newPolicy.getCustomer().getEmail(), sender, subjectPolicyChanged,
+                templatePolicyChanged);
         Map<String, Object> properties = new HashMap<>();
-        properties.put("formOfAddress", policyChangedEvent.getNewPolicy().getCustomer().getFormOfAddress());
-        properties.put("firstName", policyChangedEvent.getNewPolicy().getCustomer().getFirstName());
-        properties.put("lastName", policyChangedEvent.getNewPolicy().getCustomer().getLastName());
-        properties.put("pid", policyChangedEvent.getNewPolicy().getId());
-        properties.put("oldCoverage", policyChangedEvent.getOldPolicy().getCoverage());
-        properties.put("newCoverage", policyChangedEvent.getNewPolicy().getCoverage());
-        properties.put("oldPremium", policyChangedEvent.getOldPolicy().getPremium());
-        properties.put("newPremium", policyChangedEvent.getNewPolicy().getPremium());
+        properties.put("formOfAddress", formatFormOfAddress(newPolicy.getCustomer().getFormOfAddress()));
+        properties.put("firstName", newPolicy.getCustomer().getFirstName());
+        properties.put("lastName", newPolicy.getCustomer().getLastName());
+        properties.put("pid", newPolicy.getId());
+        properties.put("oldCoverage", odlPolicy.getCoverage());
+        properties.put("newCoverage", newPolicy.getCoverage());
+        properties.put("oldPremium", odlPolicy.getPremium());
+        properties.put("newPremium", newPolicy.getPremium());
         email.setProperties(properties);
         try {
             emailSenderService.sendHtmlMessage(email);
@@ -206,24 +196,22 @@ public class NotificationService {
     }
 
     public void sendPolicyCancelledMail(PolicyChangedEvent policyChangedEvent) {
-        Email email = new Email();
-        email.setTo(policyChangedEvent.getNewPolicy().getCustomer().getEmail());
-        email.setFrom(sender);
-        email.setSubject(subjectPolicyCancelled);
-        email.setTemplate(templatePolicyCancelled);
+        PolicyPojo policyData = policyChangedEvent.getNewPolicy();
+        CustomerPojo customerData = policyData.getCustomer();
+        Email email = setupMail(customerData.getEmail(), sender, subjectCustomerCancelled, templatePolicyCancelled);
         Map<String, Object> properties = new HashMap<>();
-        properties.put("formOfAddress", policyChangedEvent.getNewPolicy().getCustomer().getFormOfAddress());
-        properties.put("firstName", policyChangedEvent.getNewPolicy().getCustomer().getFirstName());
-        properties.put("lastName", policyChangedEvent.getNewPolicy().getCustomer().getLastName());
-        properties.put("pid", policyChangedEvent.getNewPolicy().getId());
-        properties.put("startDate", formatDate(policyChangedEvent.getNewPolicy().getStartDate()));
-        properties.put("endDate", formatDate(policyChangedEvent.getNewPolicy().getEndDate()));
-        properties.put("coverage", policyChangedEvent.getNewPolicy().getCoverage());
-        properties.put("castrated", boolToString(policyChangedEvent.getNewPolicy().getObjectOfInsurance().isCastrated()));
-        properties.put("personality", policyChangedEvent.getNewPolicy().getObjectOfInsurance().getPersonality());
-        properties.put("environment", policyChangedEvent.getNewPolicy().getObjectOfInsurance().getEnvironment());
-        properties.put("weight", policyChangedEvent.getNewPolicy().getObjectOfInsurance().getWeight());
-        properties.put("premium", policyChangedEvent.getNewPolicy().getPremium());
+        properties.put("formOfAddress", formatFormOfAddress(customerData.getFormOfAddress()));
+        properties.put("firstName", customerData.getFirstName());
+        properties.put("lastName", customerData.getLastName());
+        properties.put("pid", policyData.getId());
+        properties.put("startDate", formatDate(policyData.getStartDate()));
+        properties.put("endDate", formatDate(policyData.getEndDate()));
+        properties.put("coverage", policyData.getCoverage());
+        properties.put("castrated", boolToString(policyData.getObjectOfInsurance().isCastrated()));
+        properties.put("personality", policyData.getObjectOfInsurance().getPersonality());
+        properties.put("environment", policyData.getObjectOfInsurance().getEnvironment());
+        properties.put("weight", policyData.getObjectOfInsurance().getWeight());
+        properties.put("premium", policyData.getPremium());
         email.setProperties(properties);
         try {
             emailSenderService.sendHtmlMessage(email);
@@ -244,5 +232,22 @@ public class NotificationService {
     private String formatDate(LocalDate date) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
         return date.format(formatter);
+    }
+
+    private String formatFormOfAddress(String formOfAddress) {
+        if (formOfAddress.equals("herr"))
+            return "Sehr geehrter Herr ";
+        if (formOfAddress.equals("frau"))
+            return "Sehr geehrte Frau ";
+        return formOfAddress;
+    }
+
+    private Email setupMail(String to, String from, String subject, String template) {
+        Email mail = new Email();
+        mail.setFrom(from);
+        mail.setTo(to);
+        mail.setSubject(subject);
+        mail.setTemplate(template);
+        return mail;
     }
 }
