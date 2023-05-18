@@ -4,7 +4,7 @@ services:
     build:
       args:
         mode: "prod"
-        customerService: "http://customer:8081"
+        customerService: "http://customer:8080"
         policyService: "http://policy:8080"
       context: ../UI
       dockerfile: Dockerfile
@@ -33,10 +33,11 @@ services:
       - spring.datasource.username=root
       - spring.datasource.password=test
       - spring.datasource.driver-class-name=org.mariadb.jdbc.Driver
+      - server.port=8080
   #    - spring.jpa.database-platform=org.hibernate.dialect.MariaDBDialect
       - spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MariaDBDialect
     ports:
-      - "81:8081"
+      - "81:8080"
     depends_on:
       customerdb:
         condition: service_healthy
