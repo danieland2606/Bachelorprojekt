@@ -11,6 +11,7 @@ import java.util.Arrays;
 
 @Service
 public class CustomerValidationService {
+    public static final String cancelStateEmploymentStatus = "arbeitslos";
     private final String[] formOfAddress = {
             "herr", "frau"
     };
@@ -21,7 +22,7 @@ public class CustomerValidationService {
             "ledig", "verheiratet", "verwitwet"
     };
     private final String[] employmentStatus = {
-            "selbststaendig", "angestellt", "arbeitslos", "arbeitssuchend", "ausbildung"
+            cancelStateEmploymentStatus, "selbststaendig", "angestellt", "arbeitssuchend", "ausbildung"
     };
 
     /**

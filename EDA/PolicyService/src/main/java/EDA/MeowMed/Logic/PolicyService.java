@@ -389,6 +389,7 @@ public class PolicyService {
      */
     public void updateAllPoliciesOfCustomer(Long customerID, boolean cancelPolicies) {
         for (Policy p : this.policyRepository.getPolicyList(customerID)) {
+            if (!p.isCancelled())
             this.updatePolicyDataBasedOnNewInformation(p, cancelPolicies);
         }
         this.policyRepository.flush();

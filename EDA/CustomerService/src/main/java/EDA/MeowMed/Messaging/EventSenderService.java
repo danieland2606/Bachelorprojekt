@@ -1,8 +1,8 @@
 package EDA.MeowMed.Messaging;
 
 
+import EDA.MeowMed.Application.CustomerValidationService;
 import events.customer.CustomerChangedEvent;
-import events.customer.CustomerCreatedEvent;
 import EDA.MeowMed.Persistence.Entity.Customer;
 import org.springframework.amqp.core.TopicExchange;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -23,8 +23,9 @@ public class EventSenderService {
     public EventSenderService() {
     }
 
-    private final String CREATED_ROUTING_KEY = "customer.created";
-    private final String CHANGED_ROUTING_KEY = "customer.changed";
+    private final String created_routing_key = "customer.created";
+    private final String changed_routing_key = "customer.changed";
+    private final String cancelled_routing_key = "cancelled.customer.changed";
 
 
     /**
@@ -36,7 +37,7 @@ public class EventSenderService {
      */
     public boolean sendCustomerCreatedEvent(Customer customer) {
         try {
-            template.convertAndSend(topicExchange.getName(), CREATED_ROUTING_KEY, customer.createCustomerCreatedEvent());
+            template.convertAndSend(topicExchange.getName(), created_routing_key, customer.createCustomerCreatedEvent());
             System.out.println(" [x] Sent");
         } catch (Exception e) {
             System.out.println("Fehler beim Senden");
@@ -47,7 +48,15 @@ public class EventSenderService {
 
     public boolean sendCustomerChangedEvent(Customer customerNew, Customer customerOld) {
         try {
-            template.convertAndSend(topicExchange.getName(), CHANGED_ROUTING_KEY, new CustomerChangedEvent(customerOld.toCustomerData(), customerNew.toCustomerData()));
+            CustomerChangedEvent customerChangedEvent = new CustomerChangedEvent(customerOld.toCustomerData(), customerNew.toCustomerData());
+            String routing_key;
+            if (customerNew.getEmploymentStatus().equals(CustomerValidationService.cancelStateEmploymentStatus)) {
+                routing_key = cancelled_routing_key;
+            } else {
+                routing_key = changed_routing_key;
+            }
+
+            template.convertAndSend(topicExchange.getName(), routing_key,customerChangedEvent);
             System.out.println(" [x] Sent");
         } catch (Exception e) {
             System.out.println("Fehler beim Senden");

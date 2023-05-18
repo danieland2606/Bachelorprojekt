@@ -41,6 +41,6 @@ public class MessagingConfig {
 
     @Bean
     public Binding binCustomerChanged(TopicExchange topic, @Qualifier("CustomerChangedQueue") Queue queue) {
-        return BindingBuilder.bind(queue).to(topic).with("customer.changed");
+        return BindingBuilder.bind(queue).to(topic).with("#.customer.changed");
     }
 }
