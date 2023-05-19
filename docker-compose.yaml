@@ -44,6 +44,11 @@ services:
       MYSQL_PASSWORD: 123456789
     volumes:
       - policydb_data_rda:/var/lib/mysql
+    healthcheck:
+      test: "mariadb --user=root --password=$$MARIADB_ROOT_PASSWORD --execute \"SHOW DATABASES;\""
+      interval: 5s
+      timeout: 20s
+      retries: 10
   customer.rda:
     container_name: customer-service-rda
     image: meowmed-customer.rda
@@ -73,6 +78,11 @@ services:
       MYSQL_PASSWORD: 123456789
     volumes:
       - customerdb_data_rda:/var/lib/mysql
+    healthcheck:
+      test: "mariadb --user=root --password=$$MARIADB_ROOT_PASSWORD --execute \"SHOW DATABASES;\""
+      interval: 5s
+      timeout: 20s
+      retries: 10
   notification.rda:
     container_name: notification-service-rda
     image: meowmed-notification.rda

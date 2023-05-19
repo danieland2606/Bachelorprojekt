@@ -1,6 +1,8 @@
 package com.meowmed.rdapolicy;
 
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -363,9 +365,8 @@ public class PolicyService {
 		debugprice = totalprice;
 
 		// Auf 2 Nachkommastellen runden
-		totalprice = ((int)(totalprice*100))/100;
+		totalprice = Math.round(totalprice*100.0)/100.0;
 		if(debugmode) System.out.println("getPolicyPrice: totalprice: " + totalprice);
-
 		return totalprice;
 	}
 

@@ -63,8 +63,6 @@ public class PolicyController {
 			return ResponseEntity.status(200).body(pService.getPolicyList(c_id,fields));
 		} catch (PolicyNotFoundException e) {
 			return ResponseEntity.status(204).body(new MappingJacksonValue(Collections.singletonMap("message", e.getMessage())));
-			//MappingJacksonValue errWrapper = new MappingJacksonValue(Collections.singletonMap("error", e.getMessage()));
-			//return ResponseEntity.status(400).body(errWrapper);
 		} catch (Exception e) {
 			return ResponseEntity.status(400).body(new MappingJacksonValue(Collections.singletonMap("error", e.getMessage())));
 		}
@@ -82,11 +80,11 @@ public class PolicyController {
 		try {
 			return ResponseEntity.status(200).body(pService.getPolicy(c_id,p_id));
 		} catch (IllegalArgumentException e) {
-			return ResponseEntity.status(400).body(new MappingJacksonValue(Collections.singletonMap("error", e.getMessage())));
+			return ResponseEntity.status(404).body(new MappingJacksonValue(Collections.singletonMap("error", e.getMessage())));
 		} catch (PolicyNotFoundException e){
 			return ResponseEntity.status(404).body(new MappingJacksonValue(Collections.singletonMap("error", e.getMessage())));
 		} catch (CustomerNotFoundException e){
-			return ResponseEntity.status(400).body(new MappingJacksonValue(Collections.singletonMap("error", e.getMessage())));
+			return ResponseEntity.status(404).body(new MappingJacksonValue(Collections.singletonMap("error", e.getMessage())));
 		}
 	}
 

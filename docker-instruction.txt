@@ -3,9 +3,9 @@ Docker oder Docker Desktop muss installiert und gestartet sein.
 Unter Linux muss auch Docker-Compose installiert sein
 
 Inhalt der docker-compose:
-- Projekt von EDA (UI-Port 82, Customer-Port 8071, Policy-Port 8072)
-- Projekt von RDA (UI-Port 81, Customer-Port 8081, Policy-Port 8082)
-- Swagger Oberfläche auf Port 80
+- Projekt von EDA (UI-Port 80, Customer-Port 8071, Policy-Port 8072)
+- Projekt von RDA (UI-Port 80, Customer-Port 8081, Policy-Port 8082)
+- Swagger Oberfläche auf Port 81
 
 Erzeugen vom EDA Projekt:
 docker compose --profile eda up -d --build
