@@ -289,7 +289,7 @@ public class PolicyService {
 			|| ChronoUnit.YEARS.between(customer.getDateOfBirth() , LocalDate.now())< 18 
 			|| customer.getEmploymentStatus().equalsIgnoreCase("arbeitslos")
 			;
-		if (policyNotAllowed) throw new PolicyNotAllowed("Policy wurde nicht gefunden");
+		if (policyNotAllowed) throw new PolicyNotAllowed("Policy ist nicht erlaubt");
 		CatEntity cat = cRepository.findByRace(body.getPolicy().getObjectOfInsurance().getRace());
 		if (cat==null) throw new CatNotFoundException("Cat wurde nicht gefunden");
 		if(debugmode) System.out.println("getPolicyPrice: cat: " + cat);

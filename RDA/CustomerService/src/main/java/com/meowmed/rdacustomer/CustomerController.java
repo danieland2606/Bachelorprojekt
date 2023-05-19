@@ -4,6 +4,7 @@ package com.meowmed.rdacustomer;
 import org.springframework.web.bind.annotation.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.MappingJacksonValue;
 import com.meowmed.rdacustomer.entity.CustomerRequest;
 
@@ -48,8 +49,8 @@ public class CustomerController{
      *   ]
      */
     @GetMapping("/customer")
-    public MappingJacksonValue getCustomerList(@RequestParam(value = "fields") String fields) {
-        return cService.getCustomerList(fields);
+    public ResponseEntity<MappingJacksonValue> getCustomerList(@RequestParam(value = "fields") String fields) {
+        return ResponseEntity.status(200).body(cService.getCustomerList(fields));
     }
 
     /**
@@ -77,9 +78,8 @@ public class CustomerController{
      *
      */
     @GetMapping("/customer/{c_id}")
-    public MappingJacksonValue getCustomer(@PathVariable Long c_id) {
-        return cService.getCustomer(c_id);
-
+    public ResponseEntity<MappingJacksonValue> getCustomer(@PathVariable Long c_id) {
+        return ResponseEntity.status(200).body(cService.getCustomer(c_id));
     }
     /**
      * Diese Methode speichert ein CustomerEntity
@@ -106,13 +106,12 @@ public class CustomerController{
      * @return Gibt die ID aus dem erstellten Objekt zurück
      */
     @PostMapping("/customer")
-    public MappingJacksonValue postCustomer(@RequestBody CustomerRequest cRequest) {
-        return cService.postCustomer(cRequest);
-
+    public ResponseEntity<MappingJacksonValue> postCustomer(@RequestBody CustomerRequest cRequest) {
+        return ResponseEntity.status(201).body(cService.postCustomer(cRequest));
     }
 
     @PutMapping("/customer/{c_id}")
-    public MappingJacksonValue putCustomer(@PathVariable Long c_id, @RequestBody CustomerRequest cRequest) {
-        return cService.customerUpdate(c_id, cRequest);
+    public ResponseEntity<MappingJacksonValue> putCustomer(@PathVariable Long c_id, @RequestBody CustomerRequest cRequest) {
+        return ResponseEntity.status(204).body(cService.customerUpdate(c_id, cRequest));
     }
 }
