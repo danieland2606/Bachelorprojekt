@@ -106,7 +106,7 @@ public class CustomerCreatedEvent implements Serializable {
         this.employmentStatus = employmentStatus;
     }
 
-    public boolean isDogOwner() {
+    public boolean getDogOwner() {
         return dogOwner;
     }
 

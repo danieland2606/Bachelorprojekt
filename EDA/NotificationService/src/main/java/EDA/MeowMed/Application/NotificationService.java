@@ -2,6 +2,7 @@ package EDA.MeowMed.Application;
 
 import events.customer.CustomerChangedEvent;
 import events.customer.CustomerCreatedEvent;
+import events.customer.subclasses.Address;
 import events.customer.subclasses.CustomerData;
 import events.policy.PolicyChangedEvent;
 import events.policy.PolicyCreatedEvent;
@@ -15,6 +16,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Function;
 
 /**
  * Class for sending the Email of CustomerCreatedEvent and PolicyCreatedEvent.
@@ -24,6 +26,9 @@ public class NotificationService {
 
     @Autowired
     private EmailSenderService emailSenderService;
+
+    @Autowired
+    private EmailFactory emailFactory;
     private final String sender = "noreply@meowmed.com";
     private final String subjectCustomerCreated = "Willkommen bei MeowMed!";
     private final String templateCustomerCreated = "customernotification";
@@ -57,20 +62,33 @@ public class NotificationService {
      * @param customerCreated the CustomerCreatedEvent containing all valuable data concerning the CustomerCreatedMail
      */
     public void sendCustomerCreatedMail(CustomerCreatedEvent customerCreated) {
-        Email email = setupMail(customerCreated.getEmail(), sender, subjectCustomerCreated, templateCustomerCreated);
-        Map<String, Object> properties = new HashMap<>();
-        properties.put("formOfAddress", formatFormOfAddress(customerCreated.getFormOfAddress()));
-        properties.put("firstName", customerCreated.getFirstName());
-        properties.put("lastName", customerCreated.getLastName());
-        properties.put("cid", customerCreated.getId());
-        properties.put("maritalStatus", customerCreated.getMaritalStatus());
-        properties.put("dateOfBirth", formatDate(customerCreated.getDateOfBirth()));
-        properties.put("dogOwner", boolToString(customerCreated.isDogOwner()));
-        properties.put("employmentStatus", customerCreated.getEmploymentStatus());
-        properties.put("phoneNumber", customerCreated.getPhoneNumber());
-        properties.put("bankDetails", customerCreated.getBankDetails());
-        properties.put("address", customerCreated.getAddress().toString());
-        email.setProperties(properties);
+//        Email email = setupMail(customerCreated.getEmail(), sender, subjectCustomerCreated, templateCustomerCreated);
+//        Map<String, Object> properties = new HashMap<>();
+//        properties.put("formOfAddress", formatFormOfAddress(customerCreated.getFormOfAddress()));
+//        properties.put("firstName", customerCreated.getFirstName());
+//        properties.put("lastName", customerCreated.getLastName());
+//        properties.put("cid", customerCreated.getId());
+//        properties.put("maritalStatus", customerCreated.getMaritalStatus());
+//        properties.put("dateOfBirth", formatDate(customerCreated.getDateOfBirth()));
+//        properties.put("dogOwner", boolToString(customerCreated.isDogOwner()));
+//        properties.put("employmentStatus", customerCreated.getEmploymentStatus());
+//        properties.put("phoneNumber", customerCreated.getPhoneNumber());
+//        properties.put("bankDetails", customerCreated.getBankDetails());
+//        properties.put("address", customerCreated.getAddress().toString());
+//        email.setProperties(properties);
+        Map<String, Function<Object, String>> parser = new HashMap<>();
+        parser.put("formOfAddress", NotificationService::formatFormOfAddress);
+        parser.put("dateOfBirth", NotificationService::formatDate);
+        parser.put("dogOwner", NotificationService::boolToString);
+        parser.put("address", Object::toString);
+        Email email = emailFactory.buildEmail(
+                customerCreated.getEmail(),
+                sender,
+                subjectCustomerCreated,
+                templateCustomerCreated,
+                parser,
+                customerCreated
+        );
 
         try {
             emailSenderService.sendHtmlMessage(email);
@@ -108,7 +126,6 @@ public class NotificationService {
     }
 
     /**
-     *
      * @param customerChanged
      */
     public void sendCustomerCancelledMail(CustomerChangedEvent customerChanged) {
@@ -223,23 +240,23 @@ public class NotificationService {
     }
 
     //FIXME Bereits in Eventklassen machen?
-    private String boolToString (boolean bool) {
-        if (bool)
+    private static String boolToString(Object bool) {
+        if ((boolean) bool)
             return "Ja";
         return "Nein";
     }
 
-    private String formatDate(LocalDate date) {
+    private static String formatDate(Object date) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-        return date.format(formatter);
+        return ((LocalDate) date).format(formatter);
     }
 
-    private String formatFormOfAddress(String formOfAddress) {
+    public static String formatFormOfAddress(Object formOfAddress) {
+
         if (formOfAddress.equals("herr"))
             return "Sehr geehrter Herr ";
-        if (formOfAddress.equals("frau"))
+        else
             return "Sehr geehrte Frau ";
-        return formOfAddress;
     }
 
     private Email setupMail(String to, String from, String subject, String template) {

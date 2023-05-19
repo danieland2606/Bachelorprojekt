@@ -2,12 +2,10 @@ package EDA.MeowMed.Persistence.Entity;
 
 
 import events.customer.CustomerCreatedEvent;
-import events.customer.subclasses.CustomerData;
 import events.policy.subclasses.CustomerPojo;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
-import java.time.LocalDate;
 
 @Entity
 @Table(name="Customer")
@@ -63,7 +61,7 @@ public class Customer implements Serializable {
         this.lastName = c.getLastName();
         this.formOfAddress = c.getFormOfAddress();
         this.title = c.getTitle();
-        this.dogOwner = c.isDogOwner();
+        this.dogOwner = c.getDogOwner();
         this.address = new Address(c.getAddress());
         this.email = c.getEmail();
         this.employmentStatus = c.getEmploymentStatus();

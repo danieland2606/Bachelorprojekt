@@ -18,11 +18,19 @@ public class EmailTemplateParser {
     /**
      * Build a Map for each template found in MailTemplates and collects all variables in the template.
      */
-    private EmailTemplateParser() {
+    public EmailTemplateParser() {
         emailTemplateObjects = new HashMap<>();
         try {
             // Stream of all files within the MailTemplates directory
-            Files.walk(Paths.get("./NotificationService/src/main/resources/MailTemplates"))
+            Files.walk(Paths.get("."))
+                    // only in MailTemplate directory
+                    .filter(path -> (
+                            // for IDE Deployment
+                            path.startsWith("./NotificationService/src/main/resources/MailTemplates/")
+                            ||
+                            // for docker image
+                            path.startsWith("./app/MailTemplates/")
+                            ))
                     // only files, no directory's
                     .filter(Files::isRegularFile)
                     // only .html files
@@ -45,11 +53,7 @@ public class EmailTemplateParser {
         }
     }
 
-    @Bean
-    @Scope(value = ConfigurableBeanFactory.SCOPE_SINGLETON)
-    public EmailTemplateParser emailTemplateParser() {
-        return new EmailTemplateParser();
-    }
+
 
     public Set<String> getElementsOfTemplate(String template) {
         return emailTemplateObjects.get(template);
