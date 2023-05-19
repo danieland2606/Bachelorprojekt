@@ -2,6 +2,8 @@ package EDA.MeowMed.Application;
 
 import EDA.MeowMed.Persistence.Entity.Customer;
 import EDA.MeowMed.Persistence.Entity.Address;
+import org.apache.commons.validator.routines.IBANValidator;
+import org.apache.commons.validator.routines.checkdigit.IBANCheckDigit;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.InvocationTargetException;
@@ -94,6 +96,11 @@ public class CustomerValidationService {
             throw new IllegalArgumentException(address.getStreet() + " is not a valid argument for street!");
         }
     }
+    private void checkBankDetails(Customer customer) throws IllegalArgumentException {
+        if (!IBANCheckDigit.IBAN_CHECK_DIGIT.isValid(customer.getBankDetails())) {
+            throw new IllegalArgumentException(customer.getBankDetails() + " is not a valid argument for bankDetails!");
+        }
+    }
 
     // TODO: Add validation for PhoneNumber, Email and BankDetails
     private void checkPhoneNumber(Customer customer) throws IllegalArgumentException {
@@ -108,9 +115,5 @@ public class CustomerValidationService {
         }
     }
 
-    private void checkBankDetails(Customer customer) throws IllegalArgumentException {
-        if (false) {//Stub, currently no use
-            throw new IllegalArgumentException(customer.getBankDetails() + " is not a valid argument for bankDetails!");
-        }
-    }
+
 }
