@@ -113,6 +113,33 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "PolicyChangeNotification Copy",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"firstName\": \"Alexander\",\r\n    \"lastName\": \"Hampel\",\r\n    \"title\": \"\",\r\n    \"formOfAdress\": \"Herr\",\r\n    \"maritalStatus\": \"ledig\",\r\n    \"cDateOfBirth\": \"1996-01-14\",\r\n    \"employmentStatus\": \"student\",\r\n    \"city\": \"Hannover\",\r\n    \"street\": \"Ricklinger Stadtweg 120\",\r\n    \"postalCode\": 30159,\r\n    \"phoneNumber\": \"+4951177488375\",\r\n    \"email\": \"alexander.hampel@stud.hs-hannover.de\",\r\n    \"bankDetails\": \"IE12BOFI90000112345678\",\r\n    \"hasDog\": true,\r\n    \"pid\": 1,\r\n    \"cid\": 3,\r\n    \"startDate\": \"1990-01-01\",\r\n    \"endDate\": \"2030-12-31\",\r\n    \"coverage\": 50000,\r\n    \"premium\": 75,\r\n    \"name\": \"Tomato\",\r\n    \"race\": \"Bengal\",\r\n    \"color\": \"Braun\",\r\n    \"oDateOfBirth\": \"2015-07-22\",\r\n    \"castrated\": true,\r\n    \"personality\": \"anhänglich\",\r\n    \"environment\": \"drinnen\",\r\n    \"weight\": 4\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:83/policydeletenotification",
+					"host": [
+						"localhost"
+					],
+					"port": "83",
+					"path": [
+						"policydeletenotification"
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }
