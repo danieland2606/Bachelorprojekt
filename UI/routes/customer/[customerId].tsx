@@ -2,10 +2,11 @@ import { HandlerContext, PageProps } from "$fresh/server.ts";
 import { EditCustomer } from "$this/components/EditCustomer.tsx";
 import { itemSearch, Table } from "$this/components/Table.tsx";
 import { Search } from "$this/components/Search.tsx";
-import { compareId, origin } from "$this/common/util.ts";
+import { compareId, Obj, origin } from "$this/common/util.ts";
 import { deserializeCustomerFull } from "$this/common/deserialize.ts";
 import { customerClient } from "$this/common/customerClient.ts";
 import { policyClient, PolicyShort } from "$this/common/policyClient.ts";
+import { CustomerAllRequired } from "$this/generated/index.ts";
 
 export const handler = {
   async GET(req: Request, ctx: HandlerContext) {
@@ -16,7 +17,7 @@ export const handler = {
     const policyList = await policyClient.getPolicyList(customerId);
     const tableData = formatPolicyList(policyList, customerId, search);
     const customer = await customerClient.getCustomer(customerId);
-    return ctx.render({ tableData, customer, edit });
+    return ctx.render({ tableData, customer, edit, search });
   },
   async POST(req: Request, ctx: HandlerContext) {
     const customerId = Number.parseInt(ctx.params.customerId);
@@ -29,34 +30,36 @@ export const handler = {
 };
 
 export default function ShowCustomer({ data, params }: PageProps) {
+  const { edit, search, customer, tableData } = data;
+  const employmentStatus = (customer as CustomerAllRequired).employmentStatus;
   const id = "edit-customer";
   return (
     <>
       <h1>Kundendetails</h1>
       <EditCustomer
         id={id}
-        mode={data.edit ? "edit" : "display"}
-        values={data.customer}
+        mode={edit ? "edit" : "display"}
+        values={customer}
         allrequired
       >
       </EditCustomer>
       <div class="box-row">
         <Search
-          value={data.search}
+          value={search}
           class="relative sm:inline-block block mb-4 sm:mb-0"
         >
         </Search>
         <a
-          class="button create-new"
           href={`/customer/${params.customerId}/policy`}
+          class={employmentStatus == "arbeitslos" ? "pointer-events-none" : ""}
         >
           Neuer Vertrag
         </a>
       </div>
-      <Table tabledata={data.tableData}></Table>
+      <Table tabledata={tableData}></Table>
       <div class="box-row buttons">
         <a class="button" href="/">Zurück</a>
-        {data.edit &&
+        {edit &&
           (
             <input
               form={id}

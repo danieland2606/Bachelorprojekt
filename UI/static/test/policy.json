@@ -6,8 +6,8 @@
   "active": true,
   "objectOfInsurance": {
     "name": "Tomato",
-    "race": "Bengal",
-    "color": "Braun",
+    "race": "bengal",
+    "color": "braun",
     "dateOfBirth": "2015-07-22",
     "castrated": true,
     "personality": "anhänglich",

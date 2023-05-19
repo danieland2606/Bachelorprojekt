@@ -48,8 +48,8 @@ export function Table(props: TableProps) {
           </tr>
         </thead>
         <tbody>
-          {items.map(({ row, actions }) => (
-            <tr>
+          {items.map(({ row, actions, active }) => (
+            <tr class={active ? undefined : "text-gray-600"}>
               {row.map((field) => <td>{field}</td>)}
               {hasActions && (
                 <td>
@@ -63,6 +63,7 @@ export function Table(props: TableProps) {
                     <TableButton
                       href={actions.edit}
                       kind="edit"
+                      disabled={!active}
                     />
                   )}
                   {actions.delete && (
