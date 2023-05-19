@@ -10,8 +10,12 @@ export const handler = {
   async POST(req: Request, ctx: HandlerContext) {
     const form = await req.formData();
     const calcPolicy = deserializePolicyCalc(form);
-    const { premium } = await policyClient.calcPolicyPrice(calcPolicy);
-    return ctx.render({ premium });
+    try {
+      const { premium } = await policyClient.calcPolicyPrice(calcPolicy);
+      return ctx.render({ premium });
+    } catch (_) {
+      return ctx.render({ premium: "error" });
+    }
   },
 };
 

@@ -1,21 +1,20 @@
 version: '3.7'
 services:
-  ui:
-  
   ui.rda:
     container_name: ui-service
     image: meowmed-ui
     profiles:
       - rda
     environment:
-      - MEOWMED_CUSTOMER_SERVER="http://customer.rda:8080"
-      - MEOWMED_POLICY_SERVER="http://policy.rda:8080"
+      - MEOWMED_CUSTOMER_SERVER=http://customer.rda:8080
+      - MEOWMED_POLICY_SERVER=http://policy.rda:8080
     networks:
       - rda
     ports:
       - "80:8000"
     depends_on:
-      - ui
+      - policy.rda
+      - customer.rda
   policy.rda:
     container_name: policy-service-rda
     image: meowmed-policy.rda
@@ -106,14 +105,15 @@ services:
     profiles:
       - eda
     environment:
-      - MEOWMED_CUSTOMER_SERVER="http://customer.eda:8081"
-      - MEOWMED_POLICY_SERVER="http://policy.eda:8080"
+      - MEOWMED_CUSTOMER_SERVER=http://customer.eda:8081
+      - MEOWMED_POLICY_SERVER=http://policy.eda:8080
     networks:
       - eda
     ports:
       - "80:8000"
     depends_on:
-      - ui
+      - policy.rda
+      - customer.rda
   customer.eda:
     container_name: customer-service-eda
     image: meowmed-customer.eda

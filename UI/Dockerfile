@@ -10,6 +10,6 @@ COPY ./main.ts ./fresh.gen.ts ./import_map.json ./deno.json ./
 EXPOSE 8000
 CMD ["run", "-A", "main.ts"]
 
-FROM meowmed-ui-test AS prod
+FROM test AS prod
 RUN mv ./common/customerClient_prod.ts ./common/customerClient.ts
 RUN mv ./common/policyClient_prod.ts ./common/policyClient.ts

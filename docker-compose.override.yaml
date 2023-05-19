@@ -10,35 +10,30 @@ services:
     environment:
       API_URL: ./Meowmed+_REST.yaml
   ui:
-    image: meowmed-ui
     build:
       context: ./UI
       target: prod
-    env_file:
-      - ./UI/.env
-      
+    environment:
+      - DENO_DEPLOYMENT_ID=2baff8832ead514a9cff77a18f43810bf19be235
+
   policy.rda:
-    image: meowmed-policy.rda
     build:
       context: ./RDA/PolicyService
       dockerfile: Dockerfile
     ports:
       - "8082:8080"
   customer.rda:
-    image: meowmed-customer.rda
     build:
       context: ./RDA/CustomerService
       dockerfile: Dockerfile
     ports:
       - "8081:8080"
   notification.rda:
-    image: meowmed-notification.rda
     build:
       context: ./RDA/NotificationService
       dockerfile: Dockerfile
 
   customer.eda:
-    image: meowmed-customer.eda
     build:
       context: ./EDA/
       dockerfile: ./CustomerService/Dockerfile
@@ -47,7 +42,6 @@ services:
     ports:
       - "8071:8081"
   notification.eda:
-    image: meowmed-notification.eda
     build:
       context: ./EDA/
       dockerfile: ./NotificationService/Dockerfile
