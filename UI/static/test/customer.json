@@ -6,7 +6,7 @@
   "maritalStatus": "ledig",
   "dateOfBirth": "2000-12-30",
   "dogOwner": false,
-  "employmentStatus": "arbeitslos",
+  "employmentStatus": "angestellt",
   "address": {
     "city": "Hannover",
     "street": "Berliner Allee 100",
