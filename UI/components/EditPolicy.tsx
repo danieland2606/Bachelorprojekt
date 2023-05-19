@@ -9,7 +9,7 @@ import {
   PersonalityValues,
   Policy,
 } from "$this/generated/index.ts";
-import { Obj, propMap } from "$this/util/util.ts";
+import { Obj, propMap } from "$this/common/util.ts";
 
 const policy = propMap(new Policy());
 const cat = propMap(new ObjectOfInsurance(), "objectOfInsurance.");

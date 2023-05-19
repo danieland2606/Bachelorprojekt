@@ -8,6 +8,9 @@ if (rev.indexOf(":") !== -1) {
     .trim();
 }
 
-Deno.writeTextFileSync("ui.env", `DENO_DEPLOYMENT_ID=${rev}`);
+Deno.writeTextFileSync(".env", `DENO_DEPLOYMENT_ID=${rev}`);
+
+Deno.env.set("MEOWMED_CUSTOMER_SERVER", "testing");
+Deno.env.set("MEOWMED_POLICY_SERVER", "testing");
 
 await dev(import.meta.url, "./main.ts");

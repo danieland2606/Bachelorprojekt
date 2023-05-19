@@ -9,7 +9,7 @@ import {
   MaritalStatusValues,
   TitleValues,
 } from "$this/generated/index.ts";
-import { Obj, propMap } from "$this/util/util.ts";
+import { Obj, propMap } from "$this/common/util.ts";
 
 const customer = propMap(new Customer());
 const address = propMap(new Address(), "address.");

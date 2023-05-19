@@ -1,8 +1,8 @@
 import { HandlerContext, PageProps } from "$fresh/server.ts";
 import { EditPolicy } from "$this/components/EditPolicy.tsx";
-import { policyClient } from "$this/util/client.ts";
-import { origin } from "$this/util/util.ts";
-import { deserializePolicyFull } from "$this/util/deserialize.ts";
+import { policyClient } from "$this/common/policyClient.ts";
+import { origin } from "$this/common/util.ts";
+import { deserializePolicyFull } from "$this/common/deserialize.ts";
 
 export const handler = {
   async GET(_: Request, ctx: HandlerContext) {
@@ -20,6 +20,7 @@ export const handler = {
 
 export default function CreatePolicy({ params }: PageProps) {
   const id = "new-policy";
+  const iframe = "premium-calc";
   return (
     <>
       <h1>Neuen Vertrag anlegen</h1>
@@ -32,15 +33,16 @@ export default function CreatePolicy({ params }: PageProps) {
         mode="create"
       >
         <iframe
-          name="premium-calc"
-          style="border-style:none;width:6em;height:6em"
+          name={iframe}
+          style="border-style:none;width:6em;height:4em"
+          src="/api/premium"
         >
         </iframe>
         <input
           type="submit"
           form={id}
           class="button"
-          formTarget="premium-calc"
+          formTarget={iframe}
           formAction="/api/premium"
           value="Rate berechnen"
         >

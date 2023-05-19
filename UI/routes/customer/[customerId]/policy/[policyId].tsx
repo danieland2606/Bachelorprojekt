@@ -1,8 +1,8 @@
 import { HandlerContext, PageProps } from "$fresh/server.ts";
 import { EditPolicy } from "$this/components/EditPolicy.tsx";
-import { policyClient } from "$this/util/client.ts";
-import { deserializePolicyFull } from "$this/util/deserialize.ts";
-import { origin } from "$this/util/util.ts";
+import { policyClient } from "$this/common/policyClient.ts";
+import { deserializePolicyFull } from "$this/common/deserialize.ts";
+import { origin } from "$this/common/util.ts";
 
 export const handler = {
   async GET(req: Request, ctx: HandlerContext) {

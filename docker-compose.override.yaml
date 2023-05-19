@@ -9,45 +9,36 @@ services:
       - ./Meowmed+_REST.yaml:/usr/share/nginx/html/Meowmed+_REST.yaml
     environment:
       API_URL: ./Meowmed+_REST.yaml
-
-  ui.rda:
+  ui:
+    image: meowmed-ui
     build:
-      args:
-        mode: "prod"
-        customerService: "http://customer.rda:8080"
-        policyService: "http://policy.rda:8080"
       context: ./UI
-      dockerfile: Dockerfile
+      target: prod
     env_file:
-      - ./UI/ui.env
+      - ./UI/.env
+      
   policy.rda:
+    image: meowmed-policy.rda
     build:
       context: ./RDA/PolicyService
       dockerfile: Dockerfile
     ports:
       - "8082:8080"
   customer.rda:
+    image: meowmed-customer.rda
     build:
       context: ./RDA/CustomerService
       dockerfile: Dockerfile
     ports:
       - "8081:8080"
   notification.rda:
+    image: meowmed-notification.rda
     build:
       context: ./RDA/NotificationService
       dockerfile: Dockerfile
 
-  ui.eda:
-    build:
-      args:
-        mode: "prod"
-        customerService: "http://customer.eda:8081"
-        policyService: "http://policy.eda:8080"
-      context: ./UI
-      dockerfile: Dockerfile
-    env_file:
-      - ./UI/ui.env
   customer.eda:
+    image: meowmed-customer.eda
     build:
       context: ./EDA/
       dockerfile: ./CustomerService/Dockerfile
@@ -56,6 +47,7 @@ services:
     ports:
       - "8071:8081"
   notification.eda:
+    image: meowmed-notification.eda
     build:
       context: ./EDA/
       dockerfile: ./NotificationService/Dockerfile

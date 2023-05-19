@@ -1,6 +1,6 @@
 import { HandlerContext, PageProps } from "$fresh/server.ts";
-import { deserializePolicyFull } from "$this/util/deserialize.ts";
-import { policyClient } from "$this/util/client.ts";
+import { deserializePolicyFull } from "$this/common/deserialize.ts";
+import { policyClient } from "$this/common/policyClient.ts";
 import { PolicyCalc } from "$this/generated/index.ts";
 
 export const handler = {

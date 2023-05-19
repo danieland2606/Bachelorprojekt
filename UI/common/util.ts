@@ -31,3 +31,10 @@ export function propMap<T extends object>(object: T, prefix = "") {
 export function origin({ url }: Request) {
   return new URL(url).origin;
 }
+
+export function voidToEmpty<T>(arg: T[] | void) { //typescript sucks
+  if (typeof arg === "undefined") {
+    return [] as T[];
+  }
+  return arg;
+}

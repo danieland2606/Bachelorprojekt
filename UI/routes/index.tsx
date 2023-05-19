@@ -1,9 +1,9 @@
 import { HandlerContext, PageProps } from "$fresh/server.ts";
 import { itemSearch, Table } from "$this/components/Table.tsx";
 import { Search } from "$this/components/Search.tsx";
-import { Address, Customer } from "$this/generated/models/all.ts";
-import { compareId } from "$this/util/util.ts";
-import { customerClient } from "$this/util/client.ts";
+import { Address } from "$this/generated/models/all.ts";
+import { compareId } from "$this/common/util.ts";
+import { customerClient, CustomerShort } from "$this/common/customerClient.ts";
 
 export const handler = {
   async GET(req: Request, ctx: HandlerContext) {
@@ -33,7 +33,7 @@ export default function Dashboard({ data }: PageProps) {
   );
 }
 
-function formatCustomerList(customerList: Customer[], search: string) {
+function formatCustomerList(customerList: CustomerShort[], search: string) {
   const headers = ["ID", "Vorname", "Nachname", "Adresse"];
   const items = customerList
     .sort(compareId)
@@ -42,11 +42,8 @@ function formatCustomerList(customerList: Customer[], search: string) {
   return { headers, items };
 }
 
-function customerToTableItem(customer: Customer) {
+function customerToTableItem(customer: CustomerShort) {
   const { id, firstName, lastName, address } = customer;
-  if (id == null || firstName == null || lastName == null || address == null) {
-    throw new Error("Required fields of customer missing");
-  }
   const row = [id, firstName, lastName, formatAddress(address)];
   const actions = { details: `/customer/${id}`, edit: `/customer/${id}?edit` };
   return { row, actions, active: true };

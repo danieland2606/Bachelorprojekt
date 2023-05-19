@@ -1,8 +1,8 @@
 import { HandlerContext } from "$fresh/server.ts";
 import { EditCustomer } from "$this/components/EditCustomer.tsx";
-import { customerClient } from "$this/util/client.ts";
-import { deserializeCustomerFull } from "$this/util/deserialize.ts";
-import { origin } from "$this/util/util.ts";
+import { customerClient } from "$this/common/customerClient.ts";
+import { deserializeCustomerFull } from "$this/common/deserialize.ts";
+import { origin } from "$this/common/util.ts";
 
 export const handler = {
   async GET(_: Request, ctx: HandlerContext) {

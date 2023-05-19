@@ -3008,6 +3008,10 @@ html {
   border-radius: 0px;
 }
 
+.border-none {
+  border-style: none;
+}
+
 .bg-error {
   --tw-bg-opacity: 1;
   background-color: hsl(var(--er) / var(--tw-bg-opacity));

@@ -2,10 +2,10 @@ import { HandlerContext, PageProps } from "$fresh/server.ts";
 import { EditCustomer } from "$this/components/EditCustomer.tsx";
 import { itemSearch, Table } from "$this/components/Table.tsx";
 import { Search } from "$this/components/Search.tsx";
-import { Policy } from "$this/generated/models/all.ts";
-import { compareId, origin } from "$this/util/util.ts";
-import { deserializeCustomerFull } from "$this/util/deserialize.ts";
-import { customerClient, policyClient } from "$this/util/client.ts";
+import { compareId, origin } from "$this/common/util.ts";
+import { deserializeCustomerFull } from "$this/common/deserialize.ts";
+import { customerClient } from "$this/common/customerClient.ts";
+import { policyClient, PolicyShort } from "$this/common/policyClient.ts";
 
 export const handler = {
   async GET(req: Request, ctx: HandlerContext) {
@@ -74,7 +74,7 @@ export default function ShowCustomer({ data, params }: PageProps) {
 }
 
 function formatPolicyList(
-  policyList: Policy[],
+  policyList: PolicyShort[],
   customerId: number,
   search = "",
 ) {
@@ -86,23 +86,12 @@ function formatPolicyList(
   return { headers, items };
 }
 
-function policyToTableItem(policy: Policy, customerId: number) {
-  const row = getRequiredFields(policy);
+function policyToTableItem(policy: PolicyShort, customerId: number) {
+  const { id, name, startDate, endDate, coverage, active } = policy;
+  const row = [id, name, startDate, endDate, coverage];
   const actions = {
-    details: `/customer/${customerId}/policy/${policy.id}`,
-    edit: `/customer/${customerId}/policy/${policy.id}?edit`,
+    details: `/customer/${customerId}/policy/${id}`,
+    edit: `/customer/${customerId}/policy/${id}?edit`,
   };
-  return { row, actions, active: !!policy.active };
-}
-
-function getRequiredFields(policy: Policy) {
-  const { name } = policy?.objectOfInsurance ?? {};
-  const { id, startDate, endDate, coverage, active } = policy;
-  if (
-    id == null || startDate == null || endDate == null ||
-    coverage == null || name == null || active == null
-  ) {
-    throw new Error("Required fields of policy missing");
-  }
-  return [id, name, startDate, endDate, coverage];
+  return { row, actions, active };
 }
