@@ -109,7 +109,31 @@ public class CustomerController{
     public ResponseEntity<MappingJacksonValue> postCustomer(@RequestBody CustomerRequest cRequest) {
         return ResponseEntity.status(201).body(cService.postCustomer(cRequest));
     }
-
+    /**
+     * Diese Methode updated ein CustomerEntity
+     * @url "http://domain/:port/customer/"
+     * @param c_id ID des gesuchten Customers
+     * @param cRequest beinhaltet die Daten die geändert werden müssen
+     * {
+     *   "firstName": "John",
+     *   "lastName": "Doe",
+     *   "formOfAdress": "Mr",
+     *   "title": "",
+     *   "maritalStatus": "single",
+     *   "dateOfBirth": "2000-12-30",
+     *   "employmentStatus": "employed",
+     *   "address": {
+     *     "city": "Hannover",
+     *     "street": "Berliner Allee 100",
+     *     "postalCode": "30855"
+     *   },
+     *   "phoneNumber": "+4951177488375",
+     *   "email": "example@aol.com",
+     *   "bankDetails": "IE12BOFI90000112345678"
+     * }
+     *
+     * @return Gibt die ID des veränderten Objekt zurück
+     */
     @PutMapping("/customer/{c_id}")
     public ResponseEntity<MappingJacksonValue> putCustomer(@PathVariable Long c_id, @RequestBody CustomerRequest cRequest) {
         return ResponseEntity.status(204).body(cService.customerUpdate(c_id, cRequest));
