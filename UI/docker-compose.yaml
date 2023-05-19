@@ -2,13 +2,14 @@ version: '3.7'
 services:
   ui:
     build:
-      args:
-        mode: test
       context: .
-      dockerfile: Dockerfile
+      target: test
     env_file:
       - ui.env
-    container_name: ui-services
+    environment:
+      - MEOWMED_CUSTOMER_SERVER=testing
+      - MEOWMED_POLICY_SERVER=testing
+    container_name: meowmed+
     networks:
       - "default"
     ports:

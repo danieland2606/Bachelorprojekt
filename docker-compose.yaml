@@ -2,11 +2,12 @@ version: '3.7'
 services:
   ui.rda:
     container_name: ui-service
-    image: meowmed-ui.rda
+    image: meowmed-ui
     profiles:
       - rda
     environment:
-      - DENO_DEPLOYMENT_ID=111cba220e8fc3caaa47f6ad6b0baf2e8d48aac2
+      - MEOWMED_CUSTOMER_SERVER=http://customer.rda:8080
+      - MEOWMED_POLICY_SERVER=http://policy.rda:8080
     networks:
       - rda
     ports:
@@ -100,18 +101,19 @@ services:
 
   ui.eda:
     container_name: ui-service-eda
-    image: meowmed-ui.eda
+    image: meowmed-ui
     profiles:
       - eda
     environment:
-      - DENO_DEPLOYMENT_ID=111cba220e8fc3caaa47f6ad6b0baf2e8d48aac2
+      - MEOWMED_CUSTOMER_SERVER=http://customer.eda:8081
+      - MEOWMED_POLICY_SERVER=http://policy.eda:8080
     networks:
       - eda
     ports:
       - "80:8000"
     depends_on:
-      - customer.eda
-      - policy.eda
+      - policy.rda
+      - customer.rda
   customer.eda:
     container_name: customer-service-eda
     image: meowmed-customer.eda

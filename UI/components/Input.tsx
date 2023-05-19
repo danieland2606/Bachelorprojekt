@@ -1,5 +1,5 @@
 import { JSX } from "preact/jsx-runtime";
-import { capitalize } from "$this/util/util.ts";
+import { capitalize } from "$this/common/util.ts";
 
 export const notRequirable = [
   "button",

@@ -1,8 +1,8 @@
 import { HandlerContext } from "$fresh/server.ts";
 import { EditCustomer } from "$this/components/EditCustomer.tsx";
-import { customerClient } from "$this/util/client.ts";
-import { deserialize } from "$this/util/util.ts";
-import { CustomerAllRequired } from "$this/generated/index.ts";
+import { customerClient } from "$this/common/customerClient.ts";
+import { deserializeCustomerFull } from "$this/common/deserialize.ts";
+import { origin } from "$this/common/util.ts";
 
 export const handler = {
   async GET(_: Request, ctx: HandlerContext) {
@@ -10,13 +10,10 @@ export const handler = {
   },
   async POST(req: Request, _: HandlerContext) {
     const form = await req.formData();
-    const customer = deserialize<CustomerAllRequired>(
-      form,
-      "CustomerAllRequired",
-    );
+    const customer = deserializeCustomerFull(form);
     await customerClient.createCustomer(customer);
-    const base = new URL(req.url).origin;
-    return Response.redirect(new URL("/", base), 303);
+    const index = new URL("/", origin(req));
+    return Response.redirect(index, 303);
   },
 };
 

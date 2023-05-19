@@ -1,10 +1,12 @@
 import { HandlerContext, PageProps } from "$fresh/server.ts";
 import { EditCustomer } from "$this/components/EditCustomer.tsx";
-import { Table } from "$this/components/Table.tsx";
+import { itemSearch, Table } from "$this/components/Table.tsx";
 import { Search } from "$this/components/Search.tsx";
-import { CustomerAllRequired, Policy } from "$this/generated/models/all.ts";
-import { compareId, deserialize } from "$this/util/util.ts";
-import { customerClient, policyClient } from "$this/util/client.ts";
+import { compareId, Obj, origin } from "$this/common/util.ts";
+import { deserializeCustomerFull } from "$this/common/deserialize.ts";
+import { customerClient } from "$this/common/customerClient.ts";
+import { policyClient, PolicyShort } from "$this/common/policyClient.ts";
+import { CustomerAllRequired } from "$this/generated/index.ts";
 
 export const handler = {
   async GET(req: Request, ctx: HandlerContext) {
@@ -15,50 +17,49 @@ export const handler = {
     const policyList = await policyClient.getPolicyList(customerId);
     const tableData = formatPolicyList(policyList, customerId, search);
     const customer = await customerClient.getCustomer(customerId);
-    return ctx.render({ tableData, customer, edit });
+    return ctx.render({ tableData, customer, edit, search });
   },
   async POST(req: Request, ctx: HandlerContext) {
     const customerId = Number.parseInt(ctx.params.customerId);
     const form = await req.formData();
-    const customer = deserialize<CustomerAllRequired>(
-      form,
-      "CustomerAllRequired",
-    );
+    const customer = deserializeCustomerFull(form);
     await customerClient.updateCustomer(customerId, customer);
-    const base = new URL(req.url).origin;
-    return Response.redirect(new URL("/", base), 303);
+    const index = new URL("/", origin(req));
+    return Response.redirect(index, 303);
   },
 };
 
 export default function ShowCustomer({ data, params }: PageProps) {
+  const { edit, search, customer, tableData } = data;
+  const employmentStatus = (customer as CustomerAllRequired).employmentStatus;
   const id = "edit-customer";
   return (
     <>
       <h1>Kundendetails</h1>
       <EditCustomer
         id={id}
-        mode={data.edit ? "edit" : "display"}
-        values={data.customer}
+        mode={edit ? "edit" : "display"}
+        values={customer}
         allrequired
       >
       </EditCustomer>
       <div class="box-row">
         <Search
-          value={data.search}
+          value={search}
           class="relative sm:inline-block block mb-4 sm:mb-0"
         >
         </Search>
         <a
-          class="button create-new"
           href={`/customer/${params.customerId}/policy`}
+          class={employmentStatus == "arbeitslos" ? "pointer-events-none" : ""}
         >
           Neuer Vertrag
         </a>
       </div>
-      <Table tabledata={data.tableData}></Table>
+      <Table tabledata={tableData}></Table>
       <div class="box-row buttons">
         <a class="button" href="/">Zurück</a>
-        {data.edit &&
+        {edit &&
           (
             <input
               form={id}
@@ -76,52 +77,24 @@ export default function ShowCustomer({ data, params }: PageProps) {
 }
 
 function formatPolicyList(
-  policyList: Policy[],
+  policyList: PolicyShort[],
   customerId: number,
   search = "",
 ) {
-  return {
-    headers: ["ID", "Katze", "Beginn", "Ende", "Jahresdeckung"],
-    items: policyList
-      .filter(policySearch(search))
-      .sort(compareId)
-      .map((policy) => policyToTableRow(policy, customerId)),
-  };
+  const headers = ["ID", "Katze", "Beginn", "Ende", "Jahresdeckung"];
+  const items = policyList
+    .sort(compareId)
+    .map((policy) => policyToTableItem(policy, customerId))
+    .filter(itemSearch(search));
+  return { headers, items };
 }
 
-function policyToTableRow(policy: Policy, customerId: number) {
-  if (
-    policy.id == null || policy.objectOfInsurance == null ||
-    policy.startDate == null || policy.endDate == null ||
-    policy.coverage == null
-  ) {
-    throw new Error("Required fields of policy missing");
-  }
-  return {
-    item: [
-      policy.id,
-      policy.objectOfInsurance.name,
-      policy.startDate,
-      policy.endDate,
-      policy.coverage,
-    ],
-    actions: {
-      details: `/customer/${customerId}/policy/${policy.id}`,
-      edit: `/customer/${customerId}/policy/${policy.id}?edit`,
-      delete: "",
-    },
+function policyToTableItem(policy: PolicyShort, customerId: number) {
+  const { id, name, startDate, endDate, coverage, active } = policy;
+  const row = [id, name, startDate, endDate, coverage];
+  const actions = {
+    details: `/customer/${customerId}/policy/${id}`,
+    edit: `/customer/${customerId}/policy/${id}?edit`,
   };
-}
-
-function policySearch(search: string) {
-  if (!search) {
-    return function () {
-      return true;
-    };
-  }
-  return (policy: Policy) => {
-    const searchTarget =
-      `${policy.id} ${policy.objectOfInsurance?.name} ${policy.startDate} ${policy.endDate} ${policy.coverage}`;
-    return searchTarget.toLowerCase().includes(search.toLowerCase());
-  };
+  return { row, actions, active };
 }

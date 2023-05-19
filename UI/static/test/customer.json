@@ -1,12 +1,12 @@
 {
   "firstName": "John",
   "lastName": "Doe",
-  "formOfAddress": "Mr",
+  "formOfAddress": "herr",
   "title": "",
-  "maritalStatus": "single",
+  "maritalStatus": "ledig",
   "dateOfBirth": "2000-12-30",
   "dogOwner": false,
-  "employmentStatus": "employed",
+  "employmentStatus": "arbeitslos",
   "address": {
     "city": "Hannover",
     "street": "Berliner Allee 100",

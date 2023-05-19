@@ -1,7 +1,7 @@
 import { HandlerContext, PageProps } from "$fresh/server.ts";
-import { deserialize } from "$this/util/util.ts";
-import { policyClient } from "$this/util/client.ts";
-import { PolicyAllRequired, PolicyCalc } from "$this/generated/index.ts";
+import { deserializePolicyFull } from "$this/common/deserialize.ts";
+import { policyClient } from "$this/common/policyClient.ts";
+import { PolicyCalc } from "$this/generated/index.ts";
 
 export const handler = {
   GET(_: Request, ctx: HandlerContext) {
@@ -10,8 +10,12 @@ export const handler = {
   async POST(req: Request, ctx: HandlerContext) {
     const form = await req.formData();
     const calcPolicy = deserializePolicyCalc(form);
-    const { premium } = await policyClient.calcPolicyPrice(calcPolicy);
-    return ctx.render({ premium });
+    try {
+      const { premium } = await policyClient.calcPolicyPrice(calcPolicy);
+      return ctx.render({ premium });
+    } catch (_) {
+      return ctx.render({ premium: "error" });
+    }
   },
 };
 
@@ -28,9 +32,5 @@ function deserializePolicyCalc(form: FormData) {
   if (isNaN(id)) { //intentionally not using Number.isNaN()
     throw new Error("customerId missing for premium calculation");
   }
-  const policyCalc = {
-    customerId: id,
-    policy: deserialize<PolicyAllRequired>(form, "PolicyAllRequired"),
-  };
-  return policyCalc as PolicyCalc;
+  return { customerId: id, policy: deserializePolicyFull(form) } as PolicyCalc;
 }

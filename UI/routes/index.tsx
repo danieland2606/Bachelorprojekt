@@ -1,9 +1,9 @@
 import { HandlerContext, PageProps } from "$fresh/server.ts";
-import { Item, Table } from "$this/components/Table.tsx";
+import { itemSearch, Table } from "$this/components/Table.tsx";
 import { Search } from "$this/components/Search.tsx";
-import { Address, Customer } from "$this/generated/models/all.ts";
-import { compareId } from "$this/util/util.ts";
-import { customerClient } from "$this/util/client.ts";
+import { Address } from "$this/generated/models/all.ts";
+import { compareId } from "$this/common/util.ts";
+import { customerClient, CustomerShort } from "$this/common/customerClient.ts";
 
 export const handler = {
   async GET(req: Request, ctx: HandlerContext) {
@@ -33,53 +33,22 @@ export default function Dashboard({ data }: PageProps) {
   );
 }
 
-function formatCustomerList(customerList: Customer[], search: string) {
-  return {
-    headers: ["ID", "Vorname", "Nachname", "Adresse"],
-    items: customerList
-      .filter(customerSearch(search))
-      .sort(compareId)
-      .map(customerToTableRow),
-  };
+function formatCustomerList(customerList: CustomerShort[], search: string) {
+  const headers = ["ID", "Vorname", "Nachname", "Adresse"];
+  const items = customerList
+    .sort(compareId)
+    .map(customerToTableItem)
+    .filter(itemSearch(search));
+  return { headers, items };
 }
 
-function customerToTableRow(customer: Customer): Item {
-  if (
-    customer.id == null || customer.firstName == null ||
-    customer.lastName == null || customer.address == null
-  ) {
-    throw new Error("Required fields of customer missing");
-  }
-  return {
-    item: [
-      customer.id,
-      customer.firstName,
-      customer.lastName,
-      formatAddress(customer.address),
-    ],
-    actions: {
-      details: `/customer/${customer.id}`,
-      edit: `/customer/${customer.id}?edit`,
-      delete: "",
-    },
-  };
+function customerToTableItem(customer: CustomerShort) {
+  const { id, firstName, lastName, address } = customer;
+  const row = [id, firstName, lastName, formatAddress(address)];
+  const actions = { details: `/customer/${id}`, edit: `/customer/${id}?edit` };
+  return { row, actions, active: true };
 }
 
-function formatAddress(address: Address): string {
-  return `${address.street}, ${address.postalCode} ${address.city}`;
-}
-
-function customerSearch(search: string) {
-  if (!search) {
-    return function () {
-      return true;
-    };
-  }
-  return (customer: Customer) => {
-    const searchTarget =
-      `${customer.id} ${customer.firstName} ${customer.lastName} ${
-        customer?.address && formatAddress(customer.address)
-      }`;
-    return searchTarget.toLowerCase().includes(search.toLowerCase());
-  };
+function formatAddress({ street, postalCode, city }: Address): string {
+  return `${street}, ${postalCode} ${city}`;
 }
