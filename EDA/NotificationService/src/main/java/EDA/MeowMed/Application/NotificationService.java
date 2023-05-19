@@ -3,7 +3,6 @@ package EDA.MeowMed.Application;
 import events.customer.CustomerChangedEvent;
 import events.customer.CustomerCreatedEvent;
 import events.customer.subclasses.Address;
-import events.customer.subclasses.CustomerData;
 import events.policy.PolicyChangedEvent;
 import events.policy.PolicyCreatedEvent;
 import events.policy.subclasses.CustomerPojo;
@@ -62,20 +61,6 @@ public class NotificationService {
      * @param customerCreated the CustomerCreatedEvent containing all valuable data concerning the CustomerCreatedMail
      */
     public void sendCustomerCreatedMail(CustomerCreatedEvent customerCreated) {
-//        Email email = setupMail(customerCreated.getEmail(), sender, subjectCustomerCreated, templateCustomerCreated);
-//        Map<String, Object> properties = new HashMap<>();
-//        properties.put("formOfAddress", formatFormOfAddress(customerCreated.getFormOfAddress()));
-//        properties.put("firstName", customerCreated.getFirstName());
-//        properties.put("lastName", customerCreated.getLastName());
-//        properties.put("cid", customerCreated.getId());
-//        properties.put("maritalStatus", customerCreated.getMaritalStatus());
-//        properties.put("dateOfBirth", formatDate(customerCreated.getDateOfBirth()));
-//        properties.put("dogOwner", boolToString(customerCreated.isDogOwner()));
-//        properties.put("employmentStatus", customerCreated.getEmploymentStatus());
-//        properties.put("phoneNumber", customerCreated.getPhoneNumber());
-//        properties.put("bankDetails", customerCreated.getBankDetails());
-//        properties.put("address", customerCreated.getAddress().toString());
-//        email.setProperties(properties);
         Map<String, Function<Object, String>> parser = new HashMap<>();
         parser.put("formOfAddress", NotificationService::formatFormOfAddress);
         parser.put("dateOfBirth", NotificationService::formatDate);
@@ -100,22 +85,19 @@ public class NotificationService {
     }
 
     public void sendCustomerChangedMail(CustomerChangedEvent customerChanged) {
-        CustomerData customerData = customerChanged.getNewCustomer();
-        Email email = setupMail(customerData.getEmail(), sender, subjectCustomerChanged, templateCustomerChanged);
-        Map<String, Object> properties = new HashMap<>();
-        properties.put("formOfAddress", formatFormOfAddress(customerChanged.getNewCustomer().getFormOfAddress()));
-        properties.put("firstName", customerChanged.getNewCustomer().getFirstName());
-        properties.put("lastName", customerChanged.getNewCustomer().getLastName());
-        properties.put("cid", customerChanged.getNewCustomer().getId());
-        properties.put("maritalStatus", customerChanged.getNewCustomer().getMaritalStatus());
-        properties.put("dateOfBirth", formatDate(customerChanged.getNewCustomer().getDateOfBirth()));
-        properties.put("dogOwner", boolToString(customerChanged.getNewCustomer().getDogOwner()));
-        properties.put("employmentStatus", customerChanged.getNewCustomer().getEmploymentStatus());
-        properties.put("phoneNumber", customerChanged.getNewCustomer().getPhoneNumber());
-        properties.put("bankDetails", customerChanged.getNewCustomer().getBankDetails());
-        properties.put("address", customerChanged.getNewCustomer().getAddress().toString());
-        email.setProperties(properties);
-
+        Map<String, Function<Object, String>> parser = new HashMap<>();
+        parser.put("formOfAddress", NotificationService::formatFormOfAddress);
+        parser.put("dateOfBirth", NotificationService::formatDate);
+        parser.put("dogOwner", NotificationService::boolToString);
+        parser.put("address", Object::toString);
+        Email email = emailFactory.buildEmail(
+                customerChanged.getEmail(),
+                sender,
+                subjectCustomerCreated,
+                templateCustomerCreated,
+                parser,
+                customerChanged
+        );
         try {
             emailSenderService.sendHtmlMessage(email);
         } catch (MessagingException e) {
@@ -129,14 +111,16 @@ public class NotificationService {
      * @param customerChanged
      */
     public void sendCustomerCancelledMail(CustomerChangedEvent customerChanged) {
-        CustomerData customerData = customerChanged.getNewCustomer();
-        Email email = setupMail(customerData.getEmail(), sender, subjectCustomerCancelled, templateCustomerCancelled);
-        Map<String, Object> properties = new HashMap<>();
-        properties.put("formOfAddress", formatFormOfAddress(customerChanged.getNewCustomer().getFormOfAddress()));
-        properties.put("firstName", customerChanged.getNewCustomer().getFirstName());
-        properties.put("lastName", customerChanged.getNewCustomer().getLastName());
-        email.setProperties(properties);
-
+        Map<String, Function<Object, String>> parser = new HashMap<>();
+        parser.put("formOfAddress", NotificationService::formatFormOfAddress);
+        Email email = emailFactory.buildEmail(
+                customerChanged.getEmail(),
+                sender,
+                subjectCustomerCreated,
+                templateCustomerCreated,
+                parser,
+                customerChanged
+        );
         try {
             emailSenderService.sendHtmlMessage(email);
         } catch (MessagingException e) {
@@ -162,23 +146,19 @@ public class NotificationService {
      * @param policyCreated the PolicyCreatedEvent containing all valuable data concerning the PolicyCreatedMail
      */
     public void sendPolicyCreatedMail(PolicyCreatedEvent policyCreated) {
-        PolicyPojo policyData = policyCreated.getPolicy();
-        CustomerPojo customerData = policyData.getCustomer();
-        Email email = setupMail(customerData.getEmail(), sender, subjectPolicy, templatePolicyCreated);
-        Map<String, Object> properties = new HashMap<>();
-        properties.put("formOfAddress", formatFormOfAddress(customerData.getFormOfAddress()));
-        properties.put("firstName", customerData.getFirstName());
-        properties.put("lastName", customerData.getLastName());
-        properties.put("pid", policyData.getId());
-        properties.put("startDate", formatDate(policyData.getStartDate()));
-        properties.put("endDate", formatDate(policyData.getEndDate()));
-        properties.put("coverage", policyData.getCoverage());
-        properties.put("castrated", boolToString(policyData.getObjectOfInsurance().isCastrated()));
-        properties.put("personality", policyData.getObjectOfInsurance().getPersonality());
-        properties.put("environment", policyData.getObjectOfInsurance().getEnvironment());
-        properties.put("weight", policyData.getObjectOfInsurance().getWeight());
-        properties.put("premium", policyData.getPremium());
-        email.setProperties(properties);
+        Map<String, Function<Object, String>> parser = new HashMap<>();
+        parser.put("formOfAddress", NotificationService::formatFormOfAddress);
+        parser.put("startDate", NotificationService::formatDate);
+        parser.put("endDate", NotificationService::formatDate);
+        parser.put("castrated", NotificationService::boolToString);
+        Email email = emailFactory.buildEmail(
+                policyCreated.getEmail(),
+                sender,
+                subjectCustomerCreated,
+                templateCustomerCreated,
+                parser,
+                policyCreated
+        );
         try {
             emailSenderService.sendHtmlMessage(email);
         } catch (MessagingException e) {
@@ -189,20 +169,19 @@ public class NotificationService {
     }
 
     public void sendPolicyChangedMail(PolicyChangedEvent policyChangedEvent) {
-        PolicyPojo newPolicy = policyChangedEvent.getNewPolicy();
-        PolicyPojo odlPolicy = policyChangedEvent.getOldPolicy();
-        Email email = setupMail(newPolicy.getCustomer().getEmail(), sender, subjectPolicyChanged,
-                templatePolicyChanged);
-        Map<String, Object> properties = new HashMap<>();
-        properties.put("formOfAddress", formatFormOfAddress(newPolicy.getCustomer().getFormOfAddress()));
-        properties.put("firstName", newPolicy.getCustomer().getFirstName());
-        properties.put("lastName", newPolicy.getCustomer().getLastName());
-        properties.put("pid", newPolicy.getId());
-        properties.put("oldCoverage", odlPolicy.getCoverage());
-        properties.put("newCoverage", newPolicy.getCoverage());
-        properties.put("oldPremium", odlPolicy.getPremium());
-        properties.put("newPremium", newPolicy.getPremium());
-        email.setProperties(properties);
+        Map<String, Function<Object, String>> parser = new HashMap<>();
+        parser.put("formOfAddress", NotificationService::formatFormOfAddress);
+        parser.put("startDate", NotificationService::formatDate);
+        parser.put("endDate", NotificationService::formatDate);
+        parser.put("castrated", NotificationService::boolToString);
+        Email email = emailFactory.buildEmail(
+                policyChangedEvent.getEmail(),
+                sender,
+                subjectCustomerCreated,
+                templateCustomerCreated,
+                parser,
+                policyChangedEvent
+        );
         try {
             emailSenderService.sendHtmlMessage(email);
         } catch (MessagingException e) {
@@ -213,23 +192,19 @@ public class NotificationService {
     }
 
     public void sendPolicyCancelledMail(PolicyChangedEvent policyChangedEvent) {
-        PolicyPojo policyData = policyChangedEvent.getNewPolicy();
-        CustomerPojo customerData = policyData.getCustomer();
-        Email email = setupMail(customerData.getEmail(), sender, subjectCustomerCancelled, templatePolicyCancelled);
-        Map<String, Object> properties = new HashMap<>();
-        properties.put("formOfAddress", formatFormOfAddress(customerData.getFormOfAddress()));
-        properties.put("firstName", customerData.getFirstName());
-        properties.put("lastName", customerData.getLastName());
-        properties.put("pid", policyData.getId());
-        properties.put("startDate", formatDate(policyData.getStartDate()));
-        properties.put("endDate", formatDate(policyData.getEndDate()));
-        properties.put("coverage", policyData.getCoverage());
-        properties.put("castrated", boolToString(policyData.getObjectOfInsurance().isCastrated()));
-        properties.put("personality", policyData.getObjectOfInsurance().getPersonality());
-        properties.put("environment", policyData.getObjectOfInsurance().getEnvironment());
-        properties.put("weight", policyData.getObjectOfInsurance().getWeight());
-        properties.put("premium", policyData.getPremium());
-        email.setProperties(properties);
+        Map<String, Function<Object, String>> parser = new HashMap<>();
+        parser.put("formOfAddress", NotificationService::formatFormOfAddress);
+        parser.put("startDate", NotificationService::formatDate);
+        parser.put("endDate", NotificationService::formatDate);
+        parser.put("castrated", NotificationService::boolToString);
+        Email email = emailFactory.buildEmail(
+                policyChangedEvent.getEmail(),
+                sender,
+                subjectCustomerCreated,
+                templateCustomerCreated,
+                parser,
+                policyChangedEvent
+        );
         try {
             emailSenderService.sendHtmlMessage(email);
         } catch (MessagingException e) {

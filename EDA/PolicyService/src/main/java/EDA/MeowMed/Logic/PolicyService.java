@@ -16,7 +16,6 @@ import EDA.MeowMed.Persistence.Entity.Policy;
 import EDA.MeowMed.Rest.PremiumCalculationData;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
-import events.customer.subclasses.CustomerData;
 import events.policy.PolicyChangedEvent;
 import events.policy.PolicyCreatedEvent;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -347,9 +346,9 @@ public class PolicyService {
         boolean premiumChanged = Math.abs(persistentPolicy.getPremium() - oldPolicy.getPremium()) > 0.0001;
         if (persistentPolicy.getObjectOfInsurance().getPersonality().equals("sehr verspielt")) {
             persistentPolicy.setCancelled(true);
-            this.policySender.sendPolicyCancelled(new PolicyChangedEvent(oldPolicy.toPojo(), persistentPolicy.toPojo()));
+            this.policySender.sendPolicyCancelled(new PolicyChangedEvent(persistentPolicy.toPojo()));
         } else if (premiumChanged) {
-            this.policySender.sendPolicyChanged(new PolicyChangedEvent(oldPolicy.toPojo(), persistentPolicy.toPojo()));
+            this.policySender.sendPolicyChanged(new PolicyChangedEvent(persistentPolicy.toPojo()));
         }
         policyRepository.save(persistentPolicy);
         objectOfInsuranceRepository.save(persistentPolicy.getObjectOfInsurance());
@@ -364,20 +363,19 @@ public class PolicyService {
      @param customerChangedEvent The event that contains the new customer data
      */
     public void updateCustomer(CustomerChangedEvent customerChangedEvent) throws ObjectNotFoundException{
-        CustomerData newData = customerChangedEvent.getNewCustomer();
-        Customer customer = this.getCustomer(newData.getId());
-        customer.setFirstName(newData.getFirstName());
-        customer.setLastName(newData.getLastName());
-        customer.setFormOfAddress(newData.getFormOfAddress());
-        customer.setTitle(newData.getTitle());
-        customer.setDogOwner(newData.getDogOwner());
-        customer.getAddress().setPostalCode(newData.getAddress().getPostalCode());
-        customer.setEmail(newData.getEmail());
-        customer.setEmploymentStatus(newData.getEmploymentStatus());
+        Customer customer = this.getCustomer(customerChangedEvent.getId());
+        customer.setFirstName(customerChangedEvent.getFirstName());
+        customer.setLastName(customerChangedEvent.getLastName());
+        customer.setFormOfAddress(customerChangedEvent.getFormOfAddress());
+        customer.setTitle(customerChangedEvent.getTitle());
+        customer.setDogOwner(customerChangedEvent.getDogOwner());
+        customer.getAddress().setPostalCode(customerChangedEvent.getAddress().getPostalCode());
+        customer.setEmail(customerChangedEvent.getEmail());
+        customer.setEmploymentStatus(customerChangedEvent.getEmploymentStatus());
         this.addressRepository.save(customer.getAddress());
         this.customerRepository.save(customer);
 //        this.customerRepository.flush(); Speichert customer nicht
-        this.updateAllPoliciesOfCustomer(newData.getId(), customer.getEmploymentStatus().equals("arbeitslos"));
+        this.updateAllPoliciesOfCustomer(customerChangedEvent.getId(), customer.getEmploymentStatus().equals("arbeitslos"));
     }
 
     /**
@@ -400,7 +398,6 @@ public class PolicyService {
      * @param cancelPolicy
      */
     private void updatePolicyDataBasedOnNewInformation(Policy newPolicy, boolean cancelPolicy) throws ObjectNotFoundException{
-        Policy oldPolicy = new Policy(newPolicy);
         System.out.println("Customer Postleitzahl: " + newPolicy.getCustomer().getAddress().getPostalCode());
         double newPremium = this.getPremium(newPolicy.getCustomer(), newPolicy);
         boolean premiumChanged = Math.abs(newPremium - newPolicy.getPremium()) > 0.0001;
@@ -410,11 +407,11 @@ public class PolicyService {
             //FIXME Art des Speicherns notwendig? Anders möglich?
             policyRepository.save(newPolicy);
             objectOfInsuranceRepository.save(newPolicy.getObjectOfInsurance());
-            this.policySender.sendPolicyCancelled(new PolicyChangedEvent(oldPolicy.toPojo(), newPolicy.toPojo()));
+            this.policySender.sendPolicyCancelled(new PolicyChangedEvent(newPolicy.toPojo()));
         } else if(premiumChanged) {
             policyRepository.save(newPolicy);
             objectOfInsuranceRepository.save(newPolicy.getObjectOfInsurance());
-            this.policySender.sendPolicyChanged(new PolicyChangedEvent(oldPolicy.toPojo(), newPolicy.toPojo()));
+            this.policySender.sendPolicyChanged(new PolicyChangedEvent(newPolicy.toPojo()));
         }
     }
 }

@@ -72,7 +72,7 @@ public class ObjectOfInsurancePojo implements Serializable {
         this.dateOfBirth = dateOfBirth;
     }
 
-    public boolean isCastrated() {
+    public boolean getCastrated() {
         return castrated;
     }
 

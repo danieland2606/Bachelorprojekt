@@ -1,8 +1,8 @@
 package EDA.MeowMed.Persistence.Entity;
 
 import com.fasterxml.jackson.annotation.JsonFilter;
+import events.customer.CustomerChangedEvent;
 import events.customer.CustomerCreatedEvent;
-import events.customer.subclasses.CustomerData;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
@@ -202,8 +202,13 @@ public class Customer implements Serializable {
         );
     }
 
-    public CustomerData toCustomerData() {
-        return new CustomerData(
+    /**
+     * TODO: Add comment
+     *
+     * @return
+     */
+    public CustomerChangedEvent createCustomerChangedEvent() {
+        return new CustomerChangedEvent(
                 id,
                 firstName,
                 lastName,

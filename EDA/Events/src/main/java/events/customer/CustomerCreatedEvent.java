@@ -24,7 +24,6 @@ public class CustomerCreatedEvent implements Serializable {
     private String maritalStatus;
     private LocalDate dateOfBirth;
     private String employmentStatus;
-
     private boolean dogOwner;
     private Address address;
     private String phoneNumber;
@@ -74,13 +73,21 @@ public class CustomerCreatedEvent implements Serializable {
         this.lastName = lastName;
     }
 
-    public String getFormOfAddress() {return formOfAddress;}
+    public String getFormOfAddress() {
+        return formOfAddress;
+    }
 
-    public void setFormOfAddress(String formOfAddress) {this.formOfAddress = formOfAddress;}
+    public void setFormOfAddress(String formOfAddress) {
+        this.formOfAddress = formOfAddress;
+    }
 
-    public String getTitle() {return title;}
+    public String getTitle() {
+        return title;
+    }
 
-    public void setTitle(String title) {this.title = title;}
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
     public String getMaritalStatus() {
         return maritalStatus;

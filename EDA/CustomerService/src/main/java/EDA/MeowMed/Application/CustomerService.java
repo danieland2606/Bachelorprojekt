@@ -176,7 +176,7 @@ public class CustomerService {
         customerNew.setId(customerOld.getId());
         customerRepository.save(customerNew);
         
-        eventSenderService.sendCustomerChangedEvent(customerNew, customerOld);
+        eventSenderService.sendCustomerChangedEvent(customerNew);
 
         return null;
     }

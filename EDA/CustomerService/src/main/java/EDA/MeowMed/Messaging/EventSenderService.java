@@ -46,11 +46,11 @@ public class EventSenderService {
         return true;
     }
 
-    public boolean sendCustomerChangedEvent(Customer customerNew, Customer customerOld) {
+    public boolean sendCustomerChangedEvent(Customer customer) {
         try {
-            CustomerChangedEvent customerChangedEvent = new CustomerChangedEvent(customerOld.toCustomerData(), customerNew.toCustomerData());
+            CustomerChangedEvent customerChangedEvent = customer.createCustomerChangedEvent();
             String routing_key;
-            if (customerNew.getEmploymentStatus().equals(CustomerValidationService.cancelStateEmploymentStatus)) {
+            if (customer.getEmploymentStatus().equals(CustomerValidationService.cancelStateEmploymentStatus)) {
                 routing_key = cancelled_routing_key;
             } else {
                 routing_key = changed_routing_key;
