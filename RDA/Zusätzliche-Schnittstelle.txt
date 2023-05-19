@@ -1,0 +1,10 @@
+Notificationservice:
+    @PostMapping("/customernotification") --> CustomerMailEntity
+    @PostMapping("/policynotification") --> PolicyMailEntity
+    @PostMapping("/policychangenotification") --> PolicyMailEntity
+    @PostMapping("/customerchangenotification") --> CustomerMailEntity
+    @PostMapping("/policydeletenotification") --> PolicyMailEntity
+
+Policyservice:
+    @PutMapping("/customer/{c_id}/policy") (Trigger für Customerupdates)
+    @DeleteMapping("customer/{c_id}/policy/{p_id}")

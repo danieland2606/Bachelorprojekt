@@ -31,24 +31,8 @@ public class NotificationController {
 
     /**
      * Diese Methode nimmt eine Customer-Post-Anfrage für den Email-Versand an und sendet eine vorbereitete EMail
-     * @url "http://domain:port/customernotification"
+     * @url POST "http://domain:port/customernotification"
      * @param details Ein Customer-Objekt, dessen Inhalt in der EMail verwendet wird
-     * {
-            "firstName": "Jan",
-            "lastName": "Lorenz",
-            "formofAdress": "Mr.",
-            "martialStatus": "ledig",
-            "dateOfBirth": "1999-11-03",
-            "employmentStatus": "student",
-            "address": {
-                "city": "Hildesheim",
-                "street": "Burgerking Hbf",
-                "postalCode": 31137
-            },
-            "phoneNumber": "+49123456789",
-            "email": "jan-niklas-johannes.lorenz@stud.hs-hannover.de",
-            "bankDetails": "DE2131627312371351232"
-        }
      * @return Zurück kommt ein HTTP-Statuscode, der aussagt, ob die Mail versendet wurde
      */
 
@@ -59,47 +43,46 @@ public class NotificationController {
 
     /**
      * Diese Methode nimmt eine Vertrags-Post-Anfrage für den Email-Versand an und sendet eine vorbereitete EMail
-     * @url "http://domain:port/customernotification"
+     * @url POST "http://domain:port/policynotification"
      * @param details Ein Vertrags-Objekt mit zusätzlichen Infos, dessen Inhalt in der EMail verwendet wird
-     * {
-            "firstName" : "Alexander",
-            "lastName" : "Hampel",
-            "formOfAdress": "Herr",
-            "martialStatus" : "erledigt",
-            "dateOfBirth" : "1996-01-14",
-            "employmentStatus": "student",
-            "phoneNumber": "0123456789",
-            "email": "alexander.hampel@stud.hs-hannover.de",
-            "bankDetails": "DE123456789123456789",
-            "city": "Hannover",
-            "street": "Ricklinger Stadtweg 120",
-            "postalCode": "30149",
-            "pid": 2,
-            "cid": 1,
-            "startDate": "2023-05-07",
-            "endDate": "2023-05-08",
-            "coverage": 10000,
-            "premium": 975.0,
-            "name": "Nello",
-            "race": "Bengalisch",
-            "color": "alpine-weiss",
-            "age": "2023-08-07",
-            "castrated": false,
-            "personality": "verspielt",
-            "environment": "freiläufer",
-            "weight" : 4
-        }
      * @return Zurück kommt ein HTTP-Statuscode, der aussagt, ob die Mail versendet wurde
      */
     @PostMapping("/policynotification")
     public ResponseEntity<String> postNotificationPolicy(@RequestBody MailPolicyEntity details) {
-        //System.out.println(details);
         return nService.policyNotification(details);
     }
 
+    /**
+     * Diese Methode nimmt eine Vertragsänderung-Post-Anfrage für den Email-Versand an und sendet eine vorbereitete EMail
+     * @url POST "http://domain:port/policychangenotification"
+     * @param details Ein Vertrags-Objekt mit zusätzlichen Infos, dessen Inhalt in der EMail verwendet wird
+     * @return Zurück kommt ein HTTP-Statuscode, der aussagt, ob die Mail versendet wurde
+     */
     @PostMapping("/policychangenotification")
     public ResponseEntity<String> putNotificationChangePolicy(@RequestBody MailPolicyEntity details) {
         return  nService.changePolicyNotification(details);
+    }
+
+    /**
+     * Diese Methode nimmt eine Customeränderungs-Post-Anfrage für den Email-Versand an und sendet eine vorbereitete EMail
+     * @url POST "http://domain:port/customerchangenotification"
+     * @param details Ein Vertrags-Objekt mit zusätzlichen Infos, dessen Inhalt in der EMail verwendet wird
+     * @return Zurück kommt ein HTTP-Statuscode, der aussagt, ob die Mail versendet wurde
+     */
+    @PostMapping("/customerchangenotification")
+    public ResponseEntity<String> putNotificationChangeCustomer(@RequestBody MailCustomerEntity details) {
+        return  nService.changeCustomerNotification(details);
+    }
+
+    /**
+     * Diese Methode nimmt eine Vertragslöschung-Post-Anfrage für den Email-Versand an und sendet eine vorbereitete EMail
+     * @url POST "http://domain:port/policydeletenotification"
+     * @param details Ein Vertrags-Objekt mit zusätzlichen Infos, dessen Inhalt in der EMail verwendet wird
+     * @return Zurück kommt ein HTTP-Statuscode, der aussagt, ob die Mail versendet wurde
+     */
+    @PostMapping("/policydeletenotification")
+    public ResponseEntity<String> deleteNotificationPolicy(@RequestBody MailPolicyEntity details) {
+        return nService.deleteNotificationPolicy(details);
     }
 
 }

@@ -12,20 +12,20 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:81/customer/1/policy?fields=startDate,endDate,coverage,objectOfInsurance.name,id",
+					"raw": "localhost:8082/customer/3/policy?fields=startDate,endDate,coverage,objectOfInsurance.name,id,active",
 					"host": [
 						"localhost"
 					],
-					"port": "81",
+					"port": "8082",
 					"path": [
 						"customer",
-						"1",
+						"3",
 						"policy"
 					],
 					"query": [
 						{
 							"key": "fields",
-							"value": "startDate,endDate,coverage,objectOfInsurance.name,id"
+							"value": "startDate,endDate,coverage,objectOfInsurance.name,id,active"
 						}
 					]
 				}
@@ -38,11 +38,11 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:81/customer/1/policy/2",
+					"raw": "localhost:8082/customer/1/policy/2",
 					"host": [
 						"localhost"
 					],
-					"port": "81",
+					"port": "8082",
 					"path": [
 						"customer",
 						"1",
@@ -68,12 +68,12 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:81/customer/3/policy",
+					"raw": "http://localhost:8082/customer/3/policy",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "81",
+					"port": "8082",
 					"path": [
 						"customer",
 						"3",
@@ -90,7 +90,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n  \"startDate\": \"1990-01-01\",\r\n  \"endDate\": \"2030-12-31\",\r\n  \"coverage\": 90000,\r\n  \"objectOfInsurance\": {\r\n    \"name\": \"Tomato\",\r\n    \"race\": \"Bengal\",\r\n    \"color\": \"Braun\",\r\n    \"dateOfBirth\": \"2015-07-22\",\r\n    \"castrated\": true,\r\n    \"personality\": \"anhänglich\",\r\n    \"environment\": \"drinnen\",\r\n    \"weight\": 4\r\n  }\r\n}",
+					"raw": "{\r\n  \"startDate\": \"1990-01-01\",\r\n  \"endDate\": \"2030-12-31\",\r\n  \"coverage\": 58752,\r\n  \"objectOfInsurance\": {\r\n    \"name\": \"Tomato\",\r\n    \"race\": \"Bengal\",\r\n    \"color\": \"Braun\",\r\n    \"dateOfBirth\": \"2015-07-22\",\r\n    \"castrated\": false,\r\n    \"personality\": \"anhänglich\",\r\n    \"environment\": \"drinnen\",\r\n    \"weight\": 4\r\n  }\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -98,17 +98,17 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:81/customer/3/policy/3",
+					"raw": "http://localhost:8082/customer/3/policy/2",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "81",
+					"port": "8082",
 					"path": [
 						"customer",
 						"3",
 						"policy",
-						"3"
+						"2"
 					]
 				}
 			},
@@ -116,15 +116,12 @@
 		},
 		{
 			"name": "getPolicyPrice",
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
 			"request": {
-				"method": "GET",
+				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"customerId\": 3,\r\n    \"policy\":{\r\n        \"startDate\": \"1990-01-01\",\r\n        \"endDate\": \"2030-12-31\",\r\n        \"coverage\": 50000,\r\n        \"objectOfInsurance\": {\r\n        \"name\": \"Tomato\",\r\n        \"race\": \"Bengal\",\r\n        \"color\": \"Braun\",\r\n        \"dateOfBirth\": \"2015-07-22\",\r\n        \"castrated\": true,\r\n        \"personality\": \"anhänglich\",\r\n        \"environment\": \"drinnen\",\r\n        \"weight\": 4\r\n        }\r\n    }\r\n}",
+					"raw": "{\r\n    \"customerId\": 3,\r\n    \"policy\":{\r\n        \"startDate\": \"1990-01-01\",\r\n        \"endDate\": \"2030-12-31\",\r\n        \"coverage\": 10000,\r\n        \"objectOfInsurance\": {\r\n        \"name\": \"Tomato\",\r\n        \"race\": \"Bengal\",\r\n        \"color\": \"schwarz\",\r\n        \"dateOfBirth\": \"2001-05-01\",\r\n        \"castrated\": true,\r\n        \"personality\": \"anhänglich\",\r\n        \"environment\": \"draussen\",\r\n        \"weight\": 4\r\n        }\r\n    }\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -132,13 +129,33 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:81/policyprice",
+					"raw": "localhost:8082/policyprice",
 					"host": [
 						"localhost"
 					],
-					"port": "81",
+					"port": "8082",
 					"path": [
 						"policyprice"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "updateCustomerPolicies",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "localhost:8082/customer/3/policy",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"customer",
+						"3",
+						"policy"
 					]
 				}
 			},

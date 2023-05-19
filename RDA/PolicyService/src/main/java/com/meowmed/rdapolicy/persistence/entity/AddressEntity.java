@@ -1,4 +1,4 @@
-package com.meowmed.rdapolicy.entity;
+package com.meowmed.rdapolicy.persistence.entity;
 
 import com.fasterxml.jackson.annotation.JsonFilter;
 import com.fasterxml.jackson.annotation.JsonIgnore;

@@ -12,11 +12,11 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:82/customer?fields=id,firstName,lastName,address",
+					"raw": "localhost:8081/customer?fields=id,firstName,lastName,address",
 					"host": [
 						"localhost"
 					],
-					"port": "82",
+					"port": "8081",
 					"path": [
 						"customer"
 					],
@@ -36,14 +36,14 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:82/customer/1",
+					"raw": "localhost:8081/customer/3",
 					"host": [
 						"localhost"
 					],
-					"port": "82",
+					"port": "8081",
 					"path": [
 						"customer",
-						"1"
+						"3"
 					]
 				}
 			},
@@ -56,7 +56,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n  \"firstName\": \"Alexander\",\r\n  \"lastName\": \"Hampel\",\r\n  \"formOfAddress\": \"Mr\",\r\n  \"title\": \"\",\r\n  \"maritalStatus\": \"single\",\r\n  \"dateOfBirth\": \"2000-12-30\",\r\n  \"employmentStatus\": \"employed\",\r\n  \"address\": {\r\n    \"city\": \"Hannover\",\r\n    \"street\": \"Berliner Allee 100\",\r\n    \"postalCode\": \"30855\"\r\n  },\r\n  \"phoneNumber\": \"+4951177488375\",\r\n  \"email\": \"alexander.hampel@stud.hs-hannover.de\",\r\n  \"bankDetails\": \"IE12BOFI90000112345678\"\r\n}",
+					"raw": "{\r\n  \"firstName\": \"Alexander\",\r\n  \"lastName\": \"Hampel\",\r\n  \"formOfAddress\": \"herr\",\r\n  \"title\": \"\",\r\n  \"maritalStatus\": \"single\",\r\n  \"dateOfBirth\": \"2000-12-30\",\r\n  \"employmentStatus\": \"employed\",\r\n  \"address\": {\r\n    \"city\": \"Hannover\",\r\n    \"street\": \"Berliner Allee 100\",\r\n    \"postalCode\": \"10000\"\r\n  },\r\n  \"phoneNumber\": \"+4951177488375\",\r\n  \"email\": \"alexander.hampel@stud.hs-hannover.de\",\r\n  \"bankDetails\": \"IE12BOFI90000112345678\",\r\n  \"hasDog\": true\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -64,13 +64,41 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:82/customer",
+					"raw": "localhost:8081/customer",
 					"host": [
 						"localhost"
 					],
-					"port": "82",
+					"port": "8081",
 					"path": [
 						"customer"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "updateCustomer",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"firstName\": \"Alexander\",\r\n  \"lastName\": \"Hampel\",\r\n  \"formOfAddress\": \"herr\",\r\n  \"title\": \"\",\r\n  \"maritalStatus\": \"single\",\r\n  \"dateOfBirth\": \"2000-12-30\",\r\n  \"employmentStatus\": \"arbeitslos\",\r\n  \"address\": {\r\n    \"city\": \"Hannover\",\r\n    \"street\": \"Berliner Allee 100\",\r\n    \"postalCode\": \"10000\"\r\n  },\r\n  \"phoneNumber\": \"+4951177488375\",\r\n  \"email\": \"alexander.hampel@stud.hs-hannover.de\",\r\n  \"bankDetails\": \"IE12BOFI90000112345678\",\r\n  \"hasDog\": true\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8081/customer/3",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"customer",
+						"3"
 					]
 				}
 			},

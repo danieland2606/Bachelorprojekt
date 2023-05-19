@@ -8,6 +8,8 @@ import com.meowmed.rdacustomer.entity.CustomerEntity;
 import com.meowmed.rdacustomer.entity.CustomerRequest;
 import com.meowmed.rdacustomer.entity.MailCustomerEntity;
 
+import reactor.core.publisher.Mono;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -15,6 +17,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.ClientResponse;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.*;
 import java.time.LocalDate;
@@ -30,6 +34,9 @@ public class CustomerService {
 
     @Value("${docker.notificationurl}")
     private String notificationUrl;
+
+    @Value("${docker.policyurl}")
+    private String policyUrl;
 
 
     private final CustomerRepository cRepository;
@@ -66,20 +73,6 @@ public class CustomerService {
         MappingJacksonValue wrapper = new MappingJacksonValue(cRepository.findAll());
         List<String> customerList = new ArrayList<String>();
 
-        /*  Warum ist das hier????
-        MailCustomerEntity mail = new MailCustomerEntity();
-        String notificationURL = "http://" + notificationUrl + ":8080";
-        WebClient notificationClient = WebClient.create(notificationURL);
-        WebClient.UriSpec<WebClient.RequestBodySpec> uriSpec = notificationClient.method(HttpMethod.POST);
-        //WebClient.ResponseSpec responseSpec = notificationClient.get().uri(customerURL,c_id).retrieve();
-
-        Mono<String> result = notificationClient.post()
-                .uri("/policynotification")
-                .contentType(MediaType.APPLICATION_JSON)
-                .bodyValue(mail)
-                .retrieve()
-                .bodyToMono(String.class);
-        */
 
         customerList.addAll(Arrays.asList(fields.split(",")));
         customerList.add("id");
@@ -102,7 +95,6 @@ public class CustomerService {
         cRepository.save(customer);
         MailCustomerEntity mail = new MailCustomerEntity(cRequest);
 		System.out.println(mail);
-		//WebClient notificationClient = WebClient.create("http://" + notificationUrl + ":8080");
 		String url = "http://" + notificationUrl + ":8080/customernotification";
 		RestTemplate restTemplate = new RestTemplate();
 		ResponseEntity<String> response = restTemplate.postForEntity(url, mail, String.class);
@@ -120,6 +112,12 @@ public class CustomerService {
         return wrapper;
     }
 
+    /**
+     * Diese Methode aktualisiert eine CustomerEntity.
+     * @param cRequest ist das zu aktualierednde Customer Objekt.
+     * @param c_id ist die Id des Objekts.
+     * @return Die ID des erstellten Objekts.
+     */
     public MappingJacksonValue customerUpdate(Long c_id, CustomerRequest cRequest) {
 
         Optional<CustomerEntity> currentCustomer = cRepository.findById(c_id);
@@ -128,22 +126,29 @@ public class CustomerService {
         cRequest.getAddress().setId(currentCustomer.get().getAddress().getId());
 
 
-        // Erzeugen und ersetzen der Policy
+        // Erzeugen und ersetzen der Customer
         CustomerEntity customer= new CustomerEntity(cRequest.getFirstName(), cRequest.getLastName(), cRequest.getTitle(), cRequest.getFormOfAddress(), cRequest.getMaritalStatus(), cRequest.getDateOfBirth(), cRequest.getEmploymentStatus(), cRequest.getAddress(), cRequest.getPhoneNumber(),cRequest.getEmail(),cRequest.getBankDetails(),cRequest.isDogOwner());
         aRepository.save(cRequest.getAddress());
         customer.setId(c_id);
         customer = cRepository.save(customer);
 
-        /*// Versand der Mail
-        MailPolicyEntity mail = new MailPolicyEntity(policy, customer);
-        ResponseEntity<String> response = sendMail("policychangenotification", mail);
-        if (response.getStatusCode() != HttpStatus.OK) throw new MailSendException();
-		{
-			MappingJacksonValue errWrapper = new MappingJacksonValue(Collections.singletonMap("error", "Es gab Probleme, die Mail zu versenden, Daten wurden aber gespeichert"));
-			return new ResponseEntity<MappingJacksonValue>(errWrapper,HttpStatusCode.valueOf(400));
-		}
-        if(debugmode) System.out.println("updatePolicy: mail: " + mail + " response: " + response);
-        */
+        String policyURL = "http://" + policyUrl + ":8080/customer/{c_id}/policy";
+        //WebClient customerClient = WebClient.create();
+        //Mono<ResponseEntity<MappingJacksonValue>> responseSpec =  customerClient.put().uri(policyURL,c_id).retrieve().toEntity(MappingJacksonValue.class);
+        RestTemplate restTemplate = new RestTemplate();
+		restTemplate.put(policyURL, null,Map.of("c_id", c_id));
+        //System.out.println("customerUpdate: responseSpec: " + response);
+
+        MailCustomerEntity mail = new MailCustomerEntity(cRequest);
+        String url = "http://" + notificationUrl + ":8080/customerchangenotification";
+        RestTemplate restTemplate2 = new RestTemplate();
+        ResponseEntity<String> response = restTemplate2.postForEntity(url, mail, String.class);
+        if (response.getStatusCode() == HttpStatus.OK) {
+            System.out.println("Request Successful");
+        } else {
+            System.out.println("Request Failed");
+        }
+
         // Verpacken und Filtern von der Ausgabe
         MappingJacksonValue wrapper = new MappingJacksonValue(customer);
         wrapper.setFilters(new SimpleFilterProvider()
@@ -151,22 +156,23 @@ public class CustomerService {
                 .setFailOnUnknownId(false));
 
         return wrapper;
-        //return new ResponseEntity<MappingJacksonValue>(wrapper,HttpStatusCode.valueOf(201));
 
     }
-
+    /**
+     * Diese Methode ist zum befüllen der Datenbank.
+     */
     void setUp(){
         LocalDate birthdayOfJan= LocalDate.of(1999,11,03);
         AddressEntity adressJan= new AddressEntity("Hildesheim","Burgerking Hbf","31137");
-        CustomerEntity Jan= new CustomerEntity("Jan", "Lorenz", "", "Herr","ledig",birthdayOfJan,"student",adressJan , "+49123456789" ,"jan-niklas-johannes.lorenz@stud.hs-hannover.de" ,"DE2131627312371351232", false  );
+        CustomerEntity Jan= new CustomerEntity("Jan", "Lorenz", "", "herr","ledig",birthdayOfJan,"student",adressJan , "+49123456789" ,"jan-niklas-johannes.lorenz@stud.hs-hannover.de" ,"DE2131627312371351232", false  );
 
         LocalDate birthdayofDaniel= LocalDate.of(2002,06,26);
         AddressEntity adressDaniel= new AddressEntity("Hannover", "Subway Hbf", "12345");
-        CustomerEntity Daniel= new CustomerEntity("Daniel", "Arnold","","Herr", "ledig", birthdayofDaniel, "student", adressDaniel, "+4942069123123", "daniel.arnold@stud.hs-hannover.de", "DE", false);
+        CustomerEntity Daniel= new CustomerEntity("Daniel", "Arnold","","herr", "ledig", birthdayofDaniel, "student", adressDaniel, "+4942069123123", "daniel.arnold@stud.hs-hannover.de", "DE", false);
     
         LocalDate birthdayOfAlex= LocalDate.of(1996,01,14);
         AddressEntity adressAlex= new AddressEntity("Hildesheim","Burgerking Hbf","31137");
-        CustomerEntity Alex= new CustomerEntity("Alexander","Hampel","","Herr","ledig",birthdayOfAlex,"student", adressAlex, "+49123456789", "alexander.hampel@stud.hs-hannover.de", "DE2131627312371351232", false);
+        CustomerEntity Alex= new CustomerEntity("Alexander","Hampel","","herr","ledig",birthdayOfAlex,"student", adressAlex, "+49123456789", "alexander.hampel@stud.hs-hannover.de", "DE2131627312371351232", false);
 
 
         aRepository.save(adressJan);
