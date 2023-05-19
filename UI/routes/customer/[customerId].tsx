@@ -1,9 +1,10 @@
 import { HandlerContext, PageProps } from "$fresh/server.ts";
 import { EditCustomer } from "$this/components/EditCustomer.tsx";
-import { Table } from "$this/components/Table.tsx";
+import { itemSearch, Table } from "$this/components/Table.tsx";
 import { Search } from "$this/components/Search.tsx";
-import { CustomerAllRequired, Policy } from "$this/generated/models/all.ts";
-import { compareId, deserialize } from "$this/util/util.ts";
+import { Policy } from "$this/generated/models/all.ts";
+import { compareId, origin } from "$this/util/util.ts";
+import { deserializeCustomerFull } from "$this/util/deserialize.ts";
 import { customerClient, policyClient } from "$this/util/client.ts";
 
 export const handler = {
@@ -20,13 +21,10 @@ export const handler = {
   async POST(req: Request, ctx: HandlerContext) {
     const customerId = Number.parseInt(ctx.params.customerId);
     const form = await req.formData();
-    const customer = deserialize<CustomerAllRequired>(
-      form,
-      "CustomerAllRequired",
-    );
+    const customer = deserializeCustomerFull(form);
     await customerClient.updateCustomer(customerId, customer);
-    const base = new URL(req.url).origin;
-    return Response.redirect(new URL("/", base), 303);
+    const index = new URL("/", origin(req));
+    return Response.redirect(index, 303);
   },
 };
 
@@ -80,48 +78,31 @@ function formatPolicyList(
   customerId: number,
   search = "",
 ) {
-  return {
-    headers: ["ID", "Katze", "Beginn", "Ende", "Jahresdeckung"],
-    items: policyList
-      .filter(policySearch(search))
-      .sort(compareId)
-      .map((policy) => policyToTableRow(policy, customerId)),
-  };
+  const headers = ["ID", "Katze", "Beginn", "Ende", "Jahresdeckung"];
+  const items = policyList
+    .sort(compareId)
+    .map((policy) => policyToTableItem(policy, customerId))
+    .filter(itemSearch(search));
+  return { headers, items };
 }
 
-function policyToTableRow(policy: Policy, customerId: number) {
+function policyToTableItem(policy: Policy, customerId: number) {
+  const row = getRequiredFields(policy);
+  const actions = {
+    details: `/customer/${customerId}/policy/${policy.id}`,
+    edit: `/customer/${customerId}/policy/${policy.id}?edit`,
+  };
+  return { row, actions, active: !!policy.active };
+}
+
+function getRequiredFields(policy: Policy) {
+  const { name } = policy?.objectOfInsurance ?? {};
+  const { id, startDate, endDate, coverage, active } = policy;
   if (
-    policy.id == null || policy.objectOfInsurance == null ||
-    policy.startDate == null || policy.endDate == null ||
-    policy.coverage == null
+    id == null || startDate == null || endDate == null ||
+    coverage == null || name == null || active == null
   ) {
     throw new Error("Required fields of policy missing");
   }
-  return {
-    item: [
-      policy.id,
-      policy.objectOfInsurance.name,
-      policy.startDate,
-      policy.endDate,
-      policy.coverage,
-    ],
-    actions: {
-      details: `/customer/${customerId}/policy/${policy.id}`,
-      edit: `/customer/${customerId}/policy/${policy.id}?edit`,
-      delete: "",
-    },
-  };
-}
-
-function policySearch(search: string) {
-  if (!search) {
-    return function () {
-      return true;
-    };
-  }
-  return (policy: Policy) => {
-    const searchTarget =
-      `${policy.id} ${policy.objectOfInsurance?.name} ${policy.startDate} ${policy.endDate} ${policy.coverage}`;
-    return searchTarget.toLowerCase().includes(search.toLowerCase());
-  };
+  return [id, name, startDate, endDate, coverage];
 }

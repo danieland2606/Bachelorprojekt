@@ -1,8 +1,8 @@
 import { HandlerContext, PageProps } from "$fresh/server.ts";
 import { EditPolicy } from "$this/components/EditPolicy.tsx";
 import { policyClient } from "$this/util/client.ts";
-import { deserialize } from "$this/util/util.ts";
-import { PolicyAllRequired } from "$this/generated/index.ts";
+import { origin } from "$this/util/util.ts";
+import { deserializePolicyFull } from "$this/util/deserialize.ts";
 
 export const handler = {
   async GET(_: Request, ctx: HandlerContext) {
@@ -11,13 +11,10 @@ export const handler = {
   async POST(req: Request, ctx: HandlerContext) {
     const customerId = Number.parseInt(ctx.params.customerId);
     const form = await req.formData();
-    const policy = deserialize<PolicyAllRequired>(form, "PolicyAllRequired");
+    const policy = deserializePolicyFull(form);
     await policyClient.createPolicy(customerId, policy);
-    const base = new URL(req.url).origin;
-    return Response.redirect(
-      new URL(`/customer/${customerId}`, base),
-      303,
-    );
+    const customerUrl = new URL(`/customer/${customerId}`, origin(req));
+    return Response.redirect(customerUrl, 303);
   },
 };
 

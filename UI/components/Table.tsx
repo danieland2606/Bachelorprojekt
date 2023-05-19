@@ -3,12 +3,15 @@ import { asset } from "$fresh/runtime.ts";
 import { TableButton } from "$this/components/TableButton.tsx";
 
 export interface Item {
-  item: Array<number | string | boolean>;
-  actions: {
-    details: string | undefined;
-    edit: string | undefined;
-    delete: string | undefined;
-  };
+  row: (string | number | boolean)[];
+  actions: TableActions;
+  active: boolean;
+}
+
+export interface TableActions {
+  details?: string;
+  edit?: string;
+  delete?: string;
 }
 
 export interface TableItems {
@@ -20,8 +23,16 @@ export interface TableProps extends JSX.HTMLAttributes<HTMLTableElement> {
   tabledata: TableItems;
 }
 
-function hasAnyActions(items: Array<Item>) {
+function hasAnyActions(items: Item[]) {
   return !!(items?.some(({ actions }) => actions != null));
+}
+
+export function itemSearch(search: string): (item: Item) => boolean {
+  if (!search) {
+    return () => true;
+  }
+  return (item: Item) =>
+    item.row.join(" ").toLowerCase().includes(search.toLowerCase());
 }
 
 export function Table(props: TableProps) {
@@ -37,9 +48,9 @@ export function Table(props: TableProps) {
           </tr>
         </thead>
         <tbody>
-          {items.map(({ item, actions }) => (
+          {items.map(({ row, actions }) => (
             <tr>
-              {item.map((field) => <td>{field}</td>)}
+              {row.map((field) => <td>{field}</td>)}
               {hasActions && (
                 <td>
                   {actions.details && (

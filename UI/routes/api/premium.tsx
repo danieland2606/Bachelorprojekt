@@ -1,7 +1,7 @@
 import { HandlerContext, PageProps } from "$fresh/server.ts";
-import { deserialize } from "$this/util/util.ts";
+import { deserializePolicyFull } from "$this/util/deserialize.ts";
 import { policyClient } from "$this/util/client.ts";
-import { PolicyAllRequired, PolicyCalc } from "$this/generated/index.ts";
+import { PolicyCalc } from "$this/generated/index.ts";
 
 export const handler = {
   GET(_: Request, ctx: HandlerContext) {
@@ -28,9 +28,5 @@ function deserializePolicyCalc(form: FormData) {
   if (isNaN(id)) { //intentionally not using Number.isNaN()
     throw new Error("customerId missing for premium calculation");
   }
-  const policyCalc = {
-    customerId: id,
-    policy: deserialize<PolicyAllRequired>(form, "PolicyAllRequired"),
-  };
-  return policyCalc as PolicyCalc;
+  return { customerId: id, policy: deserializePolicyFull(form) } as PolicyCalc;
 }

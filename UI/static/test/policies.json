@@ -4,6 +4,7 @@
     "startDate": "1990-01-01",
     "endDate": "2030-12-31",
     "coverage": 50000,
+    "active": true,
     "objectOfInsurance": {
       "name": "Tomato"
     }
@@ -13,6 +14,7 @@
     "startDate": "1992-11-01",
     "endDate": "2024-11-01",
     "coverage": 10000,
+    "active": false,
     "objectOfInsurance": {
       "name": "Perry"
     }

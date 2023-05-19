@@ -39,6 +39,7 @@ const policyFields = new Set<PolicyPropertyNames>([
   "startDate",
   "endDate",
   "coverage",
+  "active",
 ]);
 
 export const policyClient = {
