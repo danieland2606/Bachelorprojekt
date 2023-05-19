@@ -1,4 +1,4 @@
-package com.meowmed.rdapolicy.entity;
+package com.meowmed.rdapolicy.persistence.entity;
 
 import java.util.Arrays;
 

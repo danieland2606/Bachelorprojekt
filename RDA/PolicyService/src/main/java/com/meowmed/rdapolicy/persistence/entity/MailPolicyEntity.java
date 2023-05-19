@@ -1,4 +1,4 @@
-package com.meowmed.rdapolicy.entity;
+package com.meowmed.rdapolicy.persistence.entity;
 
 import java.time.LocalDate;
 
@@ -23,6 +23,7 @@ public class MailPolicyEntity {
     private LocalDate endDate;
     private int coverage;
     private double premium;
+    private boolean active;
     private String name;
     private String race;
     private String color;
@@ -33,11 +34,13 @@ public class MailPolicyEntity {
     private int weight;
     public MailPolicyEntity() {
     }
+    
     public MailPolicyEntity(String firstName, String lastName, String title, String formOfAddress, String maritalStatus,
             LocalDate cDateOfBirth, String employmentStatus, String city, String street, String postalCode,
-            String phoneNumber, String email, String bankDetails, boolean dogOwner, long pid, long cid, LocalDate startDate,
-            LocalDate endDate, int coverage, double premium, String name, String race, String color,
-            LocalDate oDateOfBirth, boolean castrated, String personality, String environment, int weight) {
+            String phoneNumber, String email, String bankDetails, boolean dogOwner, long pid, long cid,
+            LocalDate startDate, LocalDate endDate, int coverage, double premium, boolean active, String name,
+            String race, String color, LocalDate oDateOfBirth, boolean castrated, String personality,
+            String environment, int weight) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.title = title;
@@ -58,6 +61,7 @@ public class MailPolicyEntity {
         this.endDate = endDate;
         this.coverage = coverage;
         this.premium = premium;
+        this.active = active;
         this.name = name;
         this.race = race;
         this.color = color;
@@ -88,6 +92,7 @@ public class MailPolicyEntity {
         this.endDate = entity.getEndDate();
         this.coverage = entity.getCoverage();
         this.premium = entity.getPremium();
+        this.active = entity.isActive();
         this.name = entity.getObjectOfInsurance().getName();
         this.race = entity.getObjectOfInsurance().getRace();
         this.color = entity.getObjectOfInsurance().getColor();
@@ -97,174 +102,239 @@ public class MailPolicyEntity {
         this.environment = entity.getObjectOfInsurance().getEnvironment();
         this.weight = entity.getObjectOfInsurance().getWeight();
     }
+
     public String getFirstName() {
         return firstName;
     }
+
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
+
     public String getLastName() {
         return lastName;
     }
+
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
+
     public String getTitle() {
         return title;
     }
+
     public void setTitle(String title) {
         this.title = title;
     }
+
     public String getFormOfAddress() {
         return formOfAddress;
     }
+
     public void setFormOfAddress(String formOfAddress) {
         this.formOfAddress = formOfAddress;
     }
+
     public String getMaritalStatus() {
         return maritalStatus;
     }
+
     public void setMaritalStatus(String maritalStatus) {
         this.maritalStatus = maritalStatus;
     }
+
     public LocalDate getcDateOfBirth() {
         return cDateOfBirth;
     }
+
     public void setcDateOfBirth(LocalDate cDateOfBirth) {
         this.cDateOfBirth = cDateOfBirth;
     }
+
     public String getEmploymentStatus() {
         return employmentStatus;
     }
+
     public void setEmploymentStatus(String employmentStatus) {
         this.employmentStatus = employmentStatus;
     }
+
     public String getCity() {
         return city;
     }
+
     public void setCity(String city) {
         this.city = city;
     }
+
     public String getStreet() {
         return street;
     }
+
     public void setStreet(String street) {
         this.street = street;
     }
+
     public String getPostalCode() {
         return postalCode;
     }
+
     public void setPostalCode(String postalCode) {
         this.postalCode = postalCode;
     }
+
     public String getPhoneNumber() {
         return phoneNumber;
     }
+
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
+
     public String getEmail() {
         return email;
     }
+
     public void setEmail(String email) {
         this.email = email;
     }
+
     public String getBankDetails() {
         return bankDetails;
     }
+
     public void setBankDetails(String bankDetails) {
         this.bankDetails = bankDetails;
     }
+
     public boolean isDogOwner() {
         return dogOwner;
     }
+
     public void setDogOwner(boolean dogOwner) {
         this.dogOwner = dogOwner;
     }
+
     public long getPid() {
         return pid;
     }
+
     public void setPid(long pid) {
         this.pid = pid;
     }
+
     public long getCid() {
         return cid;
     }
+
     public void setCid(long cid) {
         this.cid = cid;
     }
+
     public LocalDate getStartDate() {
         return startDate;
     }
+
     public void setStartDate(LocalDate startDate) {
         this.startDate = startDate;
     }
+
     public LocalDate getEndDate() {
         return endDate;
     }
+
     public void setEndDate(LocalDate endDate) {
         this.endDate = endDate;
     }
+
     public int getCoverage() {
         return coverage;
     }
+
     public void setCoverage(int coverage) {
         this.coverage = coverage;
     }
+
     public double getPremium() {
         return premium;
     }
+
     public void setPremium(double premium) {
         this.premium = premium;
     }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
     public String getName() {
         return name;
     }
+
     public void setName(String name) {
         this.name = name;
     }
+
     public String getRace() {
         return race;
     }
+
     public void setRace(String race) {
         this.race = race;
     }
+
     public String getColor() {
         return color;
     }
+
     public void setColor(String color) {
         this.color = color;
     }
+
     public LocalDate getoDateOfBirth() {
         return oDateOfBirth;
     }
+
     public void setoDateOfBirth(LocalDate oDateOfBirth) {
         this.oDateOfBirth = oDateOfBirth;
     }
+
     public boolean isCastrated() {
         return castrated;
     }
+
     public void setCastrated(boolean castrated) {
         this.castrated = castrated;
     }
+
     public String getPersonality() {
         return personality;
     }
+
     public void setPersonality(String personality) {
         this.personality = personality;
     }
+
     public String getEnvironment() {
         return environment;
     }
+
     public void setEnvironment(String environment) {
         this.environment = environment;
     }
+
     public int getWeight() {
         return weight;
     }
+
     public void setWeight(int weight) {
         this.weight = weight;
     }
+
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -291,6 +361,7 @@ public class MailPolicyEntity {
         long temp;
         temp = Double.doubleToLongBits(premium);
         result = prime * result + (int) (temp ^ (temp >>> 32));
+        result = prime * result + (active ? 1231 : 1237);
         result = prime * result + ((name == null) ? 0 : name.hashCode());
         result = prime * result + ((race == null) ? 0 : race.hashCode());
         result = prime * result + ((color == null) ? 0 : color.hashCode());
@@ -301,6 +372,7 @@ public class MailPolicyEntity {
         result = prime * result + weight;
         return result;
     }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -355,7 +427,10 @@ public class MailPolicyEntity {
                 return false;
         } else if (!street.equals(other.street))
             return false;
-        if (postalCode != other.postalCode)
+        if (postalCode == null) {
+            if (other.postalCode != null)
+                return false;
+        } else if (!postalCode.equals(other.postalCode))
             return false;
         if (phoneNumber == null) {
             if (other.phoneNumber != null)
@@ -391,6 +466,8 @@ public class MailPolicyEntity {
         if (coverage != other.coverage)
             return false;
         if (Double.doubleToLongBits(premium) != Double.doubleToLongBits(other.premium))
+            return false;
+        if (active != other.active)
             return false;
         if (name == null) {
             if (other.name != null)
@@ -428,6 +505,7 @@ public class MailPolicyEntity {
             return false;
         return true;
     }
+
     @Override
     public String toString() {
         return "MailPolicyEntity [firstName=" + firstName + ", lastName=" + lastName + ", title=" + title
@@ -435,9 +513,10 @@ public class MailPolicyEntity {
                 + cDateOfBirth + ", employmentStatus=" + employmentStatus + ", city=" + city + ", street=" + street
                 + ", postalCode=" + postalCode + ", phoneNumber=" + phoneNumber + ", email=" + email + ", bankDetails="
                 + bankDetails + ", dogOwner=" + dogOwner + ", pid=" + pid + ", cid=" + cid + ", startDate=" + startDate
-                + ", endDate=" + endDate + ", coverage=" + coverage + ", premium=" + premium + ", name=" + name
-                + ", race=" + race + ", color=" + color + ", oDateOfBirth=" + oDateOfBirth + ", castrated=" + castrated
-                + ", personality=" + personality + ", environment=" + environment + ", weight=" + weight + "]";
+                + ", endDate=" + endDate + ", coverage=" + coverage + ", premium=" + premium + ", active=" + active
+                + ", name=" + name + ", race=" + race + ", color=" + color + ", oDateOfBirth=" + oDateOfBirth
+                + ", castrated=" + castrated + ", personality=" + personality + ", environment=" + environment
+                + ", weight=" + weight + "]";
     }
-        
+     
 }

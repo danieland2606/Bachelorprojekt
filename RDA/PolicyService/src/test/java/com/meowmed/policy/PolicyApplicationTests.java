@@ -8,12 +8,12 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import com.meowmed.rdapolicy.database.CatRepository;
-import com.meowmed.rdapolicy.database.ObjectOfInsuranceRepository;
-import com.meowmed.rdapolicy.database.PolicyRepository;
-import com.meowmed.rdapolicy.entity.CatEntity;
-import com.meowmed.rdapolicy.entity.ObjectOfInsuranceEntity;
-import com.meowmed.rdapolicy.entity.PolicyEntity;
+import com.meowmed.rdapolicy.persistence.CatRepository;
+import com.meowmed.rdapolicy.persistence.ObjectOfInsuranceRepository;
+import com.meowmed.rdapolicy.persistence.PolicyRepository;
+import com.meowmed.rdapolicy.persistence.entity.CatEntity;
+import com.meowmed.rdapolicy.persistence.entity.ObjectOfInsuranceEntity;
+import com.meowmed.rdapolicy.persistence.entity.PolicyEntity;
 
 @SpringBootTest
 class PolicyApplicationTests {
