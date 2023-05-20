@@ -6,8 +6,9 @@ export function compareId({ id: id1 = 0 }, { id: id2 = 0 }) {
   return id1 - id2;
 }
 
-type primitive = undefined | null | string | number | boolean | symbol | bigint;
-type Rec<T> = Record<string, primitive | T>;
+export type primitiveNonNull = string | number | boolean | symbol | bigint;
+export type primitive = primitiveNonNull | undefined | null;
+export type Rec<T> = Record<string, primitive | T>;
 // deno-lint-ignore no-empty-interface
 export interface Obj extends Rec<Obj> {}
 //https://stackoverflow.com/questions/4244896/accessing-an-object-property-with-a-dynamically-computed-name

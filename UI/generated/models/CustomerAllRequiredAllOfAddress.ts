@@ -13,9 +13,9 @@
 import { HttpFile } from '../http/http.ts';
 
 export class CustomerAllRequiredAllOfAddress {
-    'city': string;
-    'street': string;
-    'postalCode': string;
+    'city': string = "string_example";
+    'street': string = "string_example";
+    'postalCode': string = "04807";
 
     static readonly discriminator: string | undefined = undefined;
 

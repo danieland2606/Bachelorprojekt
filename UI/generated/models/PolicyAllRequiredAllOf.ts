@@ -14,7 +14,7 @@ import { PolicyAllRequiredAllOfObjectOfInsurance } from '../models/PolicyAllRequ
 import { HttpFile } from '../http/http.ts';
 
 export class PolicyAllRequiredAllOf {
-    'objectOfInsurance': PolicyAllRequiredAllOfObjectOfInsurance;
+    'objectOfInsurance': PolicyAllRequiredAllOfObjectOfInsurance = new PolicyAllRequiredAllOfObjectOfInsurance();
 
     static readonly discriminator: string | undefined = undefined;
 

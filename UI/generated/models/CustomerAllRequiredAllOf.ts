@@ -14,7 +14,7 @@ import { CustomerAllRequiredAllOfAddress } from '../models/CustomerAllRequiredAl
 import { HttpFile } from '../http/http.ts';
 
 export class CustomerAllRequiredAllOf {
-    'address': CustomerAllRequiredAllOfAddress;
+    'address': CustomerAllRequiredAllOfAddress = new CustomerAllRequiredAllOfAddress();
 
     static readonly discriminator: string | undefined = undefined;
 

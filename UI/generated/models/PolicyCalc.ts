@@ -14,8 +14,8 @@ import { PolicyAllRequired } from '../models/PolicyAllRequired.ts';
 import { HttpFile } from '../http/http.ts';
 
 export class PolicyCalc {
-    'customerId': number;
-    'policy': PolicyAllRequired;
+    'customerId': number = 1;
+    'policy': PolicyAllRequired = new PolicyAllRequired();
 
     static readonly discriminator: string | undefined = undefined;
 

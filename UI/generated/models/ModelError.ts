@@ -16,7 +16,7 @@ export class ModelError {
     /**
     * short description of error condition
     */
-    'error': string;
+    'error': string = "string_example";
 
     static readonly discriminator: string | undefined = undefined;
 

@@ -13,7 +13,7 @@
 import { HttpFile } from '../http/http.ts';
 
 export class ID {
-    'id': number;
+    'id': number = 1;
 
     static readonly discriminator: string | undefined = undefined;
 

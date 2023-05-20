@@ -19,18 +19,18 @@ import { HttpFile } from '../http/http.ts';
 
 export class CustomerAllRequired {
     'id'?: number;
-    'firstName': string;
-    'lastName': string;
-    'formOfAddress': FormOfAddress;
-    'title': Title;
-    'maritalStatus': MaritalStatus;
-    'dateOfBirth': string;
-    'employmentStatus': EmploymentStatus;
-    'dogOwner': boolean;
-    'address': CustomerAllRequiredAllOfAddress;
-    'phoneNumber': string;
-    'email': string;
-    'bankDetails': string;
+    'firstName': string = "string_example";
+    'lastName': string = "string_example";
+    'formOfAddress': FormOfAddress = "herr";
+    'title': Title = "none";
+    'maritalStatus': MaritalStatus = "ledig";
+    'dateOfBirth': string = new Date('1970-01-01').toISOString().split('T')[0];;
+    'employmentStatus': EmploymentStatus = "selbststaendig";
+    'dogOwner': boolean = true;
+    'address': CustomerAllRequiredAllOfAddress = new CustomerAllRequiredAllOfAddress();
+    'phoneNumber': string = "string_example";
+    'email': string = "string_example";
+    'bankDetails': string = "AE0728880015280217980962255008507";
 
     static readonly discriminator: string | undefined = undefined;
 

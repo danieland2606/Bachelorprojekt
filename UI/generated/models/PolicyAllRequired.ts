@@ -15,12 +15,12 @@ import { HttpFile } from '../http/http.ts';
 
 export class PolicyAllRequired {
     'id'?: number;
-    'startDate': string;
-    'endDate': string;
-    'coverage': number;
+    'startDate': string = new Date('1970-01-01').toISOString().split('T')[0];;
+    'endDate': string = new Date('1970-01-01').toISOString().split('T')[0];;
+    'coverage': number = 3.14;
     'premium': number;
     'active': boolean;
-    'objectOfInsurance': PolicyAllRequiredAllOfObjectOfInsurance;
+    'objectOfInsurance': PolicyAllRequiredAllOfObjectOfInsurance = new PolicyAllRequiredAllOfObjectOfInsurance();
 
     static readonly discriminator: string | undefined = undefined;
 

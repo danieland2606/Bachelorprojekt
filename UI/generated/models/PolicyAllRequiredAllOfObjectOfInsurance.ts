@@ -17,14 +17,14 @@ import { Personality } from '../models/Personality.ts';
 import { HttpFile } from '../http/http.ts';
 
 export class PolicyAllRequiredAllOfObjectOfInsurance {
-    'name': string;
-    'race': CatRace;
-    'color': FurColor;
-    'dateOfBirth': string;
-    'castrated': boolean;
-    'personality': Personality;
-    'environment': Environment;
-    'weight': number;
+    'name': string = "string_example";
+    'race': CatRace = "siamese";
+    'color': FurColor = "seal";
+    'dateOfBirth': string = new Date('1970-01-01').toISOString().split('T')[0];;
+    'castrated': boolean = true;
+    'personality': Personality = "anhaenglich";
+    'environment': Environment = "draussen";
+    'weight': number = 3.14;
 
     static readonly discriminator: string | undefined = undefined;
 

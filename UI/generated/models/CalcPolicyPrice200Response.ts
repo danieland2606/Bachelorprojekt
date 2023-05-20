@@ -13,7 +13,7 @@
 import { HttpFile } from '../http/http.ts';
 
 export class CalcPolicyPrice200Response {
-    'premium': number;
+    'premium': number = 3.14;
 
     static readonly discriminator: string | undefined = undefined;
 

@@ -1,18 +1,17 @@
 import { JSX } from "preact/jsx-runtime";
+import { Obj, resolve } from "$this/common/util.ts";
 import {
   cloneElement,
   Component,
   ComponentChildren,
   VNode,
 } from "preact/src/index.js";
-import { Obj, resolve } from "$this/common/util.ts";
 
 export type FormProps = JSX.HTMLAttributes<HTMLFormElement> & Data;
 export type managed =
   | VNode<HTMLSelectElement>
   | VNode<HTMLInputElement>
   | VNode<HTMLTextAreaElement>;
-type ManagedProp = { component: Child; data: Data };
 type Child = Component | VNode | managed;
 
 interface Data {
@@ -81,9 +80,9 @@ function configManagedElement(element: managed, data: Data) {
 
 function getSafely(property: string, data?: Obj) {
   try {
-    return resolve(property, data) as string;
+    return String(resolve(property, data));
   } catch (error) {
-    console.debug(
+    console.error(
       `Exception on resolving property ${property} in ${JSON.stringify(data)}
       Exception was ${error}`,
     );

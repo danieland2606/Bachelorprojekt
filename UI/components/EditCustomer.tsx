@@ -1,6 +1,7 @@
 import { JSX } from "preact/jsx-runtime";
 import { Input, Select } from "$this/components/Input.tsx";
 import { Form } from "$this/components/Form.tsx";
+import { Obj, propMap } from "$this/common/util.ts";
 import {
   Address,
   Customer,
@@ -9,7 +10,6 @@ import {
   MaritalStatusValues,
   TitleValues,
 } from "$this/generated/index.ts";
-import { Obj, propMap } from "$this/common/util.ts";
 
 const customer = propMap(new Customer());
 const address = propMap(new Address(), "address.");

@@ -27,14 +27,15 @@ export interface SelectProps extends JSX.HTMLAttributes<HTMLSelectElement> {
 }
 
 export function Select(props: SelectProps) {
+  let clss;
   if (props.readonly) {
     delete props.readonly;
-    props.disabled = true;
+    clss = "pointer-events-none";
   }
   return (
     <div class="cell">
       <label id={props.name}>{props.labeltext}</label>
-      <select {...props} label={props.name}>
+      <select {...props} label={props.name} class={clss}>
         {props.children ??
           props.options?.map((option) => (
             <option value={option}>{pretty(option)}</option>
@@ -58,7 +59,7 @@ function pretty(val: string) {
 export function Input(props: InputProps) {
   if (isDisabled(props)) {
     delete props.readonly;
-    props.disabled = true;
+    props.class += " pointer-events-none";
   }
   if (notRequirable.includes(type(props))) {
     delete props.required;
