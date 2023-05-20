@@ -105,10 +105,10 @@ services:
     profiles:
       - eda
     environment:
-      - MEOWMED_CUSTOMER_SERVER=http://customer.eda:8081
+      - MEOWMED_CUSTOMER_SERVER=http://customer.eda:8080
       - MEOWMED_POLICY_SERVER=http://policy.eda:8080
     networks:
-      - eda
+      - "default"
     ports:
       - "80:8000"
     depends_on:
@@ -120,88 +120,100 @@ services:
     profiles:
       - eda
     networks:
-      - eda
+      - "default"
     environment:
       - spring.rabbitmq.host=rabbitmq
       - spring.datasource.url=jdbc:mariadb://customerdb.eda:3306/Customer
       - spring.datasource.username=root
       - spring.datasource.password=test
       - spring.datasource.driver-class-name=org.mariadb.jdbc.Driver
+      - server.port=8080
       - spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MariaDBDialect
     depends_on:
-      - customerdb.eda
-      - rabbitmq
-  customerdb.eda:
-    image: mariadb:latest
-    container_name: customerdb-eda
+      customerdb.eda:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_started
+  policy.eda:
+    container_name: policy-service-eda
+    image: meowmed-policy.eda
     profiles:
       - eda
     networks:
-      - eda
+      - "default"
     environment:
-      MARIADB_ROOT_PASSWORD: test
-      MYSQL_DATABASE: Customer
-      MYSQL_USER: user
-      MYSQL_PASSWORD: test12345
-    volumes:
-      - customerdb_data_eda:/var/lib/mysql
-    healthcheck:
-      test: "mariadb --user=root --password=$$MARIADB_ROOT_PASSWORD --execute \"SHOW DATABASES;\""
-      interval: 5s
-      timeout: 20s
-      retries: 10
+      - RABBIT_HOST=rabbitmq
+      - spring.datasource.url=jdbc:mariadb://policydb.eda:3306/Policy
+      - spring.datasource.username=user
+      - spring.datasource.password=123456789
+      - spring.rabbitmq.host=rabbitmq
+      - spring.datasource.username=root
+      - spring.datasource.password=test
+      - spring.datasource.driver-class-name=org.mariadb.jdbc.Driver
+      - server.port=8080
+      - spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MariaDBDialect
+    depends_on:
+      policydb.eda:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_started
   notification.eda:
     container_name: notification-service-eda
     image: meowmed-notification.eda
     profiles:
       - eda
     networks:
-      - eda
+      - "default"
     environment:
       - spring.rabbitmq.host=rabbitmq
     depends_on:
-      - rabbitmq
-  policy.eda:
-    container_name: policy-service-eda
-    image: meowmed-policy.eda
+      rabbitmq:
+        condition: service_started
+  customerdb.eda:
+    image: mariadb:latest
+    container_name: customerdb-eda
     profiles:
       - eda
-    depends_on:
-      - policydb.eda
-      - rabbitmq
     networks:
-      - eda
+      - "default"
     environment:
-      - RABBIT_HOST=rabbitmq
-      - spring.datasource.url=jdbc:mariadb://policydb.eda:3306/Policy
-      - spring.datasource.username=user
-      - spring.datasource.password=123456789
+      MARIADB_ROOT_PASSWORD: test
+      MYSQL_DATABASE: Customer
+      MYSQL_USER: user
+      MYSQL_PASSWORD: test12345
+    healthcheck:
+      test: "mariadb --user=root --password=$$MARIADB_ROOT_PASSWORD --execute \"SHOW DATABASES;\""
+      interval: 5s
+      timeout: 20s
+      retries: 10
+    volumes:
+      - customerdb_data_eda:/var/lib/mysql
   policydb.eda:
     image: mariadb:latest
     container_name: policydb-eda
     profiles:
       - eda
     networks:
-      - eda
+      - "default"
     environment:
       MARIADB_ROOT_PASSWORD: test
       MYSQL_DATABASE: Policy
       MYSQL_USER: user
       MYSQL_PASSWORD: 123456789
-    volumes:
-      - policydb_data_eda:/var/lib/mysql
     healthcheck:
       test: "mariadb --user=root --password=$$MARIADB_ROOT_PASSWORD --execute \"SHOW DATABASES;\""
       interval: 5s
       timeout: 20s
       retries: 10
+    volumes:
+      - policydb_data_eda:/var/lib/mysql
   rabbitmq:
     image: rabbitmq:management-alpine
     container_name: rabbitmq
     profiles:
       - eda
     networks:
-      - eda
+      - "default"
 
 volumes:
   customerdb_data_eda:
@@ -211,4 +223,3 @@ volumes:
 
 networks:
   rda:
-  eda:
