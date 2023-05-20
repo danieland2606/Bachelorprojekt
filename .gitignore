@@ -169,3 +169,4 @@ nb-configuration.xml
 
 .vite
 *.html.gz
+.target/

@@ -2,10 +2,11 @@ import { HandlerContext, PageProps } from "$fresh/server.ts";
 import { EditCustomer } from "$this/components/EditCustomer.tsx";
 import { itemSearch, Table } from "$this/components/Table.tsx";
 import { Search } from "$this/components/Search.tsx";
-import { compareId, Obj, origin } from "$this/common/util.ts";
+import { compareId, origin } from "$this/common/util.ts";
+import { PolicyShort } from "$this/common/types.ts";
 import { deserializeCustomerFull } from "$this/common/deserialize.ts";
 import { customerClient } from "$this/common/customerClient.ts";
-import { policyClient, PolicyShort } from "$this/common/policyClient.ts";
+import { policyClient } from "$this/common/policyClient.ts";
 import { CustomerAllRequired } from "$this/generated/index.ts";
 
 export const handler = {

@@ -4,12 +4,7 @@ services:
     build:
       context: .
       target: test
-    env_file:
-      - ui.env
-    environment:
-      - MEOWMED_CUSTOMER_SERVER=testing
-      - MEOWMED_POLICY_SERVER=testing
-    container_name: meowmed+
+    container_name: meowmed-ui-test
     networks:
       - "default"
     ports:

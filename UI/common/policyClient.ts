@@ -5,8 +5,7 @@ import {
   PolicyCalc,
 } from "$this/generated/index.ts";
 import { ObjectSerializer } from "$this/generated/models/ObjectSerializer.ts";
-import { processResponse } from "$this/common/policyClient_prod.ts";
-export type { PolicyShort } from "$this/common/policyClient_prod.ts";
+import { processPolicyResponse } from "$this/common/types.ts";
 
 export const policyClient = {
   getPolicyList: async (_: number) => {
@@ -18,7 +17,7 @@ export const policyClient = {
       "Array<GetPolicyList200ResponseInner>",
       "",
     );
-    return processResponse(response);
+    return processPolicyResponse(response);
   },
   getPolicy: async (_1: number, _2: number) =>
     ObjectSerializer.deserialize(

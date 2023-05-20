@@ -1,4 +1,5 @@
 #! /bin/sh
 docker compose --profile rda --profile eda build
-
-docker images meowmed-* --format '{{.Repository}}' | tr '\n' ' ' | xargs docker save | gzip > meowmed.tar.gz
+mkdir -p target
+docker images meowmed-* --format '{{.Repository}}' | tr '\n' ' ' | xargs docker save | gzip > target/meowmed.tar.gz
+cp docker-compose.yaml target/

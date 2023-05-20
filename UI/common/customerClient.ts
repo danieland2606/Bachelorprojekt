@@ -1,7 +1,6 @@
 import { CustomerAllRequired, ID } from "$this/generated/index.ts";
 import { ObjectSerializer } from "$this/generated/models/ObjectSerializer.ts";
-import { processResponse } from "$this/common/customerClient_prod.ts";
-export type { CustomerShort } from "$this/common/customerClient_prod.ts";
+import { processCustomerResponse } from "$this/common/types.ts";
 
 export const customerClient = {
   getCustomerList: async () => {
@@ -13,7 +12,7 @@ export const customerClient = {
       "Array<GetCustomerList200ResponseInner>",
       "",
     );
-    return processResponse(response);
+    return processCustomerResponse(response);
   },
   getCustomer: async (_: number) =>
     ObjectSerializer.deserialize(

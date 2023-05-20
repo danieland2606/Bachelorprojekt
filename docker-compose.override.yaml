@@ -13,8 +13,6 @@ services:
     build:
       context: ./UI
       target: prod
-    environment:
-      - DENO_DEPLOYMENT_ID=2baff8832ead514a9cff77a18f43810bf19be235
 
   policy.rda:
     build:

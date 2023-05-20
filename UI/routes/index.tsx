@@ -3,7 +3,8 @@ import { itemSearch, Table } from "$this/components/Table.tsx";
 import { Search } from "$this/components/Search.tsx";
 import { Address } from "$this/generated/models/all.ts";
 import { compareId } from "$this/common/util.ts";
-import { customerClient, CustomerShort } from "$this/common/customerClient.ts";
+import { CustomerShort } from "$this/common/types.ts";
+import { customerClient } from "$this/common/customerClient.ts";
 
 export const handler = {
   async GET(req: Request, ctx: HandlerContext) {

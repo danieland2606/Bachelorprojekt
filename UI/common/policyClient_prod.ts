@@ -1,7 +1,7 @@
 import { voidToEmpty } from "$this/common/util.ts";
+import { processPolicyResponse } from "$this/common/types.ts";
 import {
   createConfiguration,
-  GetPolicyList200ResponseInner,
   PolicyAllRequired,
   PolicyApi,
   PolicyCalc,
@@ -23,20 +23,11 @@ const policyFields = new Set<PolicyPropertyNames>([
   "active",
 ]);
 
-export interface PolicyShort {
-  id: number;
-  name: string;
-  startDate: string;
-  endDate: string;
-  coverage: number;
-  active: boolean;
-}
-
 export const policyClient = {
   getPolicyList: (customerId: number) =>
     policyApi.getPolicyList(customerId, policyFields)
       .then(voidToEmpty)
-      .then(processResponse),
+      .then(processPolicyResponse),
   getPolicy: (customerId: number, policyId: number) =>
     policyApi.getPolicy(customerId, policyId),
   createPolicy: (customerId: number, policy: PolicyAllRequired) =>
@@ -48,19 +39,3 @@ export const policyClient = {
   ) => policyApi.updatePolicy(customerId, policyId, policy),
   calcPolicyPrice: (calc: PolicyCalc) => policyApi.calcPolicyPrice(calc),
 };
-
-export function processResponse(policy: GetPolicyList200ResponseInner[]) {
-  return policy.map(extractRequested);
-}
-
-function extractRequested(policy: GetPolicyList200ResponseInner) {
-  const { name } = policy?.objectOfInsurance ?? {};
-  const { id, startDate, endDate, coverage, active } = policy;
-  if (
-    startDate == null || endDate == null ||
-    coverage == null || name == null || active == null
-  ) {
-    throw new Error("Required fields of policy missing");
-  }
-  return { id, name, startDate, endDate, coverage, active } as PolicyShort;
-}
