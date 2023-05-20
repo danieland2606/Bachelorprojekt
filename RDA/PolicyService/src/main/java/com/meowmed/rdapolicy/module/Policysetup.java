@@ -31,9 +31,9 @@ public class Policysetup {
                 entities.add(new CatEntity("siamese", 12, 15, 4, 7, 2, new String[]{"seal","blau","lilac","creme"})) ;
                 entities.add(new CatEntity("perser", 12, 16, 4, 7, 3, new String[]{"weiß", "schildpatt","schwarz"}));
                 entities.add(new CatEntity("bengal", 12, 16, 4, 6, 4, new String[]{"braun", "schildpatt","marmor"}));
-                entities.add(new CatEntity("maine-cone", 12, 15, 5, 10, 2, new String[]{"grau","braun","weiß"}));
+                entities.add(new CatEntity("maine-coon", 12, 15, 5, 10, 2, new String[]{"grau","braun","weiß"}));
                 entities.add(new CatEntity("sphynx", 12, 15, 4, 6, 5, new String[]{}));
-                entities.add(new CatEntity("scottish Fold", 12, 15, 4, 6, 6, new String[]{}));
+                entities.add(new CatEntity("scottish-fold", 12, 15, 4, 6, 6, new String[]{}));
                 entities.add(new CatEntity("british-shorthair", 12, 15, 4, 6, 0, new String[]{}));
                 entities.add(new CatEntity("abyssinian", 12, 15, 3, 5, 4, new String[]{"rot", "schildpatt", "zimt"}));
                 entities.add(new CatEntity("ragdoll", 12, 15, 4, 7, 3, new String[]{"blau", "seal", "lilac", "schildpatt"}));
