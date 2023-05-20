@@ -1,23 +1,5 @@
 version: '3.7'
 services:
-  ui:
-    build:
-      args:
-        mode: "prod"
-        customerService: "http://customer:8080"
-        policyService: "http://policy:8080"
-      context: ../UI
-      dockerfile: Dockerfile
-    container_name: ui-service-l
-    env_file:
-      - ../UI/ui.env
-    networks:
-      - "default"
-    ports:
-      - "80:8000"
-
-
-
   customer:
     build:
       context: ./
