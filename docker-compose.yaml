@@ -1,7 +1,7 @@
 version: '3.7'
 services:
   ui.rda:
-    container_name: ui-service
+    container_name: ui-service-rda
     image: meowmed-ui
     profiles:
       - rda

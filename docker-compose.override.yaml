@@ -9,11 +9,11 @@ services:
       - ./Meowmed+_REST.yaml:/usr/share/nginx/html/Meowmed+_REST.yaml
     environment:
       API_URL: ./Meowmed+_REST.yaml
-  ui:
+
+  ui.rda:
     build:
       context: ./UI
       target: prod
-
   policy.rda:
     build:
       context: ./RDA/PolicyService
@@ -31,6 +31,10 @@ services:
       context: ./RDA/NotificationService
       dockerfile: Dockerfile
 
+  ui.eda:
+    build:
+      context: ./UI
+      target: prod
   customer.eda:
     build:
       context: ./EDA/
