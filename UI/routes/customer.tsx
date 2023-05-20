@@ -21,7 +21,7 @@ export default function CreateCustomer() {
   const id = "new-customer";
   return (
     <>
-      <h1>Neuen Kunden anlegen</h1>
+      <h1>Neuer Kunde</h1>
       <EditCustomer
         id={id}
         action="/customer"
