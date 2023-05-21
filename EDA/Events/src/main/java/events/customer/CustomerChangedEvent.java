@@ -48,11 +48,11 @@ public class CustomerChangedEvent implements Serializable {
         this.bankDetails = bankDetails;
     }
 
-    public Long getId() {
+    public Long getCid() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setCid(Long id) {
         this.id = id;
     }
 
@@ -72,13 +72,21 @@ public class CustomerChangedEvent implements Serializable {
         this.lastName = lastName;
     }
 
-    public String getFormOfAddress() {return formOfAddress;}
+    public String getFormOfAddress() {
+        return formOfAddress;
+    }
 
-    public void setFormOfAddress(String formOfAddress) {this.formOfAddress = formOfAddress;}
+    public void setFormOfAddress(String formOfAddress) {
+        this.formOfAddress = formOfAddress;
+    }
 
-    public String getTitle() {return title;}
+    public String getTitle() {
+        return title;
+    }
 
-    public void setTitle(String title) {this.title = title;}
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
     public String getMaritalStatus() {
         return maritalStatus;

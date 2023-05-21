@@ -1,5 +1,6 @@
 package EDA.MeowMed.Application;
 
+import EDA.MeowMed.Email.Email;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;

@@ -1,4 +1,4 @@
-package EDA.MeowMed.Application;
+package EDA.MeowMed.Email;
 
 import java.util.Map;
 

@@ -1,4 +1,4 @@
-package EDA.MeowMed.Application;
+package EDA.MeowMed.Email;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +13,8 @@ import java.util.function.Function;
 public class EmailFactory {
     @Autowired
     EmailTemplateParser emailTemplateParser;
+    @Autowired
+    EmailParser emailParser;
 
     /**
      * ToDo: get sane
@@ -27,7 +29,6 @@ public class EmailFactory {
      * @param from
      * @param subject
      * @param template
-     * @param parser
      * @param object
      * @return
      */
@@ -36,7 +37,6 @@ public class EmailFactory {
             String from,
             String subject,
             String template,
-            Map<String, Function<Object, String>> parser,
             Object object
     ) {
         Email email = new Email();
@@ -44,8 +44,9 @@ public class EmailFactory {
         email.setFrom(from);
         email.setSubject(subject);
         email.setTemplate(template);
+        Map<String, Function<Object, String>> parser = emailParser.getParser();
         Map<String, Object> properties = new HashMap<>();
-        Class classToParse = object.getClass();
+        Class<?> classToParse = object.getClass();
         for (String element : emailTemplateParser.getElementsOfTemplate(template)) {
             try {
                 String getter = "get" + StringUtils.capitalize(element);

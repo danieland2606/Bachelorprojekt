@@ -1,4 +1,4 @@
-package EDA.MeowMed.Application;
+package EDA.MeowMed.Email;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -52,8 +52,6 @@ public class EmailTemplateParser {
             throw new RuntimeException(e);
         }
     }
-
-
 
     public Set<String> getElementsOfTemplate(String template) {
         return emailTemplateObjects.get(template);

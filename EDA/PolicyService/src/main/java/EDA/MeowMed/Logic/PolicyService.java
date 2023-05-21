@@ -363,7 +363,7 @@ public class PolicyService {
      @param customerChangedEvent The event that contains the new customer data
      */
     public void updateCustomer(CustomerChangedEvent customerChangedEvent) throws ObjectNotFoundException{
-        Customer customer = this.getCustomer(customerChangedEvent.getId());
+        Customer customer = this.getCustomer(customerChangedEvent.getCid());
         customer.setFirstName(customerChangedEvent.getFirstName());
         customer.setLastName(customerChangedEvent.getLastName());
         customer.setFormOfAddress(customerChangedEvent.getFormOfAddress());
@@ -375,7 +375,7 @@ public class PolicyService {
         this.addressRepository.save(customer.getAddress());
         this.customerRepository.save(customer);
 //        this.customerRepository.flush(); Speichert customer nicht
-        this.updateAllPoliciesOfCustomer(customerChangedEvent.getId(), customer.getEmploymentStatus().equals("arbeitslos"));
+        this.updateAllPoliciesOfCustomer(customerChangedEvent.getCid(), customer.getEmploymentStatus().equals("arbeitslos"));
     }
 
     /**

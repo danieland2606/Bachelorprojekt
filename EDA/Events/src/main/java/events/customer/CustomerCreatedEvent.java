@@ -49,11 +49,11 @@ public class CustomerCreatedEvent implements Serializable {
         this.bankDetails = bankDetails;
     }
 
-    public Long getId() {
+    public Long getCid() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setCid(Long id) {
         this.id = id;
     }
 

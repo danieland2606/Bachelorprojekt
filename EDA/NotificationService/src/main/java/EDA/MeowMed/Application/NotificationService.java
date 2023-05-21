@@ -1,21 +1,17 @@
 package EDA.MeowMed.Application;
 
+import EDA.MeowMed.Email.Email;
+import EDA.MeowMed.Email.EmailFactory;
 import events.customer.CustomerChangedEvent;
 import events.customer.CustomerCreatedEvent;
-import events.customer.subclasses.Address;
 import events.policy.PolicyChangedEvent;
 import events.policy.PolicyCreatedEvent;
-import events.policy.subclasses.CustomerPojo;
-import events.policy.subclasses.PolicyPojo;
 import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.function.Function;
 
 /**
  * Class for sending the Email of CustomerCreatedEvent and PolicyCreatedEvent.
@@ -37,7 +33,7 @@ public class NotificationService {
     private final String subjectCustomerChanged = "Änderung der Angaben zu Ihrer Person";
     private final String templateCustomerChanged = "customerchangednotification";
 
-    private final String subjectPolicy = "Ihre MeowMed Vertragsinformationen";
+    private final String subjectPolicyCreated = "Ihre MeowMed Vertragsinformationen";
     private final String templatePolicyCreated = "policynotification";
 
     private final String templatePolicyChanged = "policychangednotification";
@@ -61,17 +57,11 @@ public class NotificationService {
      * @param customerCreated the CustomerCreatedEvent containing all valuable data concerning the CustomerCreatedMail
      */
     public void sendCustomerCreatedMail(CustomerCreatedEvent customerCreated) {
-        Map<String, Function<Object, String>> parser = new HashMap<>();
-        parser.put("formOfAddress", NotificationService::formatFormOfAddress);
-        parser.put("dateOfBirth", NotificationService::formatDate);
-        parser.put("dogOwner", NotificationService::boolToString);
-        parser.put("address", Object::toString);
         Email email = emailFactory.buildEmail(
                 customerCreated.getEmail(),
                 sender,
                 subjectCustomerCreated,
                 templateCustomerCreated,
-                parser,
                 customerCreated
         );
 
@@ -85,17 +75,11 @@ public class NotificationService {
     }
 
     public void sendCustomerChangedMail(CustomerChangedEvent customerChanged) {
-        Map<String, Function<Object, String>> parser = new HashMap<>();
-        parser.put("formOfAddress", NotificationService::formatFormOfAddress);
-        parser.put("dateOfBirth", NotificationService::formatDate);
-        parser.put("dogOwner", NotificationService::boolToString);
-        parser.put("address", Object::toString);
         Email email = emailFactory.buildEmail(
                 customerChanged.getEmail(),
                 sender,
-                subjectCustomerCreated,
-                templateCustomerCreated,
-                parser,
+                subjectCustomerChanged,
+                templateCustomerChanged,
                 customerChanged
         );
         try {
@@ -111,14 +95,11 @@ public class NotificationService {
      * @param customerChanged
      */
     public void sendCustomerCancelledMail(CustomerChangedEvent customerChanged) {
-        Map<String, Function<Object, String>> parser = new HashMap<>();
-        parser.put("formOfAddress", NotificationService::formatFormOfAddress);
         Email email = emailFactory.buildEmail(
                 customerChanged.getEmail(),
                 sender,
-                subjectCustomerCreated,
-                templateCustomerCreated,
-                parser,
+                subjectCustomerCancelled,
+                templateCustomerCancelled,
                 customerChanged
         );
         try {
@@ -146,17 +127,11 @@ public class NotificationService {
      * @param policyCreated the PolicyCreatedEvent containing all valuable data concerning the PolicyCreatedMail
      */
     public void sendPolicyCreatedMail(PolicyCreatedEvent policyCreated) {
-        Map<String, Function<Object, String>> parser = new HashMap<>();
-        parser.put("formOfAddress", NotificationService::formatFormOfAddress);
-        parser.put("startDate", NotificationService::formatDate);
-        parser.put("endDate", NotificationService::formatDate);
-        parser.put("castrated", NotificationService::boolToString);
         Email email = emailFactory.buildEmail(
                 policyCreated.getEmail(),
                 sender,
-                subjectCustomerCreated,
-                templateCustomerCreated,
-                parser,
+                subjectPolicyCreated,
+                templatePolicyCreated,
                 policyCreated
         );
         try {
@@ -169,17 +144,11 @@ public class NotificationService {
     }
 
     public void sendPolicyChangedMail(PolicyChangedEvent policyChangedEvent) {
-        Map<String, Function<Object, String>> parser = new HashMap<>();
-        parser.put("formOfAddress", NotificationService::formatFormOfAddress);
-        parser.put("startDate", NotificationService::formatDate);
-        parser.put("endDate", NotificationService::formatDate);
-        parser.put("castrated", NotificationService::boolToString);
         Email email = emailFactory.buildEmail(
                 policyChangedEvent.getEmail(),
                 sender,
-                subjectCustomerCreated,
-                templateCustomerCreated,
-                parser,
+                subjectPolicyChanged,
+                templatePolicyChanged,
                 policyChangedEvent
         );
         try {
@@ -192,17 +161,11 @@ public class NotificationService {
     }
 
     public void sendPolicyCancelledMail(PolicyChangedEvent policyChangedEvent) {
-        Map<String, Function<Object, String>> parser = new HashMap<>();
-        parser.put("formOfAddress", NotificationService::formatFormOfAddress);
-        parser.put("startDate", NotificationService::formatDate);
-        parser.put("endDate", NotificationService::formatDate);
-        parser.put("castrated", NotificationService::boolToString);
         Email email = emailFactory.buildEmail(
                 policyChangedEvent.getEmail(),
                 sender,
-                subjectCustomerCreated,
-                templateCustomerCreated,
-                parser,
+                subjectPolicyCancelled,
+                templatePolicyCancelled,
                 policyChangedEvent
         );
         try {
