@@ -56,7 +56,7 @@ public class Customer implements Serializable {
     }
 
     public Customer(CustomerCreatedEvent c) {
-        this.id = c.getId();
+        this.id = c.getCid();
         this.firstName = c.getFirstName();
         this.lastName = c.getLastName();
         this.formOfAddress = c.getFormOfAddress();

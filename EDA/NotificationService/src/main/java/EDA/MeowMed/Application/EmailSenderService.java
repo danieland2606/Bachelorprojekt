@@ -3,7 +3,6 @@ package EDA.MeowMed.Application;
 import EDA.MeowMed.Email.Email;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -13,14 +12,12 @@ import org.thymeleaf.spring6.SpringTemplateEngine;
 
 import java.nio.charset.StandardCharsets;
 
-@RequiredArgsConstructor
 @Service
-
 public class EmailSenderService {
     @Autowired
-    private final JavaMailSender mailSender;
+    private JavaMailSender mailSender;
     @Autowired
-    private final SpringTemplateEngine templateEngine;
+    private SpringTemplateEngine templateEngine;
 
     public void sendHtmlMessage(Email email) throws MessagingException {
         MimeMessage mimeMessage = mailSender.createMimeMessage();
