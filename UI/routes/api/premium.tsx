@@ -22,7 +22,9 @@ export const handler = {
 export default function PremiumDisplay({ data }: PageProps) {
   return (
     <>
-      <p>{data.premium}</p>
+      <div class="absolute inset-0 flex select-none">
+        <p class="m-auto">{data.premium}</p>
+      </div>
     </>
   );
 }

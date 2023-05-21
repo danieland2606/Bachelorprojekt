@@ -10,6 +10,13 @@ export default {
     extend: {
       backgroundImage: {
         "search": "url('/search.svg')",
+        "logo": "url('/cg-logo-black.svg')",
+      },
+      backgroundSize: {
+        "auto": "auto",
+        "cover": "cover",
+        "contain": "contain",
+        "70%": "70%",
       },
     },
   },

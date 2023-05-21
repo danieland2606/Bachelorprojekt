@@ -11,7 +11,7 @@ export const handler = [
     let body: string | null = await response.text();
     body = body?.replace(
       /^<!DOCTYPE html><html/,
-      '<!DOCTYPE html><html data-theme="retro"',
+      '<!DOCTYPE html><html data-theme="retro" class="bg-logo bg-contain bg-right-top bg-no-repeat bg-fixed lg:bg-70%"',
     ) || null;
     return new Response(body, options);
   },

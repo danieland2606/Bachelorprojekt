@@ -32,21 +32,23 @@ export default function CreatePolicy({ params }: PageProps) {
         allrequired
         mode="create"
       >
-        <iframe
-          name={iframe}
-          style="border-style:none;width:6em;height:4em"
-          src="/api/premium"
-        >
-        </iframe>
-        <input
-          type="submit"
-          form={id}
-          class="btn btn-normal mb-4"
-          formTarget={iframe}
-          formAction="/api/premium"
-          value="Rate berechnen"
-        >
-        </input>
+        <div class="input-group my-5">
+          <input
+            type="submit"
+            form={id}
+            class="btn btn-normal mb-4 w-1/2"
+            formTarget={iframe}
+            formAction="/api/premium"
+            value="Rate berechnen"
+          >
+          </input>
+          <iframe
+            name={iframe}
+            class="input input-bordered"
+            src="/api/premium"
+          >
+          </iframe>
+        </div>
       </EditPolicy>
       <div class="sm:flex py-5 justify-between block">
         <a
@@ -58,7 +60,7 @@ export default function CreatePolicy({ params }: PageProps) {
         <input
           form={id}
           type="submit"
-          class="btn btn-normal flex sm:inline-flex"
+          class="btn btn-normal flex w-full sm:w-auto"
           value="Vertrag abschließen"
         >
         </input>

@@ -18,7 +18,7 @@ export default function App({ Component }: AppProps) {
         <link rel="icon" type="image/svg+xml" href={asset("/favicon.svg")}>
         </link>
       </Head>
-      <div class="p-5 max-w-screen-xl mx-auto">
+      <div class="p-5 max-w-screen-xl mx-auto mt-10 lg:mt-24">
         <Component></Component>
       </div>
     </>

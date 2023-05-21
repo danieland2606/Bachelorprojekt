@@ -30,7 +30,10 @@ export function Form(props: FormProps) {
   delete props.allrequired;
   delete props.values;
   return (
-    <form {...props} class="box-column form-control">
+    <form
+      {...props}
+      class="form-control lg:grid lg:grid-cols-2 lg:gap-x-5"
+    >
       {configured}
     </form>
   );
