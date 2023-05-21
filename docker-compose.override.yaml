@@ -2,7 +2,6 @@ version: '3.7'
 services:
   swagger-ui:
     image: swaggerapi/swagger-ui
-    container_name: swagger_ui_container
     ports:
       - "81:8080"
     volumes:
@@ -11,27 +10,20 @@ services:
       API_URL: ./Meowmed+_REST.yaml
 
   ui.rda:
-    build:
-      context: ./UI
-      target: prod
+    build: ./UI
   customer.rda:
-    build:
-      context: ./RDA/CustomerService
+    build: ./RDA/CustomerService
     ports:
       - "8081:8080"
   policy.rda:
-    build:
-      context: ./RDA/PolicyService
+    build: ./RDA/PolicyService
     ports:
       - "8082:8080"
   notification.rda:
-    build:
-      context: ./RDA/NotificationService
+    build: ./RDA/NotificationService
       
   ui.eda:
-    build:
-      context: ./UI
-      target: prod
+    build: ./UI
   customer.eda:
     build:
       context: ./EDA
@@ -39,7 +31,7 @@ services:
       args:
         service: CustomerService
     ports:
-      - "8071:8081"
+      - "8071:8080"
   policy.eda:
     build:
       context: ./EDA

@@ -1,26 +1,20 @@
 version: '3.7'
 services:
   ui.rda:
-    container_name: ui-service-rda
     image: meowmed-ui
     profiles:
       - rda
     environment:
       - MEOWMED_CUSTOMER_SERVER=http://customer.rda:8080
       - MEOWMED_POLICY_SERVER=http://policy.rda:8080
-    networks:
-      - rda
     ports:
       - "80:8000"
     depends_on:
       - policy.rda
       - customer.rda
   policy.rda:
-    container_name: policy-service-rda
     image: meowmed-policy.rda
     profiles:
-      - rda
-    networks:
       - rda
     depends_on:
       - policydb.rda
@@ -33,32 +27,26 @@ services:
       - docker_debugmode=true
   policydb.rda:
     image: mariadb:latest
-    container_name: policydb-rda
     profiles:
       - rda
-    networks:
-      - rda
-    environment:
+    environment: &dbcredentials
       MARIADB_ROOT_PASSWORD: test
       MYSQL_DATABASE: Policy
       MYSQL_USER: user
       MYSQL_PASSWORD: 123456789
     volumes:
       - policydb_data_rda:/var/lib/mysql
-    healthcheck:
+    healthcheck: &dbhealthcheck
       test: "mariadb --user=root --password=$$MARIADB_ROOT_PASSWORD --execute \"SHOW DATABASES;\""
       interval: 5s
       timeout: 20s
       retries: 10
   customer.rda:
-    container_name: customer-service-rda
     image: meowmed-customer.rda
     profiles:
       - rda
     depends_on:
       - customerdb.rda
-    networks:
-      - rda
     environment:
       - spring.datasource.url=jdbc:mariadb://customerdb.rda:3306/Customer
       - spring.datasource.username=user
@@ -67,67 +55,50 @@ services:
       - docker.policyurl=policy.rda
   customerdb.rda:
     image: mariadb:latest
-    container_name: customerdb-rda
     profiles:
       - rda
-    networks:
-      - rda
     environment:
-      MARIADB_ROOT_PASSWORD: test
+      <<: *dbcredentials
       MYSQL_DATABASE: Customer
-      MYSQL_USER: user
-      MYSQL_PASSWORD: 123456789
     volumes:
       - customerdb_data_rda:/var/lib/mysql
     healthcheck:
-      test: "mariadb --user=root --password=$$MARIADB_ROOT_PASSWORD --execute \"SHOW DATABASES;\""
-      interval: 5s
-      timeout: 20s
-      retries: 10
+      <<: *dbhealthcheck
   notification.rda:
-    container_name: notification-service-rda
     image: meowmed-notification.rda
     profiles:
       - rda
-    networks:
-      - rda
     environment:
-      - spring_mail_host=smtp.gmail.com
       - spring_mail_port=587
+      - spring_mail_host=smtp.gmail.com
       - spring_mail_username=meowmedservice@gmail.com
       - spring_mail_password=yqanpbjhupnllbcz
       - spring_mail_properties.mail.smtp.auth=true
       - spring_mail_properties.mail.smtp.starttls.enable=true
 
   ui.eda:
-    container_name: ui-service-eda
     image: meowmed-ui
     profiles:
       - eda
     environment:
       - MEOWMED_CUSTOMER_SERVER=http://customer.eda:8080
       - MEOWMED_POLICY_SERVER=http://policy.eda:8080
-    networks:
-      - eda
     ports:
       - "80:8000"
     depends_on:
       - policy.eda
       - customer.eda
   customer.eda:
-    container_name: customer-service-eda
     image: meowmed-customer.eda
     profiles:
       - eda
-    networks:
-      - eda
     environment:
+      - server.port=8080
       - spring.rabbitmq.host=rabbitmq
-      - spring.datasource.url=jdbc:mariadb://customerdb.eda:3306/Customer
       - spring.datasource.username=root
       - spring.datasource.password=test
       - spring.datasource.driver-class-name=org.mariadb.jdbc.Driver
-      - server.port=8080
+      - spring.datasource.url=jdbc:mariadb://customerdb.eda:3306/Customer
       - spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MariaDBDialect
     depends_on:
       customerdb.eda:
@@ -135,22 +106,17 @@ services:
       rabbitmq:
         condition: service_started
   policy.eda:
-    container_name: policy-service-eda
     image: meowmed-policy.eda
     profiles:
       - eda
-    networks:
-      - eda
     environment:
+      - server.port=8080
       - RABBIT_HOST=rabbitmq
-      - spring.datasource.url=jdbc:mariadb://policydb.eda:3306/Policy
+      - spring.rabbitmq.host=rabbitmq
       - spring.datasource.username=user
       - spring.datasource.password=123456789
-      - spring.rabbitmq.host=rabbitmq
-      - spring.datasource.username=root
-      - spring.datasource.password=test
       - spring.datasource.driver-class-name=org.mariadb.jdbc.Driver
-      - server.port=8080
+      - spring.datasource.url=jdbc:mariadb://policydb.eda:3306/Policy
       - spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MariaDBDialect
     depends_on:
       policydb.eda:
@@ -158,11 +124,8 @@ services:
       rabbitmq:
         condition: service_started
   notification.eda:
-    container_name: notification-service-eda
     image: meowmed-notification.eda
     profiles:
-      - eda
-    networks:
       - eda
     environment:
       - spring.rabbitmq.host=rabbitmq
@@ -171,48 +134,29 @@ services:
         condition: service_started
   customerdb.eda:
     image: mariadb:latest
-    container_name: customerdb-eda
     profiles:
       - eda
-    networks:
-      - eda
     environment:
-      MARIADB_ROOT_PASSWORD: test
+      <<: *dbcredentials
       MYSQL_DATABASE: Customer
-      MYSQL_USER: user
-      MYSQL_PASSWORD: test12345
     healthcheck:
-      test: "mariadb --user=root --password=$$MARIADB_ROOT_PASSWORD --execute \"SHOW DATABASES;\""
-      interval: 5s
-      timeout: 20s
-      retries: 10
+      <<: *dbhealthcheck
     volumes:
       - customerdb_data_eda:/var/lib/mysql
   policydb.eda:
     image: mariadb:latest
-    container_name: policydb-eda
     profiles:
       - eda
-    networks:
-      - eda
     environment:
-      MARIADB_ROOT_PASSWORD: test
+      <<: *dbcredentials
       MYSQL_DATABASE: Policy
-      MYSQL_USER: user
-      MYSQL_PASSWORD: 123456789
     healthcheck:
-      test: "mariadb --user=root --password=$$MARIADB_ROOT_PASSWORD --execute \"SHOW DATABASES;\""
-      interval: 5s
-      timeout: 20s
-      retries: 10
+      <<: *dbhealthcheck
     volumes:
       - policydb_data_eda:/var/lib/mysql
   rabbitmq:
     image: rabbitmq:management-alpine
-    container_name: rabbitmq
     profiles:
-      - eda
-    networks:
       - eda
 
 volumes:
@@ -220,7 +164,3 @@ volumes:
   policydb_data_eda:
   customerdb_data_rda:
   policydb_data_rda:
-
-networks:
-  rda:
-  eda:
