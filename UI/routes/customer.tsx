@@ -30,12 +30,12 @@ export default function CreateCustomer() {
         mode="create"
       >
       </EditCustomer>
-      <div class="box-row buttons">
-        <a class="button" href="/">Abbrechen</a>
+      <div class="box-row buttons sm:flex py-5 justify-between block">
+        <a class="button btn btn-normal flex sm:inline-flex mb-4 sm:mb-0" href="/">Abbrechen</a>
         <input
           form={id}
           type="submit"
-          class="button"
+          class="button btn btn-normal flex sm:inline-flex"
           value="Anlegen"
         >
         </input>

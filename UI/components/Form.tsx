@@ -27,7 +27,7 @@ export function Form(props: FormProps) {
   const data = { allrequired, editable, values };
   const configured = configChildren(children, data);
   return (
-    <form {...props} class="box-column">
+    <form {...props} class="box-column form-control">
       {configured}
     </form>
   );

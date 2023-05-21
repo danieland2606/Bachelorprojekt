@@ -18,6 +18,9 @@ export const handler = {
 export default function Dashboard({ data }: PageProps) {
   return (
     <>
+      <div class="md:w-9/12 text-left">
+        <img src="/cg-logo-black.svg" alt="Logo"/>
+      </div>
       <h1 class="text-4xl font-medium">Dashboard</h1>
       <div class="sm:flex py-5 justify-between block">
         <Search

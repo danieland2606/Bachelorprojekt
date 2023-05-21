@@ -30,11 +30,13 @@ export function Select(props: SelectProps) {
   let clss;
   if (props.readonly) {
     delete props.readonly;
-    clss = "pointer-events-none";
+    clss = "pointer-events-none select w-full select-borderd";
+  } else {
+    clss = "select w-full select-borderd";
   }
   return (
     <div class="cell">
-      <label id={props.name}>{props.labeltext}</label>
+      <label class="label" id={props.name}>{props.labeltext}</label>
       <select {...props} label={props.name} class={clss}>
         {props.children ??
           props.options?.map((option) => (
@@ -66,8 +68,8 @@ export function Input(props: InputProps) {
   }
   return (
     <div class="cell">
-      <label id={props.name}>{props.labeltext}</label>
-      <input {...props} label={props.name}></input>
+      <label class="label" id={props.name}>{props.labeltext}</label>
+      <input {...props} class="input input-borderd" label={props.name}></input>
     </div>
   );
 }
