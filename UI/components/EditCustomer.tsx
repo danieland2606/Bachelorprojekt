@@ -17,19 +17,20 @@ const address = propMap(new Address(), "address.");
 type Mode = "create" | "display" | "edit";
 
 interface EditCustomerProps extends JSX.HTMLAttributes<HTMLFormElement> {
-  mode: Mode;
+  mode?: Mode;
   allrequired?: boolean;
   values?: Obj;
 }
 
-function getEditable(mode: Mode) {
+function getEditable(mode?: Mode) {
   switch (mode) {
-    case "create":
-      return undefined;
     case "display":
       return [];
     case "edit":
       return [customer.employmentStatus];
+    case "create":
+    default:
+      return undefined;
   }
 }
 

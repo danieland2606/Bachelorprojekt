@@ -34,7 +34,7 @@ export function Select(props: SelectProps) {
       <select
         {...subProps}
         id={name}
-        class={`${clss} select w-full select-borderd`}
+        class={`${clss} select w-full select-bordered`}
       >
         {subProps.children ??
           options?.map((option) => (
@@ -50,7 +50,7 @@ export function Input(props: InputProps) {
   return (
     <div>
       <label class="label" for={name}>{label}</label>
-      <input {...subProps} id={name} class={`${clss} input input-borderd`} />
+      <input {...subProps} id={name} class={`${clss} input input-bordered`} />
     </div>
   );
 }
