@@ -17,16 +17,14 @@ const cat = propMap(new ObjectOfInsurance(), "objectOfInsurance.");
 type Mode = "create" | "display" | "edit";
 
 export interface EditPolicyProps extends JSX.HTMLAttributes<HTMLFormElement> {
-  mode: Mode;
+  mode?: Mode;
   allrequired?: boolean;
   values?: Obj;
-  customerId: string;
+  customerId?: string;
 }
 
-function getEditable(mode: Mode) {
+function getEditable(mode?: Mode) {
   switch (mode) {
-    case "create":
-      return undefined;
     case "display":
       return [];
     case "edit":
@@ -37,17 +35,23 @@ function getEditable(mode: Mode) {
         cat.weight,
         policy.coverage,
       ]; //TODO check Capgemini requirements
+    case "create":
+    default:
+      return undefined;
   }
 }
 
 export function EditPolicy(props: EditPolicyProps) {
+  const { mode, customerId } = props;
+  delete props.mode;
+  delete props.customerId;
   return (
-    <Form {...props} editable={getEditable(props.mode)}>
-      <input name="customerId" type="hidden" value={props.customerId}></input>
+    <Form {...props} editable={getEditable(mode)}>
+      <input name="customerId" type="hidden" value={customerId}></input>
       <Input name={policy.startDate} labeltext="Begin" type="date"></Input>
       <Input name={policy.endDate} labeltext="Ende" type="date"></Input>
       <Input name={policy.coverage} labeltext="Deckung" type="number"></Input>
-      {props.mode !== "create" && (
+      {mode !== "create" && (
         <Input name={policy.premium} labeltext="Rate" type="number"></Input>
       )}
       <div class="box-column">

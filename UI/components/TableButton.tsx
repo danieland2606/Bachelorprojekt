@@ -4,18 +4,22 @@ export type kind = "details" | "edit" | "delete";
 
 export interface TableButtonProps
   extends JSX.HTMLAttributes<HTMLAnchorElement> {
-  kind: kind;
+  kind?: kind;
 }
 
 export function TableButton(props: TableButtonProps) {
   return (
-    <a {...props} class="btn btn-outline btn-sm rounded-none p-1 aspect-square">
+    <a
+      {...props}
+      kind={undefined}
+      class="btn btn-outline btn-sm rounded-none p-1 aspect-square"
+    >
       {getImage(props.kind)}
     </a>
   );
 }
 
-function getImage(kind: kind) {
+function getImage(kind?: kind) {
   switch (kind) {
     case "details":
       return (

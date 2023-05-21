@@ -36,8 +36,13 @@ export default function ShowPolicy({ params, data }: PageProps) {
         mode={data.edit ? "edit" : "display"}
       >
       </EditPolicy>
-      <div class="box-row buttons sm:flex py-5 justify-between block">
-        <a class="button btn btn-normal inline-flex mb-4 sm:mb-0" href={`/customer/${params.customerId}`}>Zurück</a>
+      <div class="sm:flex py-5 justify-between block">
+        <a
+          class="btn btn-normal inline-flex mb-4 sm:mb-0"
+          href={`/customer/${params.customerId}`}
+        >
+          Zurück
+        </a>
         {data.edit &&
           (
             <input
@@ -45,7 +50,7 @@ export default function ShowPolicy({ params, data }: PageProps) {
               type="submit"
               formAction={`/customer/${params.customerId}/policy/${params.policyId}`}
               formMethod="post"
-              class="button btn btn-normal flex sm:inline-flex"
+              class="btn btn-normal flex sm:inline-flex"
               value="Änderungen bestätigen"
             >
             </input>

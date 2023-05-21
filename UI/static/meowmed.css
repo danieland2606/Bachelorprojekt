@@ -1862,6 +1862,11 @@ html {
   border-radius: var(--rounded-btn, 0.5rem);
 }
 
+.form-control {
+  display: flex;
+  flex-direction: column;
+}
+
 .label {
   display: flex;
   -webkit-user-select: none;
@@ -3004,6 +3009,10 @@ html {
   display: flex;
 }
 
+.inline-flex {
+  display: inline-flex;
+}
+
 .table {
   display: table;
 }
@@ -3079,6 +3088,10 @@ html {
   padding-bottom: 1.25rem;
 }
 
+.text-left {
+  text-align: left;
+}
+
 .text-4xl {
   font-size: 2.25rem;
   line-height: 2.5rem;
@@ -3135,5 +3148,11 @@ html {
 
   .sm\:inline-flex {
     display: inline-flex;
+  }
+}
+
+@media (min-width: 768px) {
+  .md\:w-9\/12 {
+    width: 75%;
   }
 }

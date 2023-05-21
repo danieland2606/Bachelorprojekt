@@ -17,29 +17,27 @@ export const disabledTypes = [
 ];
 
 export interface InputProps extends JSX.HTMLAttributes<HTMLInputElement> {
-  labeltext: string;
+  labeltext?: string;
 }
 
 export interface SelectProps extends JSX.HTMLAttributes<HTMLSelectElement> {
-  labeltext: string;
+  labeltext?: string;
   readonly?: boolean;
   options?: readonly string[];
 }
 
 export function Select(props: SelectProps) {
-  let clss;
-  if (props.readonly) {
-    delete props.readonly;
-    clss = "pointer-events-none select w-full select-borderd";
-  } else {
-    clss = "select w-full select-borderd";
-  }
+  const { name, options, label, clss, subProps } = prepareSelectProps(props);
   return (
-    <div class="cell">
-      <label class="label" id={props.name}>{props.labeltext}</label>
-      <select {...props} label={props.name} class={clss}>
-        {props.children ??
-          props.options?.map((option) => (
+    <div>
+      <label class="label" for={name}>{label}</label>
+      <select
+        {...subProps}
+        id={name}
+        class={`${clss} select w-full select-borderd`}
+      >
+        {subProps.children ??
+          options?.map((option) => (
             <option value={option}>{pretty(option)}</option>
           )) ?? ""}
       </select>
@@ -47,31 +45,40 @@ export function Select(props: SelectProps) {
   );
 }
 
-function pretty(val: string) {
-  if (val === "none") {
-    return "";
-  }
-  const pretty = val.replaceAll("-", " ").replaceAll("ae", "ä").replaceAll(
-    "oe",
-    "ö",
-  ).replaceAll("ue", "ü");
-  return capitalize(pretty);
+export function Input(props: InputProps) {
+  const { clss, name, label, subProps } = prepareInputProps(props);
+  return (
+    <div>
+      <label class="label" for={name}>{label}</label>
+      <input {...subProps} id={name} class={`${clss} input input-borderd`} />
+    </div>
+  );
 }
 
-export function Input(props: InputProps) {
+function prepareSelectProps(props: SelectProps) {
+  const { labeltext: label, options, name } = props;
+  delete props.labeltext;
+  delete props.options;
+  let clss = (props.class ?? "") as string;
+  if (props.readonly) {
+    delete props.readonly;
+    clss += " pointer-events-none";
+  }
+  return { name, options, label, clss: clss.trim(), subProps: props };
+}
+
+function prepareInputProps(props: InputProps) {
+  const { labeltext: label, name } = props;
+  delete props.labeltext;
+  let clss = (props.class ?? "") as string;
   if (isDisabled(props)) {
     delete props.readonly;
-    props.class += " pointer-events-none";
+    clss += " pointer-events-none";
   }
   if (notRequirable.includes(type(props))) {
     delete props.required;
   }
-  return (
-    <div class="cell">
-      <label class="label" id={props.name}>{props.labeltext}</label>
-      <input {...props} class="input input-borderd" label={props.name}></input>
-    </div>
-  );
+  return { name, label, clss: clss.trim(), subProps: props };
 }
 
 function isDisabled(props: InputProps) {
@@ -85,4 +92,15 @@ function type(props: InputProps) {
     );
   }
   return props.type as string;
+}
+
+function pretty(val: string) {
+  if (val === "none") {
+    return "";
+  }
+  const pretty = val.replaceAll("-", " ").replaceAll("ae", "ä").replaceAll(
+    "oe",
+    "ö",
+  ).replaceAll("ue", "ü");
+  return capitalize(pretty);
 }

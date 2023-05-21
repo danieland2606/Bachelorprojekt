@@ -20,10 +20,10 @@ export interface TableItems {
 }
 
 export interface TableProps extends JSX.HTMLAttributes<HTMLTableElement> {
-  tabledata: TableItems;
+  tabledata?: TableItems;
 }
 
-function hasAnyActions(items: Item[]) {
+function hasAnyActions(items?: Item[]) {
   return !!(items?.some(({ actions }) => actions != null));
 }
 
@@ -36,19 +36,20 @@ export function itemSearch(search: string): (item: Item) => boolean {
 }
 
 export function Table(props: TableProps) {
-  const { headers, items } = props.tabledata;
+  const { headers, items } = props.tabledata ?? {};
+  delete props.tabledata;
   const hasActions = hasAnyActions(items);
   return (
     <div class="overflow-x-auto">
       <table {...props} class={`${props.class} table w-full table-zebra`}>
         <thead>
           <tr>
-            {headers.map((header) => <th scope="col">{header}</th>)}
+            {headers?.map((header) => <th scope="col">{header}</th>)}
             {hasActions && <th scope="col">Aktionen</th>}
           </tr>
         </thead>
         <tbody>
-          {items.map(({ row, actions, active }) => (
+          {items?.map(({ row, actions, active }) => (
             <tr class={active ? undefined : "text-gray-600"}>
               {row.map((field) => <td>{field}</td>)}
               {hasActions && (

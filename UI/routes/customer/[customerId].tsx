@@ -52,14 +52,16 @@ export default function ShowCustomer({ data, params }: PageProps) {
         </Search>
         <a
           href={`/customer/${params.customerId}/policy`}
-          class={employmentStatus == "arbeitslos" ? "pointer-events-none btn btn-normal" : "btn btn-normal"}
+          class={employmentStatus == "arbeitslos"
+            ? "pointer-events-none btn btn-normal"
+            : "btn btn-normal"}
         >
           Neuer Vertrag
         </a>
       </div>
       <Table tabledata={tableData}></Table>
-      <div class="box-row buttons sm:flex py-5 justify-between block">
-        <a class="button btn btn-normal inline-flex mb-4 sm:mb-0" href="/">Zurück</a>
+      <div class="sm:flex py-5 justify-between block">
+        <a class="btn btn-normal inline-flex mb-4 sm:mb-0" href="/">Zurück</a>
         {edit &&
           (
             <input
@@ -67,7 +69,7 @@ export default function ShowCustomer({ data, params }: PageProps) {
               type="submit"
               formAction={`/customer/${params.customerId}`}
               formMethod="post"
-              class="button btn btn-normal flex sm:inline-flex"
+              class="btn btn-normal flex sm:inline-flex"
               value="Änderungen bestätigen"
             >
             </input>

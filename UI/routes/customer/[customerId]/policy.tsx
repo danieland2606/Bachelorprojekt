@@ -41,19 +41,24 @@ export default function CreatePolicy({ params }: PageProps) {
         <input
           type="submit"
           form={id}
-          class="button btn btn-normal mb-4"
+          class="btn btn-normal mb-4"
           formTarget={iframe}
           formAction="/api/premium"
           value="Rate berechnen"
         >
         </input>
       </EditPolicy>
-      <div class="box-row buttons sm:flex py-5 justify-between block">
-        <a class="button btn btn-normal flex sm:inline-flex mb-4 sm:mb-0" href={`/customer/${params.customerId}`}>Abbrechen</a>
+      <div class="sm:flex py-5 justify-between block">
+        <a
+          class="btn btn-normal flex sm:inline-flex mb-4 sm:mb-0"
+          href={`/customer/${params.customerId}`}
+        >
+          Abbrechen
+        </a>
         <input
           form={id}
           type="submit"
-          class="button btn btn-normal flex sm:inline-flex"
+          class="btn btn-normal flex sm:inline-flex"
           value="Vertrag abschließen"
         >
         </input>

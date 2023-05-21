@@ -3,12 +3,14 @@ import { JSX } from "preact/jsx-runtime";
 export function Search(
   props: JSX.HTMLAttributes<HTMLFormElement> & { value?: string },
 ) {
+  const value = props.value;
+  delete props.value;
   return (
     <form {...props} rel="search">
       <input
         name="search"
         type="text"
-        value={props.value}
+        value={value}
         placeholder="Suche..."
         class="input"
       />
