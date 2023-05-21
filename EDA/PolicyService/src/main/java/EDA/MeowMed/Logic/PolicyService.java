@@ -173,12 +173,10 @@ public class PolicyService {
      * @throws ObjectNotFoundException if the customer with the specified ID does not exist
      * @throws DatabaseAccessException if there is an error accessing the database
      */
-    public MappingJacksonValue getPolicyList(long customerID, String fields) throws ObjectNotFoundException, DatabaseAccessException, IllegalArgumentException {
+    public MappingJacksonValue getPolicyList(long customerID, String fields) throws ObjectNotFoundException, DatabaseAccessException {
         try {
-            // check if customer is not "arbeitslos"
-            Customer customer = this.getCustomer(customerID);
-            if (customer.getEmploymentStatus().equals("arbeitslos")) {
-                throw new IllegalArgumentException("Policies for customers with employment status 'arbeitslos' cannot be created.");
+            if (!this.doesCustomerExist(customerID)) {
+                throw new ObjectNotFoundException("The Customer with ID: " + customerID + " does not exist in the database.");
             }
 
             // retrieve list of policies for the customer
