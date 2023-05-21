@@ -139,6 +139,9 @@ public class PolicyService {
                 throw new InvalidPolicyDataException("It is not possible to create a Policy for 'arbeitlose' Customer.");
             }
 
+            // All created Policies are active by default, policies that have invalid data will not be created in the first place
+            policy.setActive(true);
+
             policy.setPremium(this.getPremium(policy.getCustomer(), policy));
             System.out.println("Premium: " + policy.getPremium());
 
@@ -345,7 +348,7 @@ public class PolicyService {
         persistentPolicy.setPremium(this.getPremium(customer, persistentPolicy));
         boolean premiumChanged = Math.abs(persistentPolicy.getPremium() - oldPolicy.getPremium()) > 0.0001;
         if (persistentPolicy.getObjectOfInsurance().getPersonality().equals("sehr verspielt")) {
-            persistentPolicy.setCancelled(true);
+            persistentPolicy.setActive(false);
             this.policySender.sendPolicyCancelled(new PolicyChangedEvent(persistentPolicy.toPojo()));
         } else if (premiumChanged) {
             this.policySender.sendPolicyChanged(new PolicyChangedEvent(persistentPolicy.toPojo()));
@@ -387,8 +390,9 @@ public class PolicyService {
      */
     public void updateAllPoliciesOfCustomer(Long customerID, boolean cancelPolicies) throws ObjectNotFoundException{
         for (Policy p : this.policyRepository.getPolicyList(customerID)) {
-            if (!p.isCancelled())
-            this.updatePolicyDataBasedOnNewInformation(p, cancelPolicies);
+            if (p.isActive()) {
+                this.updatePolicyDataBasedOnNewInformation(p, cancelPolicies);
+            }
         }
         this.policyRepository.flush();
     }
@@ -403,7 +407,7 @@ public class PolicyService {
         boolean premiumChanged = Math.abs(newPremium - newPolicy.getPremium()) > 0.0001;
         newPolicy.setPremium(newPremium);
         if (cancelPolicy) {
-            newPolicy.setCancelled(true);
+            newPolicy.setActive(false);
             //FIXME Art des Speicherns notwendig? Anders möglich?
             policyRepository.save(newPolicy);
             objectOfInsuranceRepository.save(newPolicy.getObjectOfInsurance());

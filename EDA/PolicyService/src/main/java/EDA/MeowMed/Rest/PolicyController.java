@@ -146,7 +146,7 @@ public class PolicyController {
     public ResponseEntity<?> changePolicy(@PathVariable("c_id") Long customerID, @PathVariable("p_id") Long policyID, @RequestBody Policy policy) {
         try {
             this.policyService.updatePolicy(policyID, policy);
-            return new ResponseEntity<>(HttpStatusCode.valueOf(200));
+            return new ResponseEntity<>(HttpStatusCode.valueOf(204));
         } catch (ObjectNotFoundException e) {
             return new ResponseEntity<String>("The Policy with ID: " + policyID + " does not exist.",HttpStatusCode.valueOf(404));
         }

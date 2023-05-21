@@ -33,8 +33,8 @@ public class Policy implements Serializable {
     @Column(name = "premium", nullable = false  )
     private double premium;
 
-    @Column(name = "cancelled", nullable = false)
-    private boolean cancelled;
+    @Column(name = "active", nullable = false)
+    private boolean active;
 
     @OneToOne(optional = false)
     @JoinColumn(name = "object_of_insurance_id")
@@ -44,13 +44,13 @@ public class Policy implements Serializable {
     @JoinColumn(name = "customer_id")
     private Customer customer;
 
-    public Policy(long id, LocalDate startDate, LocalDate endDate, int coverage, int premium, boolean cancelled, ObjectOfInsurance objectOfInsurance) {
+    public Policy(long id, LocalDate startDate, LocalDate endDate, int coverage, int premium, boolean active, ObjectOfInsurance objectOfInsurance) {
         this.id = id;
         this.startDate = startDate;
         this.endDate = endDate;
         this.coverage = coverage;
         this.premium = premium;
-        this.cancelled = cancelled;
+        this.active = active;
         this.objectOfInsurance = objectOfInsurance;
     }
 
@@ -60,7 +60,7 @@ public class Policy implements Serializable {
         this.endDate = p.getEndDate();
         this.coverage = p.getCoverage();
         this.premium = p.getPremium();
-        this.cancelled = p.isCancelled();
+        this.active = p.isActive();
         this.objectOfInsurance = new ObjectOfInsurance(p.getObjectOfInsurance());
         this.customer = p.getCustomer();
     }
@@ -109,12 +109,12 @@ public class Policy implements Serializable {
         this.premium = premium;
     }
 
-    public boolean isCancelled() {
-        return cancelled;
+    public boolean isActive() {
+        return active;
     }
 
-    public void setCancelled(boolean cancelled) {
-        this.cancelled = cancelled;
+    public void setActive(boolean active) {
+        this.active = active;
     }
 
     public ObjectOfInsurance getObjectOfInsurance() {
