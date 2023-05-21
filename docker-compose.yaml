@@ -108,7 +108,7 @@ services:
       - MEOWMED_CUSTOMER_SERVER=http://customer.eda:8080
       - MEOWMED_POLICY_SERVER=http://policy.eda:8080
     networks:
-      - "default"
+      - eda
     ports:
       - "80:8000"
     depends_on:
@@ -120,7 +120,7 @@ services:
     profiles:
       - eda
     networks:
-      - "default"
+      - eda
     environment:
       - spring.rabbitmq.host=rabbitmq
       - spring.datasource.url=jdbc:mariadb://customerdb.eda:3306/Customer
@@ -140,7 +140,7 @@ services:
     profiles:
       - eda
     networks:
-      - "default"
+      - eda
     environment:
       - RABBIT_HOST=rabbitmq
       - spring.datasource.url=jdbc:mariadb://policydb.eda:3306/Policy
@@ -163,7 +163,7 @@ services:
     profiles:
       - eda
     networks:
-      - "default"
+      - eda
     environment:
       - spring.rabbitmq.host=rabbitmq
     depends_on:
@@ -175,7 +175,7 @@ services:
     profiles:
       - eda
     networks:
-      - "default"
+      - eda
     environment:
       MARIADB_ROOT_PASSWORD: test
       MYSQL_DATABASE: Customer
@@ -194,7 +194,7 @@ services:
     profiles:
       - eda
     networks:
-      - "default"
+      - eda
     environment:
       MARIADB_ROOT_PASSWORD: test
       MYSQL_DATABASE: Policy
@@ -213,7 +213,7 @@ services:
     profiles:
       - eda
     networks:
-      - "default"
+      - eda
 
 volumes:
   customerdb_data_eda:
@@ -223,3 +223,4 @@ volumes:
 
 networks:
   rda:
+  eda:
