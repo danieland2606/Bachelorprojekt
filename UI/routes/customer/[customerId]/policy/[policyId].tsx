@@ -2,7 +2,7 @@ import { HandlerContext, PageProps } from "$fresh/server.ts";
 import { EditPolicy } from "$this/components/EditPolicy.tsx";
 import { policyClient } from "$this/common/policyClient.ts";
 import { deserializePolicyFull } from "$this/common/deserialize.ts";
-import { origin } from "$this/common/util.ts";
+import { redirect } from "$this/common/util.ts";
 
 export const handler = {
   async GET(req: Request, ctx: HandlerContext) {
@@ -18,8 +18,7 @@ export const handler = {
     const form = await req.formData();
     const policy = deserializePolicyFull(form);
     await policyClient.updatePolicy(customerId, policyId, policy);
-    const customerUrl = new URL(`/customer/${customerId}`, origin(req));
-    return Response.redirect(customerUrl, 303);
+    return redirect(`/customer/${customerId}`);
   },
 };
 

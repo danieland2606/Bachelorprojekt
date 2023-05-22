@@ -2,12 +2,15 @@ import { HandlerContext, PageProps } from "$fresh/server.ts";
 import { EditCustomer } from "$this/components/EditCustomer.tsx";
 import { itemSearch, Table } from "$this/components/Table.tsx";
 import { Search } from "$this/components/Search.tsx";
-import { compareId, origin } from "$this/common/util.ts";
+import { compareId, redirect } from "$this/common/util.ts";
 import { PolicyShort } from "$this/common/types.ts";
 import { deserializeCustomerFull } from "$this/common/deserialize.ts";
 import { customerClient } from "$this/common/customerClient.ts";
 import { policyClient } from "$this/common/policyClient.ts";
-import { CustomerAllRequired } from "$this/generated/index.ts";
+import {
+  CustomerAllRequired,
+  EmploymentStatus,
+} from "$this/generated/index.ts";
 
 export const handler = {
   async GET(req: Request, ctx: HandlerContext) {
@@ -25,8 +28,7 @@ export const handler = {
     const form = await req.formData();
     const customer = deserializeCustomerFull(form);
     await customerClient.updateCustomer(customerId, customer);
-    const index = new URL("/", origin(req));
-    return Response.redirect(index, 303);
+    return redirect("/");
   },
 };
 
@@ -52,9 +54,7 @@ export default function ShowCustomer({ data, params }: PageProps) {
         </Search>
         <a
           href={`/customer/${params.customerId}/policy`}
-          class={employmentStatus == "arbeitslos"
-            ? "pointer-events-none btn btn-normal"
-            : "btn btn-normal"}
+          class={"btn btn-normal" + disableIfUnemployed(employmentStatus)}
         >
           Neuer Vertrag
         </a>
@@ -77,6 +77,13 @@ export default function ShowCustomer({ data, params }: PageProps) {
       </div>
     </>
   );
+}
+
+function disableIfUnemployed(status: EmploymentStatus) {
+  if (status === "arbeitslos") {
+    return " pointer-events-none";
+  }
+  return "";
 }
 
 function formatPolicyList(

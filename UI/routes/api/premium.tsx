@@ -1,31 +1,43 @@
-import { HandlerContext, PageProps } from "$fresh/server.ts";
+import { HandlerContext } from "$fresh/server.ts";
+import { asset } from "$fresh/runtime.ts";
 import { deserializePolicyFull } from "$this/common/deserialize.ts";
 import { policyClient } from "$this/common/policyClient.ts";
 import { PolicyCalc } from "$this/generated/index.ts";
 
 export const handler = {
-  GET(_: Request, ctx: HandlerContext) {
-    return ctx.renderNotFound();
+  GET(_1: Request, _2: HandlerContext) {
+    return respond("");
   },
-  async POST(req: Request, ctx: HandlerContext) {
+  async POST(req: Request, _: HandlerContext) {
     const form = await req.formData();
     const calcPolicy = deserializePolicyCalc(form);
     try {
       const { premium } = await policyClient.calcPolicyPrice(calcPolicy);
-      return ctx.render({ premium });
+      return respond(premium.toString());
     } catch (_) {
-      return ctx.render({ premium: "error" });
+      return respond("error");
     }
   },
 };
 
-export default function PremiumDisplay({ data }: PageProps) {
+function respond(premium: string) {
+  const options = { status: 200, headers: { "Content-Type": "text/html" } };
+  const body = PremiumDisplay(premium);
+  return new Response(body, options);
+}
+
+export function PremiumDisplay(premium: string) {
   return (
-    <>
-      <div class="absolute inset-0 flex select-none">
-        <p class="m-auto">{data.premium}</p>
-      </div>
-    </>
+    `<!DOCTYPE html>` +
+    `<html lang="de" data-theme="retro">` +
+    `<head>` +
+    `<meta charSet="UTF-8" />` +
+    `<link rel="stylesheet" href="${asset("/meowmed.css")}"/>` +
+    `</head>` +
+    `<body class="absolute inset-0 flex select-none">` +
+    `<p class="m-auto">${premium}</p>` +
+    `</body>` +
+    `</html>`
   );
 }
 

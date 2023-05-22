@@ -4,7 +4,12 @@
 /// <reference lib="dom.asynciterable" />
 /// <reference lib="deno.ns" />
 
-import { start } from "$fresh/server.ts";
-import manifest from "./fresh.gen.ts";
+import { InnerRenderFunction, RenderContext, start } from "$fresh/server.ts";
+import manifest from "$this/fresh.gen.ts";
 
-await start(manifest);
+function render(ctx: RenderContext, render: InnerRenderFunction) {
+  ctx.lang = "de";
+  render();
+}
+
+await start(manifest, { render });

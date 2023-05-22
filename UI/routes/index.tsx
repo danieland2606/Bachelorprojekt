@@ -1,5 +1,4 @@
 import { HandlerContext, PageProps } from "$fresh/server.ts";
-import { asset } from "$fresh/runtime.ts";
 import { itemSearch, Table } from "$this/components/Table.tsx";
 import { Search } from "$this/components/Search.tsx";
 import { Address } from "$this/generated/models/all.ts";
