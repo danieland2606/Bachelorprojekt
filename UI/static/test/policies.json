@@ -18,5 +18,15 @@
     "objectOfInsurance": {
       "name": "Perry"
     }
+  },
+  {
+    "id": 2,
+    "startDate": "1995-11-01",
+    "endDate": "2024-01-21",
+    "coverage": 50000,
+    "active": false,
+    "objectOfInsurance": {
+      "name": "Celery"
+    }
   }
 ]

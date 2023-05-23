@@ -13,6 +13,8 @@ import {
 
 const policy = propMap(new Policy());
 const cat = propMap(new ObjectOfInsurance(), "objectOfInsurance.");
+const yearStart = new Date(new Date().getFullYear(), 0, 1).toISOString();
+const yearEnd = new Date(new Date().getFullYear(), 11, 31).toISOString();
 
 type Mode = "create" | "display" | "edit";
 
@@ -47,38 +49,49 @@ export function EditPolicy(props: EditPolicyProps) {
   delete props.customerId;
   return (
     <Form {...props} editable={getEditable(mode)}>
-      <input name="customerId" type="hidden" value={customerId}></input>
-      <Input name={policy.startDate} labeltext="Begin" type="date"></Input>
-      <Input name={policy.endDate} labeltext="Ende" type="date"></Input>
-      <Input name={policy.coverage} labeltext="Deckung" type="number"></Input>
+      <input name="customerId" type="hidden" value={customerId} />
+      <Input name={policy.startDate} labeltext="Begin" type="date" />
+      <Input name={policy.endDate} labeltext="Ende" type="date" />
+      {/*<Input name={policy.dueDate} labeltext="Fälligkeit" type="date" min={yearStart} max={yearEnd}></Input>*/}
+      <Input
+        name={policy.coverage}
+        labeltext="Deckung"
+        type="number"
+        min="0"
+        step="0.01"
+        unit="€"
+      />
       {mode !== "create" && (
-        <Input name={policy.premium} labeltext="Rate" type="number"></Input>
+        <Input
+          name={policy.premium}
+          labeltext="Rate"
+          type="number"
+          min="0"
+          step="0.01"
+          unit="€"
+        />
       )}
       <div class="divider lg:col-span-2">Katze</div>
       <Input
         name={cat.name}
         labeltext="Name"
         type="text"
-      >
-      </Input>
+      />
       <Select
         name={cat.race}
         labeltext="Rasse"
         options={CatRaceValues}
-      >
-      </Select>
+      />
       <Select
         name={cat.color}
         labeltext="Farbe"
         options={FurColorValues}
-      >
-      </Select>
+      />
       <Input
         name={cat.dateOfBirth}
         labeltext="Geburtsdatum"
         type="date"
-      >
-      </Input>
+      />
       <Select name={cat.castrated} labeltext="Kastriert">
         <option value={true.toString()}>Kastriert</option>
         <option value={false.toString()}>Nicht Kastriert</option>
@@ -87,20 +100,20 @@ export function EditPolicy(props: EditPolicyProps) {
         name={cat.personality}
         labeltext="Persönlichkeit"
         options={PersonalityValues}
-      >
-      </Select>
+      />
       <Select
         name={cat.environment}
         labeltext="Umgebung"
         options={EnvironmentValues}
-      >
-      </Select>
+      />
       <Input
         name={cat.weight}
         labeltext="Gewicht"
         type="number"
-      >
-      </Input>
+        min="0"
+        step="0.1"
+        unit="kg"
+      />
       {props.children}
     </Form>
   );

@@ -7,11 +7,11 @@ export default function Error500Page({ error }: ErrorPageProps) {
     <>
       <div class="alert alert-error shadow-lg">
         <div>
-          <image src={asset("/circle-x.svg")}></image>
+          <img src={asset("/circle-x.svg")} />
           <span>500: Internal Server Error</span>
         </div>
       </div>
-      <div class="mockup-code bg-error text-black mt-2">
+      <div class="mockup-code bg-error text-black mt-2 p-2">
         <pre><code>{err.stack ?? err.message}</code></pre>
       </div>
     </>

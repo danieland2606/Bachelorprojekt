@@ -44,14 +44,12 @@ export default function ShowCustomer({ data, params }: PageProps) {
         mode={edit ? "edit" : "display"}
         values={customer}
         allrequired
-      >
-      </EditCustomer>
+      />
       <div class="box-row sm:flex py-5 justify-between block">
         <Search
           value={search}
           class="relative sm:inline-block block mb-4 sm:mb-0"
-        >
-        </Search>
+        />
         <a
           href={`/customer/${params.customerId}/policy`}
           class={"btn btn-normal" + disableIfUnemployed(employmentStatus)}
@@ -59,7 +57,7 @@ export default function ShowCustomer({ data, params }: PageProps) {
           Neuer Vertrag
         </a>
       </div>
-      <Table tabledata={tableData}></Table>
+      <Table tabledata={tableData} />
       <div class="sm:flex py-5 justify-between block">
         <a class="btn btn-normal inline-flex mb-4 sm:mb-0" href="/">Zurück</a>
         {edit &&
@@ -71,8 +69,7 @@ export default function ShowCustomer({ data, params }: PageProps) {
               formMethod="post"
               class="btn btn-normal flex sm:inline-flex"
               value="Änderungen bestätigen"
-            >
-            </input>
+            />
           )}
       </div>
     </>

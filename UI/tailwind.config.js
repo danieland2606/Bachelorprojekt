@@ -8,15 +8,13 @@ export default {
   ],
   theme: {
     extend: {
-      backgroundImage: {
-        "search": "url('/search.svg')",
-        "logo": "url('/cg-logo-black.svg')",
-      },
       backgroundSize: {
         "auto": "auto",
         "cover": "cover",
         "contain": "contain",
-        "70%": "70%",
+        "15": "15rem",
+        "20": "20rem",
+        "22": "22rem",
       },
     },
   },

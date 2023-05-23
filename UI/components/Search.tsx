@@ -1,3 +1,4 @@
+import { asset } from "$fresh/runtime.ts";
 import { JSX } from "preact/jsx-runtime";
 
 export function Search(
@@ -18,9 +19,9 @@ export function Search(
         <input
           type="submit"
           value=""
-          class="bg-search bg-no-repeat bg-cover w-8 h-8"
-        >
-        </input>
+          class="bg-no-repeat bg-cover w-8 h-8"
+          style={`background-image: url(${asset("/search.svg")})`}
+        />
       </div>
     </form>
   );

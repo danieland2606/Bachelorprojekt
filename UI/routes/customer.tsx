@@ -27,8 +27,7 @@ export default function CreateCustomer() {
         method="post"
         allrequired
         mode="create"
-      >
-      </EditCustomer>
+      />
       <div class="sm:flex py-5 justify-between block">
         <a
           class="btn btn-normal flex sm:inline-flex mb-4 sm:mb-0"
@@ -41,8 +40,7 @@ export default function CreateCustomer() {
           type="submit"
           class="btn btn-normal flex sm:inline-flex"
           value="Anlegen"
-        >
-        </input>
+        />
       </div>
     </>
   );

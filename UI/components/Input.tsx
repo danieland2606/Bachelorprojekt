@@ -18,6 +18,7 @@ export const disabledTypes = [
 
 export interface InputProps extends JSX.HTMLAttributes<HTMLInputElement> {
   labeltext?: string;
+  unit?: string;
 }
 
 export interface SelectProps extends JSX.HTMLAttributes<HTMLSelectElement> {
@@ -36,6 +37,7 @@ export function Select(props: SelectProps) {
         id={name}
         class={`${clss} select w-full select-bordered`}
       >
+        <option value=""></option>
         {subProps.children ??
           options?.map((option) => (
             <option value={option}>{pretty(option)}</option>
@@ -46,11 +48,14 @@ export function Select(props: SelectProps) {
 }
 
 export function Input(props: InputProps) {
-  const { clss, name, label, subProps } = prepareInputProps(props);
+  const { clss, name, label, subProps, unit } = prepareInputProps(props);
   return (
     <div>
       <label class="label" for={name}>{label}</label>
-      <input {...subProps} id={name} class={`${clss} input input-bordered`} />
+      <div class={unit ? "input-group" : undefined}>
+        <input {...subProps} id={name} class={`${clss} input input-bordered`} />
+        {unit && <span>{unit}</span>}
+      </div>
     </div>
   );
 }
@@ -68,7 +73,7 @@ function prepareSelectProps(props: SelectProps) {
 }
 
 function prepareInputProps(props: InputProps) {
-  const { labeltext: label, name } = props;
+  const { labeltext: label, name, unit } = props;
   delete props.labeltext;
   let clss = (props.class ?? "") as string;
   if (isDisabled(props)) {
@@ -78,7 +83,7 @@ function prepareInputProps(props: InputProps) {
   if (notRequirable.includes(type(props))) {
     delete props.required;
   }
-  return { name, label, clss: clss.trim(), subProps: props };
+  return { name, label, unit, clss: clss.trim(), subProps: props };
 }
 
 function isDisabled(props: InputProps) {

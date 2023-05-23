@@ -1,5 +1,4 @@
 import { JSX } from "preact/jsx-runtime";
-import { asset } from "$fresh/runtime.ts";
 import { TableButton } from "$this/components/TableButton.tsx";
 
 export interface Item {
@@ -41,7 +40,10 @@ export function Table(props: TableProps) {
   const hasActions = hasAnyActions(items);
   return (
     <div class="overflow-x-auto">
-      <table {...props} class={`${props.class} table w-full table-zebra`}>
+      <table
+        {...props}
+        class={`${props.class} w-full table table-zebra table-compact lg:table-normal`}
+      >
         <thead>
           <tr>
             {headers?.map((header) => <th scope="col">{header}</th>)}
@@ -50,7 +52,7 @@ export function Table(props: TableProps) {
         </thead>
         <tbody>
           {items?.map(({ row, actions, active }) => (
-            <tr class={active ? undefined : "text-gray-600"}>
+            <tr class={active ? undefined : "saturate-0"}>
               {row.map((field) => <td>{field}</td>)}
               {hasActions && (
                 <td>

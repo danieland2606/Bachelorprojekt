@@ -9,6 +9,9 @@
     .btn.btn-normal {
         @apply hover:bg-transparent hover:text-inherit hover:border-2 focus:bg-transparent focus:text-inherit focus:border-2
     }
+    h1 {
+        @apply text-4xl font-medium;
+    }    
 }
 
 .table :where(thead, tfoot) :where(th, td) {
@@ -22,4 +25,17 @@
 head, body {
     margin: 0;
     min-height: 100%;
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+  appearance: textfield;
 }

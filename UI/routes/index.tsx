@@ -18,18 +18,17 @@ export const handler = {
 export default function Dashboard({ data }: PageProps) {
   return (
     <>
-      <h1 class="text-4xl font-medium">Dashboard</h1>
+      <h1>Dashboard</h1>
       <div class="sm:flex py-5 justify-between block">
         <Search
           value={data.search}
           class="relative sm:inline-block block mb-4 sm:mb-0"
-        >
-        </Search>
+        />
         <a class="btn btn-normal flex sm:inline-flex" href="/customer">
           Neuer Kunde
         </a>
       </div>
-      <Table tabledata={data.tableData}></Table>
+      <Table tabledata={data.tableData} />
     </>
   );
 }

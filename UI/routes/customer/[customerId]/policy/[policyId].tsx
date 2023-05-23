@@ -51,8 +51,7 @@ export default function ShowPolicy({ params, data }: PageProps) {
               formMethod="post"
               class="btn btn-normal flex sm:inline-flex"
               value="Änderungen bestätigen"
-            >
-            </input>
+            />
           )}
       </div>
     </>

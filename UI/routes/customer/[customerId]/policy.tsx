@@ -22,7 +22,7 @@ export default function CreatePolicy({ params }: PageProps) {
   const id = "new-policy";
   return (
     <>
-      <h1>Neuen Vertrag anlegen</h1>
+      <h1>Neuer Vertrag</h1>
       <EditPolicy
         id={id}
         action={`/customer/${params.customerId}/policy`}
@@ -45,8 +45,7 @@ export default function CreatePolicy({ params }: PageProps) {
           type="submit"
           class="btn btn-normal flex w-full sm:w-auto"
           value="Vertrag abschließen"
-        >
-        </input>
+        />
       </div>
     </>
   );
