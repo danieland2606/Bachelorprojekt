@@ -603,6 +603,7 @@ fetch("http://localhost:8081/customer/0/policy", {
 |---|---|
 |fields|startDate|
 |fields|endDate|
+|fields|dueDate|
 |fields|coverage|
 |fields|premium|
 |fields|active|
@@ -626,6 +627,7 @@ fetch("http://localhost:8081/customer/0/policy", {
     "id": 0,
     "startDate": "2019-08-24",
     "endDate": "2019-08-24",
+    "dueDate": "2019-08-24",
     "coverage": 0,
     "premium": 0,
     "active": true,
@@ -727,9 +729,9 @@ POST /customer/0/policy HTTP/1.1
 Content-Type: application/json
 Accept: application/json
 Host: localhost:8081
-Content-Length: 240
+Content-Length: 263
 
-{"startDate":"2019-08-24","endDate":"2019-08-24","coverage":0,"objectOfInsurance":{"name":"string","race":"siamese","color":"seal","dateOfBirth":"2019-08-24","castrated":true,"personality":"anhaenglich","environment":"draussen","weight":0}}
+{"startDate":"2019-08-24","endDate":"2019-08-24","dueDate":"2019-08-24","coverage":0,"objectOfInsurance":{"name":"string","race":"siamese","color":"seal","dateOfBirth":"2019-08-24","castrated":true,"personality":"anhaenglich","environment":"draussen","weight":0}}
 ```
 
 </details>
@@ -742,7 +744,7 @@ curl --request POST \
   --url http://localhost:8081/customer/0/policy \
   --header 'Accept: application/json' \
   --header 'Content-Type: application/json' \
-  --data '{"startDate":"2019-08-24","endDate":"2019-08-24","coverage":0,"objectOfInsurance":{"name":"string","race":"siamese","color":"seal","dateOfBirth":"2019-08-24","castrated":true,"personality":"anhaenglich","environment":"draussen","weight":0}}'
+  --data '{"startDate":"2019-08-24","endDate":"2019-08-24","dueDate":"2019-08-24","coverage":0,"objectOfInsurance":{"name":"string","race":"siamese","color":"seal","dateOfBirth":"2019-08-24","castrated":true,"personality":"anhaenglich","environment":"draussen","weight":0}}'
 ```
 
 </details>
@@ -757,7 +759,7 @@ fetch("http://localhost:8081/customer/0/policy", {
     "Content-Type": "application/json",
     "Accept": "application/json"
   },
-  "body": "{\"startDate\":\"2019-08-24\",\"endDate\":\"2019-08-24\",\"coverage\":0,\"objectOfInsurance\":{\"name\":\"string\",\"race\":\"siamese\",\"color\":\"seal\",\"dateOfBirth\":\"2019-08-24\",\"castrated\":true,\"personality\":\"anhaenglich\",\"environment\":\"draussen\",\"weight\":0}}"
+  "body": "{\"startDate\":\"2019-08-24\",\"endDate\":\"2019-08-24\",\"dueDate\":\"2019-08-24\",\"coverage\":0,\"objectOfInsurance\":{\"name\":\"string\",\"race\":\"siamese\",\"color\":\"seal\",\"dateOfBirth\":\"2019-08-24\",\"castrated\":true,\"personality\":\"anhaenglich\",\"environment\":\"draussen\",\"weight\":0}}"
 })
 .then(response => {
   console.log(response);
@@ -779,6 +781,7 @@ fetch("http://localhost:8081/customer/0/policy", {
 {
   "startDate": "2019-08-24",
   "endDate": "2019-08-24",
+  "dueDate": "2019-08-24",
   "coverage": 0,
   "objectOfInsurance": {
     "name": "string",
@@ -902,6 +905,7 @@ fetch("http://localhost:8081/customer/0/policy/0", {
   "id": 0,
   "startDate": "2019-08-24",
   "endDate": "2019-08-24",
+  "dueDate": "2019-08-24",
   "coverage": 0,
   "premium": 0,
   "active": true,
@@ -955,9 +959,9 @@ PUT /customer/0/policy/0 HTTP/1.1
 Content-Type: application/json
 Accept: application/json
 Host: localhost:8081
-Content-Length: 240
+Content-Length: 263
 
-{"startDate":"2019-08-24","endDate":"2019-08-24","coverage":0,"objectOfInsurance":{"name":"string","race":"siamese","color":"seal","dateOfBirth":"2019-08-24","castrated":true,"personality":"anhaenglich","environment":"draussen","weight":0}}
+{"startDate":"2019-08-24","endDate":"2019-08-24","dueDate":"2019-08-24","coverage":0,"objectOfInsurance":{"name":"string","race":"siamese","color":"seal","dateOfBirth":"2019-08-24","castrated":true,"personality":"anhaenglich","environment":"draussen","weight":0}}
 ```
 
 </details>
@@ -970,7 +974,7 @@ curl --request PUT \
   --url http://localhost:8081/customer/0/policy/0 \
   --header 'Accept: application/json' \
   --header 'Content-Type: application/json' \
-  --data '{"startDate":"2019-08-24","endDate":"2019-08-24","coverage":0,"objectOfInsurance":{"name":"string","race":"siamese","color":"seal","dateOfBirth":"2019-08-24","castrated":true,"personality":"anhaenglich","environment":"draussen","weight":0}}'
+  --data '{"startDate":"2019-08-24","endDate":"2019-08-24","dueDate":"2019-08-24","coverage":0,"objectOfInsurance":{"name":"string","race":"siamese","color":"seal","dateOfBirth":"2019-08-24","castrated":true,"personality":"anhaenglich","environment":"draussen","weight":0}}'
 ```
 
 </details>
@@ -985,7 +989,7 @@ fetch("http://localhost:8081/customer/0/policy/0", {
     "Content-Type": "application/json",
     "Accept": "application/json"
   },
-  "body": "{\"startDate\":\"2019-08-24\",\"endDate\":\"2019-08-24\",\"coverage\":0,\"objectOfInsurance\":{\"name\":\"string\",\"race\":\"siamese\",\"color\":\"seal\",\"dateOfBirth\":\"2019-08-24\",\"castrated\":true,\"personality\":\"anhaenglich\",\"environment\":\"draussen\",\"weight\":0}}"
+  "body": "{\"startDate\":\"2019-08-24\",\"endDate\":\"2019-08-24\",\"dueDate\":\"2019-08-24\",\"coverage\":0,\"objectOfInsurance\":{\"name\":\"string\",\"race\":\"siamese\",\"color\":\"seal\",\"dateOfBirth\":\"2019-08-24\",\"castrated\":true,\"personality\":\"anhaenglich\",\"environment\":\"draussen\",\"weight\":0}}"
 })
 .then(response => {
   console.log(response);
@@ -1007,6 +1011,7 @@ fetch("http://localhost:8081/customer/0/policy/0", {
 {
   "startDate": "2019-08-24",
   "endDate": "2019-08-24",
+  "dueDate": "2019-08-24",
   "coverage": 0,
   "objectOfInsurance": {
     "name": "string",
@@ -1077,9 +1082,9 @@ POST /policyprice HTTP/1.1
 Content-Type: application/json
 Accept: application/json
 Host: localhost:8081
-Content-Length: 266
+Content-Length: 289
 
-{"customerId":0,"policy":{"startDate":"2019-08-24","endDate":"2019-08-24","coverage":0,"objectOfInsurance":{"name":"string","race":"siamese","color":"seal","dateOfBirth":"2019-08-24","castrated":true,"personality":"anhaenglich","environment":"draussen","weight":0}}}
+{"customerId":0,"policy":{"startDate":"2019-08-24","endDate":"2019-08-24","dueDate":"2019-08-24","coverage":0,"objectOfInsurance":{"name":"string","race":"siamese","color":"seal","dateOfBirth":"2019-08-24","castrated":true,"personality":"anhaenglich","environment":"draussen","weight":0}}}
 ```
 
 </details>
@@ -1092,7 +1097,7 @@ curl --request POST \
   --url http://localhost:8081/policyprice \
   --header 'Accept: application/json' \
   --header 'Content-Type: application/json' \
-  --data '{"customerId":0,"policy":{"startDate":"2019-08-24","endDate":"2019-08-24","coverage":0,"objectOfInsurance":{"name":"string","race":"siamese","color":"seal","dateOfBirth":"2019-08-24","castrated":true,"personality":"anhaenglich","environment":"draussen","weight":0}}}'
+  --data '{"customerId":0,"policy":{"startDate":"2019-08-24","endDate":"2019-08-24","dueDate":"2019-08-24","coverage":0,"objectOfInsurance":{"name":"string","race":"siamese","color":"seal","dateOfBirth":"2019-08-24","castrated":true,"personality":"anhaenglich","environment":"draussen","weight":0}}}'
 ```
 
 </details>
@@ -1107,7 +1112,7 @@ fetch("http://localhost:8081/policyprice", {
     "Content-Type": "application/json",
     "Accept": "application/json"
   },
-  "body": "{\"customerId\":0,\"policy\":{\"startDate\":\"2019-08-24\",\"endDate\":\"2019-08-24\",\"coverage\":0,\"objectOfInsurance\":{\"name\":\"string\",\"race\":\"siamese\",\"color\":\"seal\",\"dateOfBirth\":\"2019-08-24\",\"castrated\":true,\"personality\":\"anhaenglich\",\"environment\":\"draussen\",\"weight\":0}}}"
+  "body": "{\"customerId\":0,\"policy\":{\"startDate\":\"2019-08-24\",\"endDate\":\"2019-08-24\",\"dueDate\":\"2019-08-24\",\"coverage\":0,\"objectOfInsurance\":{\"name\":\"string\",\"race\":\"siamese\",\"color\":\"seal\",\"dateOfBirth\":\"2019-08-24\",\"castrated\":true,\"personality\":\"anhaenglich\",\"environment\":\"draussen\",\"weight\":0}}}"
 })
 .then(response => {
   console.log(response);
@@ -1131,6 +1136,7 @@ fetch("http://localhost:8081/policyprice", {
   "policy": {
     "startDate": "2019-08-24",
     "endDate": "2019-08-24",
+    "dueDate": "2019-08-24",
     "coverage": 0,
     "objectOfInsurance": {
       "name": "string",
@@ -1421,6 +1427,7 @@ This operation does not require authentication
   "id": 0,
   "startDate": "2019-08-24",
   "endDate": "2019-08-24",
+  "dueDate": "2019-08-24",
   "coverage": 0,
   "premium": 0,
   "active": true,
@@ -1445,6 +1452,7 @@ This operation does not require authentication
 |id|integer|false|read-only|none|
 |startDate|string(date)|false|none|none|
 |endDate|string(date)|false|none|none|
+|dueDate|string(date)|false|none|none|
 |coverage|number|false|none|none|
 |premium|number|false|read-only|none|
 |active|boolean|false|read-only|none|
@@ -1496,6 +1504,7 @@ This operation does not require authentication
   "id": 0,
   "startDate": "2019-08-24",
   "endDate": "2019-08-24",
+  "dueDate": "2019-08-24",
   "coverage": 0,
   "premium": 0,
   "active": true,
@@ -1520,6 +1529,7 @@ This operation does not require authentication
 |id|integer|false|read-only|none|
 |startDate|string(date)|true|none|none|
 |endDate|string(date)|true|none|none|
+|dueDate|string(date)|true|none|none|
 |coverage|number|true|none|none|
 |premium|number|true|read-only|none|
 |active|boolean|true|read-only|none|
@@ -1549,6 +1559,7 @@ This operation does not require authentication
 |---|---|
 |*anonymous*|startDate|
 |*anonymous*|endDate|
+|*anonymous*|dueDate|
 |*anonymous*|coverage|
 |*anonymous*|premium|
 |*anonymous*|active|
@@ -1576,6 +1587,7 @@ This operation does not require authentication
     "id": 0,
     "startDate": "2019-08-24",
     "endDate": "2019-08-24",
+    "dueDate": "2019-08-24",
     "coverage": 0,
     "premium": 0,
     "active": true,
