@@ -60,5 +60,3 @@ docker compose --profile rda up -d --build
 | 31     | Vertrag automatisch kündigen                                         | Wenn nach Datenänderung ein Vertrag ungültig wird (Verspieltes Wesen oder Arbeitsloser Kunde), sollen die betroffenen Verträge gekündigt werden                   | Hoch          |                       | 4          |                 |            |
 | 32     | Load Balancing umsetzen                                              | Die Planung für das Load Balancing soll umgesetzt werden.                                                                                                         | Mittel        |                       | 5          |                 |            |
 | 33     |                                                                      |                                                                                                                                                                   |               |                       |            |                 |            |
-
-Buy Me a Coffee at ko-fi.com
