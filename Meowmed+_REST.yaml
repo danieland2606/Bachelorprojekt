@@ -467,9 +467,6 @@ components:
         endDate:
           type: string
           format: date
-        dueDate:
-          type: string
-          format: date
         coverage:
           type: number
         premium:
@@ -507,7 +504,6 @@ components:
           required:
             - startDate
             - endDate
-            - dueDate
             - coverage
             - premium
             - active
@@ -530,7 +526,6 @@ components:
       enum:
         - startDate
         - endDate
-        - dueDate
         - coverage
         - premium
         - active
