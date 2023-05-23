@@ -21,7 +21,7 @@ export default function App({ Component }: AppProps) {
         class="absolute w-full min-w-full min-h-full"
       >
         <div
-          class={"p-5 pt-6 max-w-screen-xl mx-auto md:mt-18 lg:mt-24" + logo}
+          class={"p-5 pt-6 max-w-screen-xl mx-auto xl:mt-24" + logo}
           style={`background-image: url(${asset("/cg-logo-black.svg")})`}
         >
           <Component />

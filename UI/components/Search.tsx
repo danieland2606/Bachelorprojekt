@@ -7,22 +7,23 @@ export function Search(
   const value = props.value;
   delete props.value;
   return (
-    <form {...props} rel="search">
+    <form {...props} rel="search" class={`${props.class} input-group`}>
+      <button
+        type="submit"
+        class="input w-fit bg-text"
+      >
+        <img
+          src={asset("/search.svg")}
+          class="scale-150"
+        />
+      </button>
       <input
         name="search"
         type="text"
         value={value}
         placeholder="Suche..."
-        class="input"
+        class="input input-bordered"
       />
-      <div class="absolute right-2 top-1/2 -translate-y-1/2">
-        <input
-          type="submit"
-          value=""
-          class="bg-no-repeat bg-cover w-8 h-8"
-          style={`background-image: url(${asset("/search.svg")})`}
-        />
-      </div>
     </form>
   );
 }

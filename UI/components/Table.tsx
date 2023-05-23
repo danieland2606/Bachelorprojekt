@@ -52,7 +52,7 @@ export function Table(props: TableProps) {
         </thead>
         <tbody>
           {items?.map(({ row, actions, active }) => (
-            <tr class={active ? undefined : "saturate-0"}>
+            <tr class={active ? undefined : "saturate-0 text-gray-400"}>
               {row.map((field) => <td>{field}</td>)}
               {hasActions && (
                 <td>

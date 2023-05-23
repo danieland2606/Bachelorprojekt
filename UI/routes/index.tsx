@@ -18,13 +18,16 @@ export const handler = {
 export default function Dashboard({ data }: PageProps) {
   return (
     <>
-      <h1>Dashboard</h1>
-      <div class="sm:flex py-5 justify-between block">
+      <h1>Übersicht Kunden</h1>
+      <div class="py-2 md:py-4 flex flex-col-reverse md:flex-row md:justify-between">
         <Search
           value={data.search}
-          class="relative sm:inline-block block mb-4 sm:mb-0"
+          class="my-2 md:my-0 flex-1 md:flex-none md:w-fit"
         />
-        <a class="btn btn-normal flex sm:inline-flex" href="/customer">
+        <a
+          class="btn btn-normal flex-1 md:flex-none md:w-fit"
+          href="/customer"
+        >
           Neuer Kunde
         </a>
       </div>

@@ -1,7 +1,7 @@
 import { JSX } from "preact/jsx-runtime";
 import { Input, Select } from "$this/components/Input.tsx";
 import { Form } from "$this/components/Form.tsx";
-import { Obj, propMap } from "$this/common/util.ts";
+import { editMode, Mode, Obj, propMap } from "$this/common/util.ts";
 import {
   CatRaceValues,
   EnvironmentValues,
@@ -11,13 +11,6 @@ import {
   Policy,
 } from "$this/generated/index.ts";
 
-const policy = propMap(new Policy());
-const cat = propMap(new ObjectOfInsurance(), "objectOfInsurance.");
-const yearStart = new Date(new Date().getFullYear(), 0, 1).toISOString();
-const yearEnd = new Date(new Date().getFullYear(), 11, 31).toISOString();
-
-type Mode = "create" | "display" | "edit";
-
 export interface EditPolicyProps extends JSX.HTMLAttributes<HTMLFormElement> {
   mode?: Mode;
   allrequired?: boolean;
@@ -25,23 +18,11 @@ export interface EditPolicyProps extends JSX.HTMLAttributes<HTMLFormElement> {
   customerId?: string;
 }
 
-function getEditable(mode?: Mode) {
-  switch (mode) {
-    case "display":
-      return [];
-    case "edit":
-      return [
-        cat.castrated,
-        cat.personality,
-        cat.environment,
-        cat.weight,
-        policy.coverage,
-      ]; //TODO check Capgemini requirements
-    case "create":
-    default:
-      return undefined;
-  }
-}
+const policy = propMap(new Policy());
+const cat = propMap(new ObjectOfInsurance(), "objectOfInsurance.");
+const yearStart = new Date(new Date().getFullYear(), 0, 1).toISOString();
+const yearEnd = new Date(new Date().getFullYear(), 11, 31).toISOString();
+const getEditable = editMode([cat.personality, policy.coverage]);
 
 export function EditPolicy(props: EditPolicyProps) {
   const { mode, customerId } = props;

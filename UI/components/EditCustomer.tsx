@@ -1,7 +1,7 @@
 import { JSX } from "preact/jsx-runtime";
 import { Input, Select } from "$this/components/Input.tsx";
 import { Form } from "$this/components/Form.tsx";
-import { Obj, propMap } from "$this/common/util.ts";
+import { editMode, Mode, Obj, propMap } from "$this/common/util.ts";
 import {
   Address,
   Customer,
@@ -11,28 +11,15 @@ import {
   TitleValues,
 } from "$this/generated/index.ts";
 
-const customer = propMap(new Customer());
-const address = propMap(new Address(), "address.");
-
-type Mode = "create" | "display" | "edit";
-
 interface EditCustomerProps extends JSX.HTMLAttributes<HTMLFormElement> {
   mode?: Mode;
   allrequired?: boolean;
   values?: Obj;
 }
 
-function getEditable(mode?: Mode) {
-  switch (mode) {
-    case "display":
-      return [];
-    case "edit":
-      return [customer.employmentStatus];
-    case "create":
-    default:
-      return undefined;
-  }
-}
+const customer = propMap(new Customer());
+const address = propMap(new Address(), "address.");
+const getEditable = editMode([customer.employmentStatus]);
 
 export function EditCustomer(props: EditCustomerProps) {
   return (

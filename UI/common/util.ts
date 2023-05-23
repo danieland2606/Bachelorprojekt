@@ -41,3 +41,18 @@ export function redirect(address: string) {
   headers.set("location", address);
   return new Response(null, { status: 303, headers });
 }
+
+export type Mode = "create" | "display" | "edit";
+export function editMode(editables: string[]) {
+  return (mode?: Mode) => {
+    switch (mode) {
+      case "display":
+        return [];
+      case "edit":
+        return editables;
+      case "create":
+      default:
+        return undefined;
+    }
+  };
+}
