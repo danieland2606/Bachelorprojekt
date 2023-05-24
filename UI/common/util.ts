@@ -1,3 +1,4 @@
+// deno-lint-ignore-file ban-types
 export function capitalize(str: string) {
   return (str.charAt(0).toUpperCase() + str.slice(1)) ?? "";
 }
@@ -21,7 +22,6 @@ export function resolve(path: string, obj?: Obj) {
   );
 }
 
-// deno-lint-ignore ban-types
 export function propMap<T extends object>(object: T, prefix = "") {
   const props = Object.entries(object)
     .map(([key, _]) => [key, `${prefix}${key}`]);

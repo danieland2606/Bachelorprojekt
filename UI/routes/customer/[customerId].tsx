@@ -84,7 +84,7 @@ export default function ShowCustomer({ data, params }: PageProps) {
 
 function disableIfUnemployed(status: EmploymentStatus) {
   if (status === "arbeitslos") {
-    return " pointer-events-none";
+    return " pointer-events-none btn-disabled";
   }
   return "";
 }
@@ -95,35 +95,34 @@ function formatPolicyList(
   search = "",
 ) {
   const headers = ["ID", "Katze", "Beginn", "Ende", "Jahresdeckung"];
-  const items = policyList
-    .sort(compareId)
-    .map((policy) => policyToTableItem(policy, customerId))
-    .filter(itemSearch(search));
-
   const altHeaders = ["Beginn", "Ende", "Limit"];
-  const altItems = policyList
-    .sort(compareId)
-    .map((policy) => policyToAltItem(policy, customerId))
-    .filter(itemSearch(search));
+  const displayed = policyList
+    .filter(itemSearch(search))
+    .sort(compareId);
+  const items = displayed
+    .map((policy) => policyToTableItem(policy, customerId));
+  const altItems = displayed
+    .map((policy) => policyToAltItem(policy, customerId));
   return [{ headers, items }, { headers: altHeaders, items: altItems }];
 }
 
 function policyToTableItem(policy: PolicyShort, customerId: number) {
   const { id, name, startDate, endDate, coverage, active } = policy;
-  const row = [id, name, startDate, endDate, coverage + "€"];
-  const actions = {
-    details: `/customer/${customerId}/policy/${id}`,
-    edit: `/customer/${customerId}/policy/${id}?edit`,
-  };
+  const row = [id, name, startDate, endDate, coverage + " €"];
+  const actions = formatActions(customerId, id);
   return { row, actions, active };
 }
 
 function policyToAltItem(policy: PolicyShort, customerId: number) {
   const { id, startDate, endDate, coverage, active } = policy;
-  const row = [startDate, endDate, coverage + "€"];
-  const actions = {
-    details: `/customer/${customerId}/policy/${id}`,
-    edit: `/customer/${customerId}/policy/${id}?edit`,
-  };
+  const row = [startDate, endDate, coverage + " €"];
+  const actions = formatActions(customerId, id);
   return { row, actions, active };
+}
+
+function formatActions(customerId: number, policyId: number) {
+  return {
+    details: `/customer/${customerId}/policy/${policyId}`,
+    edit: `/customer/${customerId}/policy/${policyId}?edit`,
+  };
 }

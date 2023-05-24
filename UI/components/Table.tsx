@@ -1,3 +1,4 @@
+// deno-lint-ignore-file ban-types
 import { JSX } from "preact/jsx-runtime";
 import { TableButton } from "$this/components/TableButton.tsx";
 
@@ -26,12 +27,24 @@ function hasAnyActions(items?: Item[]) {
   return !!(items?.some(({ actions }) => actions != null));
 }
 
-export function itemSearch(search: string): (item: Item) => boolean {
+export function itemSearch(search: string): (item: object) => boolean {
   if (!search) {
     return () => true;
   }
-  return (item: Item) =>
-    item.row.join(" ").toLowerCase().includes(search.toLowerCase());
+  const searchFunc = (item: object): boolean => {
+    for (const prop in item) {
+      const key = prop as keyof typeof item;
+      const val = item[key];
+      if (typeof val === "object") {
+        return searchFunc(val);
+      }
+      if (String(val).includes(search)) {
+        return true;
+      }
+    }
+    return false;
+  };
+  return searchFunc;
 }
 
 export function Table(props: TableProps) {

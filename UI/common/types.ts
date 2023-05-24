@@ -27,15 +27,18 @@ export function processCustomerResponse(
 }
 
 function extractRequestedCustomer(policy: GetCustomerList200ResponseInner) {
-  const { id, firstName, lastName, address } = policy;
-  const { street, postalCode, city } = address ?? {};
-  if (
-    firstName == null || lastName == null || address == null ||
-    street == null || postalCode == null || city == null
-  ) {
+  if (!customerHasRequired(policy)) {
     throw new Error("Required fields of customer missing");
   }
+  const { id, firstName, lastName, address } = policy;
   return { id, firstName, lastName, address } as CustomerShort;
+}
+
+function customerHasRequired(policy: GetCustomerList200ResponseInner) {
+  const { firstName, lastName, address } = policy;
+  const { street, postalCode, city } = address ?? {};
+  return firstName != null && lastName != null && address != null &&
+    street != null && postalCode != null && city != null;
 }
 
 export function processPolicyResponse(policy: GetPolicyList200ResponseInner[]) {
@@ -43,13 +46,17 @@ export function processPolicyResponse(policy: GetPolicyList200ResponseInner[]) {
 }
 
 function extractRequestedPolicy(policy: GetPolicyList200ResponseInner) {
-  const { name } = policy?.objectOfInsurance ?? {};
-  const { id, startDate, endDate, coverage, active } = policy;
-  if (
-    startDate == null || endDate == null ||
-    coverage == null || name == null || active == null
-  ) {
+  if (!policyHasRequired(policy)) {
     throw new Error("Required fields of policy missing");
   }
+  const { id, startDate, endDate, coverage, active } = policy;
+  const { name } = policy.objectOfInsurance!;
   return { id, name, startDate, endDate, coverage, active } as PolicyShort;
+}
+
+function policyHasRequired(policy: GetPolicyList200ResponseInner) {
+  const { startDate, endDate, coverage, active } = policy;
+  const { name } = policy?.objectOfInsurance ?? {};
+  return startDate != null && endDate != null &&
+    coverage != null && name != null && active != null;
 }

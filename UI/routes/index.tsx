@@ -40,31 +40,33 @@ export default function Dashboard({ data }: PageProps) {
 
 function formatCustomerList(customerList: CustomerShort[], search: string) {
   const headers = ["ID", "Vorname", "Nachname", "Adresse"];
-  const items = customerList
-    .sort(compareId)
-    .map(customerToTableItem)
-    .filter(itemSearch(search));
-
   const altHeaders = ["Name", "Stadt"];
-  const altItems = customerList
-    .sort(compareId)
-    .map(customerToAltItem)
-    .filter(itemSearch(search));
+  const displayed = customerList
+    .filter(itemSearch(search))
+    .sort(compareId);
+  const items = displayed
+    .map(customerToTableItem);
+  const altItems = displayed
+    .map(customerToAltItem);
   return [{ headers, items }, { headers: altHeaders, items: altItems }];
 }
 
 function customerToTableItem(customer: CustomerShort) {
   const { id, firstName, lastName, address } = customer;
   const row = [id, firstName, lastName, formatAddress(address)];
-  const actions = { details: `/customer/${id}`, edit: `/customer/${id}?edit` };
+  const actions = formatActions(id);
   return { row, actions, active: true };
 }
 
 function customerToAltItem(customer: CustomerShort) {
   const { id, firstName, lastName, address } = customer;
   const row = [`${firstName} ${lastName}`, address.city ?? ""];
-  const actions = { details: `/customer/${id}`, edit: `/customer/${id}?edit` };
+  const actions = formatActions(id);
   return { row, actions, active: true };
+}
+
+function formatActions(id: number) {
+  return { details: `/customer/${id}`, edit: `/customer/${id}?edit` };
 }
 
 function formatAddress({ street, postalCode, city }: Address): string {
