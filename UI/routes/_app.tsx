@@ -18,7 +18,7 @@ export default function App({ Component }: AppProps) {
       </Head>
       <div
         data-theme="retro"
-        class="absolute w-full min-w-full min-h-full"
+        class="absolute w-full min-w-full min-h-full overflow-clip"
       >
         <div
           class={"p-5 pt-6 max-w-screen-xl mx-auto xl:mt-24" + logo}

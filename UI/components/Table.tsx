@@ -14,8 +14,8 @@ export interface TableActions {
 }
 
 export interface TableItems {
-  headers: Array<string>;
-  items: Array<Item>;
+  headers: string[];
+  items: Item[];
 }
 
 export interface TableProps extends JSX.HTMLAttributes<HTMLTableElement> {
@@ -47,7 +47,7 @@ export function Table(props: TableProps) {
         <thead>
           <tr>
             {headers?.map((header) => <th scope="col">{header}</th>)}
-            {hasActions && <th scope="col">Aktionen</th>}
+            {hasActions && <th scope="col"></th>}
           </tr>
         </thead>
         <tbody>

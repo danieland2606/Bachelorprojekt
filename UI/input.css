@@ -11,7 +11,7 @@
     }
     h1 {
         @apply text-4xl font-medium;
-    }    
+    }
 }
 
 .table :where(thead, tfoot) :where(th, td) {

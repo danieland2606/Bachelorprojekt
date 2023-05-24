@@ -10,28 +10,30 @@ export const handler = {
   async GET(req: Request, ctx: HandlerContext) {
     const search = new URL(req.url).searchParams.get("search") ?? "";
     const customers = await customerClient.getCustomerList();
-    const tableData = formatCustomerList(customers, search);
-    return ctx.render({ tableData, search });
+    const [tableData, altData] = formatCustomerList(customers, search);
+    return ctx.render({ tableData, altData, search });
   },
 };
 
 export default function Dashboard({ data }: PageProps) {
+  const { tableData, altData, search } = data;
   return (
     <>
       <h1>Übersicht Kunden</h1>
       <div class="py-2 md:py-4 flex flex-col-reverse md:flex-row md:justify-between">
         <Search
-          value={data.search}
+          value={search}
           class="my-2 md:my-0 flex-1 md:flex-none md:w-fit"
         />
         <a
-          class="btn btn-normal flex-1 md:flex-none md:w-fit"
           href="/customer"
+          class="btn btn-normal flex-1 md:flex-none md:w-fit"
         >
           Neuer Kunde
         </a>
       </div>
-      <Table tabledata={data.tableData} />
+      <Table tabledata={tableData} class="max-md:hidden" />
+      <Table tabledata={altData} class="md:hidden" />
     </>
   );
 }
@@ -42,12 +44,25 @@ function formatCustomerList(customerList: CustomerShort[], search: string) {
     .sort(compareId)
     .map(customerToTableItem)
     .filter(itemSearch(search));
-  return { headers, items };
+
+  const altHeaders = ["Name", "Stadt"];
+  const altItems = customerList
+    .sort(compareId)
+    .map(customerToAltItem)
+    .filter(itemSearch(search));
+  return [{ headers, items }, { headers: altHeaders, items: altItems }];
 }
 
 function customerToTableItem(customer: CustomerShort) {
   const { id, firstName, lastName, address } = customer;
   const row = [id, firstName, lastName, formatAddress(address)];
+  const actions = { details: `/customer/${id}`, edit: `/customer/${id}?edit` };
+  return { row, actions, active: true };
+}
+
+function customerToAltItem(customer: CustomerShort) {
+  const { id, firstName, lastName, address } = customer;
+  const row = [`${firstName} ${lastName}`, address.city ?? ""];
   const actions = { details: `/customer/${id}`, edit: `/customer/${id}?edit` };
   return { row, actions, active: true };
 }

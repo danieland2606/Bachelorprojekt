@@ -30,7 +30,7 @@ export interface SelectProps extends JSX.HTMLAttributes<HTMLSelectElement> {
 export function Select(props: SelectProps) {
   const { name, options, label, clss, subProps } = prepareSelectProps(props);
   return (
-    <div>
+    <>
       <label class="label" for={name}>{label}</label>
       <select
         {...subProps}
@@ -43,20 +43,20 @@ export function Select(props: SelectProps) {
             <option value={option}>{pretty(option)}</option>
           )) ?? ""}
       </select>
-    </div>
+    </>
   );
 }
 
 export function Input(props: InputProps) {
   const { clss, name, label, subProps, unit } = prepareInputProps(props);
   return (
-    <div>
+    <>
       <label class="label" for={name}>{label}</label>
       <div class={unit ? "input-group" : undefined}>
         <input {...subProps} id={name} class={`${clss} input input-bordered`} />
         {unit && <span>{unit}</span>}
       </div>
-    </div>
+    </>
   );
 }
 

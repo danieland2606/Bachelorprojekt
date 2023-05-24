@@ -7,7 +7,7 @@ COPY ./routes ./routes
 COPY ./static ./static
 COPY ./common ./common
 COPY ./main.ts ./fresh.gen.ts ./import_map.json ./deno.json ./
-ENV DENO_DEPLOYMENT_ID=d0ac6c35d53a187dd6b47c9e20333f38238c49fc
+ENV DENO_DEPLOYMENT_ID=6fd1f7042fe9910d24602193aac55ccdd9bff850
 EXPOSE 8000
 CMD ["run", "-A", "main.ts"]
 

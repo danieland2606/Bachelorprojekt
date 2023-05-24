@@ -19,9 +19,13 @@ export const handler = {
     const search = queryParams.get("search") ?? "";
     const customerId = Number.parseInt(ctx.params.customerId);
     const policyList = await policyClient.getPolicyList(customerId);
-    const tableData = formatPolicyList(policyList, customerId, search);
+    const [tableData, altData] = formatPolicyList(
+      policyList,
+      customerId,
+      search,
+    );
     const customer = await customerClient.getCustomer(customerId);
-    return ctx.render({ tableData, customer, edit, search });
+    return ctx.render({ tableData, altData, customer, edit, search });
   },
   async POST(req: Request, ctx: HandlerContext) {
     const customerId = Number.parseInt(ctx.params.customerId);
@@ -33,7 +37,7 @@ export const handler = {
 };
 
 export default function ShowCustomer({ data, params }: PageProps) {
-  const { edit, search, customer, tableData } = data;
+  const { edit, search, customer, tableData, altData } = data;
   const employmentStatus = (customer as CustomerAllRequired).employmentStatus;
   const id = "edit-customer";
   return (
@@ -45,21 +49,23 @@ export default function ShowCustomer({ data, params }: PageProps) {
         values={customer}
         allrequired
       />
-      <div class="box-row sm:flex py-5 justify-between block">
+      <div class="py-2 md:py-4 flex flex-col-reverse md:flex-row md:justify-between">
         <Search
           value={search}
-          class="relative sm:inline-block block mb-4 sm:mb-0"
+          class="my-2 md:my-0 flex-1 md:flex-none md:w-fit"
         />
         <a
           href={`/customer/${params.customerId}/policy`}
-          class={"btn btn-normal" + disableIfUnemployed(employmentStatus)}
+          class={"btn btn-normal flex-1 md:flex-none md:w-fit" +
+            disableIfUnemployed(employmentStatus)}
         >
           Neuer Vertrag
         </a>
       </div>
-      <Table tabledata={tableData} />
-      <div class="sm:flex py-5 justify-between block">
-        <a class="btn btn-normal inline-flex mb-4 sm:mb-0" href="/">Zurück</a>
+      <Table tabledata={tableData} class="max-md:hidden" />
+      <Table tabledata={altData} class="md:hidden" />
+      <div class="flex flex-col md:flex-row py-2 md:py-4 md:justify-between">
+        <a class="my-2 btn btn-normal md:flex-none md:w-fit" href="/">Zurück</a>
         {edit &&
           (
             <input
@@ -67,7 +73,7 @@ export default function ShowCustomer({ data, params }: PageProps) {
               type="submit"
               formAction={`/customer/${params.customerId}`}
               formMethod="post"
-              class="btn btn-normal flex sm:inline-flex"
+              class="btn btn-normal"
               value="Änderungen bestätigen"
             />
           )}
@@ -93,12 +99,28 @@ function formatPolicyList(
     .sort(compareId)
     .map((policy) => policyToTableItem(policy, customerId))
     .filter(itemSearch(search));
-  return { headers, items };
+
+  const altHeaders = ["Beginn", "Ende", "Limit"];
+  const altItems = policyList
+    .sort(compareId)
+    .map((policy) => policyToAltItem(policy, customerId))
+    .filter(itemSearch(search));
+  return [{ headers, items }, { headers: altHeaders, items: altItems }];
 }
 
 function policyToTableItem(policy: PolicyShort, customerId: number) {
   const { id, name, startDate, endDate, coverage, active } = policy;
-  const row = [id, name, startDate, endDate, coverage];
+  const row = [id, name, startDate, endDate, coverage + "€"];
+  const actions = {
+    details: `/customer/${customerId}/policy/${id}`,
+    edit: `/customer/${customerId}/policy/${id}?edit`,
+  };
+  return { row, actions, active };
+}
+
+function policyToAltItem(policy: PolicyShort, customerId: number) {
+  const { id, startDate, endDate, coverage, active } = policy;
+  const row = [startDate, endDate, coverage + "€"];
   const actions = {
     details: `/customer/${customerId}/policy/${id}`,
     edit: `/customer/${customerId}/policy/${id}?edit`,

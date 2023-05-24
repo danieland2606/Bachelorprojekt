@@ -16,6 +16,9 @@ export default {
         "20": "20rem",
         "22": "22rem",
       },
+      padding: {
+        "1/2": "50%",
+      },
     },
   },
   plugins: [daisyui],
