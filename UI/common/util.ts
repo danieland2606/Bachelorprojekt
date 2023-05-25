@@ -13,13 +13,23 @@ export type Rec<T> = Record<string, primitive | T>;
 // deno-lint-ignore no-empty-interface
 export interface Obj extends Rec<Obj> {}
 //https://stackoverflow.com/questions/4244896/accessing-an-object-property-with-a-dynamically-computed-name
-export function resolve(path: string, obj?: Obj) {
-  return path.split(".").reduce(
-    function (prev: Obj | primitive, curr: string) {
-      return prev && typeof prev === "object" ? prev[curr] : null;
-    },
-    obj,
-  );
+export function resolve(path: string, obj?: object) {
+  return path
+    .split(".")
+    .reduce(
+      function (prev: unknown, curr: string) {
+        return isObject(prev) ? index(prev, curr) : null;
+      },
+      obj,
+    );
+}
+
+export function isObject(val: unknown): val is object {
+  return val != null && typeof val === "object";
+}
+
+export function index(obj: object, key: string) {
+  return obj[key as keyof typeof obj];
 }
 
 export function propMap<T extends object>(object: T, prefix = "") {
@@ -55,4 +65,12 @@ export function editMode(editables: string[]) {
         return undefined;
     }
   };
+}
+
+export function isLeapYear(year: number) {
+  return !(year & 3 || !(year % 25) && year & 15);
+}
+
+export function toISODateString(date: Date) {
+  return date.toISOString().replace(/T.*$/, "");
 }

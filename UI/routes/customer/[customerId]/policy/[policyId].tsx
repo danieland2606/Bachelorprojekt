@@ -1,5 +1,6 @@
 import { HandlerContext, PageProps } from "$fresh/server.ts";
 import { EditPolicy } from "$this/components/EditPolicy.tsx";
+import { ButtonRow } from "$this/components/ButtonRow.tsx";
 import { policyClient } from "$this/common/policyClient.ts";
 import { deserializePolicyFull } from "$this/common/deserialize.ts";
 import { redirect } from "$this/common/util.ts";
@@ -23,37 +24,35 @@ export const handler = {
 };
 
 export default function ShowPolicy({ params, data }: PageProps) {
+  const { edit, policy } = data;
   const id = "edit-policy";
   return (
     <>
       <h1>Vertragsdetails</h1>
       <EditPolicy
         id={id}
-        values={data.policy}
+        values={policy}
         customerId={params.customerId}
         allrequired
-        mode={data.edit ? "edit" : "display"}
+        mode={edit ? "edit" : "display"}
       >
       </EditPolicy>
-      <div class="sm:flex py-5 justify-between block">
+      <ButtonRow>
         <a
-          class="btn btn-normal inline-flex mb-4 sm:mb-0"
+          class="btn px-10"
           href={`/customer/${params.customerId}`}
         >
           Zurück
         </a>
-        {data.edit &&
-          (
-            <input
-              form={id}
-              type="submit"
-              formAction={`/customer/${params.customerId}/policy/${params.policyId}`}
-              formMethod="post"
-              class="btn btn-normal flex sm:inline-flex"
-              value="Änderungen bestätigen"
-            />
-          )}
-      </div>
+        <input
+          form={id}
+          type="submit"
+          formAction={`/customer/${params.customerId}/policy/${params.policyId}`}
+          formMethod="post"
+          class={"btn px-10" + (edit ? "" : " invisible")}
+          value="Änderungen bestätigen"
+        />
+      </ButtonRow>
     </>
   );
 }

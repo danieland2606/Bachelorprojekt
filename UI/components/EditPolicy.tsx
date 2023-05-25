@@ -1,7 +1,13 @@
 import { JSX } from "preact/jsx-runtime";
 import { Input, Select } from "$this/components/Input.tsx";
 import { Form } from "$this/components/Form.tsx";
-import { editMode, Mode, Obj, propMap } from "$this/common/util.ts";
+import {
+  editMode,
+  Mode,
+  Obj,
+  propMap,
+  toISODateString,
+} from "$this/common/util.ts";
 import {
   CatRaceValues,
   EnvironmentValues,
@@ -20,8 +26,10 @@ export interface EditPolicyProps extends JSX.HTMLAttributes<HTMLFormElement> {
 
 const policy = propMap(new Policy());
 const cat = propMap(new ObjectOfInsurance(), "objectOfInsurance.");
-const yearStart = new Date(new Date().getFullYear(), 0, 1).toISOString();
-const yearEnd = new Date(new Date().getFullYear(), 11, 31).toISOString();
+const date = new Date();
+const today = toISODateString(date);
+date.setFullYear(date.getFullYear() + 1);
+const nextYear = toISODateString(date);
 const getEditable = editMode([cat.personality, policy.coverage]);
 
 export function EditPolicy(props: EditPolicyProps) {
@@ -31,12 +39,22 @@ export function EditPolicy(props: EditPolicyProps) {
   return (
     <Form {...props} editable={getEditable(mode)}>
       <input name="customerId" type="hidden" value={customerId} />
-      <Input name={policy.startDate} labeltext="Begin" type="date" />
-      <Input name={policy.endDate} labeltext="Ende" type="date" />
-      {/*<Input name={policy.dueDate} labeltext="Fälligkeit" type="date" min={yearStart} max={yearEnd}></Input>*/}
+      <Input
+        name={policy.startDate}
+        labeltext="Vertragsbeginn"
+        type="date"
+        min={today}
+      />
+      <Input
+        name={policy.endDate}
+        labeltext="VertragsEnde"
+        type="date"
+        min={nextYear}
+      />
+      {/*<Input name={policy.dueDate} labeltext="Fälligkeit" type="date" min={today} />*/}
       <Input
         name={policy.coverage}
-        labeltext="Deckung"
+        labeltext="Jährliche Deckung"
         type="number"
         min="0"
         step="0.01"
@@ -52,7 +70,7 @@ export function EditPolicy(props: EditPolicyProps) {
           unit="€"
         />
       )}
-      <div class="divider lg:col-span-2">Katze</div>
+      <div class="divider md:col-span-2">Katze</div>
       <Input
         name={cat.name}
         labeltext="Name"
@@ -72,6 +90,7 @@ export function EditPolicy(props: EditPolicyProps) {
         name={cat.dateOfBirth}
         labeltext="Geburtsdatum"
         type="date"
+        max={today}
       />
       <Select name={cat.castrated} labeltext="Kastriert">
         <option value={true.toString()}>Kastriert</option>

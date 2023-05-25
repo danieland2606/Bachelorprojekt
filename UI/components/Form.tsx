@@ -32,7 +32,7 @@ export function Form(props: FormProps) {
   return (
     <form
       {...props}
-      class="form-control lg:grid lg:grid-cols-2 lg:gap-x-5"
+      class="form-control flex flex-col gap-2 md:grid md:grid-cols-2 md:gap-x-5"
     >
       {configured}
     </form>

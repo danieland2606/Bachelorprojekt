@@ -7,19 +7,10 @@ export default {
     "./islands/**/*.{jsx,tsx}",
   ],
   theme: {
-    extend: {
-      backgroundSize: {
-        "auto": "auto",
-        "cover": "cover",
-        "contain": "contain",
-        "15": "15rem",
-        "20": "20rem",
-        "22": "22rem",
-      },
-      padding: {
-        "1/2": "50%",
-      },
-    },
+    extend: {},
   },
   plugins: [daisyui],
+  daisyui: {
+    themes: ["retro"],
+  },
 };

@@ -1,5 +1,6 @@
 import { HandlerContext } from "$fresh/server.ts";
 import { EditCustomer } from "$this/components/EditCustomer.tsx";
+import { ButtonRow } from "$this/components/ButtonRow.tsx";
 import { customerClient } from "$this/common/customerClient.ts";
 import { deserializeCustomerFull } from "$this/common/deserialize.ts";
 import { redirect } from "$this/common/util.ts";
@@ -28,9 +29,9 @@ export default function CreateCustomer() {
         allrequired
         mode="create"
       />
-      <div class="sm:flex py-5 justify-between block">
+      <ButtonRow>
         <a
-          class="btn btn-normal flex sm:inline-flex mb-4 sm:mb-0"
+          class="btn px-10"
           href="/"
         >
           Abbrechen
@@ -38,10 +39,10 @@ export default function CreateCustomer() {
         <input
           form={id}
           type="submit"
-          class="btn btn-normal flex sm:inline-flex"
+          class="btn px-10"
           value="Anlegen"
         />
-      </div>
+      </ButtonRow>
     </>
   );
 }

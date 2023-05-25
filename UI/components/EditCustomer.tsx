@@ -1,7 +1,13 @@
 import { JSX } from "preact/jsx-runtime";
 import { Input, Select } from "$this/components/Input.tsx";
 import { Form } from "$this/components/Form.tsx";
-import { editMode, Mode, Obj, propMap } from "$this/common/util.ts";
+import {
+  editMode,
+  Mode,
+  Obj,
+  propMap,
+  toISODateString,
+} from "$this/common/util.ts";
 import {
   Address,
   Customer,
@@ -19,6 +25,7 @@ interface EditCustomerProps extends JSX.HTMLAttributes<HTMLFormElement> {
 
 const customer = propMap(new Customer());
 const address = propMap(new Address(), "address.");
+const today = toISODateString(new Date());
 const getEditable = editMode([customer.employmentStatus]);
 
 export function EditCustomer(props: EditCustomerProps) {
@@ -58,6 +65,7 @@ export function EditCustomer(props: EditCustomerProps) {
         name={customer.dateOfBirth}
         labeltext="Geburtsdatum"
         type="date"
+        max={today}
       />
       <Select
         name={customer.maritalStatus}

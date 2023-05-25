@@ -2,7 +2,6 @@ import { asset, Head } from "$fresh/runtime.ts";
 import { AppProps } from "$fresh/src/server/types.ts";
 
 export default function App({ Component }: AppProps) {
-  const logo = " bg-right-top bg-no-repeat bg-15 md:bg-20 xl:bg-22";
   return (
     <>
       <Head>
@@ -18,12 +17,13 @@ export default function App({ Component }: AppProps) {
       </Head>
       <div
         data-theme="retro"
-        class="absolute w-full min-w-full min-h-full overflow-clip"
+        class="absolute w-full min-w-full min-h-full overflow-x-hidden"
       >
-        <div
-          class={"p-5 pt-6 max-w-screen-xl mx-auto xl:mt-24" + logo}
-          style={`background-image: url(${asset("/cg-logo-black.svg")})`}
-        >
+        <div class="relative p-5 pt-6 max-w-screen-xl mx-auto xl:mt-24">
+          <img
+            src={asset("/cg-logo-black.svg")}
+            class="absolute top-0 right-0 w-[240px] md:w-[320px] xl:w-[350px]"
+          />
           <Component />
         </div>
       </div>

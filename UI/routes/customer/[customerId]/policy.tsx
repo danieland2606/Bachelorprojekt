@@ -1,6 +1,7 @@
 import { HandlerContext, PageProps } from "$fresh/server.ts";
 import { policyClient } from "$this/common/policyClient.ts";
 import { EditPolicy } from "$this/components/EditPolicy.tsx";
+import { ButtonRow } from "$this/components/ButtonRow.tsx";
 import PremiumCalculator from "$this/islands/PremiumCalculator.tsx";
 import { redirect } from "$this/common/util.ts";
 import { deserializePolicyFull } from "$this/common/deserialize.ts";
@@ -31,11 +32,11 @@ export default function CreatePolicy({ params }: PageProps) {
         allrequired
         mode="create"
       >
-        <PremiumCalculator form={id} api="/api/premium" className="my-5" />
+        <PremiumCalculator form={id} api="/api/premium" className="mt-3" />
       </EditPolicy>
-      <div class="sm:flex py-5 justify-between block">
+      <ButtonRow>
         <a
-          class="btn btn-normal flex sm:inline-flex mb-4 sm:mb-0"
+          class="btn px-10"
           href={`/customer/${params.customerId}`}
         >
           Abbrechen
@@ -43,10 +44,10 @@ export default function CreatePolicy({ params }: PageProps) {
         <input
           form={id}
           type="submit"
-          class="btn btn-normal flex w-full sm:w-auto"
+          class="btn px-10"
           value="Vertrag abschließen"
         />
-      </div>
+      </ButtonRow>
     </>
   );
 }

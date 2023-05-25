@@ -1,6 +1,6 @@
 import { HandlerContext, PageProps } from "$fresh/server.ts";
 import { itemSearch, Table } from "$this/components/Table.tsx";
-import { Search } from "$this/components/Search.tsx";
+import { SearchBar } from "$this/components/SearchBar.tsx";
 import { Address } from "$this/generated/models/all.ts";
 import { compareId } from "$this/common/util.ts";
 import { CustomerShort } from "$this/common/types.ts";
@@ -20,18 +20,11 @@ export default function Dashboard({ data }: PageProps) {
   return (
     <>
       <h1>Übersicht Kunden</h1>
-      <div class="py-2 md:py-4 flex flex-col-reverse md:flex-row md:justify-between">
-        <Search
-          value={search}
-          class="my-2 md:my-0 flex-1 md:flex-none md:w-fit"
-        />
-        <a
-          href="/customer"
-          class="btn btn-normal flex-1 md:flex-none md:w-fit"
-        >
+      <SearchBar value={search}>
+        <a href="/customer" class="btn px-10">
           Neuer Kunde
         </a>
-      </div>
+      </SearchBar>
       <Table tabledata={tableData} class="max-md:hidden" />
       <Table tabledata={altData} class="md:hidden" />
     </>

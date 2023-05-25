@@ -1,7 +1,7 @@
 import { asset } from "$fresh/runtime.ts";
 import { useEffect, useState } from "preact/hooks";
 
-type PremiumProps = { className: string; form: string; api: string };
+type PremiumProps = { className?: string; form: string; api: string };
 
 export default function PremiumCalculator(
   props: PremiumProps,
@@ -22,7 +22,7 @@ export default function PremiumCalculator(
       <button
         type="submit"
         form={form}
-        class="btn btn-normal mb-4 w-1/2"
+        class="btn w-1/2"
         formTarget={iframe}
         formAction={api}
       >
@@ -31,7 +31,7 @@ export default function PremiumCalculator(
       </button>
       <iframe
         name={iframe}
-        class="input input-bordered"
+        class="input input-bordered w-1/2"
         src={api}
         onLoad={setLoaded}
       />
