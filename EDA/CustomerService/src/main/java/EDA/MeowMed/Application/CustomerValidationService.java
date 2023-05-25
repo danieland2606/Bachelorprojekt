@@ -2,6 +2,10 @@ package EDA.MeowMed.Application;
 
 import EDA.MeowMed.Persistence.Entity.Customer;
 import EDA.MeowMed.Persistence.Entity.Address;
+import com.google.i18n.phonenumbers.NumberParseException;
+import com.google.i18n.phonenumbers.PhoneNumberUtil;
+import com.google.i18n.phonenumbers.Phonenumber;
+import org.apache.commons.validator.routines.EmailValidator;
 import org.apache.commons.validator.routines.IBANValidator;
 import org.apache.commons.validator.routines.checkdigit.IBANCheckDigit;
 import org.springframework.stereotype.Service;
@@ -102,15 +106,20 @@ public class CustomerValidationService {
         }
     }
 
-    // TODO: Add validation for PhoneNumber, Email and BankDetails
     private void checkPhoneNumber(Customer customer) throws IllegalArgumentException {
-        if (false) {//Stub, currently no use
+        Phonenumber.PhoneNumber phoneNumber = null;
+        try {
+            phoneNumber = PhoneNumberUtil.getInstance().parse(customer.getPhoneNumber(),"DE");
+        } catch (NumberParseException e) {
+            throw new IllegalArgumentException(customer.getPhoneNumber() + " is not a valid argument for phoneNumber!");
+        }
+        if (PhoneNumberUtil.getInstance().isValidNumberForRegion(phoneNumber, "49")) {
             throw new IllegalArgumentException(customer.getPhoneNumber() + " is not a valid argument for phoneNumber!");
         }
     }
 
     private void checkEmail(Customer customer) throws IllegalArgumentException {
-        if (false) {//Stub, currently no use
+        if (EmailValidator.getInstance().isValid(customer.getEmail())) {
             throw new IllegalArgumentException(customer.getEmail() + " is not a valid argument for email!");
         }
     }

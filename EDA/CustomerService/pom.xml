@@ -73,6 +73,12 @@
 		</dependency>
 
 		<dependency>
+			<groupId>com.googlecode.libphonenumber</groupId>
+			<artifactId>libphonenumber</artifactId>
+			<version>8.13.12</version>
+		</dependency>
+
+		<dependency>
 			<groupId>EDA</groupId>
 			<artifactId>Events</artifactId>
 			<version>0.1</version>
