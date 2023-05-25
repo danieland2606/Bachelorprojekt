@@ -15,6 +15,8 @@ public class PolicyPojo implements Serializable {
 
     private LocalDate endDate;
 
+    private LocalDate dueDate;
+
     private int coverage;
 
     private double premium;
@@ -23,10 +25,11 @@ public class PolicyPojo implements Serializable {
 
     private CustomerPojo customer;
 
-    public PolicyPojo(long id, LocalDate startDate, LocalDate endDate, int coverage, double premium, ObjectOfInsurancePojo objectOfInsurancePojo, CustomerPojo customer) {
+    public PolicyPojo(long id, LocalDate startDate, LocalDate endDate, LocalDate dueDate, int coverage, double premium, ObjectOfInsurancePojo objectOfInsurancePojo, CustomerPojo customer) {
         this.id = id;
         this.startDate = startDate;
         this.endDate = endDate;
+        this.dueDate = dueDate;
         this.coverage = coverage;
         this.premium = premium;
         this.objectOfInsurancePojo = objectOfInsurancePojo;
@@ -60,6 +63,15 @@ public class PolicyPojo implements Serializable {
     public void setEndDate(LocalDate endDate) {
         this.endDate = endDate;
     }
+
+    public LocalDate getDueDate() {
+        return dueDate;
+    }
+
+    public void setDueDate(LocalDate dueDate) {
+        this.dueDate = dueDate;
+    }
+
 
     public int getCoverage() {
         return coverage;
