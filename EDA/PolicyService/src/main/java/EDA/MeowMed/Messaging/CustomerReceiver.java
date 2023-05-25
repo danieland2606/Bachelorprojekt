@@ -1,8 +1,8 @@
 package EDA.MeowMed.Messaging;
 
 import EDA.MeowMed.Exceptions.ObjectNotFoundException;
-import events.customer.CustomerChangedEvent;
-import events.customer.CustomerCreatedEvent;
+import event.objects.customer.CustomerChangedEvent;
+import event.objects.customer.CustomerCreatedEvent;
 import EDA.MeowMed.Logic.PolicyService;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;

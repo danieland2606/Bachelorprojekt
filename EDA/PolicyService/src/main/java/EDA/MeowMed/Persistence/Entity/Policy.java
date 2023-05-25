@@ -1,8 +1,7 @@
 package EDA.MeowMed.Persistence.Entity;
 
 import com.fasterxml.jackson.annotation.JsonFilter;
-import events.policy.PolicyCreatedEvent;
-import events.policy.subclasses.PolicyPojo;
+import event.objects.policy.subclasses.PolicyPojo;
 import jakarta.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;

@@ -2,7 +2,7 @@ package EDA.MeowMed.Messaging;
 
 
 import EDA.MeowMed.Application.CustomerValidationService;
-import events.customer.CustomerChangedEvent;
+import event.objects.customer.CustomerChangedEvent;
 import EDA.MeowMed.Persistence.Entity.Customer;
 import org.springframework.amqp.core.TopicExchange;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;

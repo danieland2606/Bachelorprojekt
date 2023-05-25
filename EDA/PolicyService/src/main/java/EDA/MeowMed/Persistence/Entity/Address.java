@@ -21,7 +21,7 @@ public class Address implements Serializable {
         this.postalCode = postalCode;
     }
 
-    public Address(events.customer.subclasses.Address a) {
+    public Address(event.objects.customer.subclasses.Address a) {
         this.postalCode = a.getPostalCode();
     }
 

@@ -1,4 +1,4 @@
-package events.policy.subclasses;
+package event.objects.policy.subclasses;
 
 import java.io.Serial;
 import java.io.Serializable;

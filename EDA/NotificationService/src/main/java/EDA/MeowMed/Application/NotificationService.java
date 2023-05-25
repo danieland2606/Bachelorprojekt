@@ -2,16 +2,13 @@ package EDA.MeowMed.Application;
 
 import EDA.MeowMed.Email.Email;
 import EDA.MeowMed.Email.EmailFactory;
-import events.customer.CustomerChangedEvent;
-import events.customer.CustomerCreatedEvent;
-import events.policy.PolicyChangedEvent;
-import events.policy.PolicyCreatedEvent;
+import event.objects.customer.CustomerChangedEvent;
+import event.objects.customer.CustomerCreatedEvent;
+import event.objects.policy.PolicyChangedEvent;
+import event.objects.policy.PolicyCreatedEvent;
 import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 
 /**
  * Class for sending the Email of CustomerCreatedEvent and PolicyCreatedEvent.

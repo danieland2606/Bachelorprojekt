@@ -1,11 +1,10 @@
 package EDA.MeowMed.Messaging;
 
-import events.policy.PolicyCreatedEvent;
-import events.policy.PolicyChangedEvent;
+import event.objects.policy.PolicyCreatedEvent;
+import event.objects.policy.PolicyChangedEvent;
 import org.springframework.amqp.core.TopicExchange;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 
 public class PolicySender {
     @Autowired

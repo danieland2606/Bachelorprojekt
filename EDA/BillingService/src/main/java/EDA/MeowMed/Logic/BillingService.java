@@ -1,6 +1,6 @@
 package EDA.MeowMed.Logic;
 
-import events.customer.CustomerCreatedEvent;
+import event.objects.customer.CustomerCreatedEvent;
 import org.springframework.stereotype.Service;
 
 @Service

@@ -1,6 +1,7 @@
-package events.customer;
+package event.objects.customer;
 
-import events.customer.subclasses.Address;
+import event.objects.customer.subclasses.Address;
+
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -10,9 +11,10 @@ import java.time.LocalDate;
 /**
  * event
  */
-public class CustomerChangedEvent implements Serializable {
+
+public class CustomerCreatedEvent implements Serializable {
     @Serial
-    private static final long serialVersionUID = 7L;
+    private static final long serialVersionUID = 1L;
 
     private Long id;
     private String firstName;
@@ -22,17 +24,16 @@ public class CustomerChangedEvent implements Serializable {
     private String maritalStatus;
     private LocalDate dateOfBirth;
     private String employmentStatus;
-
     private boolean dogOwner;
     private Address address;
     private String phoneNumber;
     private String email;
     private String bankDetails;
 
-    public CustomerChangedEvent() {
+    public CustomerCreatedEvent() {
     }
 
-    public CustomerChangedEvent(Long id, String firstName, String lastName, String formOfAddress, String title, String maritalStatus, LocalDate dateOfBirth, String employmentStatus, boolean dogOwner, Address address, String phoneNumber, String email, String bankDetails) {
+    public CustomerCreatedEvent(Long id, String firstName, String lastName, String formOfAddress, String title, String maritalStatus, LocalDate dateOfBirth, String employmentStatus, boolean dogOwner, Address address, String phoneNumber, String email, String bankDetails) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;

@@ -1,10 +1,10 @@
 package EDA.MeowMed.Messaging;
 
 import EDA.MeowMed.Application.NotificationService;
-import events.customer.CustomerChangedEvent;
-import events.customer.CustomerCreatedEvent;
-import events.policy.PolicyChangedEvent;
-import events.policy.PolicyCreatedEvent;
+import event.objects.customer.CustomerChangedEvent;
+import event.objects.customer.CustomerCreatedEvent;
+import event.objects.policy.PolicyChangedEvent;
+import event.objects.policy.PolicyCreatedEvent;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 

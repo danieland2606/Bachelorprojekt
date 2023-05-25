@@ -1,22 +1,18 @@
-package events.policy;
+package event.objects.policy;
 
-import events.policy.subclasses.PolicyPojo;
+import event.objects.policy.subclasses.PolicyPojo;
 
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDate;
 
-public class PolicyChangedEvent implements Serializable {
+public class PolicyCreatedEvent implements Serializable {
     @Serial
-    private static final long serialVersionUID = 6L;
+    private static final long serialVersionUID = 3L;
 
     private PolicyPojo policy;
 
-    public PolicyChangedEvent() {
-
-    }
-
-    public PolicyChangedEvent(PolicyPojo policy) {
+    public PolicyCreatedEvent(PolicyPojo policy) {
         this.policy = policy;
     }
 

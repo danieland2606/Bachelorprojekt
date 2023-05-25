@@ -1,4 +1,4 @@
-package events.customer.subclasses;
+package event.objects.customer.subclasses;
 
 import java.io.Serial;
 import java.io.Serializable;

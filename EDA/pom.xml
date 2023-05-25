@@ -19,14 +19,14 @@
                 <module>PolicyService</module>
                 <module>NotificationService</module>
                 <module>BillingService</module>
-                <module>Events</module>
+                <module>EventInterface</module>
             </modules>
         </profile>
 
         <profile>
             <id>CustomerService</id>
             <modules>
-                <module>Events</module>
+                <module>EventInterface</module>
                 <module>CustomerService</module>
             </modules>
         </profile>
@@ -34,7 +34,7 @@
         <profile>
             <id>PolicyService</id>
             <modules>
-                <module>Events</module>
+                <module>EventInterface</module>
                 <module>PolicyService</module>
             </modules>
         </profile>
@@ -43,14 +43,14 @@
             <id>NotificationService</id>
             <modules>
                 <module>NotificationService</module>
-                <module>Events</module>
+                <module>EventInterface</module>
             </modules>
         </profile>
 
         <profile>
             <id>BillingService</id>
             <modules>
-                <module>Events</module>
+                <module>EventInterface</module>
                 <module>BillingService</module>
             </modules>
         </profile>

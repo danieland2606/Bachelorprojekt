@@ -1,8 +1,8 @@
 package EDA.MeowMed.Persistence.Entity;
 
 
-import events.customer.CustomerCreatedEvent;
-import events.policy.subclasses.CustomerPojo;
+import event.objects.customer.CustomerCreatedEvent;
+import event.objects.policy.subclasses.CustomerPojo;
 import jakarta.persistence.*;
 
 import java.io.Serializable;

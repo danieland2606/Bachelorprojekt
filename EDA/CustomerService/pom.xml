@@ -80,7 +80,7 @@
 
 		<dependency>
 			<groupId>EDA</groupId>
-			<artifactId>Events</artifactId>
+			<artifactId>EventInterface</artifactId>
 			<version>0.1</version>
 		</dependency>
 

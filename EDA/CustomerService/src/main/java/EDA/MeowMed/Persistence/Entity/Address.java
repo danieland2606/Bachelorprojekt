@@ -74,8 +74,8 @@ public class Address implements Serializable {
      *
      * @return
      */
-    public events.customer.subclasses.Address toCustomerAddress() {
-        return new events.customer.subclasses.Address(
+    public event.objects.customer.subclasses.Address toCustomerAddress() {
+        return new event.objects.customer.subclasses.Address(
                 city,
                 street,
                 postalCode

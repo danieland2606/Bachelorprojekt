@@ -1,12 +1,10 @@
 package EDA.MeowMed.Persistence.Entity;
 
 import com.fasterxml.jackson.annotation.JsonFilter;
-import events.customer.CustomerChangedEvent;
-import events.customer.CustomerCreatedEvent;
+import event.objects.customer.CustomerCreatedEvent;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
-import java.time.LocalDate;
 
 @Entity
 @Table(name = "Customer")
