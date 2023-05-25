@@ -1,0 +1,33 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    head, body {
+        min-height: 100vh; /* fallback where dvh is not supported */
+        min-height: 100dvh;
+        margin: 0;
+    }
+    h1 {
+        @apply text-4xl font-medium;
+    }
+}
+
+@layer components {
+    .btn:hover {
+        @apply drop-shadow-lg
+    }
+}
+
+/* disable spinner button on number input */
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
