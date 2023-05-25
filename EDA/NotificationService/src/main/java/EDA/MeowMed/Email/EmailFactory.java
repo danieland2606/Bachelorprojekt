@@ -4,6 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
@@ -25,6 +26,7 @@ public class EmailFactory {
      * he is ver tired and needs to slep. just a little sleejing time as a treat.
      * ithir neebs to slek, ver twired boyo, just a lil guy. ithir needs his beaty sleeb.
      * look at him go! he yawn big cause he skeejy, neebs to falafel asleep. nini time! good night, mister author.
+     *
      * @param to
      * @param from
      * @param subject
@@ -49,7 +51,15 @@ public class EmailFactory {
         Class<?> classToParse = object.getClass();
         for (String element : emailTemplateParser.getElementsOfTemplate(template)) {
             try {
-                String getter = "get" + StringUtils.capitalize(element);
+                String prefixMethode = "";
+                Field field = classToParse.getDeclaredField(element);
+                // all Methode have get even if bool because of the way Events are build
+//                if (field.getGenericType().getTypeName().equals("boolean")) {
+//                    prefixMethode = "is";
+//                } else {
+                    prefixMethode = "get";
+//                }
+                String getter = prefixMethode + StringUtils.capitalize(element);
                 Object value = classToParse.getMethod(getter).invoke(object);
                 if (parser.containsKey(element)) {
                     properties.put(element, parser.get(element).apply(value));
@@ -61,6 +71,8 @@ public class EmailFactory {
             } catch (InvocationTargetException e) {
                 throw new RuntimeException(e);
             } catch (IllegalAccessException e) {
+                throw new RuntimeException(e);
+            } catch (NoSuchFieldException e) {
                 throw new RuntimeException(e);
             }
         }
