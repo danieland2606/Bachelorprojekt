@@ -162,11 +162,7 @@ paths:
   /customer/{customerId}/policy/{policyId}:
     parameters:
       - $ref: '#/components/parameters/CustomerId'
-      - name: policyId
-        in: path
-        required: true
-        schema:
-          type: integer
+      - $ref: '#/components/parameters/PolicyId'
     get:
       operationId: getPolicy
       summary: get a single policy
@@ -231,10 +227,38 @@ paths:
                 $ref: '#/components/schemas/Error'
         default:
           $ref: '#/components/responses/UnknownError'
+  /customer/{customerId}/policy/{policyId}/invoice:
+    parameters:
+      - $ref: '#/components/parameters/CustomerId'
+      - $ref: '#/components/parameters/PolicyId'
+    get:
+      operationId: getInvoiceList
+      summary: returns all invoices belonging to selected policy
+      tags:
+        - invoice
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Invoice"
+        '204':
+          description: policy has no invoices
+        default:
+          $ref: '#/components/responses/UnknownError'
 components:
   parameters:
     CustomerId:
       name: customerId
+      in: path
+      required: true
+      schema:
+        type: integer
+    PolicyId:
+      name: policyId
       in: path
       required: true
       schema:
@@ -553,6 +577,18 @@ components:
       required:
         - customerId
         - policy
+    Invoice:
+      type: object
+      properties:
+        id:
+          type: integer
+        dueDate:
+          type: string
+          format: date
+        amount:
+          type: number
+        details:
+          type: string
     FormOfAddress:
       type: string
       enum:
