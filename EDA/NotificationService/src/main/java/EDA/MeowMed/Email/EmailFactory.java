@@ -51,14 +51,7 @@ public class EmailFactory {
         Class<?> classToParse = object.getClass();
         for (String element : emailTemplateParser.getElementsOfTemplate(template)) {
             try {
-                String prefixMethode = "";
-                Field field = classToParse.getDeclaredField(element);
-                // all Methode have get even if bool because of the way Events are build
-//                if (field.getGenericType().getTypeName().equals("boolean")) {
-//                    prefixMethode = "is";
-//                } else {
-                    prefixMethode = "get";
-//                }
+                String prefixMethode ="get";
                 String getter = prefixMethode + StringUtils.capitalize(element);
                 Object value = classToParse.getMethod(getter).invoke(object);
                 if (parser.containsKey(element)) {
@@ -71,8 +64,6 @@ public class EmailFactory {
             } catch (InvocationTargetException e) {
                 throw new RuntimeException(e);
             } catch (IllegalAccessException e) {
-                throw new RuntimeException(e);
-            } catch (NoSuchFieldException e) {
                 throw new RuntimeException(e);
             }
         }
