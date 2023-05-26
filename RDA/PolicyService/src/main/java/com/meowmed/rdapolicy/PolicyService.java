@@ -33,6 +33,7 @@ import com.meowmed.rdapolicy.module.Policysetup;
 import com.meowmed.rdapolicy.persistence.CatRepository;
 import com.meowmed.rdapolicy.persistence.ObjectOfInsuranceRepository;
 import com.meowmed.rdapolicy.persistence.PolicyRepository;
+import com.meowmed.rdapolicy.persistence.entity.BillingPolicyEntity;
 import com.meowmed.rdapolicy.persistence.entity.CatEntity;
 import com.meowmed.rdapolicy.persistence.entity.CustomerRequest;
 import com.meowmed.rdapolicy.persistence.entity.MailPolicyEntity;
@@ -58,6 +59,10 @@ public class PolicyService {
 	//Variable, initialisiert durch application.properties
 	@Value("${docker.customerurl}")
 	private String customerUrl;
+
+	//Variable, initialisiert durch application.properties
+	@Value("${docker.billingurl}")
+	private String billingurl;
 	
 	@Value("${docker.debugmode}")
 	private boolean debugmode;
@@ -141,7 +146,7 @@ public class PolicyService {
 
 		Optional<PolicyEntity> policy = pRepository.findById(p_id);
 		if(policy.isEmpty()) throw new PolicyNotFoundException("Policy wurde nicht gefunden");
-		if(policy.get().getC_id() != c_id) throw new CustomerNotFoundException("Der angegebene Customer gehört nicht zur angegebenen Policy");
+		if(policy.get().getCid() != c_id) throw new CustomerNotFoundException("Der angegebene Customer gehört nicht zur angegebenen Policy");
 		if(debugmode) System.out.println("getPolicy: policy: " + policy);
 		
 		// Verpacken der Ausgabe + Anwenden von Filtern auf derer
@@ -186,7 +191,12 @@ public class PolicyService {
 		ResponseEntity<String> response = sendMail("policynotification", mail);
 		//if (response.getStatusCode() != HttpStatus.OK) throw new MailSendException();
 		if(debugmode) System.out.println("postPolicy: mail: " + mail + " response: " + response);
-
+		
+		/* Vorbereitung für BillingService
+		BillingPolicyEntity bill = new BillingPolicyEntity(policy.getDueDate(), policy.getPremium(), customer.getBankDetails(), policy.getCid(), customer.getFirstName(), customer.getLastName(), policy.getId(), policy.getStartDate(), "Vertragsabschluss");
+		sendBill(bill);
+		if(debugmode) System.out.println("postPolicy: bill: " + bill);
+		*/
 		// Verpacken der Ausgabe + Anwenden von Filtern auf derer
 		MappingJacksonValue wrapper = new MappingJacksonValue(policy);
 		wrapper.setFilters(new SimpleFilterProvider()
@@ -242,25 +252,33 @@ public class PolicyService {
 			if(debugmode) System.out.println("updatePolicy: mail: " + mail + " response: " + response);
 			throw new PolicyNotAllowed("Policy ist nicht erlaubt");
 		}
-		if(!currentPolicy.get().equalsPolicyRequest(c_id, pRequest)){
-			// Wird nicht vorkommen
-			//currentPolicy.get().setC_id(c_id);
-			currentPolicy.get().setEndDate(pRequest.getEndDate());
-			currentPolicy.get().setCoverage(pRequest.getCoverage());
-		}
-		currentPolicy.get().setPremium(policyPrice);
+
+		//Hier ist die Erstellung
+
+		PolicyEntity newPolicy = new PolicyEntity(currentPolicy.get().getCid(), currentPolicy.get().getStartDate(),currentPolicy.get().getEndDate(), pRequest.getCoverage(), policyPrice, currentOoBEntity);
+		newPolicy.setId(currentPolicy.get().getId());
+		newPolicy.setDueDate(currentPolicy.get().getDueDate());
+		newPolicy.setActive(currentPolicy.get().isActive());
+
 
 		oRepository.save(currentOoBEntity);
-		PolicyEntity policy = pRepository.save(currentPolicy.get());
+		PolicyEntity policy = pRepository.save(newPolicy);
 		if(debugmode) System.out.println("updatePolicy: tempCalc: " + tempCalc + " policy: " + policy);
 
 		// Versand der Mail
-		if(!currentOoBEntity.equals(pRequest.getObjectOfInsurance()) || !currentPolicy.get().equalsPolicyRequest(c_id, pRequest)){
+		if(!currentOoBEntity.equals(pRequest.getObjectOfInsurance()) || !currentPolicy.get().equals(newPolicy)){
 			MailPolicyEntity mail = new MailPolicyEntity(policy, customer);
 			ResponseEntity<String> response = sendMail("policychangenotification", mail);
 			if (response.getStatusCode() != HttpStatus.OK) throw new MailSendException("Mail konnte nicht versendet werden");
 			if(debugmode) System.out.println("updatePolicy: mail: " + mail + " response: " + response);
 		}
+		/* Vorbereitung für BillingService
+		if(newPolicy.getPremium() != currentPolicy.get().getPremium()){
+			BillingPolicyEntity bill = new BillingPolicyEntity(policy.getDueDate(), newPolicy.getPremium()-currentPolicy.get().getPremium(), customer.getBankDetails(), policy.getCid(), customer.getFirstName(), customer.getLastName(), policy.getId(), policy.getStartDate(), "Vertragsänderung");
+			sendBill(bill);
+			if(debugmode) System.out.println("updatePolicy: bill: " + bill);
+		}
+		*/
 
 		// Verpacken und Filtern von der Ausgabe
 		MappingJacksonValue wrapper = new MappingJacksonValue(policy);
@@ -428,7 +446,7 @@ public class PolicyService {
 		if (policy.isEmpty()) {
 			throw new PolicyNotFoundException("Policy wurde nicht gefunden");
 		}
-		if(policy.get().getC_id() != c_id) throw new CustomerNotFoundException("Der angegebene Customer gehört nicht zur angegebenen Policy");
+		if(policy.get().getCid() != c_id) throw new CustomerNotFoundException("Der angegebene Customer gehört nicht zur angegebenen Policy");
 
 		policy.get().setActive(false);
 		pRepository.save(policy.get());
@@ -486,5 +504,23 @@ public class PolicyService {
 		if(customer == null) throw new CustomerNotFoundException("Customer wurde nicht gefunden");
 		if(debugmode) System.out.println("getCustomerRequest: customer: " + customer);
 		return customer;
+	}
+
+	/**
+	 * Diese Methode sendet eine Anfrage an den BillingService
+	 * @param bill Hier sind die Informationen drin, die dem BillingService gegeben werden
+	 * @exception NestedRuntimeException Für alle unten aufgeführten Exceptions
+	 * @exception RestClientException Falls der Post-Aufruf zum Notifikationservice fehlschlägt
+	 */
+	private void sendBill(BillingPolicyEntity bill) throws NestedRuntimeException{
+		if(debugmode) System.out.println("sendBill: bill: " + bill);
+		///customer/{id}/policy/{id}/invoice
+		String url = "http://" + billingurl + ":8080/customer/" + bill.getCid() + "/policy/" + bill.getPid() + "/invoice";
+		RestTemplate restTemplate = new RestTemplate();
+		restTemplate.put(url, bill);
+		//ResponseEntity<String> response = restTemplate.put(url, mail);
+		//ResponseEntity<String> response = restTemplate.postForEntity(url, mail, String.class);
+		//if(debugmode) System.out.println("sendMail: url: " + url + " response: " + response);
+		//return response;
 	}
 }

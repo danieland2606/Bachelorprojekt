@@ -87,7 +87,7 @@ public class MailPolicyEntity {
         this.bankDetails = cRequest.getBankDetails();
         this.dogOwner = cRequest.isdogOwner();
         this.pid = entity.getId();
-        this.cid = entity.getC_id();
+        this.cid = entity.getCid();
         this.startDate = entity.getStartDate();
         this.endDate = entity.getEndDate();
         this.coverage = entity.getCoverage();

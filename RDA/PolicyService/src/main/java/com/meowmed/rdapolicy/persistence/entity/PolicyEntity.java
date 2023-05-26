@@ -41,6 +41,8 @@ public class PolicyEntity {
     private ObjectOfInsuranceEntity objectOfInsurance;
 
     private boolean active;
+
+    private LocalDate dueDate;
     
     public PolicyEntity() {
     }
@@ -54,6 +56,7 @@ public class PolicyEntity {
         this.premium = premium;
         this.objectOfInsurance = objectOfInsurance;
         this.active = true;
+        dueDate = LocalDate.now();
     }
 
     public long getId() {
@@ -62,14 +65,6 @@ public class PolicyEntity {
 
     public void setId(long id) {
         this.id = id;
-    }
-
-    public long getC_id() {
-        return cid;
-    }
-
-    public void setC_id(long c_id) {
-        this.cid = c_id;
     }
 
     public LocalDate getStartDate() {
@@ -120,19 +115,20 @@ public class PolicyEntity {
         this.active = active;
     }
 
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + (int) (cid ^ (cid >>> 32));
-        result = prime * result + ((startDate == null) ? 0 : startDate.hashCode());
-        result = prime * result + ((endDate == null) ? 0 : endDate.hashCode());
-        result = prime * result + coverage;
-        long temp;
-        temp = Double.doubleToLongBits(premium);
-        result = prime * result + (int) (temp ^ (temp >>> 32));
-        result = prime * result + ((objectOfInsurance == null) ? 0 : objectOfInsurance.hashCode());
-        return result;
+    public long getCid() {
+        return cid;
+    }
+
+    public void setCid(long cid) {
+        this.cid = cid;
+    }
+
+    public LocalDate getDueDate() {
+        return dueDate;
+    }
+
+    public void setDueDate(LocalDate dueDate) {
+        this.dueDate = dueDate;
     }
 
     public boolean equalsPolicyRequest(long c_id, PolicyRequest other){
@@ -151,6 +147,30 @@ public class PolicyEntity {
         if (coverage != other.getCoverage())
             return false;
         return true;
+    }
+
+    @Override
+    public String toString() {
+        return "PolicyEntity [id=" + id + ", cid=" + cid + ", startDate=" + startDate + ", endDate=" + endDate
+                + ", coverage=" + coverage + ", premium=" + premium + ", objectOfInsurance=" + objectOfInsurance
+                + ", active=" + active + ", dueDate=" + dueDate + "]";
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + (int) (cid ^ (cid >>> 32));
+        result = prime * result + ((startDate == null) ? 0 : startDate.hashCode());
+        result = prime * result + ((endDate == null) ? 0 : endDate.hashCode());
+        result = prime * result + coverage;
+        long temp;
+        temp = Double.doubleToLongBits(premium);
+        result = prime * result + (int) (temp ^ (temp >>> 32));
+        result = prime * result + ((objectOfInsurance == null) ? 0 : objectOfInsurance.hashCode());
+        result = prime * result + (active ? 1231 : 1237);
+        result = prime * result + ((dueDate == null) ? 0 : dueDate.hashCode());
+        return result;
     }
 
     @Override
@@ -183,16 +203,17 @@ public class PolicyEntity {
                 return false;
         } else if (!objectOfInsurance.equals(other.objectOfInsurance))
             return false;
+        if (active != other.active)
+            return false;
+        if (dueDate == null) {
+            if (other.dueDate != null)
+                return false;
+        } else if (!dueDate.equals(other.dueDate))
+            return false;
         return true;
     }
-
-    @Override
-    public String toString() {
-        return "PolicyEntity [id=" + id + ", cid=" + cid + ", startDate=" + startDate + ", endDate=" + endDate
-                + ", coverage=" + coverage + ", premium=" + premium + ", objectOfInsurance=" + objectOfInsurance
-                + ", active=" + active + "]";
-    }
-
+    
+    
     
     
 }
