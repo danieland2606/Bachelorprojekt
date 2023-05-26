@@ -4,14 +4,14 @@ import org.springframework.core.NestedRuntimeException;
 
 public class CatNotFoundException extends NestedRuntimeException{
     /**
-     * konstruiert eine CustomerNotFoundException und übergibt eine Fehlermeldung als Parameter
+     * konstruiert eine CatNotFoundException und übergibt eine Fehlermeldung als Parameter
      * @param message die Fehlermeldung
      */
     public CatNotFoundException(String message) {
         super(message);
     }
     /*+
-     * gibt die Fehlermeldung der CustomerNotFoundException zurück
+     * gibt die Fehlermeldung der CatNotFoundException zurück
      * @return die Fehlermeldung
      */
     public String getMessage(){

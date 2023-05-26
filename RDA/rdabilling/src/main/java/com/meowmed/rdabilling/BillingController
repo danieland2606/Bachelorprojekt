@@ -1,0 +1,20 @@
+@RestController
+public class BillingController {
+
+    private final BillingService bService;
+
+    @Autowired
+    public BillingController(BillingService billingService) {
+        this.bService = billingService;
+    }
+
+    @PutMapping("/customer/{c_id}/policy/{p_id}/invoice")
+    public void putInvoice(@RequestBody BillingPolicyEntity invoice) {
+        bService.putInvoice(invoice);
+    }
+
+    @PutMapping("/customer/{c_id}/policy/{p_id}/invoice")
+    public ResponseEntity<List<BillingEntity>> getInvoice(@PathVariable("c_id") Long c_id, @PathVariable("p_id") Long p_id) {
+        return bService.putInvoice(invoice);
+    }
+}
