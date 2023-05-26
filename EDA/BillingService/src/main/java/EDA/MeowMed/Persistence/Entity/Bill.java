@@ -1,6 +1,5 @@
 package EDA.MeowMed.Persistence.Entity;
 
-import com.fasterxml.jackson.annotation.JsonFilter;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
@@ -8,7 +7,6 @@ import java.time.LocalDate;
 
 @Entity
 @Table(name="Bill")
-@JsonFilter("billFilter")
 public class Bill implements Serializable {
 
     @Id

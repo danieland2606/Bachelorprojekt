@@ -99,7 +99,7 @@ services:
         service: BillingService
     container_name: billing-service
     depends_on:
-      policydb:
+      billingdb:
         condition: service_healthy
       rabbitmq:
         condition: service_started
