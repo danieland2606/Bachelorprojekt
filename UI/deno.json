@@ -2,7 +2,7 @@
   "tasks": {
     "start": "deno task tailwind & deno run -A --watch=static/,routes/,common/,islands/,components/ dev.ts",
     "tailwind": "npm i && npx tailwind -i ./base.css -o ./static/meowmed.css --watch",
-    "generate": "rm -rf ./generated && deno run -A npm:@openapitools/openapi-generator-cli generate -i ../Meowmed+_REST.yaml -g typescript --additional-properties=platform=deno,supportsES6=true,disallowAdditionalPropertiesIfNotPresent=false -t ./templates -o ./generated",
+    "generate": "rm -rf ./generated && npx @openapitools/openapi-generator-cli generate -i ../Meowmed+_REST.yaml -g typescript --additional-properties=platform=deno,supportsES6=true,disallowAdditionalPropertiesIfNotPresent=false -t ./templates -o ./generated",
     "build-css": "npm i && npx tailwind -i ./base.css -o ./static/meowmed.css --minify"
   },
   "importMap": "./import_map.json",

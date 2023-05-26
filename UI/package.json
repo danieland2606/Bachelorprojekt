@@ -1,5 +1,6 @@
 {
   "devDependencies": {
+    "@openapitools/openapi-generator-cli": "^2.6.0",
     "daisyui": "^2.51.6",
     "tailwindcss": "^3.3.2"
   }

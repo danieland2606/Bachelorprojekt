@@ -5,7 +5,5 @@ services:
       context: .
       target: test
     container_name: meowmed-ui-test
-    networks:
-      - "default"
     ports:
       - 80:8000
