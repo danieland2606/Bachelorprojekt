@@ -57,6 +57,9 @@ public class CustomerEntity {
         }else {
             this.bankDetails = bankDetails;
         }
+
+
+        //this.bankDetails = bankDetails;
         this.dogOwner = dogOwner;
     }
     public long getId() {
@@ -134,6 +137,7 @@ public class CustomerEntity {
         } else {
             this.bankDetails = bankDetails;
         }
+        //this.bankDetails = bankDetails;
     }
     public boolean isDogOwner() { return dogOwner;}
     public void setDogOwner(boolean dogOwner) { this.dogOwner = dogOwner;}
