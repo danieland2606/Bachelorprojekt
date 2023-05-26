@@ -589,6 +589,11 @@ components:
           type: number
         details:
           type: string
+      required: 
+        - id
+        - dueDate
+        - amount
+        - details
     FormOfAddress:
       type: string
       enum:

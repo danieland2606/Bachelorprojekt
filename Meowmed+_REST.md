@@ -1199,6 +1199,118 @@ Status Code **200**
 This operation does not require authentication
 </aside>
 
+<h1 id="meowmed--invoice">invoice</h1>
+
+## getInvoiceList
+
+<a id="opIdgetInvoiceList"></a>
+
+> Code samples
+
+<details>
+<summary>http</summary>
+
+```http
+GET /customer/0/policy/0/invoice HTTP/1.1
+Accept: application/json
+Host: localhost:8081
+
+```
+
+</details>
+
+<details>
+<summary>shell</summary>
+
+```shell
+curl --request GET \
+  --url http://localhost:8081/customer/0/policy/0/invoice \
+  --header 'Accept: application/json'
+```
+
+</details>
+
+<details>
+<summary>javascript</summary>
+
+```javascript
+fetch("http://localhost:8081/customer/0/policy/0/invoice", {
+  "method": "GET",
+  "headers": {
+    "Accept": "application/json"
+  }
+})
+.then(response => {
+  console.log(response);
+})
+.catch(err => {
+  console.error(err);
+});
+```
+
+</details>
+
+`GET /customer/{customerId}/policy/{policyId}/invoice`
+
+*returns all invoices belonging to selected policy*
+
+<h3 id="getinvoicelist-parameters">Parameters</h3>
+
+|Name|In|Type|Required|Description|
+|---|---|---|---|---|
+|customerId|path|integer|true|none|
+|policyId|path|integer|true|none|
+
+> Example responses
+
+> 200 Response
+
+```json
+[
+  {
+    "id": 0,
+    "dueDate": "2019-08-24",
+    "amount": 0,
+    "details": "string"
+  }
+]
+```
+
+> default Response
+
+```xml
+<?xml version="1.0" encoding="UTF-8" ?>
+<Error/>
+```
+
+```
+"string"
+```
+
+<h3 id="getinvoicelist-responses">Responses</h3>
+
+|Status|Meaning|Description|Schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|success|Inline|
+|204|[No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5)|policy has no invoices|None|
+|default|Default|unexpected error|string|
+
+<h3 id="getinvoicelist-responseschema">Response Schema</h3>
+
+Status Code **200**
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|*anonymous*|[[Invoice](#schemainvoice)]|false|none|none|
+|» id|integer|true|none|none|
+|» dueDate|string(date)|true|none|none|
+|» amount|number|true|none|none|
+|» details|string|true|none|none|
+
+<aside class="success">
+This operation does not require authentication
+</aside>
+
 # Schemas
 
 <h2 id="tocS_ID">ID</h2>
@@ -1612,6 +1724,32 @@ This operation does not require authentication
 |---|---|---|---|---|
 |customerId|integer|true|none|none|
 |policy|[PolicyAllRequired](#schemapolicyallrequired)|true|none|none|
+
+<h2 id="tocS_Invoice">Invoice</h2>
+<!-- backwards compatibility -->
+<a id="schemainvoice"></a>
+<a id="schema_Invoice"></a>
+<a id="tocSinvoice"></a>
+<a id="tocsinvoice"></a>
+
+```json
+{
+  "id": 0,
+  "dueDate": "2019-08-24",
+  "amount": 0,
+  "details": "string"
+}
+
+```
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|id|integer|true|none|none|
+|dueDate|string(date)|true|none|none|
+|amount|number|true|none|none|
+|details|string|true|none|none|
 
 <h2 id="tocS_FormOfAddress">FormOfAddress</h2>
 <!-- backwards compatibility -->
