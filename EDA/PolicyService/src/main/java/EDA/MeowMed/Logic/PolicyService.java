@@ -144,7 +144,7 @@ public class PolicyService {
 
             // dueDate is startDate by default
             if (policy.getDueDate() == null) { //TODO: validate IllegalArgumentException maybeeee?
-                policy.setDueDate(policy.getStartDate());
+                policy.setDueDate(policy.getStartDate()); //TODO: Validiere, dass dueDate nicht in der Vergangenheit sein kann?
             }
 
             policy.setPremium(this.getPremium(policy.getCustomer(), policy));
@@ -346,7 +346,7 @@ public class PolicyService {
         Policy persistentPolicy = p.get();
         persistentPolicy.setCoverage(newPolicy.getCoverage());
         persistentPolicy.getObjectOfInsurance().setPersonality(newPolicy.getObjectOfInsurance().getPersonality());
-        persistentPolicy.setDueDate(newPolicy.getDueDate()); //TODO: check if this should be possible
+        persistentPolicy.setDueDate(newPolicy.getDueDate()); //TODO: check if this should be possible //TODO: Validiere, dass dueDate nicht in der Vergangenheit sein kann?
         this.updatePolicyDataBasedOnNewInformation(persistentPolicy, persistentPolicy.getObjectOfInsurance().getPersonality().equals("sehr verspielt"));
     }
 

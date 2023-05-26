@@ -1,10 +1,12 @@
 package EDA.MeowMed.Persistence.Entity;
 
 import com.fasterxml.jackson.annotation.JsonFilter;
-import event.objects.customer.CustomerCreatedEvent;
+import events.customer.CustomerChangedEvent;
+import events.customer.CustomerCreatedEvent;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "Customer")
@@ -45,7 +47,7 @@ public class Customer implements Serializable {
     }
 
     public Customer(CustomerCreatedEvent c) {
-        this.id = c.getId();
+        this.id = c.getCid();
         this.formOfAddress = c.getFormOfAddress();
         this.title = c.getTitle();
         this.firstName = c.getFirstName();

@@ -60,7 +60,7 @@
 		</dependency>
 		<dependency>
 			<groupId>EDA</groupId>
-			<artifactId>EventInterface</artifactId>
+			<artifactId>Events</artifactId>
 			<version>0.1</version>
 		</dependency>
 	</dependencies>

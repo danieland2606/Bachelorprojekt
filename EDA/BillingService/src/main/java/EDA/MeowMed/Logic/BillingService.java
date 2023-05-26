@@ -1,7 +1,15 @@
 package EDA.MeowMed.Logic;
 
-import event.objects.customer.CustomerCreatedEvent;
+import EDA.MeowMed.Persistence.Entity.Bill;
+import EDA.MeowMed.Persistence.Entity.Customer;
+import events.customer.CustomerCreatedEvent;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import EDA.MeowMed.Persistence.*;
+import events.policy.subclasses.PolicyPojo;
+
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class BillingService {
@@ -11,7 +19,7 @@ public class BillingService {
     private final BillRepository billRepository;
 
     @Autowired
-    public PolicyService(BillRepository billRepository, CustomerRepository customerRepository) {
+    public BillingService(BillRepository billRepository, CustomerRepository customerRepository) {
         this.billRepository = billRepository;
         this.customerRepository = customerRepository;
     }
@@ -20,7 +28,7 @@ public class BillingService {
         this.customerRepository.save(new Customer(customerCreatedEvent));
     }
 
-    public void addBillForNewlyCreatedPolicy(Policy p) {
+    public void addBillForNewlyCreatedPolicy(PolicyPojo p) {
         Bill b = new Bill();
         b.setPolicyId(p.getId());
         b.setStartDate(p.getStartDate());
@@ -34,12 +42,11 @@ public class BillingService {
         this.billRepository.save(b);
     }
 
-    public void addBillForUpdatedPolicy(Policy p) {
+    public void addBillForUpdatedPolicy(PolicyPojo p) {
         double alreadyChargedAmount = 0.0;
         for (Bill b : this.billRepository.getBillsByPolicyId(p.getId())) {
             alreadyChargedAmount += b.getChargedAmount();
         }
-
         double amountForNewBill = (p.getPremium() * 12) - alreadyChargedAmount;
         Bill b = new Bill();
         b.setPolicyId(p.getId());
@@ -52,5 +59,9 @@ public class BillingService {
         }
         b.setCustomer(customerForPolicy.get());
         this.billRepository.save(b);
+    }
+
+    public List<Bill> findByCustomerIdAndPolicyId(long customerId, long policyId) {
+        return this.billRepository.getBillsByCustomerIdAndPolicyId(customerId, policyId);
     }
 }
