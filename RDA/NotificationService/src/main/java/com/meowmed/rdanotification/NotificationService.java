@@ -231,6 +231,7 @@ public class NotificationService {
             properties.put("personality", details.getPersonality());
             properties.put("environment", details.getEnvironment());
             properties.put("weight", details.getWeight());
+            properties.put("premium", details.getPremium());
         }
         if(debugmode) System.out.println("createNotificationMessage: properties: " + properties);
 
