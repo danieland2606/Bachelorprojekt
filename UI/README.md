@@ -25,10 +25,11 @@ regenerated unless the API changes.
 
 ### Routes
 
-Fresh uses file system routing. As such, each file under [/routes] not starting
-with _ (underscore) is a page of the site. Underscored files have special
-meaning to the fresh framework, see the fresh documentation. Files in
-[/routes/api] are used internally and only return an empty page on GET.
+Fresh uses file system routing. As such, each file under [/routes](/routes) not
+starting with _ (underscore) is a page of the site. Underscored files have
+special meaning to the fresh framework, see the fresh documentation. Files in
+[/routes/api](/routes/api) are used internally and only return an empty page on
+GET.
 
 ### Components
 
@@ -47,15 +48,15 @@ loading.
 ## Common Functionality
 
 Functionality that is used by multiple routes, islands or Components is
-currently collected in [/common]. customerClient and policyClient only provide
-test data to allow the development server to display data. In the docker build
-they are replaced by their _prod variants. These pass functionality from the
-generated client with some minor processing.
+currently collected in [/common](/common). customerClient and policyClient only
+provide test data to allow the development server to display data. In the docker
+build they are replaced by their _prod variants. These pass functionality from
+the generated client with some minor processing.
 
 Other files in /common collect functionality that has some internal
 relationship. Functionality that is used in multiple places but not yet grouped
-with related functionality is collectd in [/common/util.ts], until such a time
-when a relationship with other functionality becomes apparent.
+with related functionality is collectd in [/common/util.ts](/common/util.ts),
+until such a time when a relationship with other functionality becomes apparent.
 
 ## Deno tasks
 
