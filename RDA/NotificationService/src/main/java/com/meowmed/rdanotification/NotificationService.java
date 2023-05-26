@@ -86,41 +86,6 @@ public class NotificationService {
         return new ResponseEntity<String>("Fehler beim Versand",HttpStatusCode.valueOf(500));
     }
 
-    /**
-     * Diese Methode nimmt die Anfrage des REST-Controllers für den Vertrags-Emailversand und versendet diese
-     * @param details Ein Vertrags-Objekt mit zusätzlichen Infos, dessen Inhalt in der EMail verwendet wird
-     * @return Zurück kommt ein HTTP-Statuscode, der aussagt, ob die Mail versendet wurde
-     */
-
-    public ResponseEntity<String> policyNotification(MailPolicyEntity details){
-        if(debugmode) System.out.println("policyNotification: details: " + details);
-        try {
-            emailSender.send(createNotificationMessage(details, "create"));
-            return new ResponseEntity<String>("Mail wurde erfolgreich versendet",HttpStatusCode.valueOf(200));
-        }catch(MessagingException e){
-            if(debugmode) System.out.println("policyNotification: MesaageException: " + e);
-        }            
-        return new ResponseEntity<String>("Fehler beim Versand",HttpStatusCode.valueOf(500));
-       
-    }
-
-
-    /**
-     * Diese Methode nimmt die Anfrage des REST-Controllers für den Vertragsänderung-Emailversand und versendet diese
-     * @param details Ein Vertrags-Objekt mit zusätzlichen Infos, dessen Inhalt in der EMail verwendet wird
-     * @return Zurück kommt ein HTTP-Statuscode, der aussagt, ob die Mail versendet wurde
-     */
-    public ResponseEntity<String> changePolicyNotification(MailPolicyEntity details){
-        if(debugmode) System.out.println("changePolicyNotification: details: " + details);
-        try {
-            emailSender.send(createNotificationMessage(details, "change"));
-            return new ResponseEntity<String>("Mail wurde erfolgreich versendet",HttpStatusCode.valueOf(200));
-        }catch(MessagingException e){
-            if(debugmode) System.out.println("changePolicyNotification: MesaageException: " + e);
-        }
-        return new ResponseEntity<String>("Fehler beim Versand",HttpStatusCode.valueOf(500));
-
-    }
 
     /**
      * Diese Methode nimmt die Anfrage des REST-Controllers für den Customeränderung-Emailversand und versendet diese
@@ -162,6 +127,41 @@ public class NotificationService {
             System.out.println(e);
         }
         return new ResponseEntity<String>("Fehler beim Versand",HttpStatusCode.valueOf(500));
+    }
+
+    /**
+     * Diese Methode nimmt die Anfrage des REST-Controllers für den Vertrags-Emailversand und versendet diese
+     * @param details Ein Vertrags-Objekt mit zusätzlichen Infos, dessen Inhalt in der EMail verwendet wird
+     * @return Zurück kommt ein HTTP-Statuscode, der aussagt, ob die Mail versendet wurde
+     */
+
+    public ResponseEntity<String> policyNotification(MailPolicyEntity details){
+        if(debugmode) System.out.println("policyNotification: details: " + details);
+        try {
+            emailSender.send(createNotificationMessage(details, "create"));
+            return new ResponseEntity<String>("Mail wurde erfolgreich versendet",HttpStatusCode.valueOf(200));
+        }catch(MessagingException e){
+            if(debugmode) System.out.println("policyNotification: MesaageException: " + e);
+        }
+        return new ResponseEntity<String>("Fehler beim Versand",HttpStatusCode.valueOf(500));
+
+    }
+
+    /**
+     * Diese Methode nimmt die Anfrage des REST-Controllers für den Vertragsänderung-Emailversand und versendet diese
+     * @param details Ein Vertrags-Objekt mit zusätzlichen Infos, dessen Inhalt in der EMail verwendet wird
+     * @return Zurück kommt ein HTTP-Statuscode, der aussagt, ob die Mail versendet wurde
+     */
+    public ResponseEntity<String> changePolicyNotification(MailPolicyEntity details){
+        if(debugmode) System.out.println("changePolicyNotification: details: " + details);
+        try {
+            emailSender.send(createNotificationMessage(details, "change"));
+            return new ResponseEntity<String>("Mail wurde erfolgreich versendet",HttpStatusCode.valueOf(200));
+        }catch(MessagingException e){
+            if(debugmode) System.out.println("changePolicyNotification: MesaageException: " + e);
+        }
+        return new ResponseEntity<String>("Fehler beim Versand",HttpStatusCode.valueOf(500));
+
     }
 
     /**
