@@ -9,6 +9,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import org.apache.commons.validator.routines.checkdigit.IBANCheckDigit;
 
 
 import java.time.LocalDate;
@@ -51,7 +52,11 @@ public class CustomerEntity {
         this.address = address;
         this.phoneNumber = phoneNumber;
         this.email = email;
-        this.bankDetails = bankDetails;
+        if (!IBANCheckDigit.IBAN_CHECK_DIGIT.isValid(bankDetails)) {
+            throw new IllegalArgumentException(bankDetails + " is not a valid argument for bankDetails!");
+        }else {
+            this.bankDetails = bankDetails;
+        }
         this.dogOwner = dogOwner;
     }
     public long getId() {
@@ -124,7 +129,11 @@ public class CustomerEntity {
         return bankDetails;
     }
     public void setBankDetails(String bankDetails) {
-        this.bankDetails = bankDetails;
+        if (!IBANCheckDigit.IBAN_CHECK_DIGIT.isValid(bankDetails)) {
+            throw new IllegalArgumentException(bankDetails + " is not a valid argument for bankDetails!");
+        } else {
+            this.bankDetails = bankDetails;
+        }
     }
     public boolean isDogOwner() { return dogOwner;}
     public void setDogOwner(boolean dogOwner) { this.dogOwner = dogOwner;}
