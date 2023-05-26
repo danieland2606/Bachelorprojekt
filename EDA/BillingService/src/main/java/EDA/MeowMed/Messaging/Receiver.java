@@ -31,6 +31,6 @@ public class Receiver {
     @RabbitListener(queues = "#{PolicyChangedQueue.name}")
     public void receivePolicyChanged(PolicyChangedEvent policyChangedEvent) {
         System.out.println("Policy Change received!");
-
+        this.billingService.addBillForUpdatedPolicy(policyChangedEvent.getPolicy());
     }
 }
