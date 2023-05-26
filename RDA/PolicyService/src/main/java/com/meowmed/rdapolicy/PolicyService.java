@@ -182,6 +182,7 @@ public class PolicyService {
 		// Erzeugen von Objekten für den Policy und speichern derer
 		PriceCalculationEntity tempCalc = new PriceCalculationEntity(c_id, pRequest);
 		PolicyEntity policy = new PolicyEntity(c_id, pRequest.getStartDate(), pRequest.getEndDate(), pRequest.getCoverage(), getPolicyPrice(tempCalc), pRequest.getObjectOfInsurance());
+		policy.setDueDate(pRequest.getDueDate());
 		oRepository.save(pRequest.getObjectOfInsurance());
 		policy = pRepository.save(policy);
 		if(debugmode) System.out.println("postPolicy: policy: " + policy + " tempCalc: " + tempCalc);
