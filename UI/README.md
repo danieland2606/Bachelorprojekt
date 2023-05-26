@@ -7,8 +7,8 @@ Build dependecies are npm and Deno.
 [node](https://nodejs.org/en)
 [Deno](https://deno.com/manual@v1.34.0/getting_started/installation)
 
-Deno install scripts are provided for [Windows](install-deno.ps1) and
-[Linux](install-deno).
+Deno install scripts are provided for [Windows](./install-deno.ps1) and
+[Linux](./install-deno).
 
 ## Project structure
 
@@ -25,17 +25,17 @@ regenerated unless the API changes.
 
 ### Routes
 
-Fresh uses file system routing. As such, each file under [/routes](/routes) not
+Fresh uses file system routing. As such, each file under [/routes](./routes) not
 starting with _ (underscore) is a page of the site. Underscored files have
 special meaning to the fresh framework, see the fresh documentation. Files in
-[/routes/api](/routes/api) are used internally and only return an empty page on
+[/routes/api](./routes/api) are used internally and only return an empty page on
 GET.
 
 ### Components
 
-The major Components are [Table](/components/Table.tsx),
-[Form](/components/Form.tsx), [EditCustomer](/components/EditCustomer.tsx) and
-[EditPolicy](/components/EditPolicy.tsx). The content of Table is dynamically
+The major Components are [Table](./components/Table.tsx),
+[Form](./components/Form.tsx), [EditCustomer](./components/EditCustomer.tsx) and
+[EditPolicy](./components/EditPolicy.tsx). The content of Table is dynamically
 generated based on its interface TableItems. Form contains common functionality
 of EditCustomer and EditPolicy. These Components are used to both create,
 display and change the properties of Customer and Policy, respectively.
@@ -48,14 +48,14 @@ loading.
 ## Common Functionality
 
 Functionality that is used by multiple routes, islands or Components is
-currently collected in [/common](/common). customerClient and policyClient only
+currently collected in [/common](./common). customerClient and policyClient only
 provide test data to allow the development server to display data. In the docker
 build they are replaced by their _prod variants. These pass functionality from
 the generated client with some minor processing.
 
 Other files in /common collect functionality that has some internal
 relationship. Functionality that is used in multiple places but not yet grouped
-with related functionality is collectd in [/common/util.ts](/common/util.ts),
+with related functionality is collectd in [/common/util.ts](./common/util.ts),
 until such a time when a relationship with other functionality becomes apparent.
 
 ## Deno tasks
