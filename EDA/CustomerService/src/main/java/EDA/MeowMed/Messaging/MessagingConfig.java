@@ -1,5 +1,6 @@
 package EDA.MeowMed.Messaging;
 
+import event.Topics;
 import org.springframework.amqp.core.TopicExchange;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,16 +12,13 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class MessagingConfig {
 
-    private final String EXCHANGE_NAME = "MeowMedTopicExchange";
-
-
-    /**
+        /**
      * Creates a new RabbitMQ exchange named after the 'exchangeName' variable
      * @return a new TopicExchange object with name of 'exchangeName' variable
      */
     @Bean
     public TopicExchange topicExchange() {
-        return new TopicExchange(EXCHANGE_NAME);
+        return new TopicExchange(Topics.TOPIC_EXCHANGE_NAME);
     }
 
     @Bean

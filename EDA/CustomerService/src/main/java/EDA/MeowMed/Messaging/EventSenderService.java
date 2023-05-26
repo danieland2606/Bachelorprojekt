@@ -2,6 +2,7 @@ package EDA.MeowMed.Messaging;
 
 
 import EDA.MeowMed.Application.CustomerValidationService;
+import event.Keys;
 import event.objects.customer.CustomerChangedEvent;
 import EDA.MeowMed.Persistence.Entity.Customer;
 import org.springframework.amqp.core.TopicExchange;
@@ -23,11 +24,6 @@ public class EventSenderService {
     public EventSenderService() {
     }
 
-    private final String created_routing_key = "customer.created";
-    private final String changed_routing_key = "customer.changed";
-    private final String cancelled_routing_key = "cancelled.customer.changed";
-
-
     /**
      * Sends an event to a topic exchange when new customer is created
      * Topic name is defined in 'MessagingConfig' class
@@ -37,7 +33,7 @@ public class EventSenderService {
      */
     public boolean sendCustomerCreatedEvent(Customer customer) {
         try {
-            template.convertAndSend(topicExchange.getName(), created_routing_key, customer.createCustomerCreatedEvent());
+            template.convertAndSend(topicExchange.getName(), Keys.CUSTOMER_CREATED_KEY, customer.createCustomerCreatedEvent());
             System.out.println(" [x] Sent");
         } catch (Exception e) {
             System.out.println("Fehler beim Senden");
@@ -50,10 +46,10 @@ public class EventSenderService {
         try {
             CustomerChangedEvent customerChangedEvent = customer.createCustomerChangedEvent();
             String routing_key;
-            if (customer.getEmploymentStatus().equals(CustomerValidationService.cancelStateEmploymentStatus)) {
-                routing_key = cancelled_routing_key;
+            if (customer.getEmploymentStatus().equals(CustomerValidationService.cancelStateEmploymentStatus)) { //todo: This needs to go
+                routing_key = Keys.CUSTOMER_CHANGED_CANCELLED_KEY;
             } else {
-                routing_key = changed_routing_key;
+                routing_key = Keys.CUSTOMER_CHANGED_KEY;
             }
 
             template.convertAndSend(topicExchange.getName(), routing_key,customerChangedEvent);
