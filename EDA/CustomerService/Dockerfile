@@ -17,8 +17,8 @@ COPY /${service}/pom.xml ./$service/
 
 COPY pom.xml .
 
-COPY /Events/pom.xml ./Events/
-COPY /Events/src ./Events/src
+COPY /EventInterface/pom.xml ./EventInterface/
+COPY /EventInterface/src ./EventInterface/src
 
 RUN ./mvnw install -P ${service} -DskipTests
 RUN mkdir -p ${service}/target/dependency && (cd ${service}/target/dependency; jar -xf ../*.jar)
