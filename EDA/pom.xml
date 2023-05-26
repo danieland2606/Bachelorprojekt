@@ -18,6 +18,7 @@
                 <module>CustomerService</module>
                 <module>PolicyService</module>
                 <module>NotificationService</module>
+                <module>BillingService</module>
                 <module>Events</module>
             </modules>
         </profile>
@@ -43,6 +44,14 @@
             <modules>
                 <module>NotificationService</module>
                 <module>Events</module>
+            </modules>
+        </profile>
+
+        <profile>
+            <id>BillingService</id>
+            <modules>
+                <module>Events</module>
+                <module>BillingService</module>
             </modules>
         </profile>
     </profiles>

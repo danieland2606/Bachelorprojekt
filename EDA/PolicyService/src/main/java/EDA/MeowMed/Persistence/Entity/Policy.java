@@ -26,6 +26,9 @@ public class Policy implements Serializable {
     @Column(name = "end_date", nullable = true)
     private LocalDate endDate;
 
+    @Column(name = "due_date", nullable = false)
+    private LocalDate dueDate;
+
     @Column(name = "coverage", nullable = false)
     private int coverage;
 
@@ -44,10 +47,11 @@ public class Policy implements Serializable {
     @JoinColumn(name = "customer_id")
     private Customer customer;
 
-    public Policy(long id, LocalDate startDate, LocalDate endDate, int coverage, int premium, boolean active, ObjectOfInsurance objectOfInsurance) {
+    public Policy(long id, LocalDate startDate, LocalDate endDate, LocalDate dueDate, int coverage, int premium, boolean active, ObjectOfInsurance objectOfInsurance) {
         this.id = id;
         this.startDate = startDate;
         this.endDate = endDate;
+        this.dueDate = dueDate;
         this.coverage = coverage;
         this.premium = premium;
         this.active = active;
@@ -58,6 +62,7 @@ public class Policy implements Serializable {
         this.id = p.getId();
         this.startDate = p.getStartDate();
         this.endDate = p.getEndDate();
+        this.dueDate = p.getDueDate();
         this.coverage = p.getCoverage();
         this.premium = p.getPremium();
         this.active = p.isActive();
@@ -133,11 +138,20 @@ public class Policy implements Serializable {
         this.customer = customer;
     }
 
+    public LocalDate getDueDate() {
+        return dueDate;
+    }
+
+    public void setDueDate(LocalDate dueDate) {
+        this.dueDate = dueDate;
+    }
+
     public PolicyPojo toPojo() {
         return new PolicyPojo(
                 id,
                 startDate,
                 endDate,
+                dueDate,
                 coverage,
                 premium,
                 objectOfInsurance.toPojo(),

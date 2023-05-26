@@ -91,6 +91,35 @@ services:
         #    - spring.jpa.database-platform=org.hibernate.dialect.MariaDBDialect
       - spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MariaDBDialect
 
+  billing:
+    build:
+      context: ./
+      dockerfile: ./BillingService/Dockerfile
+      args:
+        service: BillingService
+    container_name: billing-service
+    depends_on:
+      policydb:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_started
+    networks:
+      - "default"
+    ports:
+      - "83:8080"
+    environment:
+      - RABBIT_HOST=rabbitmq
+      - spring.datasource.url=jdbc:mariadb://billingdb:3306/Billing
+      - spring.datasource.username=user
+      - spring.datasource.password=123456789
+      - spring.rabbitmq.host=rabbitmq
+      - spring.datasource.username=root
+      - spring.datasource.password=test
+      - spring.datasource.driver-class-name=org.mariadb.jdbc.Driver
+      - server.port=8080
+      #    - spring.jpa.database-platform=org.hibernate.dialect.MariaDBDialect
+      - spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MariaDBDialect
+
   policydb:
     image: mariadb:latest
     container_name: policydb
@@ -111,6 +140,22 @@ services:
     volumes:
       - policydb_data:/var/lib/mysql
 
+  billingdb:
+    image: mariadb:latest
+    container_name: billingdb
+    command: --general-log=1
+    networks:
+      - "default"
+    environment:
+      MARIADB_ROOT_PASSWORD: test
+      MYSQL_DATABASE: Billing
+      MYSQL_USER: user
+      MYSQL_PASSWORD: 123456789
+    healthcheck:
+      test: "mariadb --user=root --password=$$MARIADB_ROOT_PASSWORD --execute \"SHOW DATABASES;\""
+      interval: 5s
+      timeout: 20s
+      retries: 10
 
 
   rabbitmq:

@@ -142,6 +142,11 @@ public class PolicyService {
             // All created Policies are active by default, policies that have invalid data will not be created in the first place
             policy.setActive(true);
 
+            // dueDate is startDate by default
+            if (policy.getDueDate() == null) { //TODO: validate IllegalArgumentException maybeeee?
+                policy.setDueDate(policy.getStartDate()); //TODO: Validiere, dass dueDate nicht in der Vergangenheit sein kann?
+            }
+
             policy.setPremium(this.getPremium(policy.getCustomer(), policy));
             System.out.println("Premium: " + policy.getPremium());
 
@@ -338,22 +343,11 @@ public class PolicyService {
         if (p.isEmpty()) {
             throw new ObjectNotFoundException("The given Policy with PolicyID: " + policyID + " does not exist in the database.");
         }
-        Policy oldPolicy = new Policy(p.get());
         Policy persistentPolicy = p.get();
         persistentPolicy.setCoverage(newPolicy.getCoverage());
         persistentPolicy.getObjectOfInsurance().setPersonality(newPolicy.getObjectOfInsurance().getPersonality());
-        Customer customer = persistentPolicy.getCustomer();
-        persistentPolicy.setPremium(this.getPremium(customer, persistentPolicy));
-        boolean premiumChanged = Math.abs(persistentPolicy.getPremium() - oldPolicy.getPremium()) > 0.0001;
-        if (persistentPolicy.getObjectOfInsurance().getPersonality().equals("sehr verspielt")) {
-            persistentPolicy.setActive(false);
-            this.policySender.sendPolicyCancelled(new PolicyChangedEvent(persistentPolicy.toPojo()));
-        } else if (premiumChanged) {
-            this.policySender.sendPolicyChanged(new PolicyChangedEvent(persistentPolicy.toPojo()));
-        }
-        policyRepository.save(persistentPolicy);
-        objectOfInsuranceRepository.save(persistentPolicy.getObjectOfInsurance());
-//        this.updatePolicyDataBasedOnNewInformation(persistentPolicy, cancelPolicy);
+        persistentPolicy.setDueDate(newPolicy.getDueDate()); //TODO: check if this should be possible //TODO: Validiere, dass dueDate nicht in der Vergangenheit sein kann?
+        this.updatePolicyDataBasedOnNewInformation(persistentPolicy, persistentPolicy.getObjectOfInsurance().getPersonality().equals("sehr verspielt"));
     }
 
     /**
@@ -375,7 +369,6 @@ public class PolicyService {
         customer.setEmploymentStatus(customerChangedEvent.getEmploymentStatus());
         this.addressRepository.save(customer.getAddress());
         this.customerRepository.save(customer);
-//        this.customerRepository.flush(); Speichert customer nicht
         this.updateAllPoliciesOfCustomer(customerChangedEvent.getCid(), customer.getEmploymentStatus().equals("arbeitslos"));
     }
 
@@ -406,7 +399,6 @@ public class PolicyService {
         newPolicy.setPremium(newPremium);
         if (cancelPolicy) {
             newPolicy.setActive(false);
-            //FIXME Art des Speicherns notwendig? Anders möglich?
             policyRepository.save(newPolicy);
             objectOfInsuranceRepository.save(newPolicy.getObjectOfInsurance());
             this.policySender.sendPolicyCancelled(new PolicyChangedEvent(newPolicy.toPojo()));
