@@ -2,11 +2,11 @@ package EDA.MeowMed.Logic;
 
 import EDA.MeowMed.Persistence.Entity.Bill;
 import EDA.MeowMed.Persistence.Entity.Customer;
-import events.customer.CustomerCreatedEvent;
+import event.objects.customer.CustomerCreatedEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import EDA.MeowMed.Persistence.*;
-import events.policy.subclasses.PolicyPojo;
+import event.objects.policy.subclasses.PolicyPojo;
 
 import java.util.List;
 import java.util.Optional;
