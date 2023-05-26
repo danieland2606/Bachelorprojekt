@@ -113,13 +113,13 @@ public class CustomerValidationService {
         } catch (NumberParseException e) {
             throw new IllegalArgumentException(customer.getPhoneNumber() + " is not a valid argument for phoneNumber!");
         }
-        if (PhoneNumberUtil.getInstance().isValidNumberForRegion(phoneNumber, "49")) {
+        if (!PhoneNumberUtil.getInstance().isValidNumberForRegion(phoneNumber, "DE")) {
             throw new IllegalArgumentException(customer.getPhoneNumber() + " is not a valid argument for phoneNumber!");
         }
     }
 
     private void checkEmail(Customer customer) throws IllegalArgumentException {
-        if (EmailValidator.getInstance().isValid(customer.getEmail())) {
+        if (!EmailValidator.getInstance().isValid(customer.getEmail())) {
             throw new IllegalArgumentException(customer.getEmail() + " is not a valid argument for email!");
         }
     }
