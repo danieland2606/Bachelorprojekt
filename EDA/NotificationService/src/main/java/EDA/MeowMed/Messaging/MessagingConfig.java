@@ -38,11 +38,6 @@ public class MessagingConfig {
         }
 
         @Bean
-        public Queue customerCancelledQueue() {
-            return new Queue("customercancelled");
-        }
-
-        @Bean
         public Queue policyCreatedQueue() {
             return new Queue("policycreated");
         }
@@ -73,11 +68,6 @@ public class MessagingConfig {
         @Bean
         public Binding customerChangedBinding(TopicExchange topic, Queue customerChangedQueue) {
             return BindingBuilder.bind(customerChangedQueue()).to(topic).with(Keys.CUSTOMER_CHANGED_KEY);
-        }
-
-        @Bean
-        public Binding cutomerCancelledBinding(TopicExchange topic, Queue customerChangedQueue) {
-            return BindingBuilder.bind(customerCancelledQueue()).to(topic).with(Keys.CUSTOMER_CHANGED_CANCELLED_KEY);
         }
 
         @Bean

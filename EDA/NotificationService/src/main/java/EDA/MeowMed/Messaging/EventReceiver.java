@@ -28,12 +28,6 @@ public class EventReceiver {
         notificationService.sendCustomerChangedMail(customerChangedEvent);
     }
 
-    @RabbitListener(queues = "#{customerCancelledQueue.name}")
-    public void receiveCustomerCancelled(CustomerChangedEvent customerChangedEvent) throws InterruptedException {
-        System.out.println("Received cancel Customer Event");
-        notificationService.sendCustomerCancelledMail(customerChangedEvent);
-    }
-
     @RabbitListener(queues = "#{policyCreatedQueue.name}")
     public void receivePolicy(PolicyCreatedEvent policyCreatedEvent) throws InterruptedException {
         System.out.println("Received newly created Policy");

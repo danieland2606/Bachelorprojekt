@@ -45,14 +45,7 @@ public class EventSenderService {
     public boolean sendCustomerChangedEvent(Customer customer) {
         try {
             CustomerChangedEvent customerChangedEvent = customer.createCustomerChangedEvent();
-            String routing_key;
-            if (customer.getEmploymentStatus().equals(CustomerValidationService.cancelStateEmploymentStatus)) { //todo: This needs to go
-                routing_key = Keys.CUSTOMER_CHANGED_CANCELLED_KEY;
-            } else {
-                routing_key = Keys.CUSTOMER_CHANGED_KEY;
-            }
-
-            template.convertAndSend(topicExchange.getName(), routing_key,customerChangedEvent);
+            template.convertAndSend(topicExchange.getName(), Keys.CUSTOMER_CHANGED_KEY,customerChangedEvent);
             System.out.println(" [x] Sent");
         } catch (Exception e) {
             System.out.println("Fehler beim Senden");
