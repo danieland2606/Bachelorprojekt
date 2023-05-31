@@ -46,19 +46,6 @@ public class NotificationService {
         ));
     }
 
-    /**
-     *
-     */
-    public void sendCustomerCancelledMail(CustomerChangedEvent customerChanged) {
-        this.sendEmail(emailFactory.buildEmail(
-                customerChanged.getEmail(),
-                sender,
-                "Kündigung Ihres Vertrags bei MeowMed",
-                "customercancellednotification",
-                customerChanged
-        ));
-    }
-
 
     /**
      *
