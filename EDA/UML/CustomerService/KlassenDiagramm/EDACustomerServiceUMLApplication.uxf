@@ -4,24 +4,25 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>252</x>
-      <y>468</y>
-      <w>360</w>
-      <h>108</h>
+      <x>192</x>
+      <y>420</y>
+      <w>456</w>
+      <h>120</h>
     </coordinates>
     <panel_attributes>CustomerService
 --
 --
 + getCustomer(id: Long): String
-+ getCustomerList(id: Long): String
-+ addCustomer(customer: Customer): String</panel_attributes>
++ getCustomerList(fields: String): String
++ addCustomer(jsonCustomer: String): String
++ replaceCustomer(id: Long, jsonCustomer: String): String</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>852</x>
-      <y>468</y>
+      <x>864</x>
+      <y>360</y>
       <w>480</w>
       <h>120</h>
     </coordinates>
@@ -30,30 +31,28 @@
 - template: RabbitTemplate
 - direct: DirectExchange
 --
-- sendEvent(message: String)
-+ sendCustomerCreatedEvent(customer: Customer): boolean</panel_attributes>
++ sendCustomerCreatedEvent(customer: Customer): boolean
++ sendCustomerChangedEvent(customer: Customer): boolean</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>984</x>
-      <y>324</y>
-      <w>204</w>
-      <h>84</h>
+      <x>1020</x>
+      <y>252</y>
+      <w>180</w>
+      <h>48</h>
     </coordinates>
     <panel_attributes>MessagingConfig
 --
---
-+ direct(): DirectExchange
-+ sender(): EventSender</panel_attributes>
+--</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>348</x>
-      <y>324</y>
+      <x>336</x>
+      <y>276</y>
       <w>168</w>
       <h>36</h>
     </coordinates>
@@ -64,21 +63,21 @@ fg=gray</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>600</x>
-      <y>492</y>
-      <w>276</w>
+      <x>636</x>
+      <y>420</y>
+      <w>252</w>
       <h>60</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 r2=1
 m2=eventSenderService</panel_attributes>
-    <additional_attributes>10.0;20.0;210.0;20.0</additional_attributes>
+    <additional_attributes>10.0;20.0;190.0;20.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1080</x>
-      <y>396</y>
+      <x>1092</x>
+      <y>288</y>
       <w>36</w>
       <h>96</h>
     </coordinates>
@@ -88,8 +87,8 @@ m2=eventSenderService</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>420</x>
-      <y>348</y>
+      <x>408</x>
+      <y>300</y>
       <w>36</w>
       <h>144</h>
     </coordinates>
@@ -100,8 +99,8 @@ fg=gray</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>348</x>
-      <y>720</y>
+      <x>336</x>
+      <y>672</y>
       <w>168</w>
       <h>48</h>
     </coordinates>
@@ -113,14 +112,56 @@ fg=gray</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>420</x>
-      <y>564</y>
+      <x>408</x>
+      <y>528</y>
       <w>180</w>
-      <h>180</h>
+      <h>168</h>
     </coordinates>
     <panel_attributes>lt=-&gt;
 r2=1
 m2=customerRepository</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;130.0</additional_attributes>
+    <additional_attributes>10.0;10.0;10.0;120.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>924</x>
+      <y>492</y>
+      <w>372</w>
+      <h>348</h>
+    </coordinates>
+    <panel_attributes>CustomerValidationService
+--
++ cancelStateEmploymentStatus: String
+- formOfAddress: String[]
+- title: String[]
+- maritalStatus: String[]
+- employmentStatus: String[]
+--
++ validateCustomer(customer: Customer)
+- checkFormOfAddress(customer: Customer)
+- checkTitle(customer: Customer)
+- checkMaritalStatus(customer: Customer)
+- checkDateOfBirth(customer: Customer)
+- checkEmploymentStatus(customer: Customer)
+- checkDogOwner(customer: Customer)
+- checkAddress(customer: Customer)
+- checkBankDetails(customer: Customer)
+- checkPhoneNumber(customer: Customer)
+- checkEmail(customer: Customer)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>636</x>
+      <y>492</y>
+      <w>312</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;
+r2=1
+m2=customerValidationService</panel_attributes>
+    <additional_attributes>10.0;20.0;240.0;20.0</additional_attributes>
   </element>
 </diagram>

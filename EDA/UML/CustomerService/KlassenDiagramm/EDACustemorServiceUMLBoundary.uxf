@@ -4,17 +4,18 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>540</x>
+      <x>380</x>
       <y>410</y>
-      <w>290</w>
-      <h>90</h>
+      <w>450</w>
+      <h>100</h>
     </coordinates>
     <panel_attributes>CustomerController
 --
 --
-+ getCustomerList(): String
-+ getCustomer(c_id: Long): String
-+ postCustomer(customer: Customer): String</panel_attributes>
++ getCustomerList(): ResponseEntity&lt;String&gt;
++ getCustomer(c_id: Long): ResponseEntity&lt;String&gt;
++ postCustomer(customer: String): ResponseEntity&lt;String&gt;
++ putCustomer(customer: String ,c_id: Long): ResponseEntity&lt;String&gt;</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
