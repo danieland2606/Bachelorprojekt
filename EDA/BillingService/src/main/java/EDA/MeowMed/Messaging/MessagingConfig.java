@@ -23,17 +23,17 @@ public class MessagingConfig {
 
     @Bean(name = "CustomerCreatedQueue")
     public Queue CustomerCreatedQueue() {
-        return new AnonymousQueue();
+        return new Queue("customercreated");
     }
 
     @Bean(name = "PolicyCreatedQueue")
     public Queue PolicyCreatedQueue() {
-        return new AnonymousQueue();
+        return new Queue("policycreated");
     }
 
     @Bean(name = "PolicyChangedQueue")
     public Queue PolicyChangedQueue() {
-        return new AnonymousQueue();
+        return new Queue("policychanged");
     }
 
     @Bean
