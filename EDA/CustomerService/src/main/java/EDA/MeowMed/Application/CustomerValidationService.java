@@ -17,7 +17,7 @@ import java.util.Arrays;
 
 @Service
 public class CustomerValidationService {
-    public static final String cancelStateEmploymentStatus = "arbeitslos";
+    public final String cancelStateEmploymentStatus = "arbeitslos";
     private final String[] formOfAddress = {
             "herr", "frau"
     };
@@ -123,6 +123,4 @@ public class CustomerValidationService {
             throw new IllegalArgumentException(customer.getEmail() + " is not a valid argument for email!");
         }
     }
-
-
 }
