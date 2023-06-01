@@ -83,7 +83,6 @@ services:
     environment:
       - MEOWMED_CUSTOMER_SERVER=http://customer.eda:8080
       - MEOWMED_POLICY_SERVER=http://policy.eda:8080
-      - MEOWMED_INVOICE_SERVER=http://billing.eda:8080
     ports:
       - "80:8000"
     depends_on:
@@ -133,24 +132,6 @@ services:
     depends_on:
       rabbitmq:
         condition: service_started
-  billing.eda:
-    image: meowmed-billing.eda
-    profiles:
-      - eda
-    depends_on:
-      billingdb.eda:
-        condition: service_healthy
-      rabbitmq:
-        condition: service_started
-    environment:
-      - server.port=8080
-      - RABBIT_HOST=rabbitmq
-      - spring.rabbitmq.host=rabbitmq
-      - spring.datasource.username=root
-      - spring.datasource.password=test
-      - spring.datasource.driver-class-name=org.mariadb.jdbc.Driver
-      - spring.datasource.url=jdbc:mariadb://billingdb.eda:3306/Billing
-      - spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MariaDBDialect
   customerdb.eda:
     image: mariadb:latest
     profiles:
@@ -173,17 +154,6 @@ services:
       <<: *dbhealthcheck
     volumes:
       - policydb_data_eda:/var/lib/mysql
-  billingdb.eda:
-    image: mariadb:latest
-    profiles:
-      - eda
-    environment:
-      <<: *dbcredentials
-      MYSQL_DATABASE: Billing
-    healthcheck:
-      <<: *dbhealthcheck
-    volumes:
-      - billingdb_data_eda:/var/lib/mysql
   rabbitmq:
     image: rabbitmq:management-alpine
     profiles:
@@ -192,6 +162,5 @@ services:
 volumes:
   customerdb_data_eda:
   policydb_data_eda:
-  billingdb_data_eda:
   customerdb_data_rda:
   policydb_data_rda:

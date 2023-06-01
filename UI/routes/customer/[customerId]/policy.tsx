@@ -1,5 +1,5 @@
 import { HandlerContext, PageProps } from "$fresh/server.ts";
-import { policyClient } from "$this/common/client.ts";
+import { policyClient } from "$this/common/policyClient.ts";
 import { EditPolicy } from "$this/components/EditPolicy.tsx";
 import { ButtonRow } from "$this/components/ButtonRow.tsx";
 import PremiumCalculator from "$this/islands/PremiumCalculator.tsx";

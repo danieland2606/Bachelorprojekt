@@ -46,9 +46,3 @@ services:
       dockerfile: ./NotificationService/Dockerfile
       args:
         service: NotificationService
-  billing.eda:
-    build:
-      context: ./EDA
-      dockerfile: ./BillingService/Dockerfile
-      args:
-        service: BillingService

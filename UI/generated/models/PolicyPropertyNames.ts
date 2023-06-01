@@ -12,5 +12,5 @@
 
 import { HttpFile } from '../http/http.ts';
 
-export const PolicyPropertyNamesValues =[ "startDate" , "endDate" , "dueDate" , "coverage" , "premium" , "active" , "objectOfInsurance" , "objectOfInsurance.name" , "objectOfInsurance.race" , "objectOfInsurance.color" , "objectOfInsurance.dateOfBirth" , "objectOfInsurance.castrated" , "objectOfInsurance.personality" , "objectOfInsurance.environment" , "objectOfInsurance.weight" ] as const;
+export const PolicyPropertyNamesValues =[ "startDate" , "endDate" , "coverage" , "premium" , "active" , "objectOfInsurance" , "objectOfInsurance.name" , "objectOfInsurance.race" , "objectOfInsurance.color" , "objectOfInsurance.dateOfBirth" , "objectOfInsurance.castrated" , "objectOfInsurance.personality" , "objectOfInsurance.environment" , "objectOfInsurance.weight" ] as const;
 export type PolicyPropertyNames = typeof PolicyPropertyNamesValues[number];

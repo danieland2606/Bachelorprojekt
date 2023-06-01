@@ -17,7 +17,6 @@ export class GetPolicyList200ResponseInner {
     'id': number;
     'startDate'?: string;
     'endDate'?: string;
-    'dueDate'?: string;
     'coverage'?: number;
     'premium'?: number;
     'active'?: boolean;
@@ -41,12 +40,6 @@ export class GetPolicyList200ResponseInner {
         {
             "name": "endDate",
             "baseName": "endDate",
-            "type": "string",
-            "format": "date"
-        },
-        {
-            "name": "dueDate",
-            "baseName": "dueDate",
             "type": "string",
             "format": "date"
         },

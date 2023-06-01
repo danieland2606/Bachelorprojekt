@@ -1,10 +1,8 @@
-import { resolve } from "$this/common/util.ts";
+import { Obj, resolve } from "$this/common/util.ts";
 import {
   CustomerAllRequired,
   PolicyAllRequired,
 } from "$this/generated/index.ts";
-
-type Obj = Record<string, unknown>;
 
 function convert(val: string, type: string) {
   switch (type) {
@@ -41,30 +39,14 @@ function nestProperty(target: Obj, [key, val]: [string, string]) {
   if (type === "undefined" || isFiltered(last)) {
     return target;
   }
-  keys.reduce(setIfNotDef, target)[last] = convert(val, type);
+  keys.reduce(
+    (prev, cur) => (prev[cur] ??= {}) as Obj,
+    target,
+  )[last] = convert(val, type);
   return target;
 }
 
-function setIfNotDef(obj: Obj, key: string) {
-  if (!canSet(key, obj)) {
-    throw new Error(
-      `Cannot set property ${key}. Not in prototype chain or not an object:\n${
-        JSON.stringify(obj)
-      }`,
-    );
-  }
-  return (obj[key] ??= {}) as Obj;
-}
-
-function canSet(key: string, obj: Obj) {
-  if (key in obj) {
-    const val = obj[key];
-    return typeof val === "object" || typeof val === "undefined";
-  }
-  return false;
-}
-
 function isFiltered(key: string) {
-  const filtered = ["premium", "active", "id", "customerId"]; //readonly or used internally
+  const filtered = ["premium", "active", "id", "customerId"];
   return filtered.includes(key);
 }

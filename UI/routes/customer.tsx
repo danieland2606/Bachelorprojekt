@@ -1,7 +1,7 @@
 import { HandlerContext } from "$fresh/server.ts";
 import { EditCustomer } from "$this/components/EditCustomer.tsx";
 import { ButtonRow } from "$this/components/ButtonRow.tsx";
-import { customerClient } from "$this/common/client.ts";
+import { customerClient } from "$this/common/customerClient.ts";
 import { deserializeCustomerFull } from "$this/common/deserialize.ts";
 import { redirect } from "$this/common/util.ts";
 

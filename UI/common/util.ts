@@ -7,6 +7,11 @@ export function compareId({ id: id1 = 0 }, { id: id2 = 0 }) {
   return id1 - id2;
 }
 
+export type primitiveNonNull = string | number | boolean | symbol | bigint;
+export type primitive = primitiveNonNull | undefined | null;
+export type Rec<T> = Record<string, primitive | T>;
+// deno-lint-ignore no-empty-interface
+export interface Obj extends Rec<Obj> {}
 //https://stackoverflow.com/questions/4244896/accessing-an-object-property-with-a-dynamically-computed-name
 export function resolve(path: string, obj?: object) {
   return path
@@ -29,9 +34,16 @@ export function index(obj: object, key: string) {
 
 export function propMap<T extends object>(object: T, prefix = "") {
   const props = Object.entries(object)
-    .map(([key]) => [key, `${prefix}${key}`]);
+    .map(([key, _]) => [key, `${prefix}${key}`]);
   const propMap = Object.fromEntries(props);
   return propMap as Record<keyof T, string>;
+}
+
+export function voidToEmpty<T>(arg: T[] | void) { //typescript sucks
+  if (typeof arg === "undefined") {
+    return [] as T[];
+  }
+  return arg;
 }
 
 export function redirect(address: string) {

@@ -17,7 +17,6 @@ export class Policy {
     'id'?: number;
     'startDate'?: string;
     'endDate'?: string;
-    'dueDate'?: string;
     'coverage'?: number;
     'premium'?: number;
     'active'?: boolean;
@@ -41,12 +40,6 @@ export class Policy {
         {
             "name": "endDate",
             "baseName": "endDate",
-            "type": "string",
-            "format": "date"
-        },
-        {
-            "name": "dueDate",
-            "baseName": "dueDate",
             "type": "string",
             "format": "date"
         },

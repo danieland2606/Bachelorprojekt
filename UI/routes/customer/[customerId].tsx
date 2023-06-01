@@ -6,7 +6,8 @@ import { ButtonRow } from "$this/components/ButtonRow.tsx";
 import { compareId, redirect } from "$this/common/util.ts";
 import { PolicyShort } from "$this/common/types.ts";
 import { deserializeCustomerFull } from "$this/common/deserialize.ts";
-import { customerClient, policyClient } from "$this/common/client.ts";
+import { customerClient } from "$this/common/customerClient.ts";
+import { policyClient } from "$this/common/policyClient.ts";
 import {
   CustomerAllRequired,
   EmploymentStatus,
@@ -19,8 +20,13 @@ export const handler = {
     const search = queryParams.get("search") ?? "";
     const customerId = Number.parseInt(ctx.params.customerId);
     const policyList = await policyClient.getPolicyList(customerId);
+    const [tableData, altData] = formatPolicyList(
+      policyList,
+      customerId,
+      search,
+    );
     const customer = await customerClient.getCustomer(customerId);
-    return ctx.render({ policyList, customer, edit, search });
+    return ctx.render({ tableData, altData, customer, edit, search });
   },
   async POST(req: Request, ctx: HandlerContext) {
     const customerId = Number.parseInt(ctx.params.customerId);
@@ -32,9 +38,7 @@ export const handler = {
 };
 
 export default function ShowCustomer({ data, params }: PageProps) {
-  const { edit, search, customer, policyList } = data;
-  const customerId = Number.parseInt(params.customerId);
-  const [tableData, altData] = formatPolicyList(policyList, customerId, search);
+  const { edit, search, customer, tableData, altData } = data;
   const employmentStatus = (customer as CustomerAllRequired).employmentStatus;
   const id = "edit-customer";
   return (

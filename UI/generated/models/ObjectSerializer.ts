@@ -13,7 +13,6 @@ export * from '../models/FurColor.ts';
 export * from '../models/GetCustomerList200ResponseInner.ts';
 export * from '../models/GetPolicyList200ResponseInner.ts';
 export * from '../models/ID.ts';
-export * from '../models/Invoice.ts';
 export * from '../models/MaritalStatus.ts';
 export * from '../models/ModelError.ts';
 export * from '../models/ObjectOfInsurance.ts';
@@ -41,7 +40,6 @@ import { FurColor } from '../models/FurColor.ts';
 import { GetCustomerList200ResponseInner              } from '../models/GetCustomerList200ResponseInner.ts';
 import { GetPolicyList200ResponseInner } from '../models/GetPolicyList200ResponseInner.ts';
 import { ID } from '../models/ID.ts';
-import { Invoice } from '../models/Invoice.ts';
 import { MaritalStatus } from '../models/MaritalStatus.ts';
 import { ModelError } from '../models/ModelError.ts';
 import { ObjectOfInsurance         } from '../models/ObjectOfInsurance.ts';
@@ -96,7 +94,6 @@ let typeMap: {[index: string]: any} = {
     "GetCustomerList200ResponseInner": GetCustomerList200ResponseInner,
     "GetPolicyList200ResponseInner": GetPolicyList200ResponseInner,
     "ID": ID,
-    "Invoice": Invoice,
     "ModelError": ModelError,
     "ObjectOfInsurance": ObjectOfInsurance,
     "Policy": Policy,

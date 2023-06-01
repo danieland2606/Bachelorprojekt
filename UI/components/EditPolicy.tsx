@@ -1,7 +1,13 @@
 import { JSX } from "preact/jsx-runtime";
 import { Input, Select } from "$this/components/Input.tsx";
 import { Form } from "$this/components/Form.tsx";
-import { editMode, Mode, propMap, toISODateString } from "$this/common/util.ts";
+import {
+  editMode,
+  Mode,
+  Obj,
+  propMap,
+  toISODateString,
+} from "$this/common/util.ts";
 import {
   CatRaceValues,
   EnvironmentValues,
@@ -14,7 +20,7 @@ import {
 export interface EditPolicyProps extends JSX.HTMLAttributes<HTMLFormElement> {
   mode?: Mode;
   allrequired?: boolean;
-  values?: Record<string, unknown>;
+  values?: Obj;
   customerId?: string;
 }
 
@@ -45,12 +51,7 @@ export function EditPolicy(props: EditPolicyProps) {
         type="date"
         min={nextYear}
       />
-      <Input
-        name={policy.dueDate}
-        labeltext="Fälligkeit"
-        type="date"
-        min={today}
-      />
+      {/*<Input name={policy.dueDate} labeltext="Fälligkeit" type="date" min={today} />*/}
       <Input
         name={policy.coverage}
         labeltext="Jährliche Deckung"
@@ -110,7 +111,7 @@ export function EditPolicy(props: EditPolicyProps) {
         labeltext="Gewicht"
         type="number"
         min="0"
-        step="0.01"
+        step="0.1"
         unit="kg"
       />
       {props.children}

@@ -4,7 +4,7 @@ import { SearchBar } from "$this/components/SearchBar.tsx";
 import { Address } from "$this/generated/models/all.ts";
 import { compareId } from "$this/common/util.ts";
 import { CustomerShort } from "$this/common/types.ts";
-import { customerClient } from "$this/common/client.ts";
+import { customerClient } from "$this/common/customerClient.ts";
 
 export const handler = {
   async GET(req: Request, ctx: HandlerContext) {
@@ -34,9 +34,13 @@ export default function Dashboard({ data }: PageProps) {
 function formatCustomerList(customerList: CustomerShort[], search: string) {
   const headers = ["ID", "Vorname", "Nachname", "Adresse"];
   const altHeaders = ["Name", "Stadt"];
-  const displayed = customerList.filter(itemSearch(search)).sort(compareId);
-  const items = displayed.map(customerToTableItem);
-  const altItems = displayed.map(customerToAltItem);
+  const displayed = customerList
+    .filter(itemSearch(search))
+    .sort(compareId);
+  const items = displayed
+    .map(customerToTableItem);
+  const altItems = displayed
+    .map(customerToAltItem);
   return [{ headers, items }, { headers: altHeaders, items: altItems }];
 }
 
