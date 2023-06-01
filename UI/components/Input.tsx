@@ -37,7 +37,9 @@ export function Select(props: SelectProps) {
         id={name}
         class={"select select-bordered w-full max-w-full" + clss}
       >
-        <option value=""></option>
+        {!options?.includes("none") &&
+          <option value="">
+          </option> /*properly fixing this would require making title optional*/}
         {subProps.children ??
           options?.map((option) => (
             <option value={option}>{pretty(option)}</option>
@@ -104,12 +106,13 @@ function type(props: InputProps) {
 }
 
 function pretty(val: string) {
-  if (val === "none") {
+  if (val === "none") { //properly fixing this would require making title optional
     return "";
   }
-  const pretty = val.replaceAll("-", " ").replaceAll("ae", "ä").replaceAll(
-    "oe",
-    "ö",
-  ).replaceAll("ue", "ü");
+  const pretty = val
+    .replaceAll("-", " ")
+    .replaceAll("ae", "ä")
+    .replaceAll("oe", "ö")
+    .replaceAll("ue", "ü");
   return capitalize(pretty);
 }

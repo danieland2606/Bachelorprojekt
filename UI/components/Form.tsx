@@ -1,5 +1,5 @@
 import { JSX } from "preact/jsx-runtime";
-import { Obj, resolve } from "$this/common/util.ts";
+import { resolve } from "$this/common/util.ts";
 import {
   cloneElement,
   Component,
@@ -17,7 +17,7 @@ type Child = Component | VNode | managed;
 interface Data {
   editable?: string[];
   allrequired?: boolean;
-  values?: Obj;
+  values?: Record<string, unknown>;
 }
 
 const managedTags = ["SELECT", "INPUT", "TEXTAREA"];
@@ -84,7 +84,7 @@ function configManagedElement(element: managed, data: Data) {
   return cloneElement(element, props);
 }
 
-function getSafely(property: string, data?: Obj) {
+function getSafely(property: string, data?: Record<string, unknown>) {
   try {
     return String(resolve(property, data));
   } catch (error) {

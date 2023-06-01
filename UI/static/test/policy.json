@@ -1,6 +1,7 @@
 {
   "startDate": "1990-01-01",
   "endDate": "2030-12-31",
+  "dueDate": "1990-02-01",
   "coverage": 50000,
   "premium": 75,
   "active": true,

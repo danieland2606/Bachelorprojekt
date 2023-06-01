@@ -16,6 +16,7 @@ import { FurColor } from '../models/FurColor.ts';
 import { GetCustomerList200ResponseInner } from '../models/GetCustomerList200ResponseInner.ts';
 import { GetPolicyList200ResponseInner } from '../models/GetPolicyList200ResponseInner.ts';
 import { ID } from '../models/ID.ts';
+import { Invoice } from '../models/Invoice.ts';
 import { MaritalStatus } from '../models/MaritalStatus.ts';
 import { ModelError } from '../models/ModelError.ts';
 import { ObjectOfInsurance } from '../models/ObjectOfInsurance.ts';
@@ -110,6 +111,41 @@ export class ObjectCustomerApi {
      */
     public updateCustomer(param: CustomerApiUpdateCustomerRequest, options?: Configuration): Promise<void> {
         return this.api.updateCustomer(param.customerId, param.customerAllRequired,  options).toPromise();
+    }
+
+}
+
+import { ObservableInvoiceApi } from "./ObservableAPI.ts";
+import { InvoiceApiRequestFactory, InvoiceApiResponseProcessor} from "../apis/InvoiceApi.ts";
+
+export interface InvoiceApiGetInvoiceListRequest {
+    /**
+     * 
+     * @type number
+     * @memberof InvoiceApigetInvoiceList
+     */
+    customerId: number
+    /**
+     * 
+     * @type number
+     * @memberof InvoiceApigetInvoiceList
+     */
+    policyId: number
+}
+
+export class ObjectInvoiceApi {
+    private api: ObservableInvoiceApi
+
+    public constructor(configuration: Configuration, requestFactory?: InvoiceApiRequestFactory, responseProcessor?: InvoiceApiResponseProcessor) {
+        this.api = new ObservableInvoiceApi(configuration, requestFactory, responseProcessor);
+    }
+
+    /**
+     * returns all invoices belonging to selected policy
+     * @param param the request object
+     */
+    public getInvoiceList(param: InvoiceApiGetInvoiceListRequest, options?: Configuration): Promise<void | Array<Invoice>> {
+        return this.api.getInvoiceList(param.customerId, param.policyId,  options).toPromise();
     }
 
 }
