@@ -34,13 +34,9 @@ export default function Dashboard({ data }: PageProps) {
 function formatCustomerList(customerList: CustomerShort[], search: string) {
   const headers = ["ID", "Vorname", "Nachname", "Adresse"];
   const altHeaders = ["Name", "Stadt"];
-  const displayed = customerList
-    .filter(itemSearch(search))
-    .sort(compareId);
-  const items = displayed
-    .map(customerToTableItem);
-  const altItems = displayed
-    .map(customerToAltItem);
+  const displayed = customerList.filter(itemSearch(search)).sort(compareId);
+  const items = displayed.map(customerToTableItem);
+  const altItems = displayed.map(customerToAltItem);
   return [{ headers, items }, { headers: altHeaders, items: altItems }];
 }
 

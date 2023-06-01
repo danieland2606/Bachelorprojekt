@@ -21,21 +21,21 @@ export class CustomerClient {
   #api = configApi(CustomerApi, "MEOWMED_CUSTOMER_SERVER");
 
   getCustomerList() {
-    this.#api.getCustomerList(CustomerClient.required)
+    return this.#api.getCustomerList(CustomerClient.required)
       .then(voidToEmpty)
       .then(processCustomerResponse);
   }
 
   getCustomer(id: number) {
-    this.#api.getCustomer(id);
+    return this.#api.getCustomer(id);
   }
 
   createCustomer(customer: CustomerAllRequired) {
-    this.#api.createCustomer(customer);
+    return this.#api.createCustomer(customer);
   }
 
   updateCustomer(customerId: number, customer: CustomerAllRequired) {
-    this.#api.updateCustomer(customerId, customer);
+    return this.#api.updateCustomer(customerId, customer);
   }
 }
 
@@ -44,29 +44,25 @@ export class PolicyClient {
   #api = configApi(PolicyApi, "MEOWMED_POLICY_SERVER");
 
   getPolicyList(customerId: number) {
-    this.#api.getPolicyList(customerId, PolicyClient.required)
+    return this.#api.getPolicyList(customerId, PolicyClient.required)
       .then(voidToEmpty)
       .then(processPolicyResponse);
   }
 
   getPolicy(customerId: number, policyId: number) {
-    this.#api.getPolicy(customerId, policyId);
+    return this.#api.getPolicy(customerId, policyId);
   }
 
   createPolicy(customerId: number, policy: PolicyAllRequired) {
-    this.#api.createPolicy(customerId, policy);
+    return this.#api.createPolicy(customerId, policy);
   }
 
-  updatePolicy(
-    customerId: number,
-    policyId: number,
-    policy: PolicyAllRequired,
-  ) {
-    this.#api.updatePolicy(customerId, policyId, policy);
+  updatePolicy(cId: number, pId: number, policy: PolicyAllRequired) {
+    return this.#api.updatePolicy(cId, pId, policy);
   }
 
   calcPolicyPrice(calc: PolicyCalc) {
-    this.#api.calcPolicyPrice(calc);
+    return this.#api.calcPolicyPrice(calc);
   }
 }
 
@@ -107,8 +103,8 @@ function policyRequired() {
   ]);
 }
 
-function voidToEmpty<T>(arg: T[] | void) { //typescript sucks
-  if (typeof arg === "undefined") {
+function voidToEmpty<T>(arg: T[] | void) {
+  if (arg == null) {
     return [] as T[];
   }
   return arg;
