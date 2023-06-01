@@ -4,7 +4,7 @@ import { SearchBar } from "$this/components/SearchBar.tsx";
 import { Address } from "$this/generated/models/all.ts";
 import { compareId } from "$this/common/util.ts";
 import { CustomerShort } from "$this/common/types.ts";
-import { customerClient } from "$this/common/customerClient.ts";
+import { customerClient } from "$this/common/client.ts";
 
 export const handler = {
   async GET(req: Request, ctx: HandlerContext) {

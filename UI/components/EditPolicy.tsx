@@ -1,13 +1,7 @@
 import { JSX } from "preact/jsx-runtime";
 import { Input, Select } from "$this/components/Input.tsx";
 import { Form } from "$this/components/Form.tsx";
-import {
-  editMode,
-  Mode,
-  Obj,
-  propMap,
-  toISODateString,
-} from "$this/common/util.ts";
+import { editMode, Mode, propMap, toISODateString } from "$this/common/util.ts";
 import {
   CatRaceValues,
   EnvironmentValues,
@@ -20,7 +14,7 @@ import {
 export interface EditPolicyProps extends JSX.HTMLAttributes<HTMLFormElement> {
   mode?: Mode;
   allrequired?: boolean;
-  values?: Obj;
+  values?: Record<string, unknown>;
   customerId?: string;
 }
 

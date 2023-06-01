@@ -16,6 +16,7 @@ import { FurColor } from '../models/FurColor.ts';
 import { GetCustomerList200ResponseInner } from '../models/GetCustomerList200ResponseInner.ts';
 import { GetPolicyList200ResponseInner } from '../models/GetPolicyList200ResponseInner.ts';
 import { ID } from '../models/ID.ts';
+import { Invoice } from '../models/Invoice.ts';
 import { MaritalStatus } from '../models/MaritalStatus.ts';
 import { ModelError } from '../models/ModelError.ts';
 import { ObjectOfInsurance } from '../models/ObjectOfInsurance.ts';
@@ -75,6 +76,35 @@ export class PromiseCustomerApi {
      */
     public updateCustomer(customerId: number, customerAllRequired: CustomerAllRequired, _options?: Configuration): Promise<void> {
         const result = this.api.updateCustomer(customerId, customerAllRequired, _options);
+        return result.toPromise();
+    }
+
+
+}
+
+
+
+import { ObservableInvoiceApi } from './ObservableAPI.ts';
+
+import { InvoiceApiRequestFactory, InvoiceApiResponseProcessor} from "../apis/InvoiceApi.ts";
+export class PromiseInvoiceApi {
+    private api: ObservableInvoiceApi
+
+    public constructor(
+        configuration: Configuration,
+        requestFactory?: InvoiceApiRequestFactory,
+        responseProcessor?: InvoiceApiResponseProcessor
+    ) {
+        this.api = new ObservableInvoiceApi(configuration, requestFactory, responseProcessor);
+    }
+
+    /**
+     * returns all invoices belonging to selected policy
+     * @param customerId 
+     * @param policyId 
+     */
+    public getInvoiceList(customerId: number, policyId: number, _options?: Configuration): Promise<void | Array<Invoice>> {
+        const result = this.api.getInvoiceList(customerId, policyId, _options);
         return result.toPromise();
     }
 

@@ -1,7 +1,7 @@
 import { HandlerContext } from "$fresh/server.ts";
 import { asset } from "$fresh/runtime.ts";
 import { deserializePolicyFull } from "$this/common/deserialize.ts";
-import { policyClient } from "$this/common/policyClient.ts";
+import { policyClient } from "$this/common/client.ts";
 import { PolicyCalc } from "$this/generated/index.ts";
 
 export const handler = {

@@ -1,8 +1,10 @@
 .gitignore
 .openapi-generator-ignore
 CustomerApi.md
+InvoiceApi.md
 PolicyApi.md
 apis/CustomerApi.ts
+apis/InvoiceApi.ts
 apis/PolicyApi.ts
 apis/baseapi.ts
 apis/exception.ts
@@ -28,6 +30,7 @@ models/FurColor.ts
 models/GetCustomerList200ResponseInner.ts
 models/GetPolicyList200ResponseInner.ts
 models/ID.ts
+models/Invoice.ts
 models/MaritalStatus.ts
 models/ModelError.ts
 models/ObjectOfInsurance.ts

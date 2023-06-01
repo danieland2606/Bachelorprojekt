@@ -1,4 +1,4 @@
-FROM denoland/deno:alpine-1.33.0 AS test
+FROM denoland/deno:alpine-1.34.1 AS test
 WORKDIR /app
 COPY ./components ./components
 COPY ./generated ./generated
@@ -7,11 +7,10 @@ COPY ./routes ./routes
 COPY ./static ./static
 COPY ./common ./common
 COPY ./main.ts ./fresh.gen.ts ./import_map.json ./deno.json ./
-ENV DENO_DEPLOYMENT_ID=6f2dbbd9b39d46cce4ffdd74d6cc6cecb44ddfaf
+ENV DENO_DEPLOYMENT_ID=2cc7e65bceab82a223b4a8555a874adb6afc1bf8
 EXPOSE 8000
 CMD ["run", "-A", "main.ts"]
 
 FROM test AS prod
-RUN mv ./common/customerClient_prod.ts ./common/customerClient.ts
-RUN mv ./common/policyClient_prod.ts ./common/policyClient.ts
+RUN mv ./common/client_prod.ts ./common/client.ts
 RUN rm -rf ./static/test

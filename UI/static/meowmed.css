@@ -2037,6 +2037,14 @@ h1 {
   margin-top: 0.75rem;
 }
 
+.mt-6 {
+  margin-top: 1.5rem;
+}
+
+.mb-6 {
+  margin-bottom: 1.5rem;
+}
+
 .flex {
   display: flex;
 }
@@ -2170,6 +2178,10 @@ h1 {
 
 .pt-6 {
   padding-top: 1.5rem;
+}
+
+.pb-6 {
+  padding-bottom: 1.5rem;
 }
 
 .capitalize {
