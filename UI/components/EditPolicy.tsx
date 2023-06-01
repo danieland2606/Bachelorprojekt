@@ -45,7 +45,12 @@ export function EditPolicy(props: EditPolicyProps) {
         type="date"
         min={nextYear}
       />
-      {/*<Input name={policy.dueDate} labeltext="Fälligkeit" type="date" min={today} />*/}
+      <Input
+        name={policy.dueDate}
+        labeltext="Fälligkeit"
+        type="date"
+        min={today}
+      />
       <Input
         name={policy.coverage}
         labeltext="Jährliche Deckung"
@@ -105,7 +110,7 @@ export function EditPolicy(props: EditPolicyProps) {
         labeltext="Gewicht"
         type="number"
         min="0"
-        step="0.1"
+        step="0.01"
         unit="kg"
       />
       {props.children}
