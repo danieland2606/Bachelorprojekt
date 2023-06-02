@@ -48,7 +48,7 @@ public class PolicyEntity {
     }
 
     public PolicyEntity(long c_id, LocalDate startDate, LocalDate endDate, int coverage, double premium,
-            ObjectOfInsuranceEntity objectOfInsurance) {
+            ObjectOfInsuranceEntity objectOfInsurance, LocalDate dueDate) {
         this.cid = c_id;
         this.startDate = startDate;
         this.endDate = endDate;
@@ -56,7 +56,7 @@ public class PolicyEntity {
         this.premium = premium;
         this.objectOfInsurance = objectOfInsurance;
         this.active = true;
-        dueDate = LocalDate.now();
+        this.dueDate = dueDate;
     }
 
     public long getId() {

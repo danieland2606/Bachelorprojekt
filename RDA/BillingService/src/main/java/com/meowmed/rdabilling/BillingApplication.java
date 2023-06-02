@@ -8,13 +8,13 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @author Mozamil Ahmadzaei, Alexander Hampel
  */
 @SpringBootApplication
-public class RdaBillingApplication {
+public class BillingApplication {
 	/**
 	 * Main-Applikation
 	 * @param args Argumente beim Programmstart 
 	 */
 	public static void main(String[] args) {
-		SpringApplication.run(RdaBillingApplication.class, args);
+		SpringApplication.run(BillingApplication.class, args);
 	}
 
 }

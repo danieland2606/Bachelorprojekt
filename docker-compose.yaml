@@ -7,11 +7,13 @@ services:
     environment:
       - MEOWMED_CUSTOMER_SERVER=http://customer.rda:8080
       - MEOWMED_POLICY_SERVER=http://policy.rda:8080
+      - MEOWMED_INVOICE_SERVER=http://billing.rda:8080
     ports:
       - "80:8000"
     depends_on:
       - policy.rda
       - customer.rda
+      - billing.rda
   policy.rda:
     image: meowmed-policy.rda
     profiles:
@@ -24,6 +26,7 @@ services:
       - spring.datasource.password=123456789
       - docker_customerurl=customer.rda
       - docker_notificationurl=notification.rda
+      - docker.billingurl=billing.rda
       - docker_debugmode=true
   policydb.rda:
     image: mariadb:latest
@@ -53,7 +56,6 @@ services:
       - spring.datasource.password=123456789
       - docker.notificationurl=notification.rda
       - docker.policyurl=policy.rda
-      - docker.billingurl=billing.rda
   customerdb.rda:
     image: mariadb:latest
     profiles:
@@ -94,7 +96,7 @@ services:
       <<: *dbcredentials
       MYSQL_DATABASE: Billing
     volumes:
-      - customerdb_data_rda:/var/lib/mysql
+      - billingdb_data_rda:/var/lib/mysql
     healthcheck:
       <<: *dbhealthcheck
 

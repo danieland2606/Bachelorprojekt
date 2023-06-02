@@ -218,8 +218,8 @@ public class NotificationService {
         }
         properties.put("firstName", details.getFirstName());
         properties.put("lastName", details.getLastName());
+        properties.put("pid", details.getPid());
         if(!usage.equalsIgnoreCase("delete")){
-            properties.put("pid", details.getPid());
             properties.put("startDate", formatDate(details.getStartDate()));
             properties.put("endDate", formatDate(details.getEndDate()));
             properties.put("coverage", details.getCoverage());
