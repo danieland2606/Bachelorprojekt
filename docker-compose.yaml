@@ -53,6 +53,7 @@ services:
       - spring.datasource.password=123456789
       - docker.notificationurl=notification.rda
       - docker.policyurl=policy.rda
+      - docker.billingurl=billing.rda
   customerdb.rda:
     image: mariadb:latest
     profiles:
@@ -75,6 +76,27 @@ services:
       - spring_mail_password=yqanpbjhupnllbcz
       - spring_mail_properties.mail.smtp.auth=true
       - spring_mail_properties.mail.smtp.starttls.enable=true
+  billing.rda:
+    image: meowmed-billing.rda
+    profiles:
+      - rda
+    depends_on:
+      - billingdb.rda
+    environment:
+      - spring.datasource.url=jdbc:mariadb://billingdb.rda:3306/Billing
+      - spring.datasource.username=user
+      - spring.datasource.password=123456789
+  billingdb.rda:
+    image: mariadb:latest
+    profiles:
+      - rda
+    environment:
+      <<: *dbcredentials
+      MYSQL_DATABASE: Billing
+    volumes:
+      - customerdb_data_rda:/var/lib/mysql
+    healthcheck:
+      <<: *dbhealthcheck
 
   ui.eda:
     image: meowmed-ui
@@ -195,3 +217,4 @@ volumes:
   billingdb_data_eda:
   customerdb_data_rda:
   policydb_data_rda:
+  billingdb_data_rda:

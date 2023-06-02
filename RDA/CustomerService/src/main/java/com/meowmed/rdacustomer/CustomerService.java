@@ -160,19 +160,20 @@ public class CustomerService {
     }
     /**
      * Diese Methode ist zum befüllen der Datenbank.
+     * IBAN´s sind durch ein Generator erzeugt
      */
     void setUp(){
         LocalDate birthdayOfJan= LocalDate.of(1999,11,03);
         AddressEntity adressJan= new AddressEntity("Hildesheim","Burgerking Hbf","31137");
-        CustomerEntity Jan= new CustomerEntity("Jan", "Lorenz", "", "herr","ledig",birthdayOfJan,"student",adressJan , "+49123456789" ,"jan-niklas-johannes.lorenz@stud.hs-hannover.de" ,"DE2131627312371351232", false  );
+        CustomerEntity Jan= new CustomerEntity("Jan", "Lorenz", "", "herr","ledig",birthdayOfJan,"student",adressJan , "+49123456789" ,"jan-niklas-johannes.lorenz@stud.hs-hannover.de" ,"DE12500105176218241724", false  );
 
         LocalDate birthdayofDaniel= LocalDate.of(2002,06,26);
         AddressEntity adressDaniel= new AddressEntity("Hannover", "Subway Hbf", "12345");
-        CustomerEntity Daniel= new CustomerEntity("Daniel", "Arnold","","herr", "ledig", birthdayofDaniel, "student", adressDaniel, "+4942069123123", "daniel.arnold@stud.hs-hannover.de", "DE", false);
+        CustomerEntity Daniel= new CustomerEntity("Daniel", "Arnold","","herr", "ledig", birthdayofDaniel, "student", adressDaniel, "+4942069123123", "daniel.arnold@stud.hs-hannover.de", "DE39500105174173473769", false);
     
         LocalDate birthdayOfAlex= LocalDate.of(1996,01,14);
         AddressEntity adressAlex= new AddressEntity("Hildesheim","Burgerking Hbf","31137");
-        CustomerEntity Alex= new CustomerEntity("Alexander","Hampel","","herr","ledig",birthdayOfAlex,"student", adressAlex, "+49123456789", "alexander.hampel@stud.hs-hannover.de", "DE2131627312371351232", false);
+        CustomerEntity Alex= new CustomerEntity("Alexander","Hampel","","herr","ledig",birthdayOfAlex,"student", adressAlex, "+49123456789", "alexander.hampel@stud.hs-hannover.de", "DE92500105177455257131", false);
 
 
         aRepository.save(adressJan);

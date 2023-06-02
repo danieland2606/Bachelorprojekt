@@ -21,6 +21,10 @@ services:
       - "8082:8080"
   notification.rda:
     build: ./RDA/NotificationService
+  billing.rda:
+    build: ./RDA/BillingService
+    ports:
+      - "8083:8080"
       
   ui.eda:
     build: ./UI
@@ -49,6 +53,6 @@ services:
   billing.eda:
     build:
       context: ./EDA
-      dockerfile: ./BillingService/Dockerfile
+      dockerfile: ./BillingService/Dockerfilej
       args:
         service: BillingService
