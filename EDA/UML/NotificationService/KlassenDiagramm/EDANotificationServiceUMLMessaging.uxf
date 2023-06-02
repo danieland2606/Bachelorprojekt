@@ -5,7 +5,7 @@
     <id>UMLClass</id>
     <coordinates>
       <x>390</x>
-      <y>429</y>
+      <y>494</y>
       <w>156</w>
       <h>39</h>
     </coordinates>
@@ -16,7 +16,7 @@
     <id>Relation</id>
     <coordinates>
       <x>533</x>
-      <y>429</y>
+      <y>494</y>
       <w>143</w>
       <h>39</h>
     </coordinates>
@@ -28,34 +28,37 @@
     <coordinates>
       <x>650</x>
       <y>429</y>
-      <w>390</w>
-      <h>91</h>
+      <w>663</w>
+      <h>156</h>
     </coordinates>
     <panel_attributes>EventReciever
 --
 --
-+ receiveCustomer(in: CustomerCreatedEvent)
-+ receivePolicy(in: PolicyCreatedEvent)</panel_attributes>
++ receiveCustomer(customerCreatedEvent: CustomerCreatedEvent)
++ receiveCustomerChanged(customerChangedEvent: CustomerChangedEvent)
++ receivePolicy(policyCreatedEvent: PolicyCreatedEvent)
++ receivePolicyChanged(policyChangedEvent: PolicyChangedEvent)
++ receivePolicyCancelled(policyCancelledEvent: PolicyCancelledEvent)</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>832</x>
-      <y>507</y>
+      <x>962</x>
+      <y>572</y>
       <w>182</w>
-      <h>182</h>
+      <h>156</h>
     </coordinates>
     <panel_attributes>lt=&lt;-
 r1=1
 m1=notificationService</panel_attributes>
-    <additional_attributes>10.0;120.0;10.0;10.0</additional_attributes>
+    <additional_attributes>10.0;100.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>754</x>
-      <y>663</y>
+      <x>884</x>
+      <y>702</y>
       <w>182</w>
       <h>39</h>
     </coordinates>
@@ -66,7 +69,7 @@ fg=gray</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>832</x>
+      <x>962</x>
       <y>312</y>
       <w>104</w>
       <h>143</h>
@@ -77,15 +80,14 @@ r2=events</panel_attributes>
     <additional_attributes>10.0;90.0;10.0;10.0</additional_attributes>
   </element>
   <element>
-    <id>UMLActor</id>
+    <id>UMLGeneric</id>
     <coordinates>
-      <x>793</x>
-      <y>169</y>
-      <w>104</w>
-      <h>156</h>
+      <x>910</x>
+      <y>286</y>
+      <w>143</w>
+      <h>39</h>
     </coordinates>
-    <panel_attributes>Other
-services</panel_attributes>
+    <panel_attributes>RabbitMQ</panel_attributes>
     <additional_attributes/>
   </element>
 </diagram>
