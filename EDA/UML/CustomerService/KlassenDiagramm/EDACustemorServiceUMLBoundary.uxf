@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="15.0.0">
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>380</x>
+      <y>410</y>
+      <w>450</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>CustomerController
+--
+--
++ getCustomerList(): ResponseEntity&lt;String&gt;
++ getCustomer(c_id: Long): ResponseEntity&lt;String&gt;
++ postCustomer(customer: String): ResponseEntity&lt;String&gt;
++ putCustomer(customer: String ,c_id: Long): ResponseEntity&lt;String&gt;</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1020</x>
+      <y>440</y>
+      <w>140</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>CustomerService
+fg=gray</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>820</x>
+      <y>430</y>
+      <w>220</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;
+r2=1
+m2=customerService</panel_attributes>
+    <additional_attributes>10.0;20.0;200.0;20.0</additional_attributes>
+  </element>
+</diagram>

@@ -17,6 +17,7 @@ export class PolicyAllRequired {
     'id'?: number;
     'startDate': string = new Date('1970-01-01').toISOString().split('T')[0];;
     'endDate': string = new Date('1970-01-01').toISOString().split('T')[0];;
+    'dueDate': string = new Date('1970-01-01').toISOString().split('T')[0];;
     'coverage': number = 3.14;
     'premium': number;
     'active': boolean;
@@ -40,6 +41,12 @@ export class PolicyAllRequired {
         {
             "name": "endDate",
             "baseName": "endDate",
+            "type": "string",
+            "format": "date"
+        },
+        {
+            "name": "dueDate",
+            "baseName": "dueDate",
             "type": "string",
             "format": "date"
         },

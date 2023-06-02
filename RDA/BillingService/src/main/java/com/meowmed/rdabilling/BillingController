@@ -1,0 +1,28 @@
+@RestController
+public class BillingController {
+
+    private final BillingService bService;
+
+    @Autowired
+    public BillingController(BillingService billingService) {
+        this.bService = billingService;
+    }
+    /**
+     * Diese Methode handhabt den PUT-Aufruf zum Erstellen einer Rechnung für einen Kunden und eine Policy.
+     * @param invoice Das billingPolicyEntity-Objekt für die Rechnung
+     */
+    @PutMapping("/customer/{c_id}/policy/{p_id}/invoice")
+    public void putInvoice(@RequestBody BillingPolicyEntity invoice) {
+        bService.putInvoice(invoice);
+    }
+    /**
+     * Diese Methode handhabt den GET-Aufruf zum Abrufen der Rechnung für einen bestimmten Kunden und eine Policy.
+     * @param c_id die ID des Kunden
+     * @param p_id die ID der Policy
+     * @return eine Responseentity mit der Liste von BillingEntity-Objekten als Body
+     */
+    @PutMapping("/customer/{c_id}/policy/{p_id}/invoice")
+    public ResponseEntity<List<BillingEntity>> getInvoice(@PathVariable("c_id") Long c_id, @PathVariable("p_id") Long p_id) {
+        return bService.putInvoice(invoice);
+    }
+}

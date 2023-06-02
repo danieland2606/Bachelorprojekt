@@ -1,8 +1,6 @@
 package com.meowmed.rdapolicy;
 
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -18,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -182,6 +181,7 @@ public class PolicyService {
 		// Erzeugen von Objekten für den Policy und speichern derer
 		PriceCalculationEntity tempCalc = new PriceCalculationEntity(c_id, pRequest);
 		PolicyEntity policy = new PolicyEntity(c_id, pRequest.getStartDate(), pRequest.getEndDate(), pRequest.getCoverage(), getPolicyPrice(tempCalc), pRequest.getObjectOfInsurance());
+		policy.setDueDate(pRequest.getDueDate());
 		oRepository.save(pRequest.getObjectOfInsurance());
 		policy = pRepository.save(policy);
 		if(debugmode) System.out.println("postPolicy: policy: " + policy + " tempCalc: " + tempCalc);
@@ -192,11 +192,11 @@ public class PolicyService {
 		//if (response.getStatusCode() != HttpStatus.OK) throw new MailSendException();
 		if(debugmode) System.out.println("postPolicy: mail: " + mail + " response: " + response);
 		
-		/* Vorbereitung für BillingService
+		// Vorbereitung für BillingService
 		BillingPolicyEntity bill = new BillingPolicyEntity(policy.getDueDate(), policy.getPremium(), customer.getBankDetails(), policy.getCid(), customer.getFirstName(), customer.getLastName(), policy.getId(), policy.getStartDate(), "Vertragsabschluss");
 		sendBill(bill);
 		if(debugmode) System.out.println("postPolicy: bill: " + bill);
-		*/
+
 		// Verpacken der Ausgabe + Anwenden von Filtern auf derer
 		MappingJacksonValue wrapper = new MappingJacksonValue(policy);
 		wrapper.setFilters(new SimpleFilterProvider()
@@ -240,7 +240,8 @@ public class PolicyService {
 		if(debugmode) System.out.println("updatePolicy: customer: " + customer + " currentPolicy: " + currentPolicy + " pRequest: " + pRequest);
 
 		// Erzeugen und ersetzen der Policy
-		PriceCalculationEntity tempCalc = new PriceCalculationEntity(c_id, pRequest);
+		PolicyRequest newRequest = new PolicyRequest(currentPolicy.get().getStartDate(), pRequest.getEndDate(), pRequest.getCoverage(), pRequest.getDueDate(), currentOoBEntity);
+		PriceCalculationEntity tempCalc = new PriceCalculationEntity(c_id, newRequest);
 		double policyPrice = 0;
 		try {
 			policyPrice = getPolicyPrice(tempCalc);
@@ -272,13 +273,13 @@ public class PolicyService {
 			if (response.getStatusCode() != HttpStatus.OK) throw new MailSendException("Mail konnte nicht versendet werden");
 			if(debugmode) System.out.println("updatePolicy: mail: " + mail + " response: " + response);
 		}
-		/* Vorbereitung für BillingService
+		// Vorbereitung für BillingService
 		if(newPolicy.getPremium() != currentPolicy.get().getPremium()){
 			BillingPolicyEntity bill = new BillingPolicyEntity(policy.getDueDate(), newPolicy.getPremium()-currentPolicy.get().getPremium(), customer.getBankDetails(), policy.getCid(), customer.getFirstName(), customer.getLastName(), policy.getId(), policy.getStartDate(), "Vertragsänderung");
 			sendBill(bill);
 			if(debugmode) System.out.println("updatePolicy: bill: " + bill);
 		}
-		*/
+		
 
 		// Verpacken und Filtern von der Ausgabe
 		MappingJacksonValue wrapper = new MappingJacksonValue(policy);
@@ -304,6 +305,13 @@ public class PolicyService {
 		CustomerRequest customer = getCustomerRequest(body.getCustomerId());
 		if(debugmode) System.out.println("getPolicyPrice: body: " + body + " customer: " + customer);
 		
+		// Prüfen, ob Werte sinnvoll sind
+		if(body.getPolicy().getCoverage()<=0) throw new IllegalArgumentException("Coverage ist kleiner 0.");
+		if(body.getPolicy().getEndDate().isBefore(body.getPolicy().getStartDate())) throw new IllegalArgumentException("EndDate is before StartDate!");
+		if(LocalDate.now().isBefore(body.getPolicy().getObjectOfInsurance().getDateOfBirth())) throw new IllegalArgumentException("Katzengeburt ist nach dem Vertragsanfang");
+		if(body.getPolicy().getObjectOfInsurance().getWeight()<=0) throw new IllegalArgumentException("Gewicht ist negativ/nicht vorhanden");
+
+
 		// Prüfen, ob die Bedingungen für einen Vertrag erfüllt sind
 		boolean policyNotAllowed = body.getPolicy().getObjectOfInsurance().getPersonality().contains("sehr verspielt") 
 			|| ChronoUnit.YEARS.between(customer.getDateOfBirth() , LocalDate.now())< 18 
@@ -312,6 +320,8 @@ public class PolicyService {
 		if (policyNotAllowed) throw new PolicyNotAllowed("Policy ist nicht erlaubt");
 		CatEntity cat = cRepository.findByRace(body.getPolicy().getObjectOfInsurance().getRace());
 		if (cat==null) throw new CatNotFoundException("Cat wurde nicht gefunden");
+		// Auskommentiert, da Farbe sehr subjektiv sind
+		//if(!Arrays.asList(cat.getPossibleColors()).contains(body.getPolicy().getObjectOfInsurance().getColor())) throw new CatNotFoundException("Die Katze darf nicht diese Farbe haben");
 		if(debugmode) System.out.println("getPolicyPrice: cat: " + cat);
 
 
@@ -384,6 +394,7 @@ public class PolicyService {
 
 		// Auf 2 Nachkommastellen runden
 		totalprice = Math.round(totalprice*100.0)/100.0;
+		if(totalprice<=0) throw new RestClientException("Totalprice ist negativ???"); // Hiermal RestClientException missbraucht, InvalidValueException wäre sinnvoller, bin aber zu faul grade :D
 		if(debugmode) System.out.println("getPolicyPrice: totalprice: " + totalprice);
 		return totalprice;
 	}

@@ -17,6 +17,7 @@ import { FurColor } from '../models/FurColor.ts';
 import { GetCustomerList200ResponseInner } from '../models/GetCustomerList200ResponseInner.ts';
 import { GetPolicyList200ResponseInner } from '../models/GetPolicyList200ResponseInner.ts';
 import { ID } from '../models/ID.ts';
+import { Invoice } from '../models/Invoice.ts';
 import { MaritalStatus } from '../models/MaritalStatus.ts';
 import { ModelError } from '../models/ModelError.ts';
 import { ObjectOfInsurance } from '../models/ObjectOfInsurance.ts';
@@ -135,6 +136,48 @@ export class ObservableCustomerApi {
                     middlewarePostObservable = middlewarePostObservable.pipe(mergeMap((rsp: ResponseContext) => middleware.post(rsp)));
                 }
                 return middlewarePostObservable.pipe(map((rsp: ResponseContext) => this.responseProcessor.updateCustomer(rsp)));
+            }));
+    }
+
+}
+
+import { InvoiceApiRequestFactory, InvoiceApiResponseProcessor} from "../apis/InvoiceApi.ts";
+export class ObservableInvoiceApi {
+    private requestFactory: InvoiceApiRequestFactory;
+    private responseProcessor: InvoiceApiResponseProcessor;
+    private configuration: Configuration;
+
+    public constructor(
+        configuration: Configuration,
+        requestFactory?: InvoiceApiRequestFactory,
+        responseProcessor?: InvoiceApiResponseProcessor
+    ) {
+        this.configuration = configuration;
+        this.requestFactory = requestFactory || new InvoiceApiRequestFactory(configuration);
+        this.responseProcessor = responseProcessor || new InvoiceApiResponseProcessor();
+    }
+
+    /**
+     * returns all invoices belonging to selected policy
+     * @param customerId 
+     * @param policyId 
+     */
+    public getInvoiceList(customerId: number, policyId: number, _options?: Configuration): Observable<void | Array<Invoice>> {
+        const requestContextPromise = this.requestFactory.getInvoiceList(customerId, policyId, _options);
+
+        // build promise chain
+        let middlewarePreObservable = from<RequestContext>(requestContextPromise);
+        for (let middleware of this.configuration.middleware) {
+            middlewarePreObservable = middlewarePreObservable.pipe(mergeMap((ctx: RequestContext) => middleware.pre(ctx)));
+        }
+
+        return middlewarePreObservable.pipe(mergeMap((ctx: RequestContext) => this.configuration.httpApi.send(ctx))).
+            pipe(mergeMap((response: ResponseContext) => {
+                let middlewarePostObservable = of(response);
+                for (let middleware of this.configuration.middleware) {
+                    middlewarePostObservable = middlewarePostObservable.pipe(mergeMap((rsp: ResponseContext) => middleware.post(rsp)));
+                }
+                return middlewarePostObservable.pipe(map((rsp: ResponseContext) => this.responseProcessor.getInvoiceList(rsp)));
             }));
     }
 

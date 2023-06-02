@@ -1,6 +1,8 @@
 package EDA.MeowMed.Messaging;
 
 import EDA.MeowMed.Logic.PolicyService;
+import event.Keys;
+import event.Topics;
 import org.springframework.amqp.core.*;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -16,7 +18,7 @@ public class MessagingConfig {
 
     @Bean
     public TopicExchange topic() {
-        return new TopicExchange("MeowMedTopicExchange");
+        return new TopicExchange(Topics.TOPIC_EXCHANGE_NAME);
     }
 
     @Bean
@@ -36,11 +38,11 @@ public class MessagingConfig {
 
     @Bean
     public Binding bindCustomerCreated(TopicExchange topic, @Qualifier("CustomerCreatedQueue") Queue queue) {
-        return BindingBuilder.bind(queue).to(topic).with("customer.created");
+        return BindingBuilder.bind(queue).to(topic).with(Keys.CUSTOMER_CREATED_KEY);
     }
 
     @Bean
     public Binding binCustomerChanged(TopicExchange topic, @Qualifier("CustomerChangedQueue") Queue queue) {
-        return BindingBuilder.bind(queue).to(topic).with("#.customer.changed");
+        return BindingBuilder.bind(queue).to(topic).with(Keys.CUSTOMER_CHANGED_KEY);
     }
 }

@@ -46,19 +46,6 @@ public class NotificationService {
         ));
     }
 
-    /**
-     *
-     */
-    public void sendCustomerCancelledMail(CustomerChangedEvent customerChanged) {
-        this.sendEmail(emailFactory.buildEmail(
-                customerChanged.getEmail(),
-                sender,
-                "Kündigung Ihres Vertrags bei MeowMed",
-                "customercancellednotification",
-                customerChanged
-        ));
-    }
-
 
     /**
      *
@@ -77,8 +64,8 @@ public class NotificationService {
         this.sendEmail(emailFactory.buildEmail(
                 policyChangedEvent.getEmail(),
                 sender,
-                "policychangednotification",
                 "Ihre Vertragsänderungen",
+                "policychangednotification",
                 policyChangedEvent
         ));
     }
@@ -87,8 +74,8 @@ public class NotificationService {
         this.sendEmail(emailFactory.buildEmail(
                 policyChangedEvent.getEmail(),
                 sender,
-                "policycancellednotification",
                 "Kündigung Ihres Vertrages",
+                "policycancellednotification",
                 policyChangedEvent
         ));
     }
@@ -96,7 +83,7 @@ public class NotificationService {
     private void sendEmail(Email email) {
         try {
             emailSenderService.sendHtmlMessage(email);
-        } catch (MessagingException e) { //todo: This needs to change
+        } catch (MessagingException e) {
             System.out.println("Fehler beim Senden der " + email.getTemplate() + " Mail, für" + email.getTo());
             e.printStackTrace();
         }
