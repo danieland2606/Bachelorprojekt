@@ -19,10 +19,10 @@ public class Policysetup {
                 LocalDate endDate1 = LocalDate.of(2099, 1, 1);
                 LocalDate birthDate1 = LocalDate.of(2015, 1, 1);
                 LocalDate birthDate2 = LocalDate.of(2015, 1, 2);
-                ObjectOfInsuranceEntity cat1 = new ObjectOfInsuranceEntity("Belly", "Bengal", "Braun", birthDate1, false, "anhänglich", "drinnen", 4);
-                ObjectOfInsuranceEntity cat2 = new ObjectOfInsuranceEntity("Rough", "Bengal", "Schwarz", birthDate2, false, "draufgängerisch", "drinnen", 4);
-                PolicyEntity policy1 = new PolicyEntity(1 , startDate, endDate1, 50000, 765,cat1);
-                PolicyEntity policy2 = new PolicyEntity(1 ,startDate, endDate1, 50000, 765 ,cat2);
+                ObjectOfInsuranceEntity cat1 = new ObjectOfInsuranceEntity("Belly", "bengal", "braun", birthDate1, false, "anhaenglich", "drinnen", 4);
+                ObjectOfInsuranceEntity cat2 = new ObjectOfInsuranceEntity("Rough", "bengal", "bchwarz", birthDate2, false, "draufgängerisch", "drinnen", 4);
+                PolicyEntity policy1 = new PolicyEntity(1 , startDate, endDate1, 50000, 765,cat1,startDate);
+                PolicyEntity policy2 = new PolicyEntity(1 ,startDate, endDate1, 50000, 765 ,cat2, startDate);
                 oRepository.save(cat1);
                 oRepository.save(cat2);
                 pRepository.save(policy1);

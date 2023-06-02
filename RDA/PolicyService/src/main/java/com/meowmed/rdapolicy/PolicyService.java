@@ -180,7 +180,7 @@ public class PolicyService {
 
 		// Erzeugen von Objekten für den Policy und speichern derer
 		PriceCalculationEntity tempCalc = new PriceCalculationEntity(c_id, pRequest);
-		PolicyEntity policy = new PolicyEntity(c_id, pRequest.getStartDate(), pRequest.getEndDate(), pRequest.getCoverage(), getPolicyPrice(tempCalc), pRequest.getObjectOfInsurance());
+		PolicyEntity policy = new PolicyEntity(c_id, pRequest.getStartDate(), pRequest.getEndDate(), pRequest.getCoverage(), getPolicyPrice(tempCalc), pRequest.getObjectOfInsurance(), pRequest.getDueDate());
 		policy.setDueDate(pRequest.getDueDate());
 		oRepository.save(pRequest.getObjectOfInsurance());
 		policy = pRepository.save(policy);
@@ -226,11 +226,13 @@ public class PolicyService {
 		//Holen des Customers und der momentanen Policy anhand der Argumente
 		CustomerRequest customer = getCustomerRequest(c_id);
 
-		Optional<PolicyEntity> currentPolicy = pRepository.findById(p_id);
-		if(currentPolicy.isEmpty()) throw new PolicyNotFoundException("Policy wurde nicht gefunden");
+		Optional<PolicyEntity> oldPolicy = pRepository.findById(p_id);
+		if(oldPolicy.isEmpty()) throw new PolicyNotFoundException("Policy wurde nicht gefunden");
+		PolicyEntity currentPolicy = oldPolicy.get();
+		double oldPremium = currentPolicy.getPremium();
 
 		//Validierung der momentanen Katze
-		ObjectOfInsuranceEntity currentOoBEntity = currentPolicy.get().getObjectOfInsurance();
+		ObjectOfInsuranceEntity currentOoBEntity = currentPolicy.getObjectOfInsurance();
 		if(!currentOoBEntity.equals(pRequest.getObjectOfInsurance())){
 			currentOoBEntity.setCastrated(pRequest.getObjectOfInsurance().isCastrated());
 			currentOoBEntity.setPersonality(pRequest.getObjectOfInsurance().getPersonality());
@@ -240,14 +242,14 @@ public class PolicyService {
 		if(debugmode) System.out.println("updatePolicy: customer: " + customer + " currentPolicy: " + currentPolicy + " pRequest: " + pRequest);
 
 		// Erzeugen und ersetzen der Policy
-		PolicyRequest newRequest = new PolicyRequest(currentPolicy.get().getStartDate(), pRequest.getEndDate(), pRequest.getCoverage(), pRequest.getDueDate(), currentOoBEntity);
+		PolicyRequest newRequest = new PolicyRequest(currentPolicy.getStartDate(), pRequest.getEndDate(), pRequest.getCoverage(), pRequest.getDueDate(), currentOoBEntity);
 		PriceCalculationEntity tempCalc = new PriceCalculationEntity(c_id, newRequest);
 		double policyPrice = 0;
 		try {
 			policyPrice = getPolicyPrice(tempCalc);
 		} catch (PolicyNotAllowed e) {
-			deletePolicy(c_id, currentPolicy.get().getId());
-			MailPolicyEntity mail = new MailPolicyEntity(currentPolicy.get(), customer);
+			deletePolicy(c_id, currentPolicy.getId());
+			MailPolicyEntity mail = new MailPolicyEntity(currentPolicy, customer);
 			ResponseEntity<String> response = sendMail("policydeletenotification", mail);
 			if (response.getStatusCode() != HttpStatus.OK) throw new MailSendException("Mail konnte nicht versendet werden");
 			if(debugmode) System.out.println("updatePolicy: mail: " + mail + " response: " + response);
@@ -256,10 +258,10 @@ public class PolicyService {
 
 		//Hier ist die Erstellung
 
-		PolicyEntity newPolicy = new PolicyEntity(currentPolicy.get().getCid(), currentPolicy.get().getStartDate(),currentPolicy.get().getEndDate(), pRequest.getCoverage(), policyPrice, currentOoBEntity);
-		newPolicy.setId(currentPolicy.get().getId());
-		newPolicy.setDueDate(currentPolicy.get().getDueDate());
-		newPolicy.setActive(currentPolicy.get().isActive());
+		PolicyEntity newPolicy = new PolicyEntity(currentPolicy.getCid(), currentPolicy.getStartDate(),currentPolicy.getEndDate(), pRequest.getCoverage(), policyPrice, currentOoBEntity, currentPolicy.getDueDate());
+		newPolicy.setId(currentPolicy.getId());
+		newPolicy.setDueDate(currentPolicy.getDueDate());
+		newPolicy.setActive(currentPolicy.isActive());
 
 
 		oRepository.save(currentOoBEntity);
@@ -267,15 +269,16 @@ public class PolicyService {
 		if(debugmode) System.out.println("updatePolicy: tempCalc: " + tempCalc + " policy: " + policy);
 
 		// Versand der Mail
-		if(!currentOoBEntity.equals(pRequest.getObjectOfInsurance()) || !currentPolicy.get().equals(newPolicy)){
+		//if(!currentOoBEntity.equals(pRequest.getObjectOfInsurance()) || !currentPolicy.equals(newPolicy)){
 			MailPolicyEntity mail = new MailPolicyEntity(policy, customer);
 			ResponseEntity<String> response = sendMail("policychangenotification", mail);
 			if (response.getStatusCode() != HttpStatus.OK) throw new MailSendException("Mail konnte nicht versendet werden");
 			if(debugmode) System.out.println("updatePolicy: mail: " + mail + " response: " + response);
-		}
+		//}
 		// Vorbereitung für BillingService
-		if(newPolicy.getPremium() != currentPolicy.get().getPremium()){
-			BillingPolicyEntity bill = new BillingPolicyEntity(policy.getDueDate(), newPolicy.getPremium()-currentPolicy.get().getPremium(), customer.getBankDetails(), policy.getCid(), customer.getFirstName(), customer.getLastName(), policy.getId(), policy.getStartDate(), "Vertragsänderung");
+		if(debugmode) System.out.println("updatePolicy: newPremium: " + newPolicy.getPremium() + " oldPremium: " + currentPolicy.getPremium());
+		if(newPolicy.getPremium() != oldPremium){
+			BillingPolicyEntity bill = new BillingPolicyEntity(LocalDate.now(), newPolicy.getPremium()-oldPremium, customer.getBankDetails(), policy.getCid(), customer.getFirstName(), customer.getLastName(), policy.getId(), policy.getStartDate(), "Vertragsänderung");
 			sendBill(bill);
 			if(debugmode) System.out.println("updatePolicy: bill: " + bill);
 		}
