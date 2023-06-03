@@ -75,7 +75,7 @@ public class PolicyService {
 		this.pRepository = policyRepository;
 		this.oRepository = objectOfInsuranceRepository;
 		this.cRepository = catRepository;
-		Policysetup.setUp(policyRepository, objectOfInsuranceRepository, catRepository);
+		//Policysetup.setUp(policyRepository, objectOfInsuranceRepository, catRepository);
 	}
 
     /**

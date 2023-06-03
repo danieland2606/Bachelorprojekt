@@ -46,7 +46,7 @@ public class CustomerService {
     public CustomerService(CustomerRepository customerRepository, AddressRepository adressRepository) {
         this.cRepository = customerRepository;
         this.aRepository = adressRepository;
-        setUp();
+        //setUp();
     }
 
     /** TODO

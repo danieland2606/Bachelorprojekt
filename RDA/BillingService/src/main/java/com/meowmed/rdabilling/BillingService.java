@@ -29,7 +29,7 @@ public class BillingService {
     @Autowired
     public BillingService(InvoiceRepository invoiceRepository) {
         this.iRepository = invoiceRepository;
-        setUp();
+        //setUp();
     }
 
     @Value("${docker.debugmode}")
