@@ -53,6 +53,6 @@ services:
   billing.eda:
     build:
       context: ./EDA
-      dockerfile: ./BillingService/Dockerfilej
+      dockerfile: ./BillingService/Dockerfile
       args:
         service: BillingService
