@@ -42,6 +42,17 @@ public class CatEntity {
         this.possibleColors = possibleColors;
     }
 
+    public CatEntity(long id, String race, int lowerAverageAge, int upperAverageAge, int lowerAverageWeight,
+            int upperAverageWeight, int illnessFactor, String[] possibleColors) {
+        this.id = id;
+        this.race = race;
+        this.lowerAverageAge = lowerAverageAge;
+        this.upperAverageAge = upperAverageAge;
+        this.lowerAverageWeight = lowerAverageWeight;
+        this.upperAverageWeight = upperAverageWeight;
+        this.illnessFactor = illnessFactor;
+        this.possibleColors = possibleColors;
+    }
     public String getRace() {
         return race;
     }

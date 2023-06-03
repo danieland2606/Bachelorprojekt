@@ -79,8 +79,8 @@ public class BillingService {
 
     void setUp(){
         LocalDate startDate = LocalDate.of(2017, 1, 15);
-        BillingEntity entity1 = new BillingEntity(startDate, 1500, "DE92500105177455257131", 1, "Jan Niklas", 1, startDate, "DU mich auch");
-        BillingEntity entity2 = new BillingEntity(startDate, 1500, "DE92500105177455257131", 1, "Jan Niklas", 2, startDate, "DU mich auch");
+        BillingEntity entity1 = new BillingEntity(startDate, 1500, "DE92500105177455257131", 1, "Jan Niklas", 1, startDate, "DU mich auch", 1);
+        BillingEntity entity2 = new BillingEntity(startDate, 1500, "DE92500105177455257131", 1, "Jan Niklas", 2, startDate, "DU mich auch", 2);
         iRepository.save(entity1);
         iRepository.save(entity2);
     }

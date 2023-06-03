@@ -40,6 +40,21 @@ public class BillingEntity {
         this.details = details;
     }
 
+    
+
+    public BillingEntity(LocalDate dueDate, double amount, String bankDetails, long cid, String name, long pid,
+            LocalDate startDate, String details, long id) {
+        this.dueDate = dueDate;
+        this.amount = amount;
+        this.bankDetails = bankDetails;
+        this.cid = cid;
+        this.name = name;
+        this.pid = pid;
+        this.startDate = startDate;
+        this.details = details;
+        this.id = id;
+    }
+
     public LocalDate getDueDate() {
         return dueDate;
     }

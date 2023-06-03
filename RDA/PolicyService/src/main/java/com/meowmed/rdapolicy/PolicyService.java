@@ -229,6 +229,7 @@ public class PolicyService {
 		Optional<PolicyEntity> oldPolicy = pRepository.findById(p_id);
 		if(oldPolicy.isEmpty()) throw new PolicyNotFoundException("Policy wurde nicht gefunden");
 		PolicyEntity currentPolicy = oldPolicy.get();
+		if (!currentPolicy.isActive()) throw new IllegalArgumentException("Policy ist schon gekündigt");
 		double oldPremium = currentPolicy.getPremium();
 
 		//Validierung der momentanen Katze
@@ -431,15 +432,17 @@ public class PolicyService {
 		//	throw new PolicyNotFoundException("Policy wurde nicht gefunden");
 		
 		for (PolicyEntity policy : policies) {
-			PolicyRequest pRequest = new PolicyRequest();
-			pRequest.setStartDate(policy.getStartDate());
-			pRequest.setEndDate(policy.getEndDate());
-			pRequest.setCoverage(policy.getCoverage());
-			pRequest.setObjectOfInsurance(policy.getObjectOfInsurance());
-			try {
-				updatePolicy(c_id, policy.getId(), pRequest);
-			} catch (PolicyNotAllowed e) {
-				System.out.println(e.getMessage());
+			if (policy.isActive()) {
+				PolicyRequest pRequest = new PolicyRequest();
+				pRequest.setStartDate(policy.getStartDate());
+				pRequest.setEndDate(policy.getEndDate());
+				pRequest.setCoverage(policy.getCoverage());
+				pRequest.setObjectOfInsurance(policy.getObjectOfInsurance());
+				try {
+					updatePolicy(c_id, policy.getId(), pRequest);
+				} catch (PolicyNotAllowed e) {
+					System.out.println(e.getMessage());
+				}
 			}
 		}
 		if (debugmode) System.out.println("deletePolicyForUser: policies: " + policies);
