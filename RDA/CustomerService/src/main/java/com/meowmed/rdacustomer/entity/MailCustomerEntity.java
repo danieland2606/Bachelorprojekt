@@ -5,6 +5,7 @@ import java.util.Objects;
 
 public class MailCustomerEntity {
 
+    private long id;
     private String firstName;
     private String lastName;
     private String title;
@@ -23,9 +24,10 @@ public class MailCustomerEntity {
     }
 
 
-    public MailCustomerEntity(String firstName, String lastName, String title, String formOfAddress,
+    public MailCustomerEntity(long id,String firstName, String lastName, String title, String formOfAddress,
             String maritalStatus, LocalDate dateOfBirth, String employmentStatus, String city, String street,
             String postalCode, String phoneNumber, String email, String bankDetails, boolean dogOwner) {
+        this.id= id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.title = title;
@@ -43,7 +45,8 @@ public class MailCustomerEntity {
     }
 
 
-    public MailCustomerEntity(CustomerRequest cEntity){
+    public MailCustomerEntity(long id, CustomerRequest cEntity){
+        this.id = id;
         this.firstName = cEntity.getFirstName();
         this.lastName = cEntity.getLastName();
         this.title = cEntity.getTitle();
@@ -60,7 +63,8 @@ public class MailCustomerEntity {
         this.dogOwner = cEntity.isDogOwner();
     }
 
-
+    public long getId() {return id;}
+    public void setId(long id) {this.id = id;}
     public String getFirstName() {
         return firstName;
     }

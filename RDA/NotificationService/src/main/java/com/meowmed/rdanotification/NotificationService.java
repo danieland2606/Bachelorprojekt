@@ -61,7 +61,7 @@ public class NotificationService {
             properties.put("formOfAddress", details.getFormOfAddress());
             properties.put("firstName", details.getFirstName());
             properties.put("lastName", details.getLastName());
-            //properties.put("cid", details.getId());
+            properties.put("cid", details.getId());
             properties.put("martialStatus", details.getMaritalStatus());
             properties.put("dateOfBirth", details.getDateOfBirth());
             properties.put("employmentStatus", details.getEmploymentStatus());
@@ -100,11 +100,12 @@ public class NotificationService {
             mimeMessageHelper.setTo(details.getEmail());
             mimeMessageHelper.setSubject("Vielen Dank für ihr Vertrauen in MeowMed+");
             Map<String,Object> properties = new HashMap<>();
+
             properties.put("formOfAddress", details.getFormOfAddress());
             properties.put("firstName", details.getFirstName());
             properties.put("lastName", details.getLastName());
 
-            //properties.put("cid", details.getId());
+            properties.put("cid", details.getId());
             properties.put("martialStatus", details.getMaritalStatus());
             properties.put("dateOfBirth", details.getDateOfBirth());
             properties.put("employmentStatus", details.getEmploymentStatus());

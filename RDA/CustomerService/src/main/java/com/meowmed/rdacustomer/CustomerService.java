@@ -93,7 +93,7 @@ public class CustomerService {
         aRepository.save(cRequest.getAddress());
         CustomerEntity customer= new CustomerEntity(cRequest.getFirstName(), cRequest.getLastName(), cRequest.getTitle(), cRequest.getFormOfAddress(), cRequest.getMaritalStatus(), cRequest.getDateOfBirth(), cRequest.getEmploymentStatus(), cRequest.getAddress(), cRequest.getPhoneNumber(),cRequest.getEmail(),cRequest.getBankDetails(),cRequest.isDogOwner());
         cRepository.save(customer);
-        MailCustomerEntity mail = new MailCustomerEntity(cRequest);
+        MailCustomerEntity mail = new MailCustomerEntity(customer.getId(), cRequest);
 		System.out.println(mail);
 		String url = "http://" + notificationUrl + ":8080/customernotification";
 		RestTemplate restTemplate = new RestTemplate();
@@ -139,7 +139,7 @@ public class CustomerService {
 		restTemplate.put(policyURL, null,Map.of("c_id", c_id));
         //System.out.println("customerUpdate: responseSpec: " + response);
 
-        MailCustomerEntity mail = new MailCustomerEntity(cRequest);
+        MailCustomerEntity mail = new MailCustomerEntity(customer.getId(), cRequest);
         String url = "http://" + notificationUrl + ":8080/customerchangenotification";
         RestTemplate restTemplate2 = new RestTemplate();
         ResponseEntity<String> response = restTemplate2.postForEntity(url, mail, String.class);
