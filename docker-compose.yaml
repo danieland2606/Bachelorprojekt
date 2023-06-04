@@ -125,7 +125,7 @@ services:
       - spring.datasource.driver-class-name=org.mariadb.jdbc.Driver
       - spring.datasource.url=jdbc:mariadb://customerdb.eda:3306/Customer
       - spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MariaDBDialect
-      - spring.jpa.hibernate.ddl-auto=none
+      - spring.jpa.hibernate.ddl-auto=update
     depends_on:
       customerdb.eda:
         condition: service_healthy
@@ -144,7 +144,7 @@ services:
       - spring.datasource.driver-class-name=org.mariadb.jdbc.Driver
       - spring.datasource.url=jdbc:mariadb://policydb.eda:3306/Policy
       - spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MariaDBDialect
-      - spring.jpa.hibernate.ddl-auto=none
+      - spring.jpa.hibernate.ddl-auto=update
     depends_on:
       policydb.eda:
         condition: service_healthy
@@ -177,7 +177,7 @@ services:
       - spring.datasource.driver-class-name=org.mariadb.jdbc.Driver
       - spring.datasource.url=jdbc:mariadb://billingdb.eda:3306/Billing
       - spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MariaDBDialect
-      - spring.jpa.hibernate.ddl-auto=none
+      - spring.jpa.hibernate.ddl-auto=update
   customerdb.eda:
     image: mariadb:latest
     profiles:
