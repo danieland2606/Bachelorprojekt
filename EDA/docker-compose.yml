@@ -16,6 +16,7 @@ services:
       - spring.datasource.password=test
       - spring.datasource.driver-class-name=org.mariadb.jdbc.Driver
       - server.port=8080
+      - spring.jpa.hibernate.ddl-auto=create-only
   #    - spring.jpa.database-platform=org.hibernate.dialect.MariaDBDialect
       - spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MariaDBDialect
     ports:
@@ -88,6 +89,7 @@ services:
       - spring.datasource.password=test
       - spring.datasource.driver-class-name=org.mariadb.jdbc.Driver
       - server.port=8080
+      - spring.jpa.hibernate.ddl-auto=create-only
         #    - spring.jpa.database-platform=org.hibernate.dialect.MariaDBDialect
       - spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MariaDBDialect
 
@@ -117,6 +119,7 @@ services:
       - spring.datasource.password=test
       - spring.datasource.driver-class-name=org.mariadb.jdbc.Driver
       - server.port=8080
+      - spring.jpa.hibernate.ddl-auto=create-only
       #    - spring.jpa.database-platform=org.hibernate.dialect.MariaDBDialect
       - spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MariaDBDialect
 
