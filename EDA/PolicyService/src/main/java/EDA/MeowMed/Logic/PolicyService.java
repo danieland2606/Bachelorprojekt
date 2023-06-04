@@ -63,7 +63,7 @@ public class PolicyService {
         this.setUp();
     }
 
-    private void setUp() {
+    private void setUp() {//ToDo: Check if database already exists
         ArrayList<CatRace> entities = new ArrayList<>();
         entities.add(new CatRace("siamese", 12, 15, 4, 7, 2, new String[]{"seal", "blau", "lilac", "creme"}));
         entities.add(new CatRace("perser", 12, 16, 4, 7, 3, new String[]{"weiß", "schildpatt", "schwarz"}));
