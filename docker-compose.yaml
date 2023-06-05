@@ -151,7 +151,7 @@ services:
     profiles:
       - eda
     environment:
-      - spring.rabbitmq.host=rabbitmq
+      spring.rabbitmq.host: rabbitmq
     depends_on:
       rabbitmq:
         condition: service_started

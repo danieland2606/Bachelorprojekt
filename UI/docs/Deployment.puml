@@ -1,0 +1,18 @@
+@startuml Meowmed+ Deployment
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Deployment.puml
+
+
+Node(host, "Docker engine") {
+    Node(docker, "Docker container") {
+        Container(server, "Server", "deno, SSR", "Dynamically generates site from backend data")
+    }
+    Node(docker2, "Docker container") {
+        System_Ext(backend, "Meowmed+ Services", "Backend composed of microservices")
+    }
+}
+
+Node(browser, "Browser") {
+    Container(site, "Website", "HTML", "Generated HTML with optional JavaScript")
+}
+
+@enduml

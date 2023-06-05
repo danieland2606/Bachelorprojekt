@@ -1,0 +1,14 @@
+@startuml Meowmed+
+!include  https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+
+SHOW_PERSON_OUTLINE()
+
+Person(user, "Employee")
+
+System(ui, "Meowmed+ UI", "Web-based customer management application")
+System_Ext(backend, "Meowmed+ Services", "Backend composed of microservices")
+
+Rel(user, ui, "manages customers, insurance policies")
+Rel(ui, backend, "transmits user input", "HTTP, JSON")
+
+@enduml

@@ -1,0 +1,56 @@
+@startuml Meowmed UI Server
+!include  https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+SHOW_PERSON_OUTLINE()
+
+Person(user, "Employee")
+
+System_Boundary(ui, "Meowmed+ UI") {
+
+    Container(browser, "Browser", "HTML", "Generated HTML with optional JavaScript")
+
+    Container_Boundary(server, "Server") {
+
+        Container_Boundary(handlers, "Route Handlers") {
+            Component(index, "/", $descr="")
+            Component(customer, "/customer", $descr="")
+            Component(customerId, "/customer/[customerId]", $descr="")
+            Component(policy, "/customer/[customerId]/policy", $descr="")
+            Component(policyId, "/customer/[customerId]/policy/[policyId]", $descr="")
+            Component(premium, "/api/premium", $descr="")
+        }
+
+        Component(deno, "Deno HTTP Server", "Rust, Tokio, V8", "Handles HTTP requests, provides runtime environment for fresh")
+        Component(fresh, "Fresh Framework", "deno, react-jsx", "Calls route handlers, runs preact and packages islands for hydration")
+        Component(preact, "Preact jsx renderer", $descr="Renders jsx components")
+        Container(components, "JSX Components", "react-jsx", "JSX Component exports, Handler default exports, Islands")
+    }
+}
+
+System_Ext(backend, "Meowmed+ Microservices")
+
+Rel(user, browser, "manages customers, insurance policies")
+
+Rel(browser, index, "Searches", "HTTPS")
+Rel(browser, customer, "Transmits new customer data", "HTML Forms")
+Rel(browser, customerId, "Searches, transmits customer updates", "HTML Forms")
+Rel(browser, policy, "Transmits new policy data", "HTML Forms")
+Rel(browser, premium, "Transmits policy data", "HTML Forms")
+Rel(browser, policyId, "Transmits policy updates", "HTML Forms")
+
+Rel_D(deno, fresh, "Runs")
+Rel_R(fresh, handlers, "Calls")
+Rel_L(fresh, preact, "Executes")
+Rel_U(preact, components, "Compiles HTML")
+Rel_U(fresh, deno, "Provides Response")
+Rel_U(deno, browser, "Serves HTML", "HTTPS")
+
+Rel_D(index, backend, "GETs customerList", "HTTP, JSON")
+Rel_D(customer, backend, "POSTs customer", "HTTP, JSON")
+Rel_D(customerId, backend, "GETs and PUTS customer", "HTTP, JSON")
+Rel_D(customerId, backend, "GETs policyList", "HTTP, JSON")
+Rel_D(policy, backend, "POSTs policy", "HTTP, JSON")
+Rel_D(policyId, backend, "GETs and PUTS policy", "HTTP, JSON")
+Rel_D(policyId, backend, "GETs invoices", "HTTP, JSON")
+Rel_D(premium, backend, "POSTs policy for premium calculation", "HTTP, JSON")
+@enduml

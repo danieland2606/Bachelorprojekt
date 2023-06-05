@@ -1,0 +1,32 @@
+@startuml Meowmed UI Browser
+!include  https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+SHOW_PERSON_OUTLINE()
+
+Person(user, "Employee")
+
+System_Boundary(ui, "Meowmed+ UI") {
+
+    Container_Boundary(browser, "Browser") {
+        Component(dash, "Dashboard", $descr="Displays customers")
+        Component(custNew, "Create Customer", $descr="Allows inputting new customer details")
+        Component(custDetail, "Show Customer", $descr="Displays customer details and policy overview")
+        Component(polNew, "Create Policy", $descr="Allows inputting new policy details")
+        Component(polDetail, "Show Policy", $descr="Displays policy details and invoices")
+    }
+
+    Container(server, "Server", "deno, SSR", "Dynamically generates site from backend data")
+}
+
+System_Ext(backend, "Meowmed+ Microservices")
+
+Rel_D(user, browser, "manages customers, insurance policies")
+
+Rel_D(dash, server, "Searches", "HTTPS")
+Rel_D(custNew, server, "Transmits new customer data", "HTML Forms")
+Rel_D(custDetail, server, "Searches, transmits customer updates", "HTML Forms")
+Rel_D(polNew, server, "Transmits policy data", "HTML Forms")
+Rel_D(polDetail, server, "Transmits policy updates", "HTML Forms")
+
+Rel_D(server, backend, "Queries data, transmits user input", "HTTP, JSON")
+@enduml

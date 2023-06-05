@@ -1,0 +1,18 @@
+@startuml Meowmed UI
+!include  https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+SHOW_PERSON_OUTLINE()
+
+Person(user, "Employee")
+
+System_Boundary(ui, "Meowmed+ UI") {
+    Container(browser, "Browser", "HTML", "Generated HTML with optional JavaScript")
+    Container(server, "Server", "deno, SSR", "Dynamically generates site from backend data")
+}
+
+System_Ext(backend, "Meowmed+ Services", "Backend composed of microservices")
+
+Rel(user, browser, "manages customers, insurance policies")
+Rel_R(browser, server, "transmits user input", "HTML Forms")
+Rel(server, backend, "transmits user input", "HTTP, JSON")
+@enduml

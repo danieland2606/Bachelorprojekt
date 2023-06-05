@@ -47,11 +47,11 @@ loading.
 
 ## Common Functionality
 
-Functionality that is used by multiple routes, islands or Components is
-currently collected in [/common](./common). customerClient and policyClient only
-provide test data to allow the development server to display data. In the docker
-build they are replaced by their _prod variants. These pass functionality from
-the generated client with some minor processing.
+Functionality that is used by multiple routes, islands or components is
+currently collected in [/common](./common). client.ts only provides test data to
+allow the development server to display something. In the docker build it is
+replaced by client_prod. This passes functionality from the generated client
+with some minor processing.
 
 Other files in /common collect functionality that has some internal
 relationship. Functionality that is used in multiple places but not yet grouped
