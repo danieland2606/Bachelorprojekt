@@ -41,11 +41,11 @@ function nestProperty(target: Obj, [key, val]: [string, string]) {
   if (type === "undefined" || isFiltered(last)) {
     return target;
   }
-  keys.reduce(setIfNotDef, target)[last] = convert(val, type);
+  keys.reduce(setIfInObject, target)[last] = convert(val, type);
   return target;
 }
 
-function setIfNotDef(obj: Obj, key: string) {
+function setIfInObject(obj: Obj, key: string) {
   if (!canSet(key, obj)) {
     throw new Error(
       `Cannot set property ${key}. Not in prototype chain or not an object:\n${
