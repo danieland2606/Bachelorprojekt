@@ -75,10 +75,11 @@ public class PolicyService {
 		this.pRepository = policyRepository;
 		this.oRepository = objectOfInsuranceRepository;
 		this.cRepository = catRepository;
-		//Policysetup.setUp(policyRepository, objectOfInsuranceRepository, catRepository);
+		//Policysetup.setUp(policyRepository, objectOfInsuranceRepository);
+		Policysetup.catSetUp(catRepository);
 	}
 
-    /**
+	/**
 	 * Diese Methode nimmt die Anfrage des REST-Controllers für die PolicyListe an und gibt diese gefiltert zurück.
 	 * @param c_id ID des Customers dessen Policys angefragt werden. 
 	 * @param fields Eine Liste an Komma-separierten an benötigten Feldern (z.B. startDate,endDate,coverage,objectOfInsurance.name)

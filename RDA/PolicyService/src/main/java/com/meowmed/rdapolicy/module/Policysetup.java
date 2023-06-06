@@ -14,7 +14,7 @@ public class Policysetup {
     	/**
 	 * Setup Methode für das erzeugen von Testdaten bzw. füllen der Datenbank
 	 */
-	public static void setUp(PolicyRepository pRepository, ObjectOfInsuranceRepository oRepository, CatRepository cRepository){
+	public static void setUp(PolicyRepository pRepository, ObjectOfInsuranceRepository oRepository){
                 LocalDate startDate = LocalDate.of(2017, 1, 15);
                 LocalDate endDate1 = LocalDate.of(2099, 1, 1);
                 LocalDate birthDate1 = LocalDate.of(2015, 1, 1);
@@ -31,6 +31,9 @@ public class Policysetup {
                 oRepository.save(cat2);
                 pRepository.save(policy1);
                 pRepository.save(policy2);
+        }
+
+        public static void catSetUp(CatRepository cRepository){
                 ArrayList<CatEntity> entities = new ArrayList<>();
                 entities.add(new CatEntity(1, "siamese", 12, 15, 4, 7, 2, new String[]{"seal","blau","lilac","creme"})) ;
                 entities.add(new CatEntity(2, "perser", 12, 16, 4, 7, 3, new String[]{"weiß", "schildpatt","schwarz"}));
