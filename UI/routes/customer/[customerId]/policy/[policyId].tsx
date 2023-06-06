@@ -72,7 +72,7 @@ function formatInvoiceList(invoices: Invoice[]) {
 
 function invoiceToTableItem(invoice: Invoice) {
   const { id, dueDate, amount, details } = invoice;
-  const row = [id, dueDate, amount, details];
+  const row = [id, dueDate, `${amount}€`, details];
   return { row, active: true, actions: {} };
 }
 
