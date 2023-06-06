@@ -97,7 +97,7 @@ function formatPolicyList(
 
 function policyToTableItem(policy: PolicyShort, customerId: number) {
   const { id, name, startDate, endDate, coverage, active } = policy;
-  const row = [id, name, startDate, endDate, coverage + " €"];
+  const row = [id, name, startDate, endDate, `${coverage}€`];
   const actions = formatActions(customerId, id);
   return { row, actions, active };
 }
