@@ -1,5 +1,6 @@
 package EDA.MeowMed.Logic;
 
+import java.time.LocalDate;
 import java.util.*;
 
 import EDA.MeowMed.Exceptions.DatabaseAccessException;
@@ -144,7 +145,11 @@ public class PolicyService {
 
             // dueDate is startDate by default
             if (policy.getDueDate() == null) { //TODO: validate IllegalArgumentException maybeeee?
-                policy.setDueDate(policy.getStartDate()); //TODO: Validiere, dass dueDate nicht in der Vergangenheit sein kann?
+                policy.setDueDate(policy.getStartDate());
+            }
+
+            if (policy.getDueDate().isBefore(LocalDate.now())) {
+                throw new InvalidPolicyDataException("Das Fälligkeitsdatum darf nicht in der Vergangenheit liegen.");
             }
 
             policy.setPremium(this.getPremium(policy.getCustomer(), policy));
@@ -338,7 +343,7 @@ public class PolicyService {
      @param newPolicy the new policy data to update the policy with
      @throws ObjectNotFoundException if the policy with the given policyID doesn't exist in the database
      */
-    public void updatePolicy(Long policyID, Policy newPolicy) throws ObjectNotFoundException {
+    public void updatePolicy(Long policyID, Policy newPolicy) throws ObjectNotFoundException, InvalidPolicyDataException {
         Optional<Policy> p = this.policyRepository.findById(policyID);
         if (p.isEmpty()) {
             throw new ObjectNotFoundException("The given Policy with PolicyID: " + policyID + " does not exist in the database.");
@@ -346,7 +351,10 @@ public class PolicyService {
         Policy persistentPolicy = p.get();
         persistentPolicy.setCoverage(newPolicy.getCoverage());
         persistentPolicy.getObjectOfInsurance().setPersonality(newPolicy.getObjectOfInsurance().getPersonality());
-        persistentPolicy.setDueDate(newPolicy.getDueDate()); //TODO: check if this should be possible //TODO: Validiere, dass dueDate nicht in der Vergangenheit sein kann?
+        if (newPolicy.getDueDate().isBefore(LocalDate.now())) {
+            throw new InvalidPolicyDataException("Das Fälligkeitsdatum darf nicht in der Vergangenheit liegen.");
+        }
+        persistentPolicy.setDueDate(newPolicy.getDueDate()); //TODO: check if this should be possible
         this.updatePolicyDataBasedOnNewInformation(persistentPolicy, persistentPolicy.getObjectOfInsurance().getPersonality().equals("sehr verspielt"));
     }
 

@@ -149,6 +149,8 @@ public class PolicyController {
             return new ResponseEntity<>(HttpStatusCode.valueOf(204));
         } catch (ObjectNotFoundException e) {
             return new ResponseEntity<String>("The Policy with ID: " + policyID + " does not exist.",HttpStatusCode.valueOf(404));
+        } catch (InvalidPolicyDataException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 }
