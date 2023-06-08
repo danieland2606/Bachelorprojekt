@@ -13,7 +13,7 @@ import java.util.*;
 import java.util.stream.Stream;
 
 public class EmailTemplateParser {
-    private Map<String, Set<String>> emailTemplateObjects;
+    private final Map<String, Set<String>> emailTemplateObjects;
 
     /**
      * Build a Map for each template found in MailTemplates and collects all variables in the template.

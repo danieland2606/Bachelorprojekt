@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.function.Function;
 
 public class EmailParser {
-    private Map<String, Function<Object, String>> parser;
+    private final Map<String, Function<Object, String>> parser;
 
     public EmailParser() {
         parser = new HashMap<>();
@@ -32,6 +32,11 @@ public class EmailParser {
 
     public Map<String, Function<Object, String>> getParser() {
         return parser;
+    }
+
+    private String parseFunFact(Object ignore){
+        //ToDo: Hier aufruf für random Funfact über katzen einfügen
+        return "ToDo: Fun Fact";
     }
 
     private String parseFormOfAddress(Object formOfAddress) {

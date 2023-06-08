@@ -60,7 +60,11 @@ public class EmailFactory {
                     properties.put(element, value);
                 }
             } catch (NoSuchMethodException e) {
-                throw new RuntimeException(e);
+                if (parser.containsKey(element)) {
+                    properties.put(element, parser.get(element).apply(null));
+                } else {
+                    throw new RuntimeException(e);
+                }
             } catch (InvocationTargetException e) {
                 throw new RuntimeException(e);
             } catch (IllegalAccessException e) {
