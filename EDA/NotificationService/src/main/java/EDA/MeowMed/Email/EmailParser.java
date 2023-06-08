@@ -1,5 +1,8 @@
 package EDA.MeowMed.Email;
 
+import EDA.MeowMed.REST.CatFactResponse;
+import org.springframework.web.client.RestTemplate;
+
 import java.lang.reflect.InvocationTargetException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -34,9 +37,13 @@ public class EmailParser {
         return parser;
     }
 
-    private String parseFunFact(Object ignore){
-        //ToDo: Hier aufruf für random Funfact über katzen einfügen
-        return "ToDo: Fun Fact";
+    private String parseFunFact(Object ignore) {
+        try {
+            RestTemplate restTemplate = new RestTemplate();
+            return restTemplate.getForObject("https://catfact.ninja/fact", CatFactResponse.class).getFact();
+        } catch (Exception e) {
+            return "Cats walk on their toes."; // Use a default Fact if something goes wrong
+        }
     }
 
     private String parseFormOfAddress(Object formOfAddress) {
