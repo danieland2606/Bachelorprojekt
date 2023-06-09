@@ -2,12 +2,12 @@ package EDA.MeowMed.Logic;
 
 import EDA.MeowMed.Persistence.Entity.Bill;
 import EDA.MeowMed.Persistence.Entity.Customer;
-import event.objects.customer.CustomerCreatedEvent;
+import event.objects.customer.CustomerEvent;
+import event.objects.policy.PolicyEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import EDA.MeowMed.Persistence.*;
-import event.objects.policy.subclasses.PolicyPojo;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -27,47 +27,47 @@ public class BillingService {
     }
 
     //TODO: Doccomment
-    public void addCustomer(CustomerCreatedEvent customerCreatedEvent) {
-        this.customerRepository.save(new Customer(customerCreatedEvent));
+    public void addCustomer(CustomerEvent customerEvent) {
+        this.customerRepository.save(new Customer(customerEvent));
     }
 
     //TODO: Doccomment
-    public void addBillForNewlyCreatedPolicy(PolicyPojo p) throws NoSuchElementException{
-        double chargedAmount = p.getPremium() * 12;
+    public void addBillForNewlyCreatedPolicy(PolicyEvent policyEvent) throws NoSuchElementException{
+        double chargedAmount = policyEvent.getPremium() * 12;
         if (Math.abs(chargedAmount) < 0.001) {
             return; // Dont create a Bill when the charged amount is 0 because this would not make any sense
         }
         Bill b = new Bill();
-        b.setPolicyId(p.getId());
-        b.setStartDate(p.getStartDate());
-        b.setDueDate(p.getDueDate());
+        b.setPolicyId(policyEvent.getPid());
+        b.setStartDate(policyEvent.getStartDate());
+        b.setDueDate(policyEvent.getDueDate());
         b.setChargedAmount(chargedAmount);
-        Optional<Customer> customerForPolicy = this.customerRepository.findById(p.getCustomer().getId());
+        Optional<Customer> customerForPolicy = this.customerRepository.findById(policyEvent.getCid());
         if (customerForPolicy.isEmpty()) {
-            throw new NoSuchElementException("Kunde mit ID: " + p.getCustomer().getId() + " Existiert nicht!"); //TODO: Sind alle Rückgabewerte Englisch/Deutsch? Sollte man generell im ganzen Projekt nochmal prüfen ob das einheitlich ist
+            throw new NoSuchElementException("Kunde mit ID: " + policyEvent.getCid() + " Existiert nicht!"); //TODO: Sind alle Rückgabewerte Englisch/Deutsch? Sollte man generell im ganzen Projekt nochmal prüfen ob das einheitlich ist
         }
         b.setCustomer(customerForPolicy.get());
         this.billRepository.save(b);
     }
 
     //TODO: Doccomment
-    public void addBillForUpdatedPolicy(PolicyPojo p) throws NoSuchElementException{
+    public void addBillForUpdatedPolicy(PolicyEvent policyEvent) throws NoSuchElementException{
         double alreadyChargedAmount = 0.0;
-        for (Bill b : this.billRepository.getBillsByPolicyId(p.getId())) {
+        for (Bill b : this.billRepository.getBillsByPolicyId(policyEvent.getPid())) {
             alreadyChargedAmount += b.getChargedAmount();
         }
-        double amountForNewBill = (p.getPremium() * 12) - alreadyChargedAmount;
+        double amountForNewBill = (policyEvent.getPremium() * 12) - alreadyChargedAmount;
         if (Math.abs(amountForNewBill) < 0.001) {
             return; // Dont create a Bill when the charged amount is 0 because this would not make any sense
         }
         Bill b = new Bill();
-        b.setPolicyId(p.getId());
-        b.setStartDate(p.getStartDate());
-        b.setDueDate(p.getDueDate());
+        b.setPolicyId(policyEvent.getPid());
+        b.setStartDate(policyEvent.getStartDate());
+        b.setDueDate(policyEvent.getDueDate());
         b.setChargedAmount(amountForNewBill);
-        Optional<Customer> customerForPolicy = this.customerRepository.findById(p.getCustomer().getId());
+        Optional<Customer> customerForPolicy = this.customerRepository.findById(policyEvent.getCid());
         if (customerForPolicy.isEmpty()) {
-            throw new NoSuchElementException("Kunde mit ID: " + p.getCustomer().getId() + " Existiert nicht!");
+            throw new NoSuchElementException("Kunde mit ID: " + policyEvent.getCid() + " Existiert nicht!");
         }
         b.setCustomer(customerForPolicy.get());
         this.billRepository.save(b);

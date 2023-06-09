@@ -2,6 +2,7 @@ package EDA.MeowMed.Persistence.Entity;
 
 import com.fasterxml.jackson.annotation.JsonFilter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import event.objects.customer.subclasses.AddressEvent;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
@@ -74,8 +75,8 @@ public class Address implements Serializable {
      *
      * @return
      */
-    public event.objects.customer.subclasses.Address toCustomerAddress() {
-        return new event.objects.customer.subclasses.Address(
+    public AddressEvent toEvent() {
+        return new AddressEvent(
                 city,
                 street,
                 postalCode

@@ -2,10 +2,8 @@ package EDA.MeowMed.Application;
 
 import EDA.MeowMed.Email.Email;
 import EDA.MeowMed.Email.EmailFactory;
-import event.objects.customer.CustomerChangedEvent;
-import event.objects.customer.CustomerCreatedEvent;
-import event.objects.policy.PolicyChangedEvent;
-import event.objects.policy.PolicyCreatedEvent;
+import event.objects.customer.CustomerEvent;
+import event.objects.policy.PolicyEvent;
 import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,23 +24,23 @@ public class NotificationService {
     /**
      *
      */
-    public void sendCustomerCreatedMail(CustomerCreatedEvent customerCreated) {
+    public void sendCustomerCreatedMail(CustomerEvent customerEvent) {
         this.sendEmail(emailFactory.buildEmail(
-                customerCreated.getEmail(),
+                customerEvent.getEmail(),
                 sender,
                 "Willkommen bei MeowMed!",
                 "customernotification",
-                customerCreated
+                customerEvent
         ));
     }
 
-    public void sendCustomerChangedMail(CustomerChangedEvent customerChanged) {
+    public void sendCustomerChangedMail(CustomerEvent customerEvent) {
         this.sendEmail(emailFactory.buildEmail(
-                customerChanged.getEmail(),
+                customerEvent.getEmail(),
                 sender,
                 "Änderung der Angaben zu Ihrer Person",
                 "customerchangednotification",
-                customerChanged
+                customerEvent
         ));
     }
 
@@ -50,33 +48,33 @@ public class NotificationService {
     /**
      *
      */
-    public void sendPolicyCreatedMail(PolicyCreatedEvent policyCreated) {
+    public void sendPolicyCreatedMail(PolicyEvent policyEvent) {
         this.sendEmail(emailFactory.buildEmail(
-                policyCreated.getEmail(),
+                "",//todo policyEvent.getEmail(),
                 sender,
                 "Ihre MeowMed Vertragsinformationen",
                 "policynotification",
-                policyCreated
+                policyEvent
         ));
     }
 
-    public void sendPolicyChangedMail(PolicyChangedEvent policyChangedEvent) {
+    public void sendPolicyChangedMail(PolicyEvent policyEvent) {
         this.sendEmail(emailFactory.buildEmail(
-                policyChangedEvent.getEmail(),
+                "",//todo policyEvent.getEmail(),
                 sender,
                 "Ihre Vertragsänderungen",
                 "policychangednotification",
-                policyChangedEvent
+                policyEvent
         ));
     }
 
-    public void sendPolicyCancelledMail(PolicyChangedEvent policyChangedEvent) {
+    public void sendPolicyCancelledMail(PolicyEvent policyEvent) {
         this.sendEmail(emailFactory.buildEmail(
-                policyChangedEvent.getEmail(),
+                "",//todo policyEvent.getEmail(),
                 sender,
                 "Kündigung Ihres Vertrages",
                 "policycancellednotification",
-                policyChangedEvent
+                policyEvent
         ));
     }
 

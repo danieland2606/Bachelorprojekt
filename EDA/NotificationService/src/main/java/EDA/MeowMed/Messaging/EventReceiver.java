@@ -1,10 +1,8 @@
 package EDA.MeowMed.Messaging;
 
 import EDA.MeowMed.Application.NotificationService;
-import event.objects.customer.CustomerChangedEvent;
-import event.objects.customer.CustomerCreatedEvent;
-import event.objects.policy.PolicyChangedEvent;
-import event.objects.policy.PolicyCreatedEvent;
+import event.objects.customer.CustomerEvent;
+import event.objects.policy.PolicyEvent;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -17,32 +15,32 @@ public class EventReceiver {
     private NotificationService notificationService;
 
     @RabbitListener(queues = "#{customerCreatedQueue.name}")
-    public void receiveCustomer(CustomerCreatedEvent customerCreatedEvent) throws InterruptedException {
+    public void receiveCustomer(CustomerEvent customerEvent) throws InterruptedException {
         System.out.println("Received newly created Customer");
-        notificationService.sendCustomerCreatedMail(customerCreatedEvent);
+        notificationService.sendCustomerCreatedMail(customerEvent);
     }
 
     @RabbitListener(queues = "#{customerChangedQueue.name}")
-    public void receiveCustomerChanged(CustomerChangedEvent customerChangedEvent) throws InterruptedException {
+    public void receiveCustomerChanged(CustomerEvent customerEvent) throws InterruptedException {
         System.out.println("Received changed Customer Data");
-        notificationService.sendCustomerChangedMail(customerChangedEvent);
+        notificationService.sendCustomerChangedMail(customerEvent);
     }
 
     @RabbitListener(queues = "#{policyCreatedQueue.name}")
-    public void receivePolicy(PolicyCreatedEvent policyCreatedEvent) throws InterruptedException {
+    public void receivePolicy(PolicyEvent policyEvent) throws InterruptedException {
         System.out.println("Received newly created Policy");
-        notificationService.sendPolicyCreatedMail(policyCreatedEvent);
+        notificationService.sendPolicyCreatedMail(policyEvent);
     }
 
     @RabbitListener(queues = "#{policyChangedQueue.name}")
-    public void receivePolicyChanged(PolicyChangedEvent policyChangedEvent) throws InterruptedException {
+    public void receivePolicyChanged(PolicyEvent policyEvent) throws InterruptedException {
         System.out.println("Received changed Policy Data");
-        notificationService.sendPolicyChangedMail(policyChangedEvent);
+        notificationService.sendPolicyChangedMail(policyEvent);
     }
 
     @RabbitListener(queues = "#{policyCancelledQueue.name}")
-    public void receivePolicyCancelled(PolicyChangedEvent policyChangedEvent) throws InterruptedException {
+    public void receivePolicyCancelled(PolicyEvent policyEvent) throws InterruptedException {
         System.out.println("Received cancel Policy Event");
-        notificationService.sendPolicyCancelledMail(policyChangedEvent);
+        notificationService.sendPolicyCancelledMail(policyEvent);
     }
 }

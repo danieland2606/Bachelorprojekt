@@ -1,15 +1,17 @@
-package event.objects.policy.subclasses;
+package event.objects.policy;
+
+import event.objects.policy.subclasses.ObjectOfInsuranceEvent;
 
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDate;
 
-public class PolicyPojo implements Serializable {
+public class PolicyEvent implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 9L;
 
-    private long id;
+    private Long pid;
 
     private LocalDate startDate;
 
@@ -21,31 +23,30 @@ public class PolicyPojo implements Serializable {
 
     private double premium;
 
-    private ObjectOfInsurancePojo objectOfInsurancePojo;
+    private Long cid;
+    private ObjectOfInsuranceEvent objectOfInsuranceEvent;
 
-    private CustomerPojo customer;
-
-    public PolicyPojo(long id, LocalDate startDate, LocalDate endDate, LocalDate dueDate, int coverage, double premium, ObjectOfInsurancePojo objectOfInsurancePojo, CustomerPojo customer) {
-        this.id = id;
+    public PolicyEvent(Long pid, LocalDate startDate, LocalDate endDate, LocalDate dueDate, int coverage, double premium, ObjectOfInsuranceEvent objectOfInsuranceEvent, Long cid) {
+        this.pid = pid;
         this.startDate = startDate;
         this.endDate = endDate;
         this.dueDate = dueDate;
         this.coverage = coverage;
         this.premium = premium;
-        this.objectOfInsurancePojo = objectOfInsurancePojo;
-        this.customer = customer;
+        this.objectOfInsuranceEvent = objectOfInsuranceEvent;
+        this.cid = cid;
     }
 
-    public PolicyPojo() {
+    public PolicyEvent() {
 
     }
 
-    public long getId() {
-        return id;
+    public Long getPid() {
+        return pid;
     }
 
-    public void setId(long id) {
-        this.id = id;
+    public void setPid(Long pid) {
+        this.pid = pid;
     }
 
     public LocalDate getStartDate() {
@@ -89,19 +90,19 @@ public class PolicyPojo implements Serializable {
         this.premium = premium;
     }
 
-    public ObjectOfInsurancePojo getObjectOfInsurance() {
-        return objectOfInsurancePojo;
+    public ObjectOfInsuranceEvent getObjectOfInsurance() {
+        return objectOfInsuranceEvent;
     }
 
-    public void setObjectOfInsurance(ObjectOfInsurancePojo objectOfInsurancePojo) {
-        this.objectOfInsurancePojo = objectOfInsurancePojo;
+    public void setObjectOfInsurance(ObjectOfInsuranceEvent objectOfInsuranceEvent) {
+        this.objectOfInsuranceEvent = objectOfInsuranceEvent;
     }
 
-    public CustomerPojo getCustomer() {
-        return this.customer;
+    public Long getCid() {
+        return this.cid;
     }
 
-    public void setCustomer(CustomerPojo customer) {
-        this.customer = customer;
+    public void setCid(Long cid) {
+        this.cid = cid;
     }
 }

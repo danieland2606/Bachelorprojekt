@@ -1,7 +1,6 @@
 package event.objects.customer;
 
-import event.objects.customer.subclasses.Address;
-
+import event.objects.customer.subclasses.AddressEvent;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -11,12 +10,11 @@ import java.time.LocalDate;
 /**
  * event
  */
-
-public class CustomerCreatedEvent implements Serializable {
+public class CustomerEvent implements Serializable {
     @Serial
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 7L;
 
-    private Long id;
+    private Long cid;
     private String firstName;
     private String lastName;
     private String formOfAddress;
@@ -24,17 +22,18 @@ public class CustomerCreatedEvent implements Serializable {
     private String maritalStatus;
     private LocalDate dateOfBirth;
     private String employmentStatus;
+
     private boolean dogOwner;
-    private Address address;
+    private AddressEvent address;
     private String phoneNumber;
     private String email;
     private String bankDetails;
 
-    public CustomerCreatedEvent() {
+    public CustomerEvent() {
     }
 
-    public CustomerCreatedEvent(Long id, String firstName, String lastName, String formOfAddress, String title, String maritalStatus, LocalDate dateOfBirth, String employmentStatus, boolean dogOwner, Address address, String phoneNumber, String email, String bankDetails) {
-        this.id = id;
+    public CustomerEvent(Long cid, String firstName, String lastName, String formOfAddress, String title, String maritalStatus, LocalDate dateOfBirth, String employmentStatus, boolean dogOwner, AddressEvent address, String phoneNumber, String email, String bankDetails) {
+        this.cid = cid;
         this.firstName = firstName;
         this.lastName = lastName;
         this.formOfAddress = formOfAddress;
@@ -50,11 +49,11 @@ public class CustomerCreatedEvent implements Serializable {
     }
 
     public Long getCid() {
-        return id;
+        return cid;
     }
 
     public void setCid(Long id) {
-        this.id = id;
+        this.cid = id;
     }
 
     public String getFirstName() {
@@ -113,7 +112,7 @@ public class CustomerCreatedEvent implements Serializable {
         this.employmentStatus = employmentStatus;
     }
 
-    public boolean getDogOwner() {
+    public boolean isDogOwner() {
         return dogOwner;
     }
 
@@ -121,11 +120,11 @@ public class CustomerCreatedEvent implements Serializable {
         this.dogOwner = dogOwner;
     }
 
-    public Address getAddress() {
+    public AddressEvent getAddress() {
         return address;
     }
 
-    public void setAddress(Address address) {
+    public void setAddress(AddressEvent address) {
         this.address = address;
     }
 

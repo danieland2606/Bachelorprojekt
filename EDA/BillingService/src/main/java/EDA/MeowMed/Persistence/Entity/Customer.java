@@ -1,7 +1,6 @@
 package EDA.MeowMed.Persistence.Entity;
 
-import event.objects.customer.CustomerChangedEvent;
-import event.objects.customer.CustomerCreatedEvent;
+import event.objects.customer.CustomerEvent;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
@@ -44,7 +43,7 @@ public class Customer implements Serializable {
         this.bankDetails = bankDetails;
     }
 
-    public Customer(CustomerCreatedEvent c) {
+    public Customer(CustomerEvent c) {
         this.id = c.getCid();
         this.formOfAddress = c.getFormOfAddress();
         this.title = c.getTitle();

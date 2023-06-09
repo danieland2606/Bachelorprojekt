@@ -1,7 +1,7 @@
 package EDA.MeowMed.Persistence.Entity;
 
 import com.fasterxml.jackson.annotation.JsonFilter;
-import event.objects.policy.subclasses.ObjectOfInsurancePojo;
+import event.objects.policy.subclasses.ObjectOfInsuranceEvent;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
@@ -139,8 +139,8 @@ public class ObjectOfInsurance implements Serializable {
         this.weight = weight;
     }
 
-    public ObjectOfInsurancePojo toPojo() {
-        return new ObjectOfInsurancePojo(
+    public ObjectOfInsuranceEvent toEvent() {
+        return new ObjectOfInsuranceEvent(
                 name,
                 race,
                 color,

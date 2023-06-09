@@ -1,8 +1,7 @@
 package EDA.MeowMed.Persistence.Entity;
 
 
-import event.objects.customer.CustomerCreatedEvent;
-import event.objects.policy.subclasses.CustomerPojo;
+import event.objects.customer.CustomerEvent;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
@@ -55,16 +54,16 @@ public class Customer implements Serializable {
         this.employmentStatus = employmentStatus;
     }
 
-    public Customer(CustomerCreatedEvent c) {
-        this.id = c.getCid();
-        this.firstName = c.getFirstName();
-        this.lastName = c.getLastName();
-        this.formOfAddress = c.getFormOfAddress();
-        this.title = c.getTitle();
-        this.dogOwner = c.getDogOwner();
-        this.address = new Address(c.getAddress());
-        this.email = c.getEmail();
-        this.employmentStatus = c.getEmploymentStatus();
+    public Customer(CustomerEvent customerEvent) {
+        this.id = customerEvent.getCid();
+        this.firstName = customerEvent.getFirstName();
+        this.lastName = customerEvent.getLastName();
+        this.formOfAddress = customerEvent.getFormOfAddress();
+        this.title = customerEvent.getTitle();
+        this.dogOwner = customerEvent.isDogOwner();
+        this.address = new Address(customerEvent.getAddress());
+        this.email = customerEvent.getEmail();
+        this.employmentStatus = customerEvent.getEmploymentStatus();
     }
 
     public Customer() {
@@ -132,15 +131,5 @@ public class Customer implements Serializable {
 
     public void setEmploymentStatus(String employmentStatus) {
         this.employmentStatus = employmentStatus;
-    }
-
-    public CustomerPojo toPojo() {
-        return new CustomerPojo(
-                id,
-                firstName,
-                lastName,
-                formOfAddress,
-                email
-        );
     }
 }

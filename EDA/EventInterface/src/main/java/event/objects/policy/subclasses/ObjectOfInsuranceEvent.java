@@ -4,7 +4,7 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDate;
 
-public class ObjectOfInsurancePojo implements Serializable {
+public class ObjectOfInsuranceEvent implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 4L;
@@ -25,7 +25,7 @@ public class ObjectOfInsurancePojo implements Serializable {
 
     private double weight;
 
-    public ObjectOfInsurancePojo(String name, String race, String color, LocalDate dateOfBirth, boolean castrated, String personality, String environment, double weight) {
+    public ObjectOfInsuranceEvent(String name, String race, String color, LocalDate dateOfBirth, boolean castrated, String personality, String environment, double weight) {
         this.name = name;
         this.race = race;
         this.color = color;
@@ -36,7 +36,7 @@ public class ObjectOfInsurancePojo implements Serializable {
         this.weight = weight;
     }
 
-    public ObjectOfInsurancePojo() {
+    public ObjectOfInsuranceEvent() {
 
     }
 
@@ -72,7 +72,7 @@ public class ObjectOfInsurancePojo implements Serializable {
         this.dateOfBirth = dateOfBirth;
     }
 
-    public boolean getCastrated() {
+    public boolean isCastrated() {
         return castrated;
     }
 

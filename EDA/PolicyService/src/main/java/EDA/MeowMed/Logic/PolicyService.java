@@ -9,16 +9,14 @@ import EDA.MeowMed.Exceptions.ObjectNotFoundException;
 import EDA.MeowMed.Module.PremiumCalculator;
 import EDA.MeowMed.Persistence.*;
 import EDA.MeowMed.Persistence.Entity.CatRace;
-import event.objects.customer.CustomerChangedEvent;
-import event.objects.customer.CustomerCreatedEvent;
 import EDA.MeowMed.Messaging.PolicySender;
 import EDA.MeowMed.Persistence.Entity.Customer;
 import EDA.MeowMed.Persistence.Entity.Policy;
 import EDA.MeowMed.Rest.PremiumCalculationData;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
-import event.objects.policy.PolicyChangedEvent;
-import event.objects.policy.PolicyCreatedEvent;
+import event.objects.customer.CustomerEvent;
+import event.objects.policy.PolicyEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.converter.json.MappingJacksonValue;
@@ -166,7 +164,7 @@ public class PolicyService {
                     .setFailOnUnknownId(false));
 
             // Send a message to notify that the policy was created
-            this.policySender.sendPolicyCreated(new PolicyCreatedEvent(policy.toPojo()));
+            this.policySender.sendPolicyCreated(policy.toEvent());
 
             return wrapper;
         } catch (DataAccessException ex) {
@@ -237,11 +235,11 @@ public class PolicyService {
      * Adds a new customer to the database based on the information provided in a CustomerCreatedEvent.
      * The address of the customer is also saved in the database.
      *
-     * @param customerCreatedEvent an event containing the information of the new customer
+     * @param customerEvent an event containing the information of the new customer
      * @throws DataAccessException if there's an error accessing the database
      */
-    public void addNewCustomer(CustomerCreatedEvent customerCreatedEvent) throws DataAccessException {
-        Customer customer = new Customer(customerCreatedEvent);
+    public void addNewCustomer(CustomerEvent customerEvent) throws DataAccessException {
+        Customer customer = new Customer(customerEvent);
         // Save the address of the customer in the database
         this.addressRepository.save(customer.getAddress());
         // Save the customer in the database
@@ -363,21 +361,21 @@ public class PolicyService {
      address, and employment status. If the customer's employment status changes to "arbeitslos",
      all their policies will be canceled. Then, it flushes the changes to the customer repository and
      recalculates the premium for all the customer's policies.
-     @param customerChangedEvent The event that contains the new customer data
+     @param customerEvent The event that contains the new customer data
      */
-    public void updateCustomer(CustomerChangedEvent customerChangedEvent) throws ObjectNotFoundException{
-        Customer customer = this.getCustomer(customerChangedEvent.getCid());
-        customer.setFirstName(customerChangedEvent.getFirstName());
-        customer.setLastName(customerChangedEvent.getLastName());
-        customer.setFormOfAddress(customerChangedEvent.getFormOfAddress());
-        customer.setTitle(customerChangedEvent.getTitle());
-        customer.setDogOwner(customerChangedEvent.getDogOwner());
-        customer.getAddress().setPostalCode(customerChangedEvent.getAddress().getPostalCode());
-        customer.setEmail(customerChangedEvent.getEmail());
-        customer.setEmploymentStatus(customerChangedEvent.getEmploymentStatus());
+    public void updateCustomer(CustomerEvent customerEvent) throws ObjectNotFoundException{
+        Customer customer = this.getCustomer(customerEvent.getCid());
+        customer.setFirstName(customerEvent.getFirstName());
+        customer.setLastName(customerEvent.getLastName());
+        customer.setFormOfAddress(customerEvent.getFormOfAddress());
+        customer.setTitle(customerEvent.getTitle());
+        customer.setDogOwner(customerEvent.isDogOwner());
+        customer.getAddress().setPostalCode(customerEvent.getAddress().getPostalCode());
+        customer.setEmail(customerEvent.getEmail());
+        customer.setEmploymentStatus(customerEvent.getEmploymentStatus());
         this.addressRepository.save(customer.getAddress());
         this.customerRepository.save(customer);
-        this.updateAllPoliciesOfCustomer(customerChangedEvent.getCid(), customer.getEmploymentStatus().equals("arbeitslos"));
+        this.updateAllPoliciesOfCustomer(customerEvent.getCid(), customer.getEmploymentStatus().equals("arbeitslos"));
     }
 
     /**
@@ -409,11 +407,11 @@ public class PolicyService {
             newPolicy.setActive(false);
             policyRepository.save(newPolicy);
             objectOfInsuranceRepository.save(newPolicy.getObjectOfInsurance());
-            this.policySender.sendPolicyCancelled(new PolicyChangedEvent(newPolicy.toPojo()));
+            this.policySender.sendPolicyCancelled(newPolicy.toEvent());
         } else if(premiumChanged) {
             policyRepository.save(newPolicy);
             objectOfInsuranceRepository.save(newPolicy.getObjectOfInsurance());
-            this.policySender.sendPolicyChanged(new PolicyChangedEvent(newPolicy.toPojo()));
+            this.policySender.sendPolicyChanged(newPolicy.toEvent());
         }
     }
 }
