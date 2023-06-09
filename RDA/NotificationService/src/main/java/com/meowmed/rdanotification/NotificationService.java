@@ -76,7 +76,7 @@ public class NotificationService {
             }else{
                 properties.put("dogOwner", "Nein");
             }
-            properties.put("spruch", catfact.getDouble("fact"));
+            properties.put("spruch", catfact.get("fact"));
             Context context = new Context();
 
             context.setVariables(properties);
