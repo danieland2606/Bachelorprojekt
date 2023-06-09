@@ -1,5 +1,6 @@
 version: '3.7'
 services:
+############################################# Customer Service #########################################################
   customer:
     build:
       context: ./
@@ -45,7 +46,7 @@ services:
       retries: 10
 
 
-
+############################################# Notification Service #####################################################
   notification:
     build:
       context: ./
@@ -58,11 +59,33 @@ services:
     environment:
       - spring.rabbitmq.host=rabbitmq
     depends_on:
+      notificationdb:
+        condition: service_healthy
       rabbitmq:
         condition: service_started
 
+  notificationdb:
+    image: mariadb:latest
+    container_name: notificationdb
+    networks:
+      - "default"
+    environment:
+      MARIADB_ROOT_PASSWORD: test
+      MYSQL_DATABASE: Notification
+      MYSQL_USER: user
+      MYSQL_PASSWORD: 123456789
+    healthcheck:
+      test: "mariadb --user=root --password=$$MARIADB_ROOT_PASSWORD --execute \"SHOW DATABASES;\""
+      interval: 5s
+      timeout: 20s
+      retries: 10
+    #ports:
+    #  - "3306:3306"
+    volumes:
+      - notificationdb_data:/var/lib/mysql
 
 
+############################################### Policy Service #########################################################
   policy:
     build:
       context: ./
@@ -93,6 +116,28 @@ services:
         #    - spring.jpa.database-platform=org.hibernate.dialect.MariaDBDialect
       - spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MariaDBDialect
 
+  policydb:
+    image: mariadb:latest
+    container_name: policydb
+    networks:
+      - "default"
+    environment:
+      MARIADB_ROOT_PASSWORD: test
+      MYSQL_DATABASE: Policy
+      MYSQL_USER: user
+      MYSQL_PASSWORD: 123456789
+    healthcheck:
+      test: "mariadb --user=root --password=$$MARIADB_ROOT_PASSWORD --execute \"SHOW DATABASES;\""
+      interval: 5s
+      timeout: 20s
+      retries: 10
+    #ports:
+    #  - "3306:3306"
+    volumes:
+      - policydb_data:/var/lib/mysql
+
+
+############################################# Billing Service ##########################################################
   billing:
     build:
       context: ./
@@ -123,26 +168,6 @@ services:
       #    - spring.jpa.database-platform=org.hibernate.dialect.MariaDBDialect
       - spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MariaDBDialect
 
-  policydb:
-    image: mariadb:latest
-    container_name: policydb
-    networks:
-      - "default"
-    environment:
-      MARIADB_ROOT_PASSWORD: test
-      MYSQL_DATABASE: Policy
-      MYSQL_USER: user
-      MYSQL_PASSWORD: 123456789
-    healthcheck:
-      test: "mariadb --user=root --password=$$MARIADB_ROOT_PASSWORD --execute \"SHOW DATABASES;\""
-      interval: 5s
-      timeout: 20s
-      retries: 10
-    #ports:
-    #  - "3306:3306"
-    volumes:
-      - policydb_data:/var/lib/mysql
-
   billingdb:
     image: mariadb:latest
     container_name: billingdb
@@ -161,6 +186,7 @@ services:
       retries: 10
 
 
+  ############################################ RabbitMQ ################################################################
   rabbitmq:
     image: rabbitmq:management-alpine
     container_name: rabbitmq-l
