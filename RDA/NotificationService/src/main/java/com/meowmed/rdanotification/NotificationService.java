@@ -6,6 +6,7 @@ import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +15,7 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring5.SpringTemplateEngine;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
@@ -52,6 +54,7 @@ public class NotificationService {
 
     public ResponseEntity<String> customerNotification(MailCustomerEntity details) {
         try {
+            JSONObject catfact = WebClient.create().get().uri("https://api.exchangerate.host/latest?base=EUR").retrieve().bodyToMono(JSONObject.class).block();
             MimeMessage mimeMessage = emailSender.createMimeMessage();
             MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED, StandardCharsets.UTF_8.name());
             mimeMessageHelper.setFrom(sender);
@@ -73,7 +76,9 @@ public class NotificationService {
             }else{
                 properties.put("dogOwner", "Nein");
             }
+            properties.put("spruch", catfact.get("fact"));
             Context context = new Context();
+
             context.setVariables(properties);
             String html = templateEngine.process("customernotification.html", context);
             mimeMessageHelper.setText(html, true);
@@ -220,6 +225,7 @@ public class NotificationService {
         properties.put("firstName", details.getFirstName());
         properties.put("lastName", details.getLastName());
         properties.put("pid", details.getPid());
+
         if(!usage.equalsIgnoreCase("delete")){
             properties.put("startDate", formatDate(details.getStartDate()));
             properties.put("endDate", formatDate(details.getEndDate()));
@@ -233,6 +239,18 @@ public class NotificationService {
             properties.put("environment", details.getEnvironment());
             properties.put("weight", details.getWeight());
             properties.put("premium", details.getPremium());
+
+            JSONObject exchangeRate = WebClient.create().get().uri("https://api.exchangerate.host/latest?base=EUR").retrieve().bodyToMono(JSONObject.class).block();
+            //JSONObject exchangeObj = new JSONObject(exchangeRate);
+            StringBuilder altPremium = new StringBuilder();
+            altPremium.append("USD: ");
+            altPremium.append(details.getPremium()*exchangeRate.getDouble("USD"));
+            altPremium.append(" $, BTC: ");
+            altPremium.append(details.getPremium()*exchangeRate.getDouble("BTC"));
+            altPremium.append(" XBT, SAR: ");
+            altPremium.append(details.getPremium()*exchangeRate.getDouble("SAR"));
+
+            properties.put("premiumalternativ", altPremium.toString());
         }
         if(debugmode) System.out.println("createNotificationMessage: properties: " + properties);
 
@@ -258,4 +276,5 @@ public class NotificationService {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
         return date.format(formatter);
     }
+
 }
