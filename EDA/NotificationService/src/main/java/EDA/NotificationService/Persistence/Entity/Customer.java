@@ -11,8 +11,6 @@ import java.time.LocalDate;
 public class Customer implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
     @Column(name = "customer_id", unique = true, nullable = false)
     private Long cid;
 
@@ -152,7 +150,7 @@ public class Customer implements Serializable {
         this.employmentStatus = employmentStatus;
     }
 
-    public boolean getDogOwner() {
+    public boolean isDogOwner() {
         return dogOwner;
     }
 

@@ -1,5 +1,6 @@
 package EDA.BillingService.Logic;
 
+import EDA.BillingService.Messaging.EventSenderService;
 import EDA.BillingService.Persistence.BillRepository;
 import EDA.BillingService.Persistence.CustomerRepository;
 import EDA.BillingService.Persistence.Entity.Bill;
@@ -17,7 +18,8 @@ import java.util.Optional;
 
 @Service
 public class BillingService {
-
+    @Autowired
+    EventSenderService eventSenderService;
     private final CustomerRepository customerRepository;
 
     private final BillRepository billRepository;
@@ -50,6 +52,7 @@ public class BillingService {
         }
         b.setCustomer(customerForPolicy.get());
         this.billRepository.save(b);
+        eventSenderService.sendPolicyCreatedBill(policyEvent.getPid());
     }
 
     //TODO: Doccomment
@@ -73,6 +76,7 @@ public class BillingService {
         }
         b.setCustomer(customerForPolicy.get());
         this.billRepository.save(b);
+        eventSenderService.sendPolicyChangedBill(policyEvent.getPid());
     }
 
     //TODO: Doccomment

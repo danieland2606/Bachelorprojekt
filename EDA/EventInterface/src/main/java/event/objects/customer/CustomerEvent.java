@@ -12,7 +12,7 @@ import java.time.LocalDate;
  */
 public class CustomerEvent implements Serializable {
     @Serial
-    private static final long serialVersionUID = 7L;
+    private static final long serialVersionUID = 10L;
 
     private Long cid;
     private String firstName;

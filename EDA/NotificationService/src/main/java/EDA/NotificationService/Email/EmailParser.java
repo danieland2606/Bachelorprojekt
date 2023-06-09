@@ -14,6 +14,10 @@ import java.util.function.Function;
 public class EmailParser {
     private final Map<String, Function<Map<String, Object>, String>> parser;
 
+    /**
+     * Constructs a new EmailParser object.
+     * Initializes the parser map by dynamically detecting and adding parse methods.
+     */
     public EmailParser() {
         parser = new HashMap<>();
         Arrays.stream(EmailParser.class.getDeclaredMethods())
@@ -35,6 +39,20 @@ public class EmailParser {
 
     public Map<String, Function<Map<String, Object>, String>> getParser() {
         return parser;
+    }
+
+    /* The parse methods
+     * Format:
+     * private String parse"NameOfElement"(Map<String, Object> properties){
+     *     "ClassOfElement" "NameOfElement" = ("Object to cast to") properties.get("NameOfElement");
+     *     // Some operation
+     *     return "NameOfElement";
+     * }
+     */
+
+    private String parsePremium(Map<String, Object> properties){
+        double premium = (double) properties.get("premium");
+        return premium + "€";
     }
 
     private String parseFunFact(Map<String, Object> properties) {

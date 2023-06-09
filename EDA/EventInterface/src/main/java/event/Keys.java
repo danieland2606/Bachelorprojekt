@@ -7,4 +7,6 @@ public class Keys {
     public static final String POLICY_CHANGED_KEY = "policy.changed";
     public static final String POLICY_CHANGED_ANY_KEY = "#.policy.changed";
     public static final String POLICY_CHANGED_CANCELLED_KEY = "cancelled.policy.changed";
+    public static final String POLICY_CHANGED_BILL_KEY = "bill.changed";
+    public static final String POLICY_CREATED_BILL_KEY = "bill.created";
 }

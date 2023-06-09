@@ -27,35 +27,47 @@ public class MessagingConfig {
          */
         @Bean
         public Queue customerCreatedQueue() {
-            return new Queue("customercreated");
+            return new Queue("notification_customercreated");
         }
 
         @Bean
         public Queue customerChangedQueue() {
-            return new Queue("customerchanged");
+            return new Queue("notification_customerchanged");
         }
 
         @Bean
         public Queue policyCreatedQueue() {
-            return new Queue("policycreated");
+            return new Queue("notification_policycreated");
         }
 
         @Bean
         public Queue policyChangedQueue() {
-            return new Queue("policychanged");
+            return new Queue("notification_policychanged");
         }
 
         @Bean
         public Queue policyCancelledQueue() {
-            return new Queue("policycancelled");
+            return new Queue("notification_policycancelled");
         }
+
+        @Bean
+        public Queue policyCreatedBillingQueue() {
+            return new Queue("notification_policycreatedbilling");
+        }
+
+        @Bean
+        public Queue policyChangedBillingQueue() {
+            return new Queue("notification_policychangedbilling");
+        }
+
+
 
         /**
          * Binds a queue to an exchange
          * Consumes only events witch specified routing key
          *
-         * @param topic                Exchange to bind to
-         * @param customerCreatedQueue Queue used by consumer
+         * @param topic Exchange to bind to
+         * @param queue Queue used by consumer
          * @return Topic Exchange object
          */
         @Bean
@@ -81,6 +93,16 @@ public class MessagingConfig {
         @Bean
         public Binding policyCancelledBinding(TopicExchange topic, Queue policyChangedQueue) {
             return BindingBuilder.bind(policyCancelledQueue()).to(topic).with(Keys.POLICY_CHANGED_CANCELLED_KEY);
+        }
+
+        @Bean
+        public Binding policyCreatedBillingBinding(TopicExchange topic, Queue policyCreatedBillingQueue) {
+            return BindingBuilder.bind(policyCreatedBillingQueue()).to(topic).with(Keys.POLICY_CREATED_BILL_KEY);
+        }
+
+        @Bean
+        public Binding policyChangedBillingBinding(TopicExchange topic, Queue policyChangedBillingQueue) {
+            return BindingBuilder.bind(policyChangedBillingQueue()).to(topic).with(Keys.POLICY_CHANGED_BILL_KEY);
         }
 
         @Bean

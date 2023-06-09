@@ -23,13 +23,11 @@ public class EventSenderService {
     }
 
     /**
-     * Sends an event to a topic exchange when new customer is created
-     * Topic name is defined in 'MessagingConfig' class
+     * Sends a customer created event by converting the customer object to an event and publishing it to the topic exchange.
      *
-     * @param customer Data of newly crated customer
-     * @return Status code for sending success
+     * @param customer The customer object representing the created customer.
      */
-    public boolean sendCustomerCreatedEvent(Customer customer) {
+    public void sendCustomerCreatedEvent(Customer customer) {
         try {
             template.convertAndSend(topicExchange.getName(), Keys.CUSTOMER_CREATED_KEY, customer.toEvent());
             System.out.println(" [x] Sent");
@@ -37,10 +35,13 @@ public class EventSenderService {
             System.out.println("Fehler beim Senden");
             e.printStackTrace();
         }
-        return true;
     }
-
-    public boolean sendCustomerChangedEvent(Customer customer) {
+    /**
+     * Sends a customer changed event by converting the customer object to an event and publishing it to the topic exchange.
+     *
+     * @param customer The customer object representing the changed customer.
+     */
+    public void sendCustomerChangedEvent(Customer customer) {
         try {
             template.convertAndSend(topicExchange.getName(), Keys.CUSTOMER_CHANGED_KEY,customer.toEvent());
             System.out.println(" [x] Sent");
@@ -48,6 +49,5 @@ public class EventSenderService {
             System.out.println("Fehler beim Senden");
             e.printStackTrace();
         }
-        return true;
     }
 }

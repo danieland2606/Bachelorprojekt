@@ -11,8 +11,6 @@ import java.time.LocalDate;
 public class Policy implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
     @Column(name = "id", unique = true, nullable = false)
     private Long pid;
 
@@ -35,11 +33,11 @@ public class Policy implements Serializable {
     private double premium;
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "object_of_insurance_id")
+    @JoinColumn(name = "object_of_insurance")
     private ObjectOfInsurance objectOfInsurance;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "customer_id")
+    @JoinColumn(name = "customer")
     private Customer customer;
 
     public Policy(long pid, LocalDate startDate, LocalDate endDate, LocalDate dueDate, int coverage, int premium, ObjectOfInsurance objectOfInsurance,Customer customer) {

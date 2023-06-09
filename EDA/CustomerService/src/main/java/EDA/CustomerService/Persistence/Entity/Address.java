@@ -71,9 +71,9 @@ public class Address implements Serializable {
     }
 
     /**
-     * TODO: Add comment
+     * Converts the Address object to an AddressEvent object.
      *
-     * @return
+     * @return The AddressEvent object representing the Address.
      */
     public AddressEvent toEvent() {
         return new AddressEvent(

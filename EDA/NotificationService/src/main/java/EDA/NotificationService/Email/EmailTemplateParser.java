@@ -53,6 +53,12 @@ public class EmailTemplateParser {
         }
     }
 
+    /**
+     * Retrieves the set of elements associated with the specified email template.
+     *
+     * @param template The template for which to retrieve the elements.
+     * @return The set of elements present in the template.
+     */
     public Set<String> getElementsOfTemplate(String template) {
         return emailTemplateObjects.get(template);
     }

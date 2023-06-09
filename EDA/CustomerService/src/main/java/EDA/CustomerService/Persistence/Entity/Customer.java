@@ -179,8 +179,9 @@ public class Customer implements Serializable {
     }
 
     /**
-     * ToDo Add Comment
-      * @return
+     * Converts the Customer object to a CustomerEvent object.
+     *
+     * @return The CustomerEvent object representing the Customer.
      */
     public CustomerEvent toEvent() {
         return new CustomerEvent(

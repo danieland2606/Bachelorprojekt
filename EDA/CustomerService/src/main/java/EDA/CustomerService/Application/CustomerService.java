@@ -28,11 +28,11 @@ public class CustomerService {
     private CustomerValidationService customerValidationService;
 
     /**
-     * TODO: Add comment
+     * Retrieves a JSON representation of a customer with the specified ID, excluding the "id" field.
      *
-     * @param id
-     * @return
-     * @throws JsonProcessingException
+     * @param id The ID of the customer.
+     * @return The JSON representation of the customer.
+     * @throws JsonProcessingException If an error occurs while processing JSON.
      */
     public String getCustomer(Long id) throws JsonProcessingException {
         Optional<Customer> request = customerRepository.findById(id);
@@ -46,19 +46,17 @@ public class CustomerService {
         mapper.registerModule(new JavaTimeModule());
         mapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm a z"));
         return mapper.writer(filters).writeValueAsString(request.get());
-
     }
 
     /**
-     * TODO: Add comment
+     * Retrieves a JSON representation of a list of customers based on the specified fields.
      *
-     * @param fields
-     * @return
-     * @throws JsonProcessingException
-     * @throws IllegalArgumentException
+     * @param fields The fields to include in the JSON representation. If null, all fields will be included.
+     * @return The JSON representation of the list of customers.
+     * @throws JsonProcessingException       If an error occurs while processing JSON.
+     * @throws IllegalArgumentException     If an invalid field-parameter is provided.
      */
     public String getCustomerList(String fields) throws JsonProcessingException, IllegalArgumentException {
-
         // request all Customers
         List<Customer> request = customerRepository.findAll();
         // checks if request is empty or not
@@ -129,12 +127,12 @@ public class CustomerService {
     }
 
     /**
-     * TODO: Add comment
-     * TODO: Add better validation for jsonParsing
+     * Adds a new customer based on the provided JSON representation.
      *
-     * @param jsonCustomer
-     * @return
-     * @throws JsonProcessingException
+     * @param jsonCustomer The JSON representation of the customer to be added.
+     * @return The JSON representation of the created customer id.
+     * @throws JsonProcessingException If an error occurs while processing JSON.
+     * @throws IllegalArgumentException If the JSON format is incorrect.
      */
     public String addCustomer(String jsonCustomer) throws JsonProcessingException {
         if (jsonCustomer.contains("\"id\":")) {
@@ -156,6 +154,16 @@ public class CustomerService {
         return mapper.writer(filters).writeValueAsString(customer);
     }
 
+    /**
+     * Replaces an existing customer with the specified ID based on the provided JSON representation.
+     *
+     * @param id           The ID of the customer to be replaced.
+     * @param jsonCustomer The JSON representation of the customer to replace the existing one.
+     * @return A string representation (null) indicating a successful replacement.
+     * @throws JsonProcessingException    If an error occurs while processing JSON.
+     * @throws IllegalArgumentException  If the JSON format is incorrect.
+     * @throws NoSuchElementException    If the customer with the specified ID does not exist.
+     */
     public String replaceCustomer(Long id, String jsonCustomer) throws JsonProcessingException, IllegalArgumentException, NoSuchElementException {
         if (jsonCustomer.contains("\"id\":")) {
             throw new IllegalArgumentException("Wrong Json Format");

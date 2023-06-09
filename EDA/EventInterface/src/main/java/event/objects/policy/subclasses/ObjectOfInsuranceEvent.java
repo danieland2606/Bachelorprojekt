@@ -7,7 +7,7 @@ import java.time.LocalDate;
 public class ObjectOfInsuranceEvent implements Serializable {
 
     @Serial
-    private static final long serialVersionUID = 4L;
+    private static final long serialVersionUID = 21L;
 
     private String name;
 

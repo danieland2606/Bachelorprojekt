@@ -19,6 +19,12 @@ public class EmailSenderService {
     @Autowired
     private SpringTemplateEngine templateEngine;
 
+    /**
+     * Sends an HTML email using the provided Email object.
+     *
+     * @param email The Email object containing the necessary details for sending the email.
+     * @throws MessagingException if an error occurs while preparing or sending the email.
+     */
     public void sendHtmlMessage(Email email) throws MessagingException {
         MimeMessage mimeMessage = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(mimeMessage,

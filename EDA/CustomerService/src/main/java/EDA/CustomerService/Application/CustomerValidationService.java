@@ -31,10 +31,11 @@ public class CustomerValidationService {
     };
 
     /**
-     * TODO: Add comment
+     * Validates the given customer by invoking all the check methods present in the CustomerValidationService class.
+     * If any check method throws an IllegalArgumentException, it will be re-thrown.
      *
-     * @param customer
-     * @throws IllegalArgumentException
+     * @param customer The customer to be validated.
+     * @throws IllegalArgumentException If any check method throws this exception during validation.
      */
     public void validateCustomer(Customer customer) throws IllegalArgumentException {
         Arrays.stream(CustomerValidationService.class.getDeclaredMethods())
@@ -86,7 +87,6 @@ public class CustomerValidationService {
         }
     }
 
-
     private void checkAddress(Customer customer) throws IllegalArgumentException {
         Address address = customer.getAddress();
         if (!address.getPostalCode().matches("[0-9]+") || !(address.getPostalCode().length() == 5)) {
@@ -99,6 +99,7 @@ public class CustomerValidationService {
             throw new IllegalArgumentException(address.getStreet() + " is not a valid argument for street!");
         }
     }
+
     private void checkBankDetails(Customer customer) throws IllegalArgumentException {
         if (!IBANCheckDigit.IBAN_CHECK_DIGIT.isValid(customer.getBankDetails())) {
             throw new IllegalArgumentException(customer.getBankDetails() + " is not a valid argument for bankDetails!");

@@ -9,7 +9,7 @@ import java.time.LocalDate;
 public class PolicyEvent implements Serializable {
 
     @Serial
-    private static final long serialVersionUID = 9L;
+    private static final long serialVersionUID = 20L;
 
     private Long pid;
 

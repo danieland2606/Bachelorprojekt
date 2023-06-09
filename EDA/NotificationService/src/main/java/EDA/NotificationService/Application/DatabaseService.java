@@ -96,17 +96,16 @@ public class DatabaseService {
     }
 
     /**
-     * Retrieves a policy based on the provided customer and policy ID.
+     * Retrieves a policy based on the provided policy ID.
      *
-     * @param customer The customer associated with the policy.
      * @param pid The ID of the policy to retrieve.
      * @return The retrieved policy.
-     * @throws RuntimeException if no policy exists with the provided customer and policy ID.
+     * @throws RuntimeException if no policy exists with the provided ID.
      */
-    public Policy getPolicy(Customer customer, Long pid){
-        Optional<Policy> request = policyRepository.findPolicyByCustomerAndPid(customer,pid);
+    public Policy getPolicy(Long pid){
+        Optional<Policy> request = policyRepository.findById(pid);
         if (request.isEmpty()){
-            throw new RuntimeException("No such policy exists");
+            throw new RuntimeException("No such Policy exists");
         }
         return request.get();
     }

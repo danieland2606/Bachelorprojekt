@@ -3,7 +3,7 @@ package EDA.NotificationService.Application;
 import EDA.NotificationService.Email.Email;
 import EDA.NotificationService.Email.EmailFactory;
 import EDA.NotificationService.Persistence.Entity.Customer;
-import event.objects.policy.PolicyEvent;
+import EDA.NotificationService.Persistence.Entity.Policy;
 import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,13 +23,14 @@ public class EmailService {
 
     @Autowired
     public EmailService(EmailSenderService emailSenderService, DatabaseService databaseService, EmailFactory emailFactory){
-        this.emailSenderService =emailSenderService;
+        this.emailSenderService = emailSenderService;
         this.databaseService = databaseService;
-        this.emailFactory =emailFactory;
+        this.emailFactory = emailFactory;
     }
-
     /**
+     * Sends a customer created email to the specified customer.
      *
+     * @param customer The representation of the customer to whom the email will be sent.
      */
     public void sendCustomerCreatedMail(Customer customer) {
         this.sendEmail(emailFactory.buildEmail(
@@ -40,7 +41,11 @@ public class EmailService {
                 customer
         ));
     }
-
+    /**
+     * Sends a customer changed email to the specified customer.
+     *
+     * @param customer The representation of the customer to whom the email will be sent.
+     */
     public void sendCustomerChangedMail(Customer customer) {
         this.sendEmail(emailFactory.buildEmail(
                 customer.getEmail(),
@@ -51,40 +56,54 @@ public class EmailService {
         ));
     }
 
-
     /**
+     * Sends a policy created email to the customer associated with the specified policy.
      *
+     * @param policy The representation of the policy for which the email will be sent.
      */
-    public void sendPolicyCreatedMail(PolicyEvent policyEvent) {
+    public void sendPolicyCreatedMail(Policy policy) {
         this.sendEmail(emailFactory.buildEmail(
-                "",//todo policyEvent.getEmail(),
+                policy.getCustomer().getEmail(),
                 sender,
                 "Ihre MeowMed Vertragsinformationen",
                 "policynotification",
-                policyEvent
+                policy
         ));
     }
-
-    public void sendPolicyChangedMail(PolicyEvent policyEvent) {
+    /**
+     * Sends a policy changed email to the customer associated with the specified policy.
+     *
+     * @param policy The representation of the policy for which the email will be sent.
+     */
+    public void sendPolicyChangedMail(Policy policy) {
         this.sendEmail(emailFactory.buildEmail(
-                "",//todo policyEvent.getEmail(),
+                policy.getCustomer().getEmail(),
                 sender,
                 "Ihre Vertragsänderungen",
                 "policychangednotification",
-                policyEvent
+                policy
         ));
     }
-
-    public void sendPolicyCancelledMail(PolicyEvent policyEvent) {
+    /**
+     * Sends a policy cancelled email to the customer associated with the specified policy.
+     *
+     * @param policy The representation of the policy for which the email will be sent.
+     */
+    public void sendPolicyCancelledMail(Policy policy) {
         this.sendEmail(emailFactory.buildEmail(
-                "",//todo policyEvent.getEmail(),
+                policy.getCustomer().getEmail(),
                 sender,
                 "Kündigung Ihres Vertrages",
                 "policycancellednotification",
-                policyEvent
+                policy
         ));
     }
 
+    /**
+     * Sends the given email using the email sender service.
+     *
+     * @param email The email to be sent.
+     */
     private void sendEmail(Email email) {
         try {
             emailSenderService.sendHtmlMessage(email);

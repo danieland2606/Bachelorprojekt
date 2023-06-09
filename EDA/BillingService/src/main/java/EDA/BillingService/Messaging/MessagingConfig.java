@@ -23,17 +23,17 @@ public class MessagingConfig {
 
     @Bean(name = "CustomerCreatedQueue")
     public Queue CustomerCreatedQueue() {
-        return new Queue("customercreated");
+        return new Queue("billing_customercreated");
     }
 
     @Bean(name = "PolicyCreatedQueue")
     public Queue PolicyCreatedQueue() {
-        return new Queue("policycreated");
+        return new Queue("billing_policycreated");
     }
 
     @Bean(name = "PolicyChangedQueue")
     public Queue PolicyChangedQueue() {
-        return new Queue("policychanged");
+        return new Queue("billing_policychanged");
     }
 
     @Bean

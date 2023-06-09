@@ -1,5 +1,6 @@
 package EDA.NotificationService.Messaging;
 
+import event.objects.billing.BillingEvent;
 import event.objects.customer.CustomerEvent;
 import event.objects.policy.PolicyEvent;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -41,5 +42,17 @@ public class EventReceiver {
     public void receivePolicyCancelled(PolicyEvent policyEvent) throws InterruptedException {
         System.out.println("Received cancel Policy Event");
         eventHandler.handlePolicyCancelled(policyEvent);
+    }
+
+    @RabbitListener(queues = "#{policyCreatedBillingQueue.name}")
+    public void receivePolicyCreatedBilling(BillingEvent billingEvent) throws InterruptedException {
+        System.out.println("Received created Billing Event");
+        eventHandler.handlePolicyCreatedBilling(billingEvent);
+    }
+
+    @RabbitListener(queues = "#{policyChangedBillingQueue.name}")
+    public void receivePolicyChangedBilling(BillingEvent billingEvent) throws InterruptedException {
+        System.out.println("Received changed Billing Event");
+        eventHandler.handlePolicyChangedBilling(billingEvent);
     }
 }

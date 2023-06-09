@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
@@ -18,21 +19,14 @@ public class EmailFactory {
     EmailParser emailParser;
 
     /**
-     * ToDo: get sane
-     * Author is very tired, he is eepy. Author has had a very long day of writing code
-     * and wants to take just a smol sleeb. he eeby and neebies to sleeby.
-     * ithir sleepy and need bed-bye time.
-     * author is currently experiencing critical levels of being a sleevjy lil guy and needs to go to bedb.
-     * he is ver tired and needs to slep. just a little sleejing time as a treat.
-     * ithir neebs to slek, ver twired boyo, just a lil guy. ithir needs his beaty sleeb.
-     * look at him go! he yawn big cause he skeejy, neebs to falafel asleep. nini time! good night, mister author.
+     * Builds an Email object with the specified parameters.
      *
-     * @param to
-     * @param from
-     * @param subject
-     * @param template
-     * @param objects
-     * @return
+     * @param to       The recipient of the email.
+     * @param from     The sender of the email.
+     * @param subject  The subject of the email.
+     * @param template The template to be used for the email content.
+     * @param objects  The objects to extract properties from.
+     * @return The built Email object.
      */
     public Email buildEmail(
             String to,
@@ -64,7 +58,13 @@ public class EmailFactory {
         return email;
     }
 
-
+    /**
+     * Transforms the fields of an object and its nested objects recursively,
+     * into am Map<"name of field", "value of field"> format, or in other words into its properties.
+     *
+     * @param object The object to extract properties from.
+     * @return The map of properties extracted from the object and its nested objects.
+     */
     private Map<String, Object> getPropertiesOfObject(Object object){
         HashMap<String, Object> properties = new HashMap<>();
         try {
@@ -73,20 +73,19 @@ public class EmailFactory {
             for (Field field:fields) {
                 String prefixMethode = "";
                 Class<?> fieldType = field.getType();
-                if (fieldType.isInstance(boolean.class)) {
+                if (fieldType.isAssignableFrom(boolean.class)) {
                     prefixMethode="is";
                 } else {
                     prefixMethode="get";
                 }
-                String fieldName =field.getName();
+                String fieldName = field.getName();
                 String getter = prefixMethode + StringUtils.capitalize(fieldName);
                 Object value = object.getClass().getMethod(getter).invoke(object);
 
-                if(!fieldType.isInstance(String.class)||!fieldType.isPrimitive()){
-                    properties.putAll(getPropertiesOfObject(value));
-                } else {
+                if (fieldType.isAssignableFrom(String.class) || fieldType.isAssignableFrom(LocalDate.class)|| fieldType.isAssignableFrom(Long.class) || fieldType.isPrimitive())
                     properties.put(fieldName,value);
-                }
+                else
+                    properties.putAll(getPropertiesOfObject(value));
             }
         } catch (NoSuchMethodException e) {
             throw new RuntimeException(e);

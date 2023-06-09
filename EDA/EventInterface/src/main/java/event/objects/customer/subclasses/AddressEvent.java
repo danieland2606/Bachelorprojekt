@@ -5,7 +5,7 @@ import java.io.Serializable;
 
 public class AddressEvent implements Serializable {
     @Serial
-    private static final long serialVersionUID = 2L;
+    private static final long serialVersionUID = 11L;
     private String city;
     private String street;
     private String postalCode;
