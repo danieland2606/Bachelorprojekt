@@ -12,6 +12,7 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.NestedRuntimeException;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.MappingJacksonValue;
@@ -270,13 +271,6 @@ public class PolicyService {
 		PolicyEntity policy = pRepository.save(newPolicy);
 		if(debugmode) System.out.println("updatePolicy: tempCalc: " + tempCalc + " policy: " + policy);
 
-		// Versand der Mail
-		//if(!currentOoBEntity.equals(pRequest.getObjectOfInsurance()) || !currentPolicy.equals(newPolicy)){
-			MailPolicyEntity mail = new MailPolicyEntity(policy, customer);
-			ResponseEntity<String> response = sendMail("policychangenotification", mail);
-			if (response.getStatusCode() != HttpStatus.OK) throw new MailSendException("Mail konnte nicht versendet werden");
-			if(debugmode) System.out.println("updatePolicy: mail: " + mail + " response: " + response);
-		//}
 		// Vorbereitung für BillingService
 		if(debugmode) System.out.println("updatePolicy: newPremium: " + newPolicy.getPremium() + " oldPremium: " + currentPolicy.getPremium());
 		if(newPolicy.getPremium() != oldPremium){
@@ -285,6 +279,15 @@ public class PolicyService {
 			if(debugmode) System.out.println("updatePolicy: bill: " + bill);
 		}
 		
+
+		// Versand der Mail
+		//if(!currentOoBEntity.equals(pRequest.getObjectOfInsurance()) || !currentPolicy.equals(newPolicy)){
+			MailPolicyEntity mail = new MailPolicyEntity(policy, customer);
+			ResponseEntity<String> response = sendMail("policychangenotification", mail);
+			if (response.getStatusCode() != HttpStatus.OK) throw new MailSendException("Mail konnte nicht versendet werden");
+			if(debugmode) System.out.println("updatePolicy: mail: " + mail + " response: " + response);
+		//}
+
 
 		// Verpacken und Filtern von der Ausgabe
 		MappingJacksonValue wrapper = new MappingJacksonValue(policy);

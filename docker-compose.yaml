@@ -71,6 +71,8 @@ services:
     image: meowmed-notification.rda
     profiles:
       - rda
+    ports:
+      - "8084:8080"
     environment:
       spring_mail_port: "587"
       spring_mail_host: smtp.gmail.com

@@ -15,7 +15,7 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring5.SpringTemplateEngine;
-import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.client.RestTemplate;
 
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
@@ -54,7 +54,9 @@ public class NotificationService {
 
     public ResponseEntity<String> customerNotification(MailCustomerEntity details) {
         try {
-            JSONObject catfact = WebClient.create().get().uri("https://api.exchangerate.host/latest?base=EUR").retrieve().bodyToMono(JSONObject.class).block();
+            RestTemplate template = new RestTemplate();
+            ResponseEntity<String> responseEntity = template.getForEntity("https://catfact.ninja/fact", String.class);
+            JSONObject catfact = new JSONObject(responseEntity.getBody());
             MimeMessage mimeMessage = emailSender.createMimeMessage();
             MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED, StandardCharsets.UTF_8.name());
             mimeMessageHelper.setFrom(sender);
@@ -76,7 +78,7 @@ public class NotificationService {
             }else{
                 properties.put("dogOwner", "Nein");
             }
-            properties.put("spruch", catfact.get("fact"));
+            properties.put("spruch","Katzenfakt: \"" + catfact.get("fact") + "\"");
             Context context = new Context();
 
             context.setVariables(properties);
@@ -211,7 +213,7 @@ public class NotificationService {
                 template = "policydeletenotification.html";        
         }
         if(debugmode) System.out.println("createNotificationMessage: subject: " + subject + " template: " + template);
-        switch (details.getFormOfAddress()) {
+        switch (details.getFormOfAddress()){
             case "herr":
                 properties.put("formOfAddress", "geehrter Herr");
                 break;
@@ -240,15 +242,19 @@ public class NotificationService {
             properties.put("weight", details.getWeight());
             properties.put("premium", details.getPremium());
 
-            JSONObject exchangeRate = WebClient.create().get().uri("https://api.exchangerate.host/latest?base=EUR").retrieve().bodyToMono(JSONObject.class).block();
-            //JSONObject exchangeObj = new JSONObject(exchangeRate);
+            RestTemplate restTemplate = new RestTemplate();
+            ResponseEntity<String> responseEntity = restTemplate.getForEntity("https://api.exchangerate.host/latest?base=EUR", String.class);
+            JSONObject exchangeMessage = new JSONObject(responseEntity.getBody());
+            System.out.println(exchangeMessage);
+            JSONObject exchangeRate = exchangeMessage.getJSONObject("rates");
+            System.out.println(exchangeRate);            
             StringBuilder altPremium = new StringBuilder();
             altPremium.append("USD: ");
-            altPremium.append(details.getPremium()*exchangeRate.getDouble("USD"));
+            altPremium.append(Math.round(details.getPremium()*exchangeRate.getDouble("USD")*100.0)/100.0);
             altPremium.append(" $, BTC: ");
             altPremium.append(details.getPremium()*exchangeRate.getDouble("BTC"));
             altPremium.append(" XBT, SAR: ");
-            altPremium.append(details.getPremium()*exchangeRate.getDouble("SAR"));
+            altPremium.append(Math.round(details.getPremium()*exchangeRate.getDouble("SAR")*100.0)/100.0);
 
             properties.put("premiumalternativ", altPremium.toString());
         }
