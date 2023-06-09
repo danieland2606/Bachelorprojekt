@@ -29,8 +29,9 @@ public class BillingController {
      * @param invoice Das billingPolicyEntity-Objekt für die Rechnung
      */
     @PutMapping("/customer/{c_id}/policy/{p_id}/invoice")
-    public void putInvoice(@RequestBody BillingPolicyEntity invoice) {
+    public ResponseEntity<String> putInvoice(@RequestBody BillingPolicyEntity invoice) {
         bService.putInvoice(invoice);
+        return ResponseEntity.status(200).body("Success");
     }
     /**
      * Diese Methode handhabt den GET-Aufruf zum Abrufen der Rechnung für einen bestimmten Kunden und eine Policy.
