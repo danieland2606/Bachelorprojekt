@@ -216,16 +216,7 @@ paths:
                 type: object
                 properties:
                   premium:
-                    type: object
-                    properties: 
-                      EUR:
-                        type: number
-                      USD:
-                        type: number
-                      SAR:
-                        type: number
-                      BTC:
-                        type: number
+                    type: number
                 required:
                   - premium
         '400':

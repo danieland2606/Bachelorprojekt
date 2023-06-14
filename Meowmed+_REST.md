@@ -1164,12 +1164,7 @@ fetch("http://localhost:8081/policyprice", {
 
 ```json
 {
-  "premium": {
-    "EUR": 0,
-    "USD": 0,
-    "SAR": 0,
-    "BTC": 0
-  }
+  "premium": 0
 }
 ```
 
@@ -1198,11 +1193,7 @@ Status Code **200**
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|» premium|object|true|none|none|
-|»» EUR|number|false|none|none|
-|»» USD|number|false|none|none|
-|»» SAR|number|false|none|none|
-|»» BTC|number|false|none|none|
+|» premium|number|true|none|none|
 
 <aside class="success">
 This operation does not require authentication
