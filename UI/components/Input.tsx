@@ -35,11 +35,14 @@ export function Select(props: SelectProps) {
       <select
         {...subProps}
         id={name}
-        class={"select select-bordered w-full max-w-full" + clss}
+        class={"select select-bordered w-full max-w-full focus:invalid:border-red-700" +
+          clss}
       >
-        {!options?.includes("none") &&
+        {
+          !options?.includes("none") &&
           <option value="">
-          </option> /*properly fixing this would require making title optional*/}
+          </option> /*properly fixing this would require making title optional*/
+        }
         {subProps.children ??
           options?.map((option) => (
             <option value={option}>{pretty(option)}</option>
@@ -58,7 +61,9 @@ export function Input(props: InputProps) {
         <input
           {...subProps}
           id={name}
-          class={"input input-bordered w-full" + clss}
+          class={"input input-bordered w-full focus:invalid:border-red-700 focus:invalid:text-red-700" +
+            clss}
+          placeholder=" "
         />
         {unit && <span>{unit}</span>}
       </div>

@@ -1,6 +1,7 @@
 import { JSX } from "preact/jsx-runtime";
 import { Input, Select } from "$this/components/Input.tsx";
 import { Form } from "$this/components/Form.tsx";
+import DateChecker from "$this/islands/DateChecker.tsx";
 import { editMode, Mode, propMap, toISODateString } from "$this/common/util.ts";
 import {
   CatRaceValues,
@@ -20,10 +21,7 @@ export interface EditPolicyProps extends JSX.HTMLAttributes<HTMLFormElement> {
 
 const policy = propMap(new Policy());
 const cat = propMap(new ObjectOfInsurance(), "objectOfInsurance.");
-const date = new Date();
-const today = toISODateString(date);
-date.setFullYear(date.getFullYear() + 1);
-const nextYear = toISODateString(date);
+const today = toISODateString(new Date());
 const getEditable = editMode([cat.personality, policy.coverage]);
 
 export function EditPolicy(props: EditPolicyProps) {
@@ -41,15 +39,20 @@ export function EditPolicy(props: EditPolicyProps) {
       />
       <Input
         name={policy.endDate}
-        labeltext="VertragsEnde"
+        labeltext="Vertragsende"
         type="date"
-        min={nextYear}
+        min={today}
       />
       <Input
         name={policy.dueDate}
         labeltext="Fälligkeit"
         type="date"
         min={today}
+      />
+      <DateChecker
+        start={policy.startDate}
+        end={policy.endDate}
+        due={policy.dueDate}
       />
       <Input
         name={policy.coverage}
