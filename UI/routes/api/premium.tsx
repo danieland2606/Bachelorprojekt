@@ -14,11 +14,12 @@ export const handler = {
     const calcPolicy = deserializePolicyCalc(form);
     try {
       const { premium } = await policyClient.calcPolicyPrice(calcPolicy);
+
       const converted = {
         eur: premium,
-        usd: premium,
-        sar: premium,
-        btc: premium,
+        usd: await convertCurrency(premium, "USD"),
+        sar: await convertCurrency(premium, "SAR"),
+        btc: await convertCurrency(premium, "BTC"),
       };
       return respond({ premium: converted });
     } catch (_) {
@@ -26,6 +27,21 @@ export const handler = {
     }
   },
 };
+
+function round(val: number, places: number) {
+  const integer = Math.trunc(val);
+  const rest = val - integer;
+  const rounded = Number.parseFloat(rest.toPrecision(places));
+  return integer + rounded;
+}
+
+async function convertCurrency(amount: number, to: string) {
+  const response = await fetch(
+    `https://api.exchangerate.host/convert?from=EUR&to=${to}&amount=${amount}`,
+  );
+  const { result } = await response.json();
+  return round(result, 2);
+}
 
 function respond(premium: Props) {
   const options = { status: 200, headers: { "Content-Type": "text/html" } };
