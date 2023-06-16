@@ -1,7 +1,7 @@
 package EDA.NotificationService.Email;
 
-import EDA.NotificationService.REST.CatFactResponse;
-import org.springframework.web.client.RestTemplate;
+import EDA.NotificationService.REST.NotificationController;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.lang.reflect.InvocationTargetException;
 import java.time.LocalDate;
@@ -12,6 +12,9 @@ import java.util.Map;
 import java.util.function.Function;
 
 public class EmailParser {
+
+    @Autowired
+    private NotificationController notificationController;
     private final Map<String, Function<Map<String, Object>, String>> parser;
 
     /**
@@ -50,18 +53,22 @@ public class EmailParser {
      * }
      */
 
-    private String parsePremium(Map<String, Object> properties){
+    private String parsePremium(Map<String, Object> properties) {
         double premium = (double) properties.get("premium");
-        return premium + "€";
+        String displayCurrency = (String) properties.get("displayCurrency");
+        premium = notificationController.convertCurrencyFromEURToTargetCurrency(premium, displayCurrency);
+        return premium + " " + displayCurrency;
+    }
+
+    private String parseCoverage(Map<String, Object> properties) {
+        int coverage = (int) properties.get("coverage");
+        String displayCurrency = (String) properties.get("displayCurrency");
+        coverage = (int) notificationController.convertCurrencyFromEURToTargetCurrency(coverage, displayCurrency);
+        return coverage + " " + displayCurrency;
     }
 
     private String parseFunFact(Map<String, Object> properties) {
-        try {
-            RestTemplate restTemplate = new RestTemplate();
-            return restTemplate.getForObject("https://catfact.ninja/fact", CatFactResponse.class).getFact();
-        } catch (Exception e) {
-            return "Cats walk on their toes."; // Use a default Fact if something goes wrong
-        }
+        return notificationController.getRandomCatFact();
     }
 
     private String parseFormOfAddress(Map<String, Object> properties) {
@@ -76,7 +83,7 @@ public class EmailParser {
         String city = (String) properties.get("city");
         String street = (String) properties.get("street");
         String postalCode = (String) properties.get("postalCode");
-        return postalCode + " "+ city + ", "+ street;
+        return postalCode + " " + city + ", " + street;
     }
 
     private String parseDogOwner(Map<String, Object> properties) {

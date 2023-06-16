@@ -30,12 +30,13 @@ public class PolicyController {
     }
 
     /**
-     Retrieves the policy object with the given policy ID for the customer with the given customer ID.
-     @param c_id - the ID of the customer whose policy is being retrieved
-     @param p_id - the ID of the policy being retrieved
-     @return the policy object with the given policy ID for the customer with the given customer ID.
-     @throws ObjectNotFoundException if the policy with the given policy ID for the customer with the given customer ID is not found
-     @throws DatabaseAccessException if there is an error accessing the database while retrieving the policy object
+     * Retrieves the policy object with the given policy ID for the customer with the given customer ID.
+     *
+     * @param c_id - the ID of the customer whose policy is being retrieved
+     * @param p_id - the ID of the policy being retrieved
+     * @return the policy object with the given policy ID for the customer with the given customer ID.
+     * @throws ObjectNotFoundException if the policy with the given policy ID for the customer with the given customer ID is not found
+     * @throws DatabaseAccessException if there is an error accessing the database while retrieving the policy object
      */
     @GetMapping("/customer/{c_id}/policy/{p_id}")
     public ResponseEntity<?> findPolicyByCustomerIDAndPolicyID(@PathVariable long c_id, @PathVariable long p_id) {
@@ -48,28 +49,32 @@ public class PolicyController {
         } catch (DatabaseAccessException e) {
             String errorMessage = "Error while finding the policy with the id " + p_id + " for customer " + c_id +
                     ". Please check if  both, policy and customer exists and try again.\nMore info: " + e.getMessage();
-            return  ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorMessage);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorMessage);
         } catch (Exception e) {
             String errorMessage = "An unexpected error occurred while finding the policy with the id " + p_id +
-                    " for customer " + c_id +"\nMore info: " + e.getMessage();
-            return  ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorMessage);
+                    " for customer " + c_id + "\nMore info: " + e.getMessage();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorMessage);
         }
     }
 
     /**
-     This method adds a new policy for a customer with the given customerID.
-     It uses a POST request to create a new policy in the database for the given customer ID out of Customer.
-     @param c_id - the ID of the customer for which the policy is being added
-     @param policy - the policy object being added for the customer
-     @return a ResponseEntity containing the newly added policy object
-     @throws ObjectNotFoundException if the customer with the given customerID does not exist in the database
-     @throws DatabaseAccessException if there was an error accessing the database
-     @throws ObjectNotFoundException is thrown when the customer with the given customerID does not exist in the database.
-     @throws DatabaseAccessException is thrown when there is an error accessing the database.
+     * This method adds a new policy for a customer with the given customerID.
+     * It uses a POST request to create a new policy in the database for the given customer ID out of Customer.
+     *
+     * @param c_id   - the ID of the customer for which the policy is being added
+     * @param policy - the policy object being added for the customer
+     * @return a ResponseEntity containing the newly added policy object
+     * @throws ObjectNotFoundException if the customer with the given customerID does not exist in the database
+     * @throws DatabaseAccessException if there was an error accessing the database
+     * @throws ObjectNotFoundException is thrown when the customer with the given customerID does not exist in the database.
+     * @throws DatabaseAccessException is thrown when there is an error accessing the database.
      */
     @PostMapping("/customer/{c_id}/policy")
     public ResponseEntity<?> addPolicy(@PathVariable long c_id, @RequestBody Policy policy) {
         try {
+            if (policy.getDisplayCurrency() == null) {
+                policy.setDisplayCurrency("EUR");
+            }
             MappingJacksonValue savedPolicy = this.policyService.addPolicy(c_id, policy);
             return ResponseEntity.status(HttpStatus.CREATED).body(savedPolicy);
         } catch (ObjectNotFoundException e) {
@@ -87,16 +92,17 @@ public class PolicyController {
     }
 
     /**
-     Retrieves a list of policies for the given customer ID, filtered by the specified fields.
-     Uses the policyService to retrieve the policy list for the provided customer ID and filters it based on
-     the fields parameter using the getPolicyList() method. The resulting policies are returned as a MappingJacksonValue
-     wrapped in a ResponseEntity.
-     @param c_id - the ID of the customer whose policies are being retrieved
-     @param fields - the comma-separated list of fields to be included in the response
-     @return a ResponseEntity containing the MappingJacksonValue of the retrieved policies
-     @throws ObjectNotFoundException - if the customer does not exist in the database
-     @throws DatabaseAccessException - if there is an error accessing the database
-     @see PolicyService#getPolicyList(long, String)
+     * Retrieves a list of policies for the given customer ID, filtered by the specified fields.
+     * Uses the policyService to retrieve the policy list for the provided customer ID and filters it based on
+     * the fields parameter using the getPolicyList() method. The resulting policies are returned as a MappingJacksonValue
+     * wrapped in a ResponseEntity.
+     *
+     * @param c_id   - the ID of the customer whose policies are being retrieved
+     * @param fields - the comma-separated list of fields to be included in the response
+     * @return a ResponseEntity containing the MappingJacksonValue of the retrieved policies
+     * @throws ObjectNotFoundException - if the customer does not exist in the database
+     * @throws DatabaseAccessException - if there is an error accessing the database
+     * @see PolicyService#getPolicyList(long, String)
      */
     @GetMapping("/customer/{c_id}/policy")
     public ResponseEntity<?> getPolicyList(@PathVariable long c_id, @RequestParam(value = "fields") String fields) {
@@ -114,6 +120,7 @@ public class PolicyController {
 
     /**
      * Calculates the Premium
+     *
      * @param premiumCalculationData
      * @return
      */
@@ -133,18 +140,22 @@ public class PolicyController {
 
     /**
      * Updates the Policy with p_id
+     *
      * @param customerID
      * @param policyID
-     * @param policy The Policy Data
+     * @param policy     The Policy Data
      * @return
      */
     @PutMapping("/customer/{c_id}/policy/{p_id}")
     public ResponseEntity<?> changePolicy(@PathVariable("c_id") Long customerID, @PathVariable("p_id") Long policyID, @RequestBody Policy policy) {
         try {
+            if (policy.getDisplayCurrency() == null) {
+                policy.setDisplayCurrency("EUR");
+            }
             this.policyService.updatePolicy(policyID, policy);
             return new ResponseEntity<>(HttpStatusCode.valueOf(204));
         } catch (ObjectNotFoundException e) {
-            return new ResponseEntity<String>("The Policy with ID: " + policyID + " does not exist.",HttpStatusCode.valueOf(404));
+            return new ResponseEntity<String>("The Policy with ID: " + policyID + " does not exist.", HttpStatusCode.valueOf(404));
         } catch (InvalidPolicyDataException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }

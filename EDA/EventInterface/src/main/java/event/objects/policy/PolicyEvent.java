@@ -23,16 +23,19 @@ public class PolicyEvent implements Serializable {
 
     private double premium;
 
+    private String displayCurrency;
+
     private Long cid;
     private ObjectOfInsuranceEvent objectOfInsuranceEvent;
 
-    public PolicyEvent(Long pid, LocalDate startDate, LocalDate endDate, LocalDate dueDate, int coverage, double premium, ObjectOfInsuranceEvent objectOfInsuranceEvent, Long cid) {
+    public PolicyEvent(Long pid, LocalDate startDate, LocalDate endDate, LocalDate dueDate, int coverage, double premium, String displayCurrency, ObjectOfInsuranceEvent objectOfInsuranceEvent, Long cid) {
         this.pid = pid;
         this.startDate = startDate;
         this.endDate = endDate;
         this.dueDate = dueDate;
         this.coverage = coverage;
         this.premium = premium;
+        this.displayCurrency = displayCurrency;
         this.objectOfInsuranceEvent = objectOfInsuranceEvent;
         this.cid = cid;
     }
@@ -104,5 +107,13 @@ public class PolicyEvent implements Serializable {
 
     public void setCid(Long cid) {
         this.cid = cid;
+    }
+
+    public String getDisplayCurrency() {
+        return this.displayCurrency;
+    }
+
+    public void setDisplayCurrency(String displayCurrency) {
+        this.displayCurrency = displayCurrency;
     }
 }

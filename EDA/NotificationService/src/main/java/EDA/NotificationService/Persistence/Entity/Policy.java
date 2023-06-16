@@ -28,9 +28,11 @@ public class Policy implements Serializable {
     @Column(name = "coverage", nullable = false)
     private int coverage;
 
-
     @Column(name = "premium", nullable = false)
     private double premium;
+
+    @Column(name = "display_currency", nullable = false)
+    private String displayCurrency;
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "object_of_insurance")
@@ -40,13 +42,14 @@ public class Policy implements Serializable {
     @JoinColumn(name = "customer")
     private Customer customer;
 
-    public Policy(long pid, LocalDate startDate, LocalDate endDate, LocalDate dueDate, int coverage, int premium, ObjectOfInsurance objectOfInsurance,Customer customer) {
+    public Policy(long pid, LocalDate startDate, LocalDate endDate, LocalDate dueDate, int coverage, double premium, String displayCurrency, ObjectOfInsurance objectOfInsurance, Customer customer) {
         this.pid = pid;
         this.startDate = startDate;
         this.endDate = endDate;
         this.dueDate = dueDate;
         this.coverage = coverage;
         this.premium = premium;
+        this.displayCurrency = displayCurrency;
         this.objectOfInsurance = objectOfInsurance;
         this.customer = customer;
     }
@@ -58,6 +61,7 @@ public class Policy implements Serializable {
         this.dueDate = policy.getDueDate();
         this.coverage = policy.getCoverage();
         this.premium = policy.getPremium();
+        this.displayCurrency = policy.getDisplayCurrency();
         this.objectOfInsurance = new ObjectOfInsurance(policy.getObjectOfInsurance());
         this.customer = policy.getCustomer();
     }
@@ -73,6 +77,7 @@ public class Policy implements Serializable {
         this.dueDate = policyEvent.getDueDate();
         this.coverage = policyEvent.getCoverage();
         this.premium = policyEvent.getPremium();
+        this.displayCurrency = policyEvent.getDisplayCurrency();
         this.objectOfInsurance = new ObjectOfInsurance(policyEvent.getObjectOfInsurance());
         this.customer = customer;
     }
@@ -115,6 +120,14 @@ public class Policy implements Serializable {
 
     public void setPremium(double premium) {
         this.premium = premium;
+    }
+
+    public String getDisplayCurrency() {
+        return displayCurrency;
+    }
+
+    public void setDisplayCurrency(String displayCurrency) {
+        this.displayCurrency = displayCurrency;
     }
 
     public ObjectOfInsurance getObjectOfInsurance() {

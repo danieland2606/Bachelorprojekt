@@ -3,11 +3,12 @@ package EDA.PolicyService.Persistence.Entity;
 import com.fasterxml.jackson.annotation.JsonFilter;
 import event.objects.policy.PolicyEvent;
 import jakarta.persistence.*;
+
 import java.io.Serializable;
 import java.time.LocalDate;
 
 @Entity
-@Table(name="Policy")
+@Table(name = "Policy")
 @JsonFilter("policyFilter")
 public class Policy implements Serializable {
 
@@ -31,10 +32,10 @@ public class Policy implements Serializable {
     @Column(name = "coverage", nullable = false)
     private int coverage;
 
-
-    @Column(name = "premium", nullable = false  )
+    @Column(name = "premium", nullable = false)
     private double premium;
-
+    @Column(name = "display_currency", nullable = false)
+    private String displayCurrency;
     @Column(name = "active", nullable = false)
     private boolean active;
 
@@ -46,27 +47,28 @@ public class Policy implements Serializable {
     @JoinColumn(name = "customer_id")
     private Customer customer;
 
-    public Policy(long id, LocalDate startDate, LocalDate endDate, LocalDate dueDate, int coverage, int premium, boolean active, ObjectOfInsurance objectOfInsurance) {
+    public Policy(long id, LocalDate startDate, LocalDate endDate, LocalDate dueDate, int coverage, double premium, String displayCurrency, boolean active, ObjectOfInsurance objectOfInsurance) {
         this.id = id;
         this.startDate = startDate;
         this.endDate = endDate;
         this.dueDate = dueDate;
         this.coverage = coverage;
         this.premium = premium;
+        this.displayCurrency = displayCurrency;
         this.active = active;
         this.objectOfInsurance = objectOfInsurance;
     }
 
-    public Policy(Policy p) {
-        this.id = p.getId();
-        this.startDate = p.getStartDate();
-        this.endDate = p.getEndDate();
-        this.dueDate = p.getDueDate();
-        this.coverage = p.getCoverage();
-        this.premium = p.getPremium();
-        this.active = p.isActive();
-        this.objectOfInsurance = new ObjectOfInsurance(p.getObjectOfInsurance());
-        this.customer = p.getCustomer();
+    public Policy(Policy policy) {
+        this.id = policy.getId();
+        this.startDate = policy.getStartDate();
+        this.endDate = policy.getEndDate();
+        this.dueDate = policy.getDueDate();
+        this.coverage = policy.getCoverage();
+        this.premium = policy.getPremium();
+        this.active = policy.isActive();
+        this.objectOfInsurance = new ObjectOfInsurance(policy.getObjectOfInsurance());
+        this.customer = policy.getCustomer();
     }
 
     public Policy() {
@@ -113,6 +115,14 @@ public class Policy implements Serializable {
         this.premium = premium;
     }
 
+    public String getDisplayCurrency() {
+        return displayCurrency;
+    }
+
+    public void setDisplayCurrency(String displayCurrency) {
+        this.displayCurrency = displayCurrency;
+    }
+
     public boolean isActive() {
         return active;
     }
@@ -153,6 +163,7 @@ public class Policy implements Serializable {
                 dueDate,
                 coverage,
                 premium,
+                displayCurrency,
                 objectOfInsurance.toEvent(),
                 customer.getId()
         );
