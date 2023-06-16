@@ -1,0 +1,22 @@
+<mxfile host="Electron" modified="2023-06-16T15:27:21.101Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/21.4.0 Chrome/112.0.5615.204 Electron/24.5.1 Safari/537.36" etag="TFdV0Qxn8f4XNYbLIC_u" version="21.4.0" type="device">
+  <diagram name="Seite-1" id="ezHwdp1ufA9cEexiHjnU">
+    <mxGraphModel dx="1098" dy="828" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="X1FFUUezB6iagG00LFjw-1" value="UI" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="150" y="395" width="560" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="X1FFUUezB6iagG00LFjw-2" value="Policy Service" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="370" y="595" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="X1FFUUezB6iagG00LFjw-3" value="Notification Service" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="370" y="715" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="X1FFUUezB6iagG00LFjw-4" value="Billing Service" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="590" y="595" width="120" height="60" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
