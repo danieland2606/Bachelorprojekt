@@ -44,6 +44,8 @@ services:
       interval: 5s
       timeout: 20s
       retries: 10
+    volumes:
+      - customerdb_data:/var/lib/mysql
 
 
 ############################################# Notification Service #####################################################
@@ -184,6 +186,8 @@ services:
       interval: 5s
       timeout: 20s
       retries: 10
+    volumes:
+      - billingdb_data:/var/lib/mysql
 
 
   ############################################ RabbitMQ ################################################################
@@ -200,3 +204,6 @@ services:
 
 volumes:
   policydb_data:
+  notificationdb_data:
+  customerdb_data:
+  billingdb_data:
