@@ -24,7 +24,7 @@ public interface PolicyRepository extends JpaRepository<Policy, Long> {
      *
      */
     @Query("SELECT p FROM Policy p WHERE p.customer.id = ?1")
-    public List<Policy> getPolicyList(long customerID) throws DataAccessException ;
+    List<Policy> getPolicyList(long customerID) throws DataAccessException ;
 
     /**
      * Finds a "Policy" in the database based on its ID and the ID of its associated Customer.
@@ -41,7 +41,7 @@ public interface PolicyRepository extends JpaRepository<Policy, Long> {
      * @throws DataAccessException If an error occurs while accessing the database.
      */
     @Query("SELECT p FROM Policy p WHERE p.customer.id = ?1 AND p.id = ?2")
-    public  Policy findPolicyByCustomerIDAndPolicyID(long customerID, long policyID) throws DataAccessException;
+    Policy findPolicyByCustomerIDAndPolicyID(long customerID, long policyID) throws DataAccessException;
 
 }
 

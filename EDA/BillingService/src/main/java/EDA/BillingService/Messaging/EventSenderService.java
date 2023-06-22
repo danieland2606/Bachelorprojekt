@@ -7,6 +7,9 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+/**
+ * Sender class to send policy related Events over RabbitMQ
+ */
 @Service
 public class EventSenderService {
     @Autowired
@@ -35,6 +38,13 @@ public class EventSenderService {
         return true;
     }
 
+    /**
+     * Sends an event to a topic exchange when policy has been updated
+     * Topic name is defined in 'MessagingConfig' class
+     *
+     * @param pid ID of Policy
+     * @return Status code for sending success
+     */
     public boolean sendPolicyChangedBill(Long pid) {
         try {
             template.convertAndSend(topicExchange.getName(), Keys.POLICY_CHANGED_BILL_KEY,new BillingEvent(pid));

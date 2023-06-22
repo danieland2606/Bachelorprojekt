@@ -2,6 +2,9 @@ package EDA.PolicyService.Rest;
 
 import EDA.PolicyService.Persistence.Entity.Policy;
 
+/**
+ * Class that represents the data that is relevant to calculate a premium
+ */
 public class PremiumCalculationData {
     private long customerId;
 

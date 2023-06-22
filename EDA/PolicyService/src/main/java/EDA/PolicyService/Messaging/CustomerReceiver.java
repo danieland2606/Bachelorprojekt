@@ -7,6 +7,9 @@ import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 
 
+/**
+ * Receiver class to receive Customer related events over RabbitMQ
+ */
 public class CustomerReceiver {
 
     private final PolicyService policyService;
@@ -16,12 +19,20 @@ public class CustomerReceiver {
         this.policyService = policyService;
     }
 
+    /**
+     * Receives customerCreatedEvents and triggers the PolicyService to add the respective customer
+     * @param customerEvent The customerCreatedEvent
+     */
     @RabbitListener(queues = "#{CustomerCreatedQueue.name}")
     public void receiveCreated(CustomerEvent customerEvent) {
         System.out.println("Newly created Customer received!");
         this.policyService.addNewCustomer(customerEvent);
     }
 
+    /**
+     * Receives customerChangedEvents and triggers the PolicyService to update the data of the respective customer
+     * @param customerEvent
+     */
     @RabbitListener(queues = "#{CustomerChangedQueue.name}")
     public void receiveChanged(CustomerEvent customerEvent) {
         System.out.println("Changed Customer received!");

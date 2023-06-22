@@ -7,8 +7,6 @@ import EDA.PolicyService.Persistence.Entity.Policy;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
-//TODO: Exceptions auslösen
-
 /**
  * This class provides methods to calculate the price of a cat insurance
  * policy based on various factors such as the cat's weight, age, breed,
@@ -179,82 +177,3 @@ public class PremiumCalculator {
     }
 
 }
-
-
-//RESERVE !! BITTE NICHT ENTFERNEN !! WICHTIG ALS ERSATZ !!
-//    public double getPremium(Customer customer, Policy policy) {
-//        CatRace catRace = catRaceRepository.findByRace(policy.getObjectOfInsurance().getRace());
-//        if (catRace == null) return 0;
-//
-//        int coverage = policy.getCoverage();
-//
-//        double basePrice = 0;
-//        double totalPrice = 0;
-//
-//        //TODO: Kommentare in Englisch schreiben
-//        switch(policy.getObjectOfInsurance().getColor()){
-//            case "schwarz":
-//                basePrice = 0.002 * coverage;
-//                break;
-//            default:
-//                basePrice = 0.0015 * coverage;
-//        }
-//
-//        totalPrice = basePrice;
-//
-//        double weight = policy.getObjectOfInsurance().getWeight();
-//        double lowerAvgWeight = catRace.getLowerAverageWeight();
-//        double upperAvgWeight = catRace.getUpperAverageWeight();
-//        if (weight < lowerAvgWeight) {
-//            totalPrice += Math.abs((lowerAvgWeight - weight) * 5);
-//        } else if (weight > upperAvgWeight) {
-//            totalPrice += Math.abs((weight - upperAvgWeight) * 5);
-//        }
-//
-//        totalPrice += catRace.getIllnessFactor();
-//
-//        // Ist es eine Draußenkatze, steigere den Preis um 1% des Grundwertes
-//        boolean outsideCat = (policy.getObjectOfInsurance().getEnvironment().equalsIgnoreCase("draussen"));
-//        if (outsideCat) {
-//            totalPrice += 0.1 * basePrice;
-//        }
-//
-//        // Falls die Katze im oberen Quantil des Durchschnittsalters oder älter ist, erhöhe den Preis um 20% des Grundpreises
-//        // Ist die Katze Jung, erhöhe den Preis um 5€
-//        LocalDate catBirthDate = policy.getObjectOfInsurance().getDateOfBirth();
-//        LocalDate currentDate = LocalDate.now();
-//        long catAgeInYears = ChronoUnit.YEARS.between(catBirthDate, currentDate);
-//        int catUpperAverageAge = catRace.getUpperAverageAge();
-//        int catLowerAverageAge = catRace.getLowerAverageAge();
-//        //Das ergibt der Wert der oberenQuartil basierend auf die durchschnittlichen Alter einer Katzenrasse.
-//        double upperQuartil = (catUpperAverageAge - catLowerAverageAge) * 0.75;
-//
-//        //Ist die Katze (zum Zeitpunkt des Vertragsschlusses) im oberen Quartil
-//        // des Durchschnittsalterintervals, werden 20% des Grundpreises draufgeschlagen.
-//        if (catAgeInYears > upperQuartil) {
-//            totalPrice += 0.2 * basePrice;
-//        } // -10% vom Grundwert,wenn das Alter der Katze (zum Zeitpunkt des Vertragsschlusses) <=2 ist.
-//        else if (catAgeInYears <= 2) {
-//            totalPrice -= (basePrice * 0.1);
-//        }
-//
-//        // Ist die Katze nicht kastriert, erhöhe den Preis um 5€
-//        boolean kastriert = policy.getObjectOfInsurance().isCastrated();
-//        if (!kastriert) {
-//            totalPrice += 5;
-//        }
-//
-//        // Hat der Besitzer eine PLZ die mit 0 oder 1 startet, erhöhe den Preis um 5% des Grundpreises
-//        if (customer.getAddress().getPostalCode() < 20000) {
-//            totalPrice += 0.05 * basePrice;
-//        }
-//
-//        // Wenn der besitzer ein Hund hat(Muss noch hinzugefügt werden), muss er 30% des Grundpreises aufgerechnet werden
-//        if(customer.isDogOwner()) {
-//            totalPrice += 0.3 * basePrice;
-//        }
-//
-//        // Auf 2 Nachkommastellen runden
-//        totalPrice = ((int)(totalPrice * 100)) / 100.0;
-//        return totalPrice;
-//    }

@@ -121,8 +121,8 @@ public class PolicyController {
     /**
      * Calculates the Premium
      *
-     * @param premiumCalculationData
-     * @return
+     * @param premiumCalculationData The JSON Object that contains the data that is relevant for the premium calculation
+     * @return a ResponseEntity that contains the calculated premium
      */
     @PostMapping("/policyprice")
     public ResponseEntity<?> getPremium(@RequestBody PremiumCalculationData premiumCalculationData) {
@@ -141,9 +141,9 @@ public class PolicyController {
     /**
      * Updates the Policy with p_id
      *
-     * @param customerID
-     * @param policyID
-     * @param policy     The Policy Data
+     * @param customerID The id of the customer
+     * @param policyID The id of the Policy
+     * @param policy The Policy Data
      * @return
      */
     @PutMapping("/customer/{c_id}/policy/{p_id}")

@@ -8,6 +8,9 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * A configuration to declare all needed queues, exchanges, bindings and topics for RabbitMQ
+ */
 @Configuration
 public class MessagingConfig {
 

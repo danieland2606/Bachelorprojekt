@@ -30,16 +30,23 @@ public class BillingService {
         this.customerRepository = customerRepository;
     }
 
-    //TODO: Doccomment
+    /**
+     * Adds a new customer to the database
+     * @param customerEvent The customer Event to retrieve the customer data from
+     */
     public void addCustomer(CustomerEvent customerEvent) {
         this.customerRepository.save(new Customer(customerEvent));
     }
 
-    //TODO: Doccomment
+    /**
+     * Adds a Bill for a newly created Policy
+     * @param policyEvent The policy Event with the policy data
+     * @throws NoSuchElementException When the specific customer does not exist in the database
+     */
     public void addBillForNewlyCreatedPolicy(PolicyEvent policyEvent) throws NoSuchElementException{
         double chargedAmount = policyEvent.getPremium() * 12;
         if (Math.abs(chargedAmount) < 0.001) {
-            return; // Dont create a Bill when the charged amount is 0 because this would not make any sense
+            return; // Don't create a Bill when the charged amount is 0 because this would not make any sense
         }
         Bill b = new Bill();
         b.setPolicyId(policyEvent.getPid());
@@ -48,14 +55,19 @@ public class BillingService {
         b.setChargedAmount(chargedAmount);
         Optional<Customer> customerForPolicy = this.customerRepository.findById(policyEvent.getCid());
         if (customerForPolicy.isEmpty()) {
-            throw new NoSuchElementException("Kunde mit ID: " + policyEvent.getCid() + " Existiert nicht!"); //TODO: Sind alle Rückgabewerte Englisch/Deutsch? Sollte man generell im ganzen Projekt nochmal prüfen ob das einheitlich ist
+            throw new NoSuchElementException("Customer with ID: " + policyEvent.getCid() + " does not exist");
         }
         b.setCustomer(customerForPolicy.get());
         this.billRepository.save(b);
         eventSenderService.sendPolicyCreatedBill(policyEvent.getPid());
     }
 
-    //TODO: Doccomment
+    /**
+     * Adds a Bill for an updated Policy. The charged amount on the bill will be calculated with the new premium
+     * and the charged amounts on all Bills of the specific policy that has been created in the past
+     * @param policyEvent The policy Event with the policy data
+     * @throws NoSuchElementException When the specific customer does not exist in the database
+     */
     public void addBillForUpdatedPolicy(PolicyEvent policyEvent) throws NoSuchElementException{
         double alreadyChargedAmount = 0.0;
         for (Bill b : this.billRepository.getBillsByPolicyId(policyEvent.getPid())) {
@@ -72,14 +84,20 @@ public class BillingService {
         b.setChargedAmount(amountForNewBill);
         Optional<Customer> customerForPolicy = this.customerRepository.findById(policyEvent.getCid());
         if (customerForPolicy.isEmpty()) {
-            throw new NoSuchElementException("Kunde mit ID: " + policyEvent.getCid() + " Existiert nicht!");
+            throw new NoSuchElementException("Customer with ID: " + policyEvent.getCid() + " does not exist");
         }
         b.setCustomer(customerForPolicy.get());
         this.billRepository.save(b);
         eventSenderService.sendPolicyChangedBill(policyEvent.getPid());
     }
 
-    //TODO: Doccomment
+    /**
+     * Finds all Bills by customerId and policyId
+     * @param customerId The customerId
+     * @param policyId The policyId
+     * @return List of all found Bills
+     * @throws DataAccessException When something goes wrong while accessing the database
+     */
     public List<Bill> findBillByCustomerIdAndPolicyId(long customerId, long policyId) throws DataAccessException {
         return this.billRepository.getBillsByCustomerIdAndPolicyId(customerId, policyId);
     }

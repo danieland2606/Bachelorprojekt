@@ -1,5 +1,8 @@
 package EDA.PolicyService.Exceptions;
 
+/**
+ * A class representing an error response
+ */
 public class ErrorResponse {
     private String message;
 

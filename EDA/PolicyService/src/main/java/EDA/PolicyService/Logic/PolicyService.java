@@ -61,7 +61,10 @@ public class PolicyService {
         this.setUp();
     }
 
-    private void setUp() {//ToDo: Check if database already exists
+    /**
+     * Initialises the cat race data in the database for this service.
+     */
+    private void setUp() {
         ArrayList<CatRace> entities = new ArrayList<>();
         entities.add(new CatRace("siamese", 12, 15, 4, 7, 2, new String[]{"seal", "blau", "lilac", "creme"}));
         entities.add(new CatRace("perser", 12, 16, 4, 7, 3, new String[]{"weiß", "schildpatt", "schwarz"}));
@@ -140,13 +143,18 @@ public class PolicyService {
             // All created Policies are active by default, policies that have invalid data will not be created in the first place
             policy.setActive(true);
 
+            // EndDate must be after the startDate
+            if (policy.getEndDate().isBefore(policy.getStartDate())) {
+                throw new InvalidPolicyDataException("The endDate must be after the startDate");
+            }
+
             // dueDate is startDate by default
-            if (policy.getDueDate() == null) { //TODO: validate IllegalArgumentException maybeeee?
+            if (policy.getDueDate() == null) {
                 policy.setDueDate(policy.getStartDate());
             }
 
             if (policy.getDueDate().isBefore(LocalDate.now())) {
-                throw new InvalidPolicyDataException("Das Fälligkeitsdatum darf nicht in der Vergangenheit liegen.");
+                throw new InvalidPolicyDataException("The due date must not be in the past");
             }
 
             policy.setPremium(this.getPremium(policy.getCustomer(), policy));
@@ -348,10 +356,13 @@ public class PolicyService {
         Policy persistentPolicy = p.get();
         persistentPolicy.setCoverage(newPolicy.getCoverage());
         persistentPolicy.getObjectOfInsurance().setPersonality(newPolicy.getObjectOfInsurance().getPersonality());
-        if (newPolicy.getDueDate().isBefore(LocalDate.now())) {
-            throw new InvalidPolicyDataException("Das Fälligkeitsdatum darf nicht in der Vergangenheit liegen.");
+        if (newPolicy.getDueDate() == null) {
+            throw new InvalidPolicyDataException("The due date must not be null.");
         }
-        persistentPolicy.setDueDate(newPolicy.getDueDate()); //TODO: check if this should be possible
+        if (newPolicy.getDueDate().isBefore(LocalDate.now())) {
+            throw new InvalidPolicyDataException("The due date must not be in the past.");
+        }
+        persistentPolicy.setDueDate(newPolicy.getDueDate());
         this.updatePolicyDataBasedOnNewInformation(persistentPolicy, persistentPolicy.getObjectOfInsurance().getPersonality().equals("sehr verspielt"));
     }
 
@@ -393,12 +404,11 @@ public class PolicyService {
         this.policyRepository.flush();
     }
     /**
-     * TODO: Kommentare
-     * @param newPolicy
-     * @param cancelPolicy
+     * Will update a specific policy based on new policy and customer data
+     * @param newPolicy The new policy data
+     * @param cancelPolicy Whether a policy should be cancelled or not
      */
     private void updatePolicyDataBasedOnNewInformation(Policy newPolicy, boolean cancelPolicy) throws ObjectNotFoundException{
-        System.out.println("Customer Postleitzahl: " + newPolicy.getCustomer().getAddress().getPostalCode());
         double newPremium = this.getPremium(newPolicy.getCustomer(), newPolicy);
         boolean premiumChanged = Math.abs(newPremium - newPolicy.getPremium()) > 0.0001;
         newPolicy.setPremium(newPremium);
