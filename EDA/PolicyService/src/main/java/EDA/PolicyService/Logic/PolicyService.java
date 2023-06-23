@@ -410,14 +410,13 @@ public class PolicyService {
      */
     private void updatePolicyDataBasedOnNewInformation(Policy newPolicy, boolean cancelPolicy) throws ObjectNotFoundException{
         double newPremium = this.getPremium(newPolicy.getCustomer(), newPolicy);
-        boolean premiumChanged = Math.abs(newPremium - newPolicy.getPremium()) > 0.0001;
         newPolicy.setPremium(newPremium);
         if (cancelPolicy) {
             newPolicy.setActive(false);
             policyRepository.save(newPolicy);
             objectOfInsuranceRepository.save(newPolicy.getObjectOfInsurance());
             this.policySender.sendPolicyCancelled(newPolicy.toEvent());
-        } else if(premiumChanged) {
+        } else {
             policyRepository.save(newPolicy);
             objectOfInsuranceRepository.save(newPolicy.getObjectOfInsurance());
             this.policySender.sendPolicyChanged(newPolicy.toEvent());
