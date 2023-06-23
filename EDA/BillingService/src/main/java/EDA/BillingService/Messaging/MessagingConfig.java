@@ -50,7 +50,7 @@ public class MessagingConfig {
     }
 
     @Bean
-    public Binding binPolicyChanged(TopicExchange topic, @Qualifier("PolicyChangedQueue") Queue queue) {
-        return BindingBuilder.bind(queue).to(topic).with(Keys.POLICY_CHANGED_ANY_KEY);
+    public Binding bindPolicyChanged(TopicExchange topic, @Qualifier("PolicyChangedQueue") Queue queue) {
+        return BindingBuilder.bind(queue).to(topic).with(Keys.POLICY_CHANGED_KEY);
     }
 }
