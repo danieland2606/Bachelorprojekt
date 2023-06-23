@@ -1,6 +1,6 @@
-<mxfile host="Electron" modified="2023-06-16T14:08:32.862Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/21.4.0 Chrome/112.0.5615.204 Electron/24.5.1 Safari/537.36" etag="S6n_vpAcy7H9Te0utMLQ" version="21.4.0" type="device">
+<mxfile host="Electron" modified="2023-06-23T13:51:04.252Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/21.5.0 Chrome/112.0.5615.204 Electron/24.5.1 Safari/537.36" etag="KToKCIwqxPzrhCcF-UOL" version="21.5.0" type="device">
   <diagram name="Seite-1" id="U4V7h6dTmOhHkimck--Z">
-    <mxGraphModel dx="1098" dy="1997" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="810" dy="1642" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -22,7 +22,7 @@
             <mxPoint as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="oSJu6dywpZhaMfwRbl6j-4" value="Customer service" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+        <mxCell id="oSJu6dywpZhaMfwRbl6j-4" value="Customer Service" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="271" y="-925" width="70" height="60" as="geometry" />
         </mxCell>
         <mxCell id="oSJu6dywpZhaMfwRbl6j-21" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;" parent="1" source="oSJu6dywpZhaMfwRbl6j-5" target="oSJu6dywpZhaMfwRbl6j-20" edge="1">
@@ -38,7 +38,7 @@
             <mxPoint x="-25" y="30" as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="oSJu6dywpZhaMfwRbl6j-5" value="Policy service" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+        <mxCell id="oSJu6dywpZhaMfwRbl6j-5" value="Policy Service" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="446" y="-925" width="70" height="60" as="geometry" />
         </mxCell>
         <mxCell id="oSJu6dywpZhaMfwRbl6j-27" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.75;entryDx=0;entryDy=0;dashed=1;" parent="1" source="oSJu6dywpZhaMfwRbl6j-6" target="oSJu6dywpZhaMfwRbl6j-20" edge="1">
