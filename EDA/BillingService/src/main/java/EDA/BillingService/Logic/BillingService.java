@@ -46,6 +46,7 @@ public class BillingService {
     public void addBillForNewlyCreatedPolicy(PolicyEvent policyEvent) throws NoSuchElementException{
         double chargedAmount = policyEvent.getPremium() * 12;
         if (Math.abs(chargedAmount) < 0.001) {
+            eventSenderService.sendPolicyCreatedBill(policyEvent.getPid());
             return; // Don't create a Bill when the charged amount is 0 because this would not make any sense
         }
         Bill b = new Bill();
@@ -75,6 +76,7 @@ public class BillingService {
         }
         double amountForNewBill = (policyEvent.getPremium() * 12) - alreadyChargedAmount;
         if (Math.abs(amountForNewBill) < 0.001) {
+            eventSenderService.sendPolicyChangedBill(policyEvent.getPid());
             return; // Dont create a Bill when the charged amount is 0 because this would not make any sense
         }
         Bill b = new Bill();
