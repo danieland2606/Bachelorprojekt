@@ -1,0 +1,43 @@
+<mxfile host="Electron" modified="2023-06-16T11:33:13.728Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/21.2.8 Chrome/112.0.5615.165 Electron/24.2.0 Safari/537.36" etag="sfC-Q_l_xxIdmu1fwEKV" version="21.2.8" type="device">
+  <diagram name="Seite-1" id="iynPVzdF7A_YXLMdPXeH">
+    <mxGraphModel dx="1619" dy="1188" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="oVgcBfb6dSQhZD8PGJR--1" value="SMTP" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="oVgcBfb6dSQhZD8PGJR--2" target="oVgcBfb6dSQhZD8PGJR--3" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="oVgcBfb6dSQhZD8PGJR--2" value="MeowMed &lt;br&gt;System" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="240" y="590" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="oVgcBfb6dSQhZD8PGJR--3" value="Google Mail" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="505" y="590" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="oVgcBfb6dSQhZD8PGJR--4" value="&amp;lt;&amp;lt;External&amp;gt;&amp;gt;&lt;br&gt;Cat Facts API" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="240" y="430" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="oVgcBfb6dSQhZD8PGJR--5" value="&amp;lt;&amp;lt;External&amp;gt;&amp;gt;&lt;br&gt;Exchange Rate API" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="-10" y="590" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="oVgcBfb6dSQhZD8PGJR--6" value="REST" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" parent="1" source="oVgcBfb6dSQhZD8PGJR--2" target="oVgcBfb6dSQhZD8PGJR--4" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="310" y="310" as="sourcePoint" />
+            <mxPoint x="310" y="210" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="oVgcBfb6dSQhZD8PGJR--7" value="REST" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="oVgcBfb6dSQhZD8PGJR--2" target="oVgcBfb6dSQhZD8PGJR--5" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="310" y="600" as="sourcePoint" />
+            <mxPoint x="310" y="500" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="oVgcBfb6dSQhZD8PGJR--8" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="oVgcBfb6dSQhZD8PGJR--9" target="oVgcBfb6dSQhZD8PGJR--2" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="oVgcBfb6dSQhZD8PGJR--9" value="Sachbearbeiter" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" parent="1" vertex="1">
+          <mxGeometry x="285" y="710" width="30" height="60" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
