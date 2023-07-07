@@ -5,13 +5,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Arrays;
 
-@Repository
-@Entity
-@Table(name="CatRace")
 public class CatRace {
-    @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
-    @Column(name="Cat_ID")
     private long id;
 
     private String race;

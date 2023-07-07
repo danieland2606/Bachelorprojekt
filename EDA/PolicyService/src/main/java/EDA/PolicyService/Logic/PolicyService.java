@@ -34,7 +34,7 @@ public class PolicyService {
 
     private final AddressRepository addressRepository;
 
-    private final CatRaceRepository catRaceRepository;
+    private final CatRaceDatabase catRaceDatabase;
 
     /**
      * Constructor for PolicyService class.
@@ -51,31 +51,13 @@ public class PolicyService {
                          ObjectOfInsuranceRepository objectOfInsuranceRepository,
                          CustomerRepository customerRepository,
                          AddressRepository addressRepository,
-                         CatRaceRepository catRaceRepository) {
+                         CatRaceDatabase catRaceDatabase) {
         this.policySender = policySender;
         this.policyRepository = policyRepository;
         this.objectOfInsuranceRepository = objectOfInsuranceRepository;
         this.customerRepository = customerRepository;
         this.addressRepository = addressRepository;
-        this.catRaceRepository = catRaceRepository;
-        this.setUp();
-    }
-
-    /**
-     * Initialises the cat race data in the database for this service.
-     */
-    private void setUp() {
-        ArrayList<CatRace> entities = new ArrayList<>();
-        entities.add(new CatRace("siamese", 12, 15, 4, 7, 2, new String[]{"seal", "blau", "lilac", "creme"}));
-        entities.add(new CatRace("perser", 12, 16, 4, 7, 3, new String[]{"weiß", "schildpatt", "schwarz"}));
-        entities.add(new CatRace("bengal", 12, 16, 4, 6, 4, new String[]{"braun", "schildpatt", "marmor"}));
-        entities.add(new CatRace("maine-cone", 12, 15, 5, 10, 2, new String[]{"grau", "braun", "weiß"}));
-        entities.add(new CatRace("sphynx", 12, 15, 4, 6, 5, new String[]{}));
-        entities.add(new CatRace("scottish Fold", 12, 15, 4, 6, 6, new String[]{}));
-        entities.add(new CatRace("british-shorthair", 12, 15, 4, 6, 0, new String[]{}));
-        entities.add(new CatRace("abyssinian", 12, 15, 3, 5, 4, new String[]{"rot", "schildpatt", "zimt"}));
-        entities.add(new CatRace("ragdoll", 12, 15, 4, 7, 3, new String[]{"blau", "seal", "lilac", "schildpatt"}));
-        this.catRaceRepository.saveAll(entities);
+        this.catRaceDatabase = catRaceDatabase;
     }
 
 
@@ -277,7 +259,7 @@ public class PolicyService {
      */
     public double getPremium(Customer customer, Policy policy) {
         // Get the cat race from the catRaceRepository based on the policy's object of insurance race
-        CatRace catRace = catRaceRepository.findByRace(policy.getObjectOfInsurance().getRace());
+        CatRace catRace = catRaceDatabase.findByRace(policy.getObjectOfInsurance().getRace());
         // If the cat race is not found, return 0 as the premium
         if (catRace == null) {
             System.out.println("Katzenrasse leer!");
