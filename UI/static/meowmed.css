@@ -731,12 +731,6 @@ h1 {
   scrollbar-width: none;
 }
 
-.carousel-vertical {
-  flex-direction: column;
-  overflow-y: scroll;
-  scroll-snap-type: y mandatory;
-}
-
 .carousel-item {
   box-sizing: content-box;
   display: flex;
@@ -2108,14 +2102,6 @@ h1 {
   top: 50%;
 }
 
-.end-1 {
-  inset-inline-end: 0.25rem;
-}
-
-.end-0 {
-  inset-inline-end: 0px;
-}
-
 .m-auto {
   margin: auto;
 }
@@ -2153,10 +2139,6 @@ h1 {
   aspect-ratio: 1 / 1;
 }
 
-.h-full {
-  height: 100%;
-}
-
 .min-h-full {
   min-height: 100%;
 }
@@ -2171,16 +2153,6 @@ h1 {
 
 .w-full {
   width: 100%;
-}
-
-.w-fit {
-  width: -moz-fit-content;
-  width: fit-content;
-}
-
-.w-max {
-  width: -moz-max-content;
-  width: max-content;
 }
 
 .min-w-full {
@@ -2224,14 +2196,6 @@ h1 {
   flex-direction: column;
 }
 
-.justify-end {
-  justify-content: flex-end;
-}
-
-.justify-center {
-  justify-content: center;
-}
-
 .justify-between {
   justify-content: space-between;
 }
@@ -2246,10 +2210,6 @@ h1 {
 
 .gap-4 {
   gap: 1rem;
-}
-
-.gap-3 {
-  gap: 0.75rem;
 }
 
 .overflow-x-auto {
@@ -2299,11 +2259,6 @@ h1 {
   padding-bottom: 1.25rem;
 }
 
-.py-2 {
-  padding-top: 0.5rem;
-  padding-bottom: 0.5rem;
-}
-
 .pb-2 {
   padding-bottom: 0.5rem;
 }
@@ -2314,16 +2269,6 @@ h1 {
 
 .pt-6 {
   padding-top: 1.5rem;
-}
-
-.ps-5 {
-  -webkit-padding-start: 1.25rem;
-          padding-inline-start: 1.25rem;
-}
-
-.ps-10 {
-  -webkit-padding-start: 2.5rem;
-          padding-inline-start: 2.5rem;
 }
 
 .capitalize {
@@ -2385,14 +2330,6 @@ input[type=number] {
   }
 }
 
-@media (min-width: 1280px) {
-  .xl\:carousel-vertical {
-    flex-direction: column;
-    overflow-y: scroll;
-    scroll-snap-type: y mandatory;
-  }
-}
-
 .focus\:invalid\:border-red-700:invalid:focus {
   --tw-border-opacity: 1;
   border-color: rgb(185 28 28 / var(--tw-border-opacity));
@@ -2401,26 +2338,6 @@ input[type=number] {
 .focus\:invalid\:text-red-700:invalid:focus {
   --tw-text-opacity: 1;
   color: rgb(185 28 28 / var(--tw-text-opacity));
-}
-
-@media not all and (min-width: 1280px) {
-  .max-xl\:invisible {
-    visibility: hidden;
-  }
-
-  .max-xl\:hidden {
-    display: none;
-  }
-
-  .max-xl\:w-full {
-    width: 100%;
-  }
-}
-
-@media not all and (min-width: 1024px) {
-  .max-lg\:hidden {
-    display: none;
-  }
 }
 
 @media not all and (min-width: 768px) {
@@ -2470,23 +2387,11 @@ input[type=number] {
 }
 
 @media (min-width: 1280px) {
-  .xl\:visible {
-    visibility: visible;
-  }
-
   .xl\:mt-24 {
     margin-top: 6rem;
   }
 
-  .xl\:h-full {
-    height: 100%;
-  }
-
   .xl\:w-\[350px\] {
     width: 350px;
-  }
-
-  .xl\:w-full {
-    width: 100%;
   }
 }

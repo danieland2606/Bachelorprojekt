@@ -1,11 +1,6 @@
 import { JSX } from "preact/jsx-runtime";
 import { resolve } from "$this/common/util.ts";
-import {
-  cloneElement,
-  Component,
-  ComponentChildren,
-  VNode,
-} from "preact/src/index.js";
+import { cloneElement, Component, ComponentChildren, VNode } from "preact";
 
 export type FormProps = JSX.HTMLAttributes<HTMLFormElement> & Data;
 export type managed =

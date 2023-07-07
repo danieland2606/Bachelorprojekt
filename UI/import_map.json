@@ -1,7 +1,7 @@
 {
   "imports": {
     "$this/": "./",
-    "$server": "https://deno.land/std@0.178.0/http/server.ts",
+    "$server": "https://deno.land/std@0.173.0/http/server.ts",
     "$fresh/": "https://deno.land/x/fresh@1.1.5/",
     "preact": "https://esm.sh/preact@10.13.1",
     "preact/": "https://esm.sh/preact@10.13.1/",
