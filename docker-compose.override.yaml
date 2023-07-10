@@ -56,3 +56,5 @@ services:
       dockerfile: ./BillingService/Dockerfile
       args:
         service: BillingService
+    ports:
+      - "8073:8080"

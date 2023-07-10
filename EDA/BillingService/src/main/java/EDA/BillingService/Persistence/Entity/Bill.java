@@ -27,16 +27,20 @@ public class Bill implements Serializable {
     @Column(name = "charged_amount", nullable = false)
     private double chargedAmount;
 
+    @Column(name = "reason", nullable = false)
+    private String reason;   
+
     @ManyToOne(optional = false)
     @JoinColumn(name = "customer_id")
     private Customer customer;
 
-    public Bill(long id, long policyId, LocalDate startDate, LocalDate dueDate, double chargedAmount) {
+    public Bill(long id, long policyId, LocalDate startDate, LocalDate dueDate, double chargedAmount, String reason) {
         this.id = id;
         this.policyId = policyId;
         this.startDate = startDate;
         this.dueDate = dueDate;
         this.chargedAmount = chargedAmount;
+        this.reason = reason;
     }
 
     public Bill() {
@@ -90,4 +94,14 @@ public class Bill implements Serializable {
     public void setCustomer(Customer customer) {
         this.customer = customer;
     }
+
+    public String getReason() {
+        return reason;
+    }
+
+    public void setReason(String reason) {
+        this.reason = reason;
+    }
+
+    
 }
